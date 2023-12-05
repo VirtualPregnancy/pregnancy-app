@@ -3,9 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse, Response
 
 app = FastAPI()
-origins = [
-    "http://127.0.0.1:5173",
-]
 
 app.add_middleware(
     CORSMiddleware,
