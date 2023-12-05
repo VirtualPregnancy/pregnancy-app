@@ -1,9 +1,9 @@
-.. Medtech-Heart-Vue documentation master file, created by
+.. Web App Template documentation master file, created by
    sphinx-quickstart on Wed Mar  2 11:55:38 2022.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Medtech-Heart-Vue's documentation
+Web App Template's documentation
 =============================================
 
 .. toctree::
