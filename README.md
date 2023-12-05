@@ -1,5 +1,7 @@
 # Web App Template
 
+[![Read the Docs][readthedocs]][readthedocs-url]
+
 ## Setup Project
 
 ### With backend
@@ -37,3 +39,8 @@ yarn dev
 ```
 
 - put your data into static folder, then you can the data file path into your frontend code directly.
+
+
+
+[readthedocs]: https://img.shields.io/readthedocs/web-app-template
+[readthedocs-url]: https://web-app-template.readthedocs.io/en/latest/
