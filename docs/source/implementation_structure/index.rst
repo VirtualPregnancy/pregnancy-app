@@ -14,3 +14,5 @@ The following section provides a higher level overview of the application struct
     05_static
     06_pages
     07_components
+    08_load_data_from_backend
+    09_display_model

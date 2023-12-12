@@ -61,8 +61,6 @@ function isSubTopicDisabled(subTopic) {
     subTopic.icon == null ||
     subTopic.dataFile == null ||
     subTopic.category == null ||
-    subTopic.ecg == null ||
-    subTopic.lvp == null ||
     subTopic.model == null
   );
 }
