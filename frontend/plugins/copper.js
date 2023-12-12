@@ -11,6 +11,8 @@ const baseRenderer = new Copper.copperRenderer(container, {
   guiOpen,
   camera: true,
   performance: true,
+  alpha: true,
+  logarithmicDepthBuffer: true,
   light: false,
   controls: "copper3d",
 });
