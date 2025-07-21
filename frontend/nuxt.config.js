@@ -6,7 +6,7 @@ const routerBase =
   process.env.DEPLOY_ENV === "GH_PAGES"
     ? {
         router: {
-          base: "/Your-repo/",
+          base: "/pregnancy-app/",
         },
       }
     : {
@@ -28,7 +28,7 @@ export default {
       {
         rel: "icon",
         type: "image/x-icon",
-        href: "/Your-repo/favicon2.ico",
+        href: "/pregnancy-app/favicon2.ico",
       },
       {
         rel: "stylesheet",
@@ -167,6 +167,7 @@ export default {
   ...routerBase,
   generate: {
     dir: "build",
+    //todo: modify routes afterwards
     routes: [
       // Modify these routes, when you config your routes for app
       "/model-heart",
