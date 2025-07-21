@@ -7,6 +7,9 @@
         ref="baseDomObject"
         :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
       />
+      <button @click="reloadVTKModel">Reload Model</button>
+      <button @click="loadVenousTree">Load Venous Tree</button>
+      <button @click="loadTerminalVessels">Load Terminal Vessels</button>
   </div>
 </template>
 
