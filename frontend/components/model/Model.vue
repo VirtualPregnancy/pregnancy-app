@@ -7,18 +7,6 @@
         ref="baseDomObject"
         :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
       />
-    <!-- Control panel with multiple VTK model options -->
-    <div class="model-controls">
-      <v-btn @click="reloadVTKModel" color="primary" small class="ma-1">
-        Load Arterial
-      </v-btn>
-      <v-btn @click="loadVenousTree" color="blue" small class="ma-1">
-        Load Venous
-      </v-btn>
-      <v-btn @click="loadTerminalVessels" color="green" small class="ma-1">
-        Load Terminal
-      </v-btn>
-    </div>
   </div>
 </template>
 
