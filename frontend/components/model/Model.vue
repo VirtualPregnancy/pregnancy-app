@@ -95,7 +95,7 @@ export default {
       console.log("Loading default placental model...");
       
       // Load default placental arterial tree model using utility
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
+      const result = await this.vtkLoader.loadVTKFile('model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
         displayName: 'Placental Arterial Tree',
         color: 0xff2222,
         opacity: 0.9,
@@ -126,7 +126,7 @@ export default {
     async reloadVTKModel() {
       console.log("User requested VTK model reload...");
       
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
+      const result = await this.vtkLoader.loadVTKFile('model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
         displayName: 'Placental Arterial Tree',
         color: 0xff3333,
         opacity: 0.9,
@@ -151,7 +151,7 @@ export default {
      * Load venous tree using VTKLoader utility
      */
     async loadVenousTree() {
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk', {
+      const result = await this.vtkLoader.loadVTKFile('model/healthy_gen_np3ns1_flux_250_venous_tree.vtk', {
         displayName: 'Placental Venous Tree',
         color: 0x2222ff,
         opacity: 0.8,
@@ -176,7 +176,7 @@ export default {
      * Load terminal vessels using VTKLoader utility
      */
     async loadTerminalVessels() {
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_term.vtk', {
+      const result = await this.vtkLoader.loadVTKFile('model/healthy_gen_np3ns1_flux_250_term.vtk', {
         displayName: 'Placental Terminal Vessels',
         color: 0x22ff22,
         opacity: 0.7,
