@@ -11,8 +11,8 @@ const routerBase =
       }
     : {
         router: {
-          // mode: "hash",
-          mode: "history",
+          mode: "hash",
+          // mode: "history",
           base: "/",
         },
       };
