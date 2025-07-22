@@ -84,6 +84,29 @@ export default {
   },
 
   methods: {
+    // Get correct path for static assets based on deployment environment
+    getAssetPath(relativePath) {
+      let basePath = '';
+      
+      // Check if we're in GitHub Pages environment using multiple methods
+      if (process.client) {
+        // Check current URL to determine if we're on GitHub Pages
+        const isGitHubPages = window.location.pathname.startsWith('/pregnancy-app/') || 
+                            window.location.hostname.includes('github.io');
+        basePath = isGitHubPages ? '/pregnancy-app' : '';
+      } else {
+        // Server-side: use environment variable
+        const isGitHubPages = process.env.DEPLOY_ENV === 'GH_PAGES';
+        basePath = isGitHubPages ? '/pregnancy-app' : '';
+      }
+      
+      // Ensure the path starts with / if not already
+      const cleanPath = relativePath.startsWith('/') ? relativePath : '/' + relativePath;
+      
+      console.log(`[Model] Asset path: ${relativePath} -> ${basePath + cleanPath}`);
+      return basePath + cleanPath;
+    },
+
     // Wait for plugins to be available and then initialize
     async waitForPluginsAndInitialize(retryCount = 0) {
       const maxRetries = 10;
@@ -246,7 +269,8 @@ export default {
       console.log("Loading default placental model...");
       
       // Load default placental arterial tree model using utility
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
+      const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk');
+      const result = await this.vtkLoader.loadVTKFile(vtkPath, {
         displayName: 'Placental Arterial Tree',
         color: 0xff2222,
         opacity: 0.9,
@@ -260,7 +284,8 @@ export default {
             'Placental Vessel Network (Enhanced Visualization)';
           
           // Load camera view
-          this.scene.loadViewUrl('modelView/noInfarct_view.json');
+          const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
+          this.scene.loadViewUrl(viewPath);
           this.scene.onWindowResize();
         }
       });
@@ -277,7 +302,8 @@ export default {
     async reloadVTKModel() {
       console.log("User requested VTK model reload...");
       
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
+      const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk');
+      const result = await this.vtkLoader.loadVTKFile(vtkPath, {
         displayName: 'Placental Arterial Tree',
         color: 0xff3333,
         opacity: 0.9,
@@ -289,7 +315,8 @@ export default {
           this.modelName = isPointCloud ? 
             'Placental Arterial Tree (Point Cloud)' : 
             'Placental Arterial Tree (Reloaded)';
-          this.scene.loadViewUrl('modelView/noInfarct_view.json');
+          const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
+          this.scene.loadViewUrl(viewPath);
         }
       });
       
@@ -302,7 +329,8 @@ export default {
      * Load venous tree using VTKLoader utility
      */
     async loadVenousTree() {
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk', {
+      const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk');
+      const result = await this.vtkLoader.loadVTKFile(vtkPath, {
         displayName: 'Placental Venous Tree',
         color: 0x2222ff,
         opacity: 0.8,
@@ -314,7 +342,8 @@ export default {
           this.modelName = isPointCloud ? 
             'Placental Venous Tree (Point Cloud)' : 
             'Placental Venous Tree (Enhanced)';
-          this.scene.loadViewUrl('modelView/noInfarct_view.json');
+          const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
+          this.scene.loadViewUrl(viewPath);
         }
       });
       
@@ -325,7 +354,7 @@ export default {
 
     // Legacy OBJ model loader (kept for compatibility)
     loadModel(model_url, model_name) {
-      const viewURL = 'modelView/noInfarct_view.json';
+      const viewURL = this.getAssetPath('modelView/noInfarct_view.json');
 
       this.scene = this.baseRenderer.getSceneByName(model_name);
       if (this.scene === undefined) {
