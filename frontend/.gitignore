@@ -9,7 +9,7 @@ yarn-error.log*
 
 docs/build/
 node_modules
-
+build/
 # Runtime data
 pids
 *.pid

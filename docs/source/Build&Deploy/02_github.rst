@@ -79,6 +79,9 @@ Here are the steps we host the project on GitHub pages.
 
     git subtree push --prefix=build origin gh-pages
 
+<<<<<<< HEAD
+6. Then the project will be automatically host on your GitHub pages. Go ``settings`` -> ``pages`` to see the link.
+=======
 6. Then the project will be automatically host on your GitHub pages. Go ``settings`` -> ``pages`` to see the link.
 
 
@@ -123,3 +126,4 @@ Here are the steps we host the project on GitHub pages.
                       publish_dir: "./frontend/build"
 
     Step 8: everytime when you push your code to Github, after merge it, you can create a release, Then github actions will automatically run the script and deploy the app in Github Pages.
+>>>>>>> dc65147dc6a44d2f3121ac6436452eada54bfea5
