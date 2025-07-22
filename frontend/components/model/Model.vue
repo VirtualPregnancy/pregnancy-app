@@ -6,10 +6,17 @@
     <div
         ref="baseDomObject"
         :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
+        style="width: 100%; height: 100%;"
       />
-      <button @click="reloadVTKModel">Reload Model</button>
-      <button @click="loadVenousTree">Load Venous Tree</button>
-      <button @click="loadTerminalVessels">Load Terminal Vessels</button>
+    <!-- Control panel with multiple VTK model options -->
+    <div class="model-controls">
+      <v-btn @click="reloadVTKModel" color="primary" small class="ma-1">
+        Load Arterial
+      </v-btn>
+      <v-btn @click="loadVenousTree" color="blue" small class="ma-1">
+        Load Venous
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -24,148 +31,161 @@ export default {
       THREE: null,         // Three.js library instance for 3D geometry
       baseRenderer: null,  // Main renderer for managing 3D scenes
       container: null,     // DOM container for 3D canvas
-      modelName: "Loading Placental Vessel Network...",  // Status text shown to user
+      modelName: "Placental Vessel Network",  // Status text shown to user
       helloworld:"",       // Placeholder for API response
       model:null,          // Stores loaded model data
       vtkLoader: null,     // VTK loader utility instance
-      initializationAttempts: 0, // Track initialization attempts for debugging
+      _resizeHandler: null // Store resize handler for cleanup
     };
   },
 
-  
- 
-
   computed: {
     mdAndUp() {
-      return this.$vuetify.breakpoint.mdAndUp;
+      // Add null check for $vuetify
+      return this.$vuetify && this.$vuetify.breakpoint ? this.$vuetify.breakpoint.mdAndUp : false;
     },
   },
 
   // Component mounted lifecycle - initializes 3D environment
   mounted() {
-    // Add delay and retry mechanism to ensure plugins are fully loaded
-    this.initializeWithRetry();
+    // Wait for plugins to be ready before initializing
+    this.waitForPluginsAndInitialize();
   },
 
   methods: {
-    // Initialize with retry mechanism for plugin loading
-    async initializeWithRetry(retryCount = 0, maxRetries = 5) {
-      const delay = retryCount * 500; // Progressive delay: 0ms, 500ms, 1s, 1.5s, 2s
-      this.initializationAttempts = retryCount + 1;
+    // Wait for plugins to be available and then initialize
+    async waitForPluginsAndInitialize(retryCount = 0) {
+      const maxRetries = 10;
+      const delay = 200; // 200ms delay between retries
       
-      // Update status for user
-      this.modelName = retryCount === 0 
-        ? "Initializing 3D engine..." 
-        : `Retrying 3D initialization... (${retryCount}/${maxRetries})`;
-      
+      // Check if required plugins are available
+      if (this.checkPluginsAvailability()) {
+        console.log("[Model] Plugins ready, initializing 3D engine...");
+        this.initializeCopper3D();
+      } else if (retryCount < maxRetries) {
+        console.log(`[Model] Plugins not ready, retrying... (${retryCount + 1}/${maxRetries})`);
+        this.modelName = `Loading 3D Engine... (${retryCount + 1}/${maxRetries})`;
+        
+        setTimeout(() => {
+          this.waitForPluginsAndInitialize(retryCount + 1);
+        }, delay);
+      } else {
+        console.error("[Model] Failed to initialize plugins after maximum retries");
+        this.modelName = "Error: 3D engine initialization timed out";
+      }
+    },
+
+    // Check if all required plugins are available
+    checkPluginsAvailability() {
       try {
-        // Wait for potential plugin loading
-        await new Promise(resolve => setTimeout(resolve, delay));
-        
-        console.log(`[Model] Attempt ${this.initializationAttempts}: Checking plugin availability`);
-        
-        // Check if plugins are available
-        if (!this.$Copper || !this.$three || !this.$baseRenderer || !this.$baseContainer) {
-          const missingPlugins = [];
-          if (!this.$Copper) missingPlugins.push('$Copper');
-          if (!this.$three) missingPlugins.push('$three');
-          if (!this.$baseRenderer) missingPlugins.push('$baseRenderer');
-          if (!this.$baseContainer) missingPlugins.push('$baseContainer');
-          
-          console.warn(`[Model] Missing plugins: ${missingPlugins.join(', ')}`);
-          
-          if (retryCount < maxRetries) {
-            console.log(`[Model] Plugins not ready, retrying... (${retryCount + 1}/${maxRetries + 1})`);
-            return this.initializeWithRetry(retryCount + 1, maxRetries);
-          } else {
-            throw new Error(`3D plugins failed to load after maximum retries. Missing: ${missingPlugins.join(', ')}`);
-          }
-        }
+        return this.$Copper && 
+               this.$three && 
+               this.$baseRenderer && 
+               this.$baseContainer &&
+               typeof this.$Copper === 'function' &&
+               typeof this.$three === 'function' &&
+               typeof this.$baseRenderer === 'function' &&
+               typeof this.$baseContainer === 'function';
+      } catch (e) {
+        return false;
+      }
+    },
 
-        console.log(`[Model] All plugins available, initializing...`);
-        this.modelName = "Setting up 3D environment...";
-
-        // Initialize 3D libraries from plugins
+    // Initialize Copper3D engine
+    initializeCopper3D() {
+      try {
         this.Copper = this.$Copper();           // Get Copper3D instance
         this.THREE = this.$three();             // Get Three.js instance  
         this.baseRenderer = this.$baseRenderer(); // Get main renderer
         const baseContainer = this.$baseContainer(); // Get 3D container
-        this.container = this.$refs.baseDomObject;   // Get DOM reference
         
-        // Ensure container element exists
+        // Add null check for DOM reference
+        this.container = this.$refs.baseDomObject;
         if (!this.container) {
-          throw new Error('Model container DOM element not found');
+          console.error("[Model] DOM reference not found");
+          this.modelName = "Error: DOM container not found";
+          return;
         }
-        
-        console.log(`[Model] DOM container found, setting up...`);
-        this.modelName = "Preparing 3D viewport...";
-        
-        // Setup container with delay to ensure DOM is ready
-        await new Promise(resolve => setTimeout(resolve, 100));
-        
-        // Set responsive height based on screen size
-        this.mdAndUp
-          ? (baseContainer.style.height = "100vh")  // Full height on desktop
-          : (baseContainer.style.height = "100vw"); // Square on mobile
-        
-        // Clear any existing content
-        this.container.innerHTML = '';
-        this.container.appendChild(baseContainer);
-        
-        console.log(`[Model] Container appended, initializing VTK loader...`);
-        this.modelName = "Loading 3D models...";
-        
-        // Initialize VTK loader and start loading models
-        this.initializeVTKLoader();
-        await this.start();
-        
-        // Add resize listener
-        this.addResizeListener(baseContainer);
-        
-        console.log('[Model] 3D environment initialized successfully');
+
+        // Verify all components are properly initialized
+        if (!this.baseRenderer || !baseContainer) {
+          console.error("[Model] 3D components not properly initialized");
+          this.modelName = "Error: 3D components missing";
+          return;
+        }
+      
+        // Setup container with slight delay to ensure DOM is ready
+        setTimeout(() => {
+          // Set responsive height based on screen size with null checks
+          if (baseContainer) {
+            this.mdAndUp
+              ? (baseContainer.style.height = "100vh")  // Full height on desktop
+              : (baseContainer.style.height = "100vw"); // Square on mobile
+            
+            this.container.appendChild(baseContainer);
+          }
+          
+          // Initialize VTK loader and start loading models
+          this.initializeVTKLoader();
+          this.start();
+        }, 100);
+
+        // Setup resize listener
+        this.setupResizeListener(baseContainer);
         
       } catch (error) {
-        console.error(`[Model] Initialization failed:`, error);
-        this.modelName = `Error: ${error.message}`;
-        
-        // Try one more time after a longer delay if not exceeded max retries
-        if (retryCount < maxRetries) {
-          console.log(`[Model] Will retry after longer delay...`);
-          setTimeout(() => this.initializeWithRetry(retryCount + 1, maxRetries), 2000);
-        }
+        console.error("[Model] Error initializing 3D components:", error);
+        this.modelName = "Error: Failed to initialize 3D engine";
       }
     },
 
-    // Add resize listener separately
-    addResizeListener(baseContainer) {
-      window.addEventListener("resize", () => {
+    // Setup window resize listener
+    setupResizeListener(baseContainer) {
+      const resizeHandler = () => {
         setTimeout(() => {
-          if (this.scene && baseContainer) {
+          if (baseContainer) {
             this.mdAndUp
               ? (baseContainer.style.height = "100vh")
               : (baseContainer.style.height = "100vw");
+          }
+          if (this.scene) {
             this.scene.onWindowResize();
           }
         }, 500);
-      });
+      };
+
+      window.addEventListener("resize", resizeHandler);
+      
+      // Store reference for cleanup
+      this._resizeHandler = resizeHandler;
     },
 
     // Initialize VTK loader utility
     initializeVTKLoader() {
-      // Initialize scene first
-      this.scene = this.baseRenderer.getSceneByName('placental-scene');
-      if (this.scene === undefined) {
-        this.scene = this.baseRenderer.createScene('placental-scene');
-        this.baseRenderer.setCurrentScene(this.scene);
+      try {
+        if (!this.baseRenderer) {
+          console.error("[Model] Base renderer not available");
+          return;
+        }
+        
+        // Initialize scene first
+        this.scene = this.baseRenderer.getSceneByName('placental-scene');
+        if (this.scene === undefined) {
+          this.scene = this.baseRenderer.createScene('placental-scene');
+          this.baseRenderer.setCurrentScene(this.scene);
+        }
+        
+        // Create VTK loader instance
+        this.vtkLoader = new VTKLoader(this.THREE, this.scene.scene);
+        
+        // Set copper scene reference for camera control
+        this.vtkLoader.setCopperScene(this.scene);
+        
+        console.log("VTK Loader initialized with camera control");
+      } catch (error) {
+        console.error("[Model] Error initializing VTK loader:", error);
+        this.modelName = "Error: VTK loader initialization failed";
       }
-      
-      // Create VTK loader instance
-      this.vtkLoader = new VTKLoader(this.THREE, this.scene.scene);
-      
-      // Set copper scene reference for camera control
-      this.vtkLoader.setCopperScene(this.scene);
-      
-      console.log("VTK Loader initialized with camera control");
     },
 
     // Main initialization method - called after component is mounted
@@ -173,7 +193,7 @@ export default {
       console.log("Loading default placental model...");
       
       // Load default placental arterial tree model using utility
-      const result = await this.vtkLoader.loadVTKFile('model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
+      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
         displayName: 'Placental Arterial Tree',
         color: 0xff2222,
         opacity: 0.9,
@@ -204,7 +224,7 @@ export default {
     async reloadVTKModel() {
       console.log("User requested VTK model reload...");
       
-      const result = await this.vtkLoader.loadVTKFile('model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
+      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
         displayName: 'Placental Arterial Tree',
         color: 0xff3333,
         opacity: 0.9,
@@ -229,7 +249,7 @@ export default {
      * Load venous tree using VTKLoader utility
      */
     async loadVenousTree() {
-      const result = await this.vtkLoader.loadVTKFile('model/healthy_gen_np3ns1_flux_250_venous_tree.vtk', {
+      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk', {
         displayName: 'Placental Venous Tree',
         color: 0x2222ff,
         opacity: 0.8,
@@ -241,33 +261,6 @@ export default {
           this.modelName = isPointCloud ? 
             'Placental Venous Tree (Point Cloud)' : 
             'Placental Venous Tree (Enhanced)';
-          this.scene.loadViewUrl('modelView/noInfarct_view.json');
-        }
-      });
-      
-      if (!result.success) {
-        this.modelName = `Error: ${result.error.message}`;
-      }
-    },
-
-    /**
-     * Load terminal vessels using VTKLoader utility
-     */
-    async loadTerminalVessels() {
-      const result = await this.vtkLoader.loadVTKFile('model/healthy_gen_np3ns1_flux_250_term.vtk', {
-        displayName: 'Placental Terminal Vessels',
-        color: 0x22ff22,
-        opacity: 0.7,
-        modelSize: 420, 
-        lineWidth: 15, 
-        pointSize: 50.0, 
-        onProgress: (message, progress) => {
-          this.modelName = `${message} (${Math.round(progress)}%)`;
-        },
-        onComplete: (mesh, isPointCloud) => {
-          this.modelName = isPointCloud ? 
-            'Placental Terminal Vessels (Point Cloud)' : 
-            'Placental Terminal Vessels (Enhanced)';
           this.scene.loadViewUrl('modelView/noInfarct_view.json');
         }
       });
@@ -291,8 +284,7 @@ export default {
         this.scene.loadViewUrl(viewURL);
       }
       this.scene.onWindowResize();
-      
-    },
+    }
   },
 
   watch: {},
@@ -303,11 +295,33 @@ export default {
       this.vtkLoader.dispose();
       this.vtkLoader = null;
     }
+    
+    // Clean up resize listener
+    if (this._resizeHandler) {
+      window.removeEventListener("resize", this._resizeHandler);
+      this._resizeHandler = null;
+    }
   }
 };
 </script>
 
 <style scoped lang="scss">
+.model {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.baseDom-md {
+  width: 100%;
+  height: 100vh;
+}
+
+.baseDom-sm {
+  width: 100%;
+  height: 100vw;
+}
+
 .model-controls {
   position: absolute;
   top: 10px;
