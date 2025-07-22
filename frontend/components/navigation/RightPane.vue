@@ -29,14 +29,29 @@ import PanelControls from '../model/PanelControls.vue';
 
 export default {
     data() {
-        return {};
+        return {
+            clientMounted: false // Track if component is mounted on client
+        };
     },
     mounted() {
+        this.clientMounted = true;
         $nuxt.$emit("send-emitter-data", "data in RightPanel.vue send to Model.vue");
     },
     computed: {
         mdAndUp() {
-            return this.$vuetify.breakpoint.mdAndUp;
+            // Ensure consistent behavior between SSR and client
+            if (!this.clientMounted) {
+                return false; // Default to mobile layout during SSR
+            }
+            // Add comprehensive null checks for $vuetify
+            try {
+                return this.$vuetify && 
+                       this.$vuetify.breakpoint && 
+                       this.$vuetify.breakpoint.mdAndUp;
+            } catch (e) {
+                console.warn("[RightPane] Error accessing vuetify breakpoint:", e);
+                return false;
+            }
         },
     },
     components: { PanelControls }

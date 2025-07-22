@@ -1,22 +1,32 @@
 <template>
   <div class="model">
-    <!-- Display current model loading status -->
-    {{ modelName }}
-    <!-- 3D model container div, responsive sizing based on screen size -->
-    <div
-        ref="baseDomObject"
-        :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
-        style="width: 100%; height: 100%;"
-      />
-    <!-- Control panel with multiple VTK model options -->
-    <div class="model-controls">
-      <v-btn @click="reloadVTKModel" color="primary" small class="ma-1">
-        Load Arterial
-      </v-btn>
-      <v-btn @click="loadVenousTree" color="blue" small class="ma-1">
-        Load Venous
-      </v-btn>
-    </div>
+    <!-- Only render in client-side to avoid SSR mismatch -->
+    <client-only>
+      <!-- Display current model loading status -->
+      {{ modelName }}
+      <!-- 3D model container div, responsive sizing based on screen size -->
+      <div
+          ref="baseDomObject"
+          :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
+          style="width: 100%; height: 100%;"
+        />
+      <!-- Control panel with multiple VTK model options -->
+      <div class="model-controls">
+        <v-btn @click="reloadVTKModel" color="primary" small class="ma-1">
+          Load Arterial
+        </v-btn>
+        <v-btn @click="loadVenousTree" color="blue" small class="ma-1">
+          Load Venous
+        </v-btn>
+      </div>
+      
+      <!-- Fallback template for SSR -->
+      <template #fallback>
+        <div class="loading-placeholder">
+          <div class="loading-text">Loading 3D Engine...</div>
+        </div>
+      </template>
+    </client-only>
   </div>
 </template>
 
@@ -35,24 +45,68 @@ export default {
       helloworld:"",       // Placeholder for API response
       model:null,          // Stores loaded model data
       vtkLoader: null,     // VTK loader utility instance
-      _resizeHandler: null // Store resize handler for cleanup
+      _resizeHandler: null, // Store resize handler for cleanup
+      clientMounted: false // Track if component is mounted on client
     };
   },
 
   computed: {
     mdAndUp() {
-      // Add null check for $vuetify
-      return this.$vuetify && this.$vuetify.breakpoint ? this.$vuetify.breakpoint.mdAndUp : false;
+      // Ensure consistent behavior between SSR and client
+      if (!this.clientMounted) {
+        return false; // Default to mobile layout during SSR
+      }
+      // Add comprehensive null checks for $vuetify
+      try {
+        return this.$vuetify && 
+               this.$vuetify.breakpoint && 
+               this.$vuetify.breakpoint.mdAndUp;
+      } catch (e) {
+        console.warn("[Model] Error accessing vuetify breakpoint:", e);
+        return false;
+      }
     },
   },
 
   // Component mounted lifecycle - initializes 3D environment
   mounted() {
-    // Wait for plugins to be ready before initializing
-    this.waitForPluginsAndInitialize();
+    // Mark component as client-side mounted
+    this.clientMounted = true;
+    
+    // Only initialize if we're on client-side
+    if (process.client) {
+      // Use nextTick to ensure DOM is fully rendered after client-only activation
+      this.$nextTick(() => {
+        // Wait for plugins to be ready before initializing
+        this.waitForPluginsAndInitialize();
+      });
+    }
   },
 
   methods: {
+    // Get correct path for static assets based on deployment environment
+    getAssetPath(relativePath) {
+      let basePath = '';
+      
+      // Check if we're in GitHub Pages environment using multiple methods
+      if (process.client) {
+        // Check current URL to determine if we're on GitHub Pages
+        const isGitHubPages = window.location.pathname.startsWith('/pregnancy-app/') || 
+                            window.location.hostname.includes('github.io');
+        basePath = isGitHubPages ? '/pregnancy-app' : '';
+      } else {
+        // Server-side: use environment variable
+        const isGitHubPages = process.env.DEPLOY_ENV === 'GH_PAGES';
+        basePath = isGitHubPages ? '/pregnancy-app' : '';
+      }
+      
+      // Ensure the path starts with / if not already
+      const cleanPath = relativePath.startsWith('/') ? relativePath : '/' + relativePath;
+      
+      console.log(`[Model] Asset path: ${relativePath} -> ${basePath + cleanPath}`);
+      return basePath + cleanPath;
+    },
+
     // Wait for plugins to be available and then initialize
     async waitForPluginsAndInitialize(retryCount = 0) {
       const maxRetries = 10;
@@ -93,22 +147,44 @@ export default {
 
     // Initialize Copper3D engine
     initializeCopper3D() {
+      // Wait for DOM elements to be available in client-only context
+      this.waitForDOMAndInitialize();
+    },
+
+    // Wait for DOM elements to be available and then initialize
+    async waitForDOMAndInitialize(retryCount = 0) {
+      const maxRetries = 20;
+      const delay = 100;
+
+      // Check if DOM container is available
+      this.container = this.$refs.baseDomObject;
+      
+      if (this.container) {
+        console.log("[Model] DOM container found, initializing 3D engine...");
+        this.initialize3DEngine();
+      } else if (retryCount < maxRetries) {
+        console.log(`[Model] DOM container not ready, retrying... (${retryCount + 1}/${maxRetries})`);
+        this.modelName = `Preparing 3D Container... (${retryCount + 1}/${maxRetries})`;
+        
+        setTimeout(() => {
+          this.waitForDOMAndInitialize(retryCount + 1);
+        }, delay);
+      } else {
+        console.error("[Model] Failed to find DOM container after maximum retries");
+        this.modelName = "Error: DOM container not found";
+      }
+    },
+
+    // Initialize 3D engine after DOM is ready
+    initialize3DEngine() {
       try {
         this.Copper = this.$Copper();           // Get Copper3D instance
         this.THREE = this.$three();             // Get Three.js instance  
         this.baseRenderer = this.$baseRenderer(); // Get main renderer
         const baseContainer = this.$baseContainer(); // Get 3D container
-        
-        // Add null check for DOM reference
-        this.container = this.$refs.baseDomObject;
-        if (!this.container) {
-          console.error("[Model] DOM reference not found");
-          this.modelName = "Error: DOM container not found";
-          return;
-        }
 
         // Verify all components are properly initialized
-        if (!this.baseRenderer || !baseContainer) {
+        if (!this.baseRenderer || !baseContainer || !this.container) {
           console.error("[Model] 3D components not properly initialized");
           this.modelName = "Error: 3D components missing";
           return;
@@ -117,7 +193,7 @@ export default {
         // Setup container with slight delay to ensure DOM is ready
         setTimeout(() => {
           // Set responsive height based on screen size with null checks
-          if (baseContainer) {
+          if (baseContainer && this.container) {
             this.mdAndUp
               ? (baseContainer.style.height = "100vh")  // Full height on desktop
               : (baseContainer.style.height = "100vw"); // Square on mobile
@@ -193,7 +269,8 @@ export default {
       console.log("Loading default placental model...");
       
       // Load default placental arterial tree model using utility
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
+      const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk');
+      const result = await this.vtkLoader.loadVTKFile(vtkPath, {
         displayName: 'Placental Arterial Tree',
         color: 0xff2222,
         opacity: 0.9,
@@ -207,7 +284,8 @@ export default {
             'Placental Vessel Network (Enhanced Visualization)';
           
           // Load camera view
-          this.scene.loadViewUrl('modelView/noInfarct_view.json');
+          const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
+          this.scene.loadViewUrl(viewPath);
           this.scene.onWindowResize();
         }
       });
@@ -224,7 +302,8 @@ export default {
     async reloadVTKModel() {
       console.log("User requested VTK model reload...");
       
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk', {
+      const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk');
+      const result = await this.vtkLoader.loadVTKFile(vtkPath, {
         displayName: 'Placental Arterial Tree',
         color: 0xff3333,
         opacity: 0.9,
@@ -236,7 +315,8 @@ export default {
           this.modelName = isPointCloud ? 
             'Placental Arterial Tree (Point Cloud)' : 
             'Placental Arterial Tree (Reloaded)';
-          this.scene.loadViewUrl('modelView/noInfarct_view.json');
+          const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
+          this.scene.loadViewUrl(viewPath);
         }
       });
       
@@ -249,7 +329,8 @@ export default {
      * Load venous tree using VTKLoader utility
      */
     async loadVenousTree() {
-      const result = await this.vtkLoader.loadVTKFile('/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk', {
+      const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk');
+      const result = await this.vtkLoader.loadVTKFile(vtkPath, {
         displayName: 'Placental Venous Tree',
         color: 0x2222ff,
         opacity: 0.8,
@@ -261,7 +342,8 @@ export default {
           this.modelName = isPointCloud ? 
             'Placental Venous Tree (Point Cloud)' : 
             'Placental Venous Tree (Enhanced)';
-          this.scene.loadViewUrl('modelView/noInfarct_view.json');
+          const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
+          this.scene.loadViewUrl(viewPath);
         }
       });
       
@@ -272,7 +354,7 @@ export default {
 
     // Legacy OBJ model loader (kept for compatibility)
     loadModel(model_url, model_name) {
-      const viewURL = 'modelView/noInfarct_view.json';
+      const viewURL = this.getAssetPath('modelView/noInfarct_view.json');
 
       this.scene = this.baseRenderer.getSceneByName(model_name);
       if (this.scene === undefined) {
@@ -337,6 +419,31 @@ export default {
     &:last-child {
       margin-bottom: 0;
     }
+  }
+}
+
+// Loading placeholder styles
+.loading-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+  
+  .loading-text {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 300;
+    text-align: center;
+    opacity: 0.8;
+  }
+}
+
+// Responsive adjustments for mobile
+@media (max-width: 768px) {
+  .loading-placeholder {
+    height: 100vw;
   }
 }
 </style> 
