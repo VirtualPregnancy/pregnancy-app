@@ -324,7 +324,7 @@ export default {
 
 .model-controls {
   position: absolute;
-  top: 10px;
+  top: 12px;
   left: 10px;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.75);
