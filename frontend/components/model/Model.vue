@@ -2,23 +2,13 @@
   <div class="model">
     <!-- Only render in client-side to avoid SSR mismatch -->
     <client-only>
-      <!-- Display current model loading status -->
-      {{ modelName }}
       <!-- 3D model container div, responsive sizing based on screen size -->
       <div
           ref="baseDomObject"
           :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
           style="width: 100%; height: 100%;"
         />
-      <!-- Control panel with multiple VTK model options -->
-      <div class="model-controls">
-        <v-btn @click="reloadVTKModel" color="primary" small class="ma-1">
-          Load Arterial
-        </v-btn>
-        <v-btn @click="loadVenousTree" color="blue" small class="ma-1">
-          Load Venous
-        </v-btn>
-      </div>
+      <!-- Control panel moved to PanelControls component -->
       
       <!-- Fallback template for SSR -->
       <template #fallback>
@@ -34,6 +24,22 @@
 import VTKLoader from '@/utils/vtkLoader'
 
 export default {
+  props: {
+    // Model control states from parent component
+    useTubeRendering: {
+      type: Boolean,
+      default: true
+    },
+    currentPerformanceMode: {
+      type: String,
+      default: 'high'
+    },
+    modelName: {
+      type: String,
+      default: 'Loading...'
+    }
+  },
+  
   // Component data - stores all reactive properties
   data() {
     return {
@@ -41,7 +47,6 @@ export default {
       THREE: null,         // Three.js library instance for 3D geometry
       baseRenderer: null,  // Main renderer for managing 3D scenes
       container: null,     // DOM container for 3D canvas
-      modelName: "Placental Vessel Network",  // Status text shown to user
       helloworld:"",       // Placeholder for API response
       model:null,          // Stores loaded model data
       vtkLoader: null,     // VTK loader utility instance
@@ -118,14 +123,14 @@ export default {
         this.initializeCopper3D();
       } else if (retryCount < maxRetries) {
         console.log(`[Model] Plugins not ready, retrying... (${retryCount + 1}/${maxRetries})`);
-        this.modelName = `Loading 3D Engine... (${retryCount + 1}/${maxRetries})`;
+        this.$emit('model-state-updated', { modelName: `Loading 3D Engine... (${retryCount + 1}/${maxRetries})` });
         
         setTimeout(() => {
           this.waitForPluginsAndInitialize(retryCount + 1);
         }, delay);
       } else {
         console.error("[Model] Failed to initialize plugins after maximum retries");
-        this.modelName = "Error: 3D engine initialization timed out";
+        this.$emit('model-state-updated', { modelName: "Error: 3D engine initialization timed out" });
       }
     },
 
@@ -164,14 +169,14 @@ export default {
         this.initialize3DEngine();
       } else if (retryCount < maxRetries) {
         console.log(`[Model] DOM container not ready, retrying... (${retryCount + 1}/${maxRetries})`);
-        this.modelName = `Preparing 3D Container... (${retryCount + 1}/${maxRetries})`;
+        this.$emit('model-state-updated', { modelName: `Preparing 3D Container... (${retryCount + 1}/${maxRetries})` });
         
         setTimeout(() => {
           this.waitForDOMAndInitialize(retryCount + 1);
         }, delay);
       } else {
         console.error("[Model] Failed to find DOM container after maximum retries");
-        this.modelName = "Error: DOM container not found";
+        this.$emit('model-state-updated', { modelName: "Error: DOM container not found" });
       }
     },
 
@@ -186,7 +191,7 @@ export default {
         // Verify all components are properly initialized
         if (!this.baseRenderer || !baseContainer || !this.container) {
           console.error("[Model] 3D components not properly initialized");
-          this.modelName = "Error: 3D components missing";
+          this.$emit('model-state-updated', { modelName: "Error: 3D components missing" });
           return;
         }
       
@@ -211,7 +216,7 @@ export default {
         
       } catch (error) {
         console.error("[Model] Error initializing 3D components:", error);
-        this.modelName = "Error: Failed to initialize 3D engine";
+        this.$emit('model-state-updated', { modelName: "Error: Failed to initialize 3D engine" });
       }
     },
 
@@ -257,10 +262,13 @@ export default {
         // Set copper scene reference for camera control
         this.vtkLoader.setCopperScene(this.scene);
         
-        console.log("VTK Loader initialized with camera control");
+        // Set initial performance mode
+        this.vtkLoader.setPerformanceMode(this.currentPerformanceMode);
+        
+        console.log("VTK Loader initialized with camera control and performance mode:", this.currentPerformanceMode);
       } catch (error) {
         console.error("[Model] Error initializing VTK loader:", error);
-        this.modelName = "Error: VTK loader initialization failed";
+        this.$emit('model-state-updated', { modelName: "Error: VTK loader initialization failed" });
       }
     },
 
@@ -275,13 +283,26 @@ export default {
         color: 0xff2222,
         opacity: 0.9,
         modelSize: 420, // Target model size - automatically scales lineWidth and pointSize
+        enableTubeMesh: this.useTubeRendering, // Enable realistic tube rendering
+        tubeRadiusScale: this.getOptimalRadiusScale(), // Dynamic radius scale based on performance
+        tubeSegments: this.getOptimalTubeSegments(), // Dynamic segments based on performance mode
+        enableOptimization: true, // Enable LOD and batching optimizations
         onProgress: (message, progress) => {
-          this.modelName = `${message} (${Math.round(progress)}%)`;
+          const progressMessage = `${message} (${Math.round(progress)}%)`;
+          this.$emit('model-state-updated', { modelName: progressMessage });
         },
         onComplete: (mesh, isPointCloud) => {
-          this.modelName = isPointCloud ? 
-            'Placental Vessel Network (Point Cloud)' : 
-            'Placental Vessel Network (Enhanced Visualization)';
+          let newModelName;
+          if (isPointCloud) {
+            newModelName = 'Placental Vessel Network (Point Cloud)';
+          } else {
+            newModelName = this.useTubeRendering ? 
+              'Placental Vessel Network (Variable Radius Tubes)' :
+              'Placental Vessel Network (Line Rendering)';
+          }
+          
+          // Emit state update to parent
+          this.$emit('model-state-updated', { modelName: newModelName });
           
           // Load camera view
           const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
@@ -291,7 +312,7 @@ export default {
       });
       
       if (!result.success) {
-        this.modelName = `Error: ${result.error.message}`;
+        this.$emit('model-state-updated', { modelName: `Error: ${result.error.message}` });
       }
     },
 
@@ -308,20 +329,34 @@ export default {
         color: 0xff3333,
         opacity: 0.9,
         modelSize: 420, // Target model size - automatically scales lineWidth and pointSize
+        enableTubeMesh: this.useTubeRendering, // Enable realistic tube rendering
+        tubeRadiusScale: this.getOptimalRadiusScale(), // Dynamic radius scale based on performance
+        tubeSegments: this.getOptimalTubeSegments(), // Dynamic segments based on performance mode
+        enableOptimization: true, // Enable LOD and batching optimizations
         onProgress: (message, progress) => {
-          this.modelName = `${message} (${Math.round(progress)}%)`;
+          const progressMessage = `${message} (${Math.round(progress)}%)`;
+          this.$emit('model-state-updated', { modelName: progressMessage });
         },
         onComplete: (mesh, isPointCloud) => {
-          this.modelName = isPointCloud ? 
-            'Placental Arterial Tree (Point Cloud)' : 
-            'Placental Arterial Tree (Reloaded)';
+          let newModelName;
+          if (isPointCloud) {
+            newModelName = 'Placental Arterial Tree (Point Cloud)';
+          } else {
+            newModelName = this.useTubeRendering ? 
+              'Placental Arterial Tree (Variable Radius Tubes)' :
+              'Placental Arterial Tree (Line Rendering)';
+          }
+          
+          // Emit state update to parent
+          this.$emit('model-state-updated', { modelName: newModelName });
+          
           const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
           this.scene.loadViewUrl(viewPath);
         }
       });
       
       if (!result.success) {
-        this.modelName = `Error: ${result.error.message}`;
+        this.$emit('model-state-updated', { modelName: `Error: ${result.error.message}` });
       }
     },
 
@@ -335,20 +370,34 @@ export default {
         color: 0x2222ff,
         opacity: 0.8,
         modelSize: 420, // Target model size - automatically scales lineWidth and pointSize
+        enableTubeMesh: this.useTubeRendering, // Enable realistic tube rendering
+        tubeRadiusScale: this.getOptimalRadiusScale(), // Dynamic radius scale based on performance
+        tubeSegments: this.getOptimalTubeSegments(), // Dynamic segments based on performance mode
+        enableOptimization: true, // Enable LOD and batching optimizations
         onProgress: (message, progress) => {
-          this.modelName = `${message} (${Math.round(progress)}%)`;
+          const progressMessage = `${message} (${Math.round(progress)}%)`;
+          this.$emit('model-state-updated', { modelName: progressMessage });
         },
         onComplete: (mesh, isPointCloud) => {
-          this.modelName = isPointCloud ? 
-            'Placental Venous Tree (Point Cloud)' : 
-            'Placental Venous Tree (Enhanced)';
+          let newModelName;
+          if (isPointCloud) {
+            newModelName = 'Placental Venous Tree (Point Cloud)';
+          } else {
+            newModelName = this.useTubeRendering ? 
+              'Placental Venous Tree (Variable Radius Tubes)' :
+              'Placental Venous Tree (Line Rendering)';
+          }
+          
+          // Emit state update to parent
+          this.$emit('model-state-updated', { modelName: newModelName });
+          
           const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
           this.scene.loadViewUrl(viewPath);
         }
       });
       
       if (!result.success) {
-        this.modelName = `Error: ${result.error.message}`;
+        this.$emit('model-state-updated', { modelName: `Error: ${result.error.message}` });
       }
     },
 
@@ -366,6 +415,63 @@ export default {
         this.scene.loadViewUrl(viewURL);
       }
       this.scene.onWindowResize();
+    },
+
+    // Toggle between tube and line rendering modes
+    toggleRenderMode() {
+      const newTubeRendering = !this.useTubeRendering;
+      console.log('[Model] Switched to', newTubeRendering ? 'tube' : 'line', 'rendering mode');
+      
+      // Emit state changes to parent
+      this.$emit('model-state-updated', { 
+        useTubeRendering: newTubeRendering,
+        modelName: "Switching render mode..."
+      });
+      
+      // Reload current model with new rendering mode
+      this.start(); // Reload the default arterial model
+    },
+
+    // Cycle through performance modes
+    cyclePerformanceMode() {
+      const modes = ['high', 'medium', 'low', 'auto'];
+      const currentIndex = modes.indexOf(this.currentPerformanceMode);
+      const nextIndex = (currentIndex + 1) % modes.length;
+      const newPerformanceMode = modes[nextIndex];
+      
+      console.log('[Model] Performance mode set to:', newPerformanceMode);
+      
+      // Emit state changes to parent
+      this.$emit('model-state-updated', { 
+        currentPerformanceMode: newPerformanceMode
+      });
+      
+      // Set performance mode in VTK loader if available
+      if (this.vtkLoader) {
+        this.vtkLoader.setPerformanceMode(newPerformanceMode);
+      }
+    },
+
+    // Get optimal tube segments based on performance mode
+    getOptimalTubeSegments() {
+      const segmentMap = {
+        'high': 8,
+        'medium': 6,
+        'low': 4,
+        'auto': 6 // Auto mode starts with medium quality
+      };
+      return segmentMap[this.currentPerformanceMode] || 6;
+    },
+
+    // Get performance-optimized tube radius scale
+    getOptimalRadiusScale() {
+      const scaleMap = {
+        'high': 2.0,
+        'medium': 1.5,
+        'low': 1.0,
+        'auto': 1.5 // Auto mode starts with medium quality
+      };
+      return scaleMap[this.currentPerformanceMode] || 2.0;
     }
   },
 
@@ -404,23 +510,7 @@ export default {
   height: 100vw;
 }
 
-.model-controls {
-  position: absolute;
-  top: 12px;
-  left: 10px;
-  z-index: 1000;
-  background: rgba(0, 0, 0, 0.75);
-  border-radius: 8px;
-  padding: 10px;
-  
-  .control-group {
-    margin-bottom: 8px;
-    
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-}
+// Model controls moved to PanelControls component
 
 // Loading placeholder styles
 .loading-placeholder {
