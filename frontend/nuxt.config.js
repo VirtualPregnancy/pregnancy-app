@@ -92,7 +92,7 @@ export default {
   plugins: [
     "@/plugins/topics",
     "@/plugins/current-content",
-    { src: "~/plugins/copper.js", ssr: false },
+    { src: "~/plugins/copper.js", ssr: false, mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

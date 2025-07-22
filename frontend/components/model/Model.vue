@@ -7,6 +7,9 @@
         ref="baseDomObject"
         :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
       />
+      <button @click="reloadVTKModel">Reload Model</button>
+      <button @click="loadVenousTree">Load Venous Tree</button>
+      <button @click="loadTerminalVessels">Load Terminal Vessels</button>
   </div>
 </template>
 
@@ -21,10 +24,11 @@ export default {
       THREE: null,         // Three.js library instance for 3D geometry
       baseRenderer: null,  // Main renderer for managing 3D scenes
       container: null,     // DOM container for 3D canvas
-      modelName: "Placental Vessel Network",  // Status text shown to user
+      modelName: "Loading Placental Vessel Network...",  // Status text shown to user
       helloworld:"",       // Placeholder for API response
       model:null,          // Stores loaded model data
-      vtkLoader: null      // VTK loader utility instance
+      vtkLoader: null,     // VTK loader utility instance
+      initializationAttempts: 0, // Track initialization attempts for debugging
     };
   },
 
@@ -39,39 +43,113 @@ export default {
 
   // Component mounted lifecycle - initializes 3D environment
   mounted() {
-    // Initialize 3D libraries from plugins
-    this.Copper = this.$Copper();           // Get Copper3D instance
-    this.THREE = this.$three();             // Get Three.js instance  
-    this.baseRenderer = this.$baseRenderer(); // Get main renderer
-    const baseContainer = this.$baseContainer(); // Get 3D container
-    this.container = this.$refs.baseDomObject;   // Get DOM reference
-    
-    // Setup container with slight delay to ensure DOM is ready
-    setTimeout(() => {
-      // Set responsive height based on screen size
-      this.mdAndUp
-        ? (baseContainer.style.height = "100vh")  // Full height on desktop
-        : (baseContainer.style.height = "100vw"); // Square on mobile
-      
-      
-      this.container.appendChild(baseContainer);
-      
-      // Initialize VTK loader and start loading models
-      this.initializeVTKLoader();
-      this.start();
-    }, 100);
-
-    window.addEventListener("resize", () => {
-      setTimeout(() => {
-        this.mdAndUp
-          ? (baseContainer.style.height = "100vh")
-          : (baseContainer.style.height = "100vw");
-        this.scene.onWindowResize();
-      }, 500);
-    });
+    // Add delay and retry mechanism to ensure plugins are fully loaded
+    this.initializeWithRetry();
   },
 
   methods: {
+    // Initialize with retry mechanism for plugin loading
+    async initializeWithRetry(retryCount = 0, maxRetries = 5) {
+      const delay = retryCount * 500; // Progressive delay: 0ms, 500ms, 1s, 1.5s, 2s
+      this.initializationAttempts = retryCount + 1;
+      
+      // Update status for user
+      this.modelName = retryCount === 0 
+        ? "Initializing 3D engine..." 
+        : `Retrying 3D initialization... (${retryCount}/${maxRetries})`;
+      
+      try {
+        // Wait for potential plugin loading
+        await new Promise(resolve => setTimeout(resolve, delay));
+        
+        console.log(`[Model] Attempt ${this.initializationAttempts}: Checking plugin availability`);
+        
+        // Check if plugins are available
+        if (!this.$Copper || !this.$three || !this.$baseRenderer || !this.$baseContainer) {
+          const missingPlugins = [];
+          if (!this.$Copper) missingPlugins.push('$Copper');
+          if (!this.$three) missingPlugins.push('$three');
+          if (!this.$baseRenderer) missingPlugins.push('$baseRenderer');
+          if (!this.$baseContainer) missingPlugins.push('$baseContainer');
+          
+          console.warn(`[Model] Missing plugins: ${missingPlugins.join(', ')}`);
+          
+          if (retryCount < maxRetries) {
+            console.log(`[Model] Plugins not ready, retrying... (${retryCount + 1}/${maxRetries + 1})`);
+            return this.initializeWithRetry(retryCount + 1, maxRetries);
+          } else {
+            throw new Error(`3D plugins failed to load after maximum retries. Missing: ${missingPlugins.join(', ')}`);
+          }
+        }
+
+        console.log(`[Model] All plugins available, initializing...`);
+        this.modelName = "Setting up 3D environment...";
+
+        // Initialize 3D libraries from plugins
+        this.Copper = this.$Copper();           // Get Copper3D instance
+        this.THREE = this.$three();             // Get Three.js instance  
+        this.baseRenderer = this.$baseRenderer(); // Get main renderer
+        const baseContainer = this.$baseContainer(); // Get 3D container
+        this.container = this.$refs.baseDomObject;   // Get DOM reference
+        
+        // Ensure container element exists
+        if (!this.container) {
+          throw new Error('Model container DOM element not found');
+        }
+        
+        console.log(`[Model] DOM container found, setting up...`);
+        this.modelName = "Preparing 3D viewport...";
+        
+        // Setup container with delay to ensure DOM is ready
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Set responsive height based on screen size
+        this.mdAndUp
+          ? (baseContainer.style.height = "100vh")  // Full height on desktop
+          : (baseContainer.style.height = "100vw"); // Square on mobile
+        
+        // Clear any existing content
+        this.container.innerHTML = '';
+        this.container.appendChild(baseContainer);
+        
+        console.log(`[Model] Container appended, initializing VTK loader...`);
+        this.modelName = "Loading 3D models...";
+        
+        // Initialize VTK loader and start loading models
+        this.initializeVTKLoader();
+        await this.start();
+        
+        // Add resize listener
+        this.addResizeListener(baseContainer);
+        
+        console.log('[Model] 3D environment initialized successfully');
+        
+      } catch (error) {
+        console.error(`[Model] Initialization failed:`, error);
+        this.modelName = `Error: ${error.message}`;
+        
+        // Try one more time after a longer delay if not exceeded max retries
+        if (retryCount < maxRetries) {
+          console.log(`[Model] Will retry after longer delay...`);
+          setTimeout(() => this.initializeWithRetry(retryCount + 1, maxRetries), 2000);
+        }
+      }
+    },
+
+    // Add resize listener separately
+    addResizeListener(baseContainer) {
+      window.addEventListener("resize", () => {
+        setTimeout(() => {
+          if (this.scene && baseContainer) {
+            this.mdAndUp
+              ? (baseContainer.style.height = "100vh")
+              : (baseContainer.style.height = "100vw");
+            this.scene.onWindowResize();
+          }
+        }, 500);
+      });
+    },
+
     // Initialize VTK loader utility
     initializeVTKLoader() {
       // Initialize scene first
