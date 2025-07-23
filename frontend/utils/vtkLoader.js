@@ -33,6 +33,8 @@ export default class VTKLoader {
    * @param {number} options.pointSize - Point size for point cloud (auto-calculated if not provided)
    * @param {number} options.modelSize - Target model size in units (default: 420)
    * @param {boolean} options.enableWireframe - Enable wireframe overlay (default: true)
+   * @param {boolean} options.useCylinderGeometry - Use cylinder geometry with radius data (default: false)
+   * @param {number} options.cylinderSegments - Number of radial segments for cylinders (default: 8)
    * @param {Function} options.onProgress - Progress callback function
    * @param {Function} options.onComplete - Completion callback function
    * @returns {Promise<Object>} - {success: boolean, mesh: THREE.Object3D, error?: Error}
@@ -49,6 +51,8 @@ export default class VTKLoader {
       lineWidth: options.lineWidth || Math.max(2, Math.round(modelSize / 70)), // Scale: 420→6, 280→4, 140→2
       pointSize: options.pointSize || Math.max(8, Math.round(modelSize / 17)), // Scale: 420→25, 280→16, 140→8
       enableWireframe: true,
+      useCylinderGeometry: false, // New option for cylinder rendering
+      cylinderSegments: 8, // Number of radial segments for cylinders
       onProgress: null,
       onComplete: null,
       ...options
@@ -64,22 +68,22 @@ export default class VTKLoader {
     try {
       // Fetch and parse VTK file
       const vtkData = await this.fetchVTKFile(vtkFilePath, config.onProgress);
-      const parseResult = this.parseVTKData(vtkData, config.onProgress, config.modelSize);
-      const { geometry, isPointCloud } = parseResult;
+      const parseResult = this.parseVTKData(vtkData, config.onProgress, config.modelSize, config.useCylinderGeometry);
+      const { geometry, isPointCloud, radiusData } = parseResult;
       
       // Create appropriate mesh with custom settings
-      const mesh = this.createVTKMesh(geometry, isPointCloud, config);
+      const mesh = this.createVTKMesh(geometry, isPointCloud, config, radiusData);
       
       // Add to scene with enhanced lighting
       this.addToScene(mesh, config);
       
       // Call completion callback
       if (config.onComplete) {
-        config.onComplete(mesh, isPointCloud);
+        config.onComplete(mesh, isPointCloud, radiusData);
       }
       
       console.log(`[VTKLoader] Successfully loaded: ${config.displayName}`);
-      return { success: true, mesh, isPointCloud };
+      return { success: true, mesh, isPointCloud, radiusData };
       
     } catch (error) {
       console.error(`[VTKLoader] Failed to load VTK file ${vtkFilePath}:`, error);
@@ -123,9 +127,10 @@ export default class VTKLoader {
    * @param {string} vtkData - VTK file content
    * @param {Function} onProgress - Progress callback
    * @param {number} modelSize - Target model size in units (default: 420)
-   * @returns {Object} - {geometry: THREE.BufferGeometry, isPointCloud: boolean}
+   * @param {boolean} useCylinderGeometry - Whether to create cylinder geometry
+   * @returns {Object} - {geometry: THREE.BufferGeometry, isPointCloud: boolean, radiusData: Array}
    */
-  parseVTKData(vtkData, onProgress = null,modelSize) {
+  parseVTKData(vtkData, onProgress = null, modelSize, useCylinderGeometry = false) {
     console.log("[VTKLoader] Starting VTK data parsing...");
     
     if (onProgress) {
@@ -137,9 +142,13 @@ export default class VTKLoader {
     const vertices = [];        // Final array of vertex coordinates for Three.js
     let isReadingPoints = false; // Flag: currently reading point coordinates
     let isReadingCells = false;  // Flag: currently reading cell connectivity
+    let isReadingScalars = false; // Flag: currently reading scalar data
+    let isReadingRadius = false;  // Flag: currently reading radius scalar data
     let points = [];            // Temporary storage for all point coordinates
+    let radiusData = [];        // Array to store radius values for each point
     let pointCount = 0;         // Total number of points in file
-    let cellCount = 0;          // Total number of cells (connections) in file
+    let cellCount = 0;
+    let cellConnections = [];   // Store cell connectivity information
 
     // Process each line of the VTK file
     for (let i = 0; i < lines.length; i++) {
@@ -158,6 +167,8 @@ export default class VTKLoader {
         console.log("[VTKLoader] Found", pointCount, "3D points in VTK file");
         isReadingPoints = true;
         isReadingCells = false;
+        isReadingScalars = false;
+        isReadingRadius = false;
         continue;
       }
       
@@ -170,6 +181,37 @@ export default class VTKLoader {
         }
         isReadingPoints = false;
         isReadingCells = true;
+        isReadingScalars = false;
+        isReadingRadius = false;
+        continue;
+      }
+      
+      // Detect POINT_DATA section - contains scalar data
+      if (line.startsWith('POINT_DATA')) {
+        console.log("[VTKLoader] Found POINT_DATA section");
+        isReadingPoints = false;
+        isReadingCells = false;
+        isReadingScalars = true;
+        isReadingRadius = false;
+        continue;
+      }
+      
+      // Detect SCALARS section - check if it's radius data
+      if (line.startsWith('SCALARS')) {
+        const parts = line.split(' ');
+        if (parts.length > 1 && parts[1].toLowerCase() === 'radius') {
+          console.log("[VTKLoader] Found Radius scalar data");
+          isReadingRadius = true;
+        } else {
+          isReadingRadius = false;
+        }
+        isReadingPoints = false;
+        isReadingCells = false;
+        continue;
+      }
+      
+      // Skip LOOKUP_TABLE line
+      if (line.startsWith('LOOKUP_TABLE')) {
         continue;
       }
       
@@ -180,7 +222,13 @@ export default class VTKLoader {
         points.push(...coords); // Add all coordinates to points array
       }
       
-      // Skip non-numeric lines in cells section (like CELL_TYPES, POINT_DATA, etc.)
+      // Read radius scalar data
+      if (isReadingRadius && radiusData.length < pointCount) {
+        const radii = line.split(' ').filter(x => x !== '').map(parseFloat);
+        radiusData.push(...radii);
+      }
+      
+      // Read cell connectivity data
       if (isReadingCells && line.trim() !== '' && 
           !line.startsWith('CELL_TYPES') && 
           !line.startsWith('POINT_DATA') && 
@@ -194,28 +242,27 @@ export default class VTKLoader {
         if (indices.length > 1) {
           const cellSize = indices[0]; // First number = how many points in this cell
           
-          // Debug: log first few valid cells to understand structure
-          if (vertices.length === 0 && indices.length === cellSize + 1) {
-            console.log("[VTKLoader] First valid cell example:", indices);
-            console.log("[VTKLoader] Cell size:", cellSize, "Total indices:", indices.length);
-          }
-          
-          // Only process if we have the expected number of indices
+          // Store cell connection for later processing
           if (indices.length === cellSize + 1) {
-            // For VTK lines/polylines, connect consecutive points in sequence
-            for (let j = 1; j < cellSize; j++) {
-              const idx1 = indices[j];     // Current point index
-              const idx2 = indices[j + 1]; // Next point index
-              
-              // Check if we have a valid next point (not the last point in cell)
-              if (idx2 !== undefined && !isNaN(idx1) && !isNaN(idx2)) {
-                // Ensure indices are valid (within bounds of points array)
-                if (idx1 * 3 + 2 < points.length && idx2 * 3 + 2 < points.length) {
-                  // Add line segment: 6 coordinates (x1,y1,z1,x2,y2,z2)
-                  vertices.push(
-                    points[idx1 * 3], points[idx1 * 3 + 1], points[idx1 * 3 + 2], // First point
-                    points[idx2 * 3], points[idx2 * 3 + 1], points[idx2 * 3 + 2]  // Second point
-                  );
+            cellConnections.push(indices);
+            
+            // For non-cylinder geometry, create line segments immediately
+            if (!useCylinderGeometry) {
+              // For VTK lines/polylines, connect consecutive points in sequence
+              for (let j = 1; j < cellSize; j++) {
+                const idx1 = indices[j];     // Current point index
+                const idx2 = indices[j + 1]; // Next point index
+                
+                // Check if we have a valid next point (not the last point in cell)
+                if (idx2 !== undefined && !isNaN(idx1) && !isNaN(idx2)) {
+                  // Ensure indices are valid (within bounds of points array)
+                  if (idx1 * 3 + 2 < points.length && idx2 * 3 + 2 < points.length) {
+                    // Add line segment: 6 coordinates (x1,y1,z1,x2,y2,z2)
+                    vertices.push(
+                      points[idx1 * 3], points[idx1 * 3 + 1], points[idx1 * 3 + 2], // First point
+                      points[idx2 * 3], points[idx2 * 3 + 1], points[idx2 * 3 + 2]  // Second point
+                    );
+                  }
                 }
               }
             }
@@ -230,10 +277,21 @@ export default class VTKLoader {
     }
 
     console.log("[VTKLoader] Parsing complete:", points.length / 3, "points processed");
+    console.log("[VTKLoader] Found", radiusData.length, "radius values");
     console.log("[VTKLoader] Created", vertices.length / 6, "line segments for rendering");
     
     if (onProgress) {
       onProgress("Creating 3D geometry...", 70);
+    }
+    
+    // Create Three.js BufferGeometry from parsed data
+    const geometry = new this.THREE.BufferGeometry();
+    
+    // If cylinder geometry is requested and we have radius data, create cylinders
+    if (useCylinderGeometry && radiusData.length > 0 && cellConnections.length > 0) {
+      console.log("[VTKLoader] Creating cylinder geometry with radius data...");
+      const cylinderGeometry = this.createCylinderGeometry(points, radiusData, cellConnections, modelSize);
+      return { geometry: cylinderGeometry, isPointCloud: false, radiusData };
     }
     
     // Debug: if no vertices created, there might be an issue with cell parsing
@@ -243,15 +301,18 @@ export default class VTKLoader {
       console.log("[VTKLoader] Expected points:", pointCount * 3);
     }
 
-    // Create Three.js BufferGeometry from parsed data
-    const geometry = new this.THREE.BufferGeometry();
-    
     // If no line segments were created, create a point cloud as fallback
     if (vertices.length === 0 && points.length > 0) {
       console.log("[VTKLoader] Creating point cloud fallback visualization...");
       // Use original points for point cloud
       geometry.setAttribute('position', new this.THREE.Float32BufferAttribute(points, 3));
-      return { geometry, isPointCloud: true }; // Return flag to use different material
+      
+      // Add radius data as an attribute if available
+      if (radiusData.length > 0) {
+        geometry.setAttribute('radius', new this.THREE.Float32BufferAttribute(radiusData, 1));
+      }
+      
+      return { geometry, isPointCloud: true, radiusData }; // Return flag to use different material
     } else {
       // Set vertex positions for line segments (each vertex has 3 coordinates: x, y, z)
       geometry.setAttribute('position', new this.THREE.Float32BufferAttribute(vertices, 3));
@@ -277,7 +338,170 @@ export default class VTKLoader {
       onProgress("Geometry created, building materials...", 80);
     }
     
-    return { geometry, isPointCloud: false };
+    return { geometry, isPointCloud: false, radiusData };
+  }
+
+  /**
+   * Create cylinder geometry from VTK data with radius information
+   * @param {Array} points - Array of point coordinates
+   * @param {Array} radiusData - Array of radius values for each point
+   * @param {Array} cellConnections - Array of cell connectivity data
+   * @param {number} modelSize - Target model size for scaling
+   * @returns {THREE.BufferGeometry} - Combined cylinder geometry
+   */
+  createCylinderGeometry(points, radiusData, cellConnections, modelSize) {
+    console.log("[VTKLoader] Creating cylinder geometry...");
+    
+    const combinedGeometry = new this.THREE.BufferGeometry();
+    const vertices = [];
+    const normals = [];
+    const indices = [];
+    let indexOffset = 0;
+    
+    // Number of radial segments for each cylinder
+    const radialSegments = 8;
+    
+    // Process each cell connection
+    for (const connection of cellConnections) {
+      const cellSize = connection[0];
+      
+      // Create cylinders for each segment in the cell
+      for (let i = 1; i < cellSize; i++) {
+        const idx1 = connection[i];
+        const idx2 = connection[i + 1];
+        
+        if (idx2 !== undefined && idx1 < points.length / 3 && idx2 < points.length / 3) {
+          // Get point coordinates
+          const p1 = new this.THREE.Vector3(
+            points[idx1 * 3], 
+            points[idx1 * 3 + 1], 
+            points[idx1 * 3 + 2]
+          );
+          const p2 = new this.THREE.Vector3(
+            points[idx2 * 3], 
+            points[idx2 * 3 + 1], 
+            points[idx2 * 3 + 2]
+          );
+          
+          // Get radius values (use average if both points have radius data)
+          let radius1 = radiusData[idx1] || 0.1;
+          let radius2 = radiusData[idx2] || 0.1;
+          
+          // Create tapered cylinder segment
+          const cylinderSegment = this.createTaperedCylinder(p1, p2, radius1, radius2, radialSegments);
+          
+          // Add vertices, normals, and indices to combined geometry
+          const segmentVertices = cylinderSegment.vertices;
+          const segmentNormals = cylinderSegment.normals;
+          const segmentIndices = cylinderSegment.indices;
+          
+          // Add vertices and normals
+          vertices.push(...segmentVertices);
+          normals.push(...segmentNormals);
+          
+          // Add indices with offset
+          for (const index of segmentIndices) {
+            indices.push(index + indexOffset);
+          }
+          
+          // Update index offset
+          indexOffset += segmentVertices.length / 3;
+        }
+      }
+    }
+    
+    // Set geometry attributes
+    combinedGeometry.setAttribute('position', new this.THREE.Float32BufferAttribute(vertices, 3));
+    combinedGeometry.setAttribute('normal', new this.THREE.Float32BufferAttribute(normals, 3));
+    combinedGeometry.setIndex(indices);
+    
+    // Calculate bounding box and apply scaling
+    combinedGeometry.computeBoundingBox();
+    const center = combinedGeometry.boundingBox.getCenter(new this.THREE.Vector3());
+    const size = combinedGeometry.boundingBox.getSize(new this.THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = modelSize / maxDim;
+    
+    // Transform geometry: center at origin and scale to appropriate size
+    combinedGeometry.translate(-center.x, -center.y, -center.z);
+    combinedGeometry.scale(scale, scale, scale);
+    
+    console.log("[VTKLoader] Created cylinder geometry with", vertices.length / 3, "vertices");
+    
+    return combinedGeometry;
+  }
+
+  /**
+   * Create a tapered cylinder between two points with different radii
+   * @param {THREE.Vector3} p1 - Start point
+   * @param {THREE.Vector3} p2 - End point
+   * @param {number} radius1 - Radius at start point
+   * @param {number} radius2 - Radius at end point
+   * @param {number} radialSegments - Number of radial segments
+   * @returns {Object} - {vertices: Array, normals: Array, indices: Array}
+   */
+  createTaperedCylinder(p1, p2, radius1, radius2, radialSegments) {
+    const vertices = [];
+    const normals = [];
+    const indices = [];
+    
+    // Calculate cylinder direction and perpendicular vectors
+    const direction = new this.THREE.Vector3().subVectors(p2, p1).normalize();
+    const length = p1.distanceTo(p2);
+    
+    // Create perpendicular vectors for cylinder cross-section
+    const up = new this.THREE.Vector3(0, 1, 0);
+    const right = new this.THREE.Vector3().crossVectors(direction, up).normalize();
+    if (right.lengthSq() < 0.1) {
+      // Direction is parallel to up vector, use different reference
+      right.crossVectors(direction, new this.THREE.Vector3(1, 0, 0)).normalize();
+    }
+    const forward = new this.THREE.Vector3().crossVectors(right, direction).normalize();
+    
+    // Generate vertices for cylinder caps
+    for (let ring = 0; ring <= 1; ring++) {
+      const t = ring; // 0 for start, 1 for end
+      const currentPos = new this.THREE.Vector3().lerpVectors(p1, p2, t);
+      const currentRadius = radius1 + (radius2 - radius1) * t;
+      
+      for (let segment = 0; segment < radialSegments; segment++) {
+        const angle = (segment / radialSegments) * Math.PI * 2;
+        const x = Math.cos(angle) * currentRadius;
+        const y = Math.sin(angle) * currentRadius;
+        
+        // Calculate vertex position
+        const vertexPos = new this.THREE.Vector3()
+          .copy(currentPos)
+          .add(right.clone().multiplyScalar(x))
+          .add(forward.clone().multiplyScalar(y));
+        
+        vertices.push(vertexPos.x, vertexPos.y, vertexPos.z);
+        
+        // Calculate normal (pointing outward from cylinder axis)
+        const normal = new this.THREE.Vector3()
+          .copy(right.clone().multiplyScalar(x))
+          .add(forward.clone().multiplyScalar(y))
+          .normalize();
+        
+        normals.push(normal.x, normal.y, normal.z);
+      }
+    }
+    
+    // Generate indices for cylinder walls
+    for (let ring = 0; ring < 1; ring++) {
+      for (let segment = 0; segment < radialSegments; segment++) {
+        const current = ring * radialSegments + segment;
+        const next = ring * radialSegments + ((segment + 1) % radialSegments);
+        const currentNext = (ring + 1) * radialSegments + segment;
+        const nextNext = (ring + 1) * radialSegments + ((segment + 1) % radialSegments);
+        
+        // Two triangles per quad
+        indices.push(current, next, currentNext);
+        indices.push(currentNext, next, nextNext);
+      }
+    }
+    
+    return { vertices, normals, indices };
   }
 
   /**
@@ -285,9 +509,10 @@ export default class VTKLoader {
    * @param {THREE.BufferGeometry} geometry - Parsed geometry
    * @param {boolean} isPointCloud - Whether to create point cloud or line segments
    * @param {Object} config - Configuration options
+   * @param {Array} radiusData - Radius data for points (optional)
    * @returns {THREE.Object3D} - Created mesh
    */
-  createVTKMesh(geometry, isPointCloud, config) {
+  createVTKMesh(geometry, isPointCloud, config, radiusData = null) {
     let vtkMesh;
     
     if (isPointCloud) {
@@ -301,6 +526,19 @@ export default class VTKLoader {
         sizeAttenuation: true // Points get smaller with distance
       });
       vtkMesh = new this.THREE.Points(geometry, material);
+      
+    } else if (config.useCylinderGeometry && radiusData && radiusData.length > 0) {
+      // Create cylinder mesh with proper material for 3D rendering
+      console.log("[VTKLoader] Creating cylinder mesh visualization with radius data");
+      
+      const material = new this.THREE.MeshPhongMaterial({
+        color: config.color,
+        transparent: true,
+        opacity: config.opacity,
+        shininess: 30
+      });
+      
+      vtkMesh = new this.THREE.Mesh(geometry, material);
       
     } else {
       // Create line segment visualization

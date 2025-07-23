@@ -1,14 +1,31 @@
 <template>
   <div class="parent">
     <div class="model-panel">
-      <model />
+              <model 
+          ref="modelComponent"
+          :use-tube-rendering="modelStates.useTubeRendering"
+          :current-performance-mode="modelStates.currentPerformanceMode"
+          :model-name="modelStates.modelName"
+          @model-state-updated="handleModelStateUpdate"
+        />
     </div>
     <div
       class="trace-main"
       :class="mdAndUp ? 'tracePanel-md' : 'tracePanel-sm'"
     >
       <div :class="mdAndUp ? 'trace-md' : 'trace-sm'">
-        <PanelControls/>
+        <PanelControls
+          :use-tube-rendering="modelStates.useTubeRendering"
+          :current-performance-mode="modelStates.currentPerformanceMode"
+          :model-name="modelStates.modelName"
+          :rendering-type="modelStates.renderingType"
+          @reload-arterial="handleReloadArterial"
+          @load-venous="handleLoadVenous"
+          @load-arterial-cylinders="handleLoadArterialCylinders"
+          @load-venous-cylinders="handleLoadVenousCylinders"
+          @toggle-render-mode="handleToggleRenderMode"
+          @cycle-performance="handleCyclePerformance"
+        />
       </div>
       <div
         class="d-none d-md-flex justify-center"
@@ -30,13 +47,22 @@ import PanelControls from '../model/PanelControls.vue';
 export default {
     data() {
         return {
-            clientMounted: false // Track if component is mounted on client
+            clientMounted: false, // Track if component is mounted on client
+            // Centralized model state management
+            modelStates: {
+                useTubeRendering: true,
+                currentPerformanceMode: 'high',
+                modelName: 'Loading...',
+                renderingType: '3D Cylinders' // Default to 3D cylinder rendering
+            }
         };
     },
+    
     mounted() {
         this.clientMounted = true;
         $nuxt.$emit("send-emitter-data", "data in RightPanel.vue send to Model.vue");
     },
+    
     computed: {
         mdAndUp() {
             // Ensure consistent behavior between SSR and client
@@ -53,6 +79,61 @@ export default {
                 return false;
             }
         },
+    },
+    
+    methods: {
+        // Handle events from PanelControls and forward to Model component
+        handleReloadArterial() {
+            if (this.$refs.modelComponent && this.$refs.modelComponent.reloadModel) {
+                this.$refs.modelComponent.reloadModel();
+                this.modelStates.renderingType = '3D Cylinders';
+            }
+        },
+        
+        handleLoadVenous() {
+            if (this.$refs.modelComponent && this.$refs.modelComponent.loadVenousTree) {
+                this.$refs.modelComponent.loadVenousTree();
+                this.modelStates.renderingType = '3D Cylinders';
+            }
+        },
+        
+        handleLoadArterialCylinders() {
+            if (this.$refs.modelComponent && this.$refs.modelComponent.loadArterialTreeWithCylinders) {
+                this.$refs.modelComponent.loadArterialTreeWithCylinders();
+                this.modelStates.renderingType = 'High Quality 3D';
+            }
+        },
+        
+        handleLoadVenousCylinders() {
+            if (this.$refs.modelComponent && this.$refs.modelComponent.loadVenousTreeWithCylinders) {
+                this.$refs.modelComponent.loadVenousTreeWithCylinders();
+                this.modelStates.renderingType = 'High Quality 3D';
+            }
+        },
+        
+        handleToggleRenderMode() {
+            if (this.$refs.modelComponent && this.$refs.modelComponent.toggleRenderMode) {
+                this.$refs.modelComponent.toggleRenderMode();
+                // Update local state
+                this.modelStates.useTubeRendering = !this.modelStates.useTubeRendering;
+            }
+        },
+        
+        handleCyclePerformance() {
+            if (this.$refs.modelComponent && this.$refs.modelComponent.cyclePerformanceMode) {
+                this.$refs.modelComponent.cyclePerformanceMode();
+                // Update local state - cycle through modes
+                const modes = ['high', 'medium', 'low', 'auto'];
+                const currentIndex = modes.indexOf(this.modelStates.currentPerformanceMode);
+                const nextIndex = (currentIndex + 1) % modes.length;
+                this.modelStates.currentPerformanceMode = modes[nextIndex];
+            }
+        },
+        
+        // Handle state updates from Model component
+        handleModelStateUpdate(newStates) {
+            Object.assign(this.modelStates, newStates);
+        }
     },
     components: { PanelControls }
 };
