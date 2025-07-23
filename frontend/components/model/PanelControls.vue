@@ -1,107 +1,84 @@
 <template>
-  <div class="control-panel" :class="{ 'collapsed': isCollapsed }">
-        Control Panel
-        <!-- Toggle button -->
-        <v-btn 
-        @click="toggleCollapse" 
-        class="collapse-btn"
-        fab
-        small
-        color="primary"
-        elevation="2"
-        >
-        <v-icon small >{{ isCollapsed ? 'mdi-chevron-up' : 'mdi-chevron-down' }} </v-icon>
-        
-        </v-btn>
-        
+  <div class="model-control">
+    <!-- Collapse Toggle Button -->
+    <div class="collapse-header" @click="toggleCollapse">
+      <h3 class="panel-title">
+        <v-icon left>mdi-cog-outline</v-icon>
+        Model Controls
+      </h3>
+      <v-btn icon small class="collapse-btn">
+        <v-icon>{{ isCollapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' }}</v-icon>
+      </v-btn>
+    </div>
 
-    <!-- Main controls - shown when expanded -->
-    <div v-show="!isCollapsed" class="controls-content">
-    <!-- Vessel Type Toggle -->
-     <div class="control-row">
-        <v-btn-toggle 
-          v-model="currentVesselType" 
-          @change="onVesselTypeChange"
-          color="accent"
-          dense
-          mandatory
-        >
-        <v-btn small value="arterial" @click="onVesselTypeChange('arterial')">
-            <v-icon left small>mdi-water</v-icon>
-            Arterial
-        </v-btn>
-          <v-btn small value="venous" @click="onVesselTypeChange('venous')">
-            <v-icon left small>mdi-heart-pulse</v-icon>
-            Venous
+    <!-- Collapsible Content -->
+    <div v-show="!isCollapsed" class="panel-content">
+      <!-- Main Model Controls -->
+      <div class="control-section">
+        <h4 class="control-title">Vessel Models</h4>
+        <div class="control-group">
+          <v-btn @click="$emit('reload-arterial')" color="error" block class="mb-2">
+            <v-icon left>mdi-arterial</v-icon>
+            Arterial Tree
           </v-btn>
-        </v-btn-toggle>
-     </div>
-    
-    
+          <v-btn @click="$emit('load-venous')" color="primary" block class="mb-2">
+            <v-icon left>mdi-heart-pulse</v-icon>
+            Venous Tree
+          </v-btn>
+        </div>
+      </div>
 
       <!-- Quality Toggle -->
-      <div class="control-row">
-        <v-btn-toggle 
-          v-model="currentQuality" 
-          @change="onQualityChange"
-          color="accent"
-          dense
-          mandatory
-        >
-          <v-btn small value="standard">
-            <v-icon left small>mdi-speedometer</v-icon>
-            Standard
-          </v-btn>
-          <v-btn small value="high">
-            <v-icon left small>mdi-quality-high</v-icon>
-            High Quality
-          </v-btn>
-        </v-btn-toggle>
+      <div class="control-section">
+        <h4 class="control-title">Quality Settings</h4>
+        <div class="control-row">
+          <v-btn-toggle 
+            v-model="currentQuality" 
+            @change="onQualityChange"
+            color="accent"
+            dense
+            mandatory
+          >
+            <v-btn small value="standard">
+              <v-icon left small>mdi-speedometer</v-icon>
+              Standard
+            </v-btn>
+            <v-btn small value="high">
+              <v-icon left small>mdi-quality-high</v-icon>
+              High Quality
+            </v-btn>
+          </v-btn-toggle>
+        </div>
       </div>
 
       <!-- Pressure Color Bar -->
-      <div v-if="pressureColorMapping" class="pressure-color-section">
-        <div class="color-bar-title">
-          <v-icon small class="mr-1">mdi-heart-pulse</v-icon>
-          Blood Pressure Color Scale
-        </div>
+      <div class="control-section">
+        <h4 class="control-title">Pressure Scale</h4>
         <div class="color-bar-container">
           <div class="color-bar">
-            <div 
-              v-for="(sample, index) in pressureColorMapping.samples" 
-              :key="index"
-              class="color-segment"
-              :style="{ backgroundColor: sample.color }"
-              :title="`Pressure: ${formatPressure(sample.pressure)}`"
-            ></div>
+            <div class="color-segment green-segment"></div>
+            <div class="color-segment orange-segment"></div>
+            <div class="color-segment red-segment"></div>
           </div>
-          <div class="color-bar-labels">
-            <span class="label-mid">Low → High</span>
+          <div class="color-labels">
+            <span class="label-left">Low</span>
+            <span class="label-center">Normal</span>
+            <span class="label-right">High</span>
           </div>
         </div>
-       
       </div>
 
-      <!-- Model Info -->
-      <div class="info-section">
-        <div class="info-item">
-          <span class="info-label">Model:</span>
-          <span class="info-value">{{ displayModelName }}</span>
-        </div>
-        <div class="info-item">
-          <span class="info-label">Rendering:</span>
-          <span class="info-value">{{ renderingType }}</span>
+      <!-- Model Information -->
+      <div class="control-section">
+        <h4 class="control-title">Model Info</h4>
+        <div class="status-info">
+          <div class="status-row">
+            <span class="status-label">Current:</span>
+            <span class="status-value">{{ modelName }}</span>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Compact status when collapsed -->
-    <div v-show="isCollapsed" class="compact-status">
-      <span class="status-text">{{ getCompactStatus() }}</span>
-      
-    </div>
-
-    
   </div>
 </template>
 
@@ -152,27 +129,9 @@ export default {
   },
 
   methods: {
+    // Toggle collapse state of the control panel
     toggleCollapse() {
       this.isCollapsed = !this.isCollapsed;
-    },
-
-    onVesselTypeChange(vesselType) {
-      console.log('[PanelControls] Vessel type changed to:', vesselType);
-      
-      // Emit appropriate event based on vessel type and quality
-      if (vesselType === 'arterial') {
-        if (this.currentQuality === 'high') {
-          this.$emit('load-arterial-cylinders');
-        } else {
-          this.$emit('reload-arterial');
-        }
-      } else if (vesselType === 'venous') {
-        if (this.currentQuality === 'high') {
-          this.$emit('load-venous-cylinders');
-        } else {
-          this.$emit('load-venous');
-        }
-      }
     },
 
     onQualityChange(quality) {
@@ -194,21 +153,14 @@ export default {
       }
     },
 
-    getCompactStatus() {
-      const vesselType = this.currentVesselType === 'arterial' ? 'Arterial Tree' : 'Venous Tree';
-      const quality = this.currentQuality === 'high' ? 'High Quality' : 'Standard';
-      return `${vesselType} | ${quality}`;
-    },
-
-    formatPressure(pressure) {
-      // Format pressure values for display
-      if (pressure >= 1000) {
-        return (pressure / 1000).toFixed(1) + 'k';
-      } else if (pressure >= 1) {
-        return pressure.toFixed(1);
-      } else {
-        return pressure.toFixed(3);
-      }
+    getPerformanceLabel(mode) {
+      const labels = {
+        'high': 'High Performance',
+        'medium': 'Medium Performance',
+        'low': 'Low Performance',
+        'auto': 'Auto Adjust'
+      };
+      return labels[mode] || 'Unknown';
     }
   },
 
@@ -228,20 +180,54 @@ export default {
 .control-panel {
   position: relative;
   width: 100%;
-  background: rgba(0, 0, 0, 0.9);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   overflow: hidden;
- 
-  transition: all 0.3s ease;
+}
 
-  &.collapsed {
-    min-height: 60px;
-    text-align: center;
+.collapse-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
   }
-  
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+}
+
+.collapse-btn {
+  transition: transform 0.2s ease;
+}
+
+.panel-content {
+  padding: 20px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 
@@ -401,10 +387,69 @@ export default {
   word-break: break-word;
 }
 
-.compact-status {
-  padding: 20px;
+// Pressure Color Bar Styles
+.color-bar-container {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.color-bar {
+  display: flex;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.color-segment {
+  flex: 1;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scaleY(1.1);
+  }
+}
+
+.green-segment {
+  background: linear-gradient(to right, #3BB245, #7BC142); // American Green variations
+}
+
+.orange-segment {
+  background: linear-gradient(to right, #7BC142, #FA8722); // Green to Princeton Orange
+}
+
+.red-segment {
+  background: linear-gradient(to right, #FA8722, #8E202A); // Orange to Vivid Auburn
+}
+
+.color-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.label-left, .label-center, .label-right {
+  flex: 1;
   text-align: center;
-  color: rgba(255, 255, 255, 0.9);
+}
+
+.label-left {
+  text-align: left;
+}
+
+.label-right {
+  text-align: right;
+}
+
+// Custom button styles
+.v-btn {
+  text-transform: none !important;
+  font-weight: 500 !important;
 }
 
 .status-text {
