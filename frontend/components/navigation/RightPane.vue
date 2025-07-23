@@ -1,13 +1,13 @@
 <template>
   <div class="parent">
     <div class="model-panel">
-      <model 
-        ref="modelComponent"
-        :use-tube-rendering="modelStates.useTubeRendering"
-        :current-performance-mode="modelStates.currentPerformanceMode"
-        :model-name="modelStates.modelName"
-        @model-state-updated="handleModelStateUpdate"
-      />
+              <model 
+          ref="modelComponent"
+          :use-tube-rendering="modelStates.useTubeRendering"
+          :current-performance-mode="modelStates.currentPerformanceMode"
+          :model-name="modelStates.modelName"
+          @model-state-updated="handleModelStateUpdate"
+        />
     </div>
     <div
       class="trace-main"
@@ -18,8 +18,11 @@
           :use-tube-rendering="modelStates.useTubeRendering"
           :current-performance-mode="modelStates.currentPerformanceMode"
           :model-name="modelStates.modelName"
+          :rendering-type="modelStates.renderingType"
           @reload-arterial="handleReloadArterial"
           @load-venous="handleLoadVenous"
+          @load-arterial-cylinders="handleLoadArterialCylinders"
+          @load-venous-cylinders="handleLoadVenousCylinders"
           @toggle-render-mode="handleToggleRenderMode"
           @cycle-performance="handleCyclePerformance"
         />
@@ -49,7 +52,8 @@ export default {
             modelStates: {
                 useTubeRendering: true,
                 currentPerformanceMode: 'high',
-                modelName: 'Loading...'
+                modelName: 'Loading...',
+                renderingType: '3D Cylinders' // Default to 3D cylinder rendering
             }
         };
     },
@@ -80,14 +84,30 @@ export default {
     methods: {
         // Handle events from PanelControls and forward to Model component
         handleReloadArterial() {
-            if (this.$refs.modelComponent && this.$refs.modelComponent.reloadVTKModel) {
-                this.$refs.modelComponent.reloadVTKModel();
+            if (this.$refs.modelComponent && this.$refs.modelComponent.reloadModel) {
+                this.$refs.modelComponent.reloadModel();
+                this.modelStates.renderingType = '3D Cylinders';
             }
         },
         
         handleLoadVenous() {
             if (this.$refs.modelComponent && this.$refs.modelComponent.loadVenousTree) {
                 this.$refs.modelComponent.loadVenousTree();
+                this.modelStates.renderingType = '3D Cylinders';
+            }
+        },
+        
+        handleLoadArterialCylinders() {
+            if (this.$refs.modelComponent && this.$refs.modelComponent.loadArterialTreeWithCylinders) {
+                this.$refs.modelComponent.loadArterialTreeWithCylinders();
+                this.modelStates.renderingType = 'High Quality 3D';
+            }
+        },
+        
+        handleLoadVenousCylinders() {
+            if (this.$refs.modelComponent && this.$refs.modelComponent.loadVenousTreeWithCylinders) {
+                this.$refs.modelComponent.loadVenousTreeWithCylinders();
+                this.modelStates.renderingType = 'High Quality 3D';
             }
         },
         

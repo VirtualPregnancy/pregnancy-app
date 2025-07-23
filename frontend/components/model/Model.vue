@@ -8,7 +8,6 @@
           :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
           style="width: 100%; height: 100%;"
         />
-      <!-- Control panel moved to PanelControls component -->
       
       <!-- Fallback template for SSR -->
       <template #fallback>
@@ -276,29 +275,33 @@ export default {
     async start(){
       console.log("Loading default placental model...");
       
-      // Load default placental arterial tree model using utility
+      // Load default placental arterial tree model using utility with 3D cylinders
       const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk');
       const result = await this.vtkLoader.loadVTKFile(vtkPath, {
         displayName: 'Placental Arterial Tree',
         color: 0xff2222,
         opacity: 0.9,
-        modelSize: 420, // Target model size - automatically scales lineWidth and pointSize
-        enableTubeMesh: this.useTubeRendering, // Enable realistic tube rendering
-        tubeRadiusScale: this.getOptimalRadiusScale(), // Dynamic radius scale based on performance
-        tubeSegments: this.getOptimalTubeSegments(), // Dynamic segments based on performance mode
-        enableOptimization: true, // Enable LOD and batching optimizations
+        modelSize: 420,
+        useCylinderGeometry: true, // Default to 3D cylinder rendering
+        cylinderSegments: 10, // Good balance of quality and performance
         onProgress: (message, progress) => {
           const progressMessage = `${message} (${Math.round(progress)}%)`;
           this.$emit('model-state-updated', { modelName: progressMessage });
         },
-        onComplete: (mesh, isPointCloud) => {
-          let newModelName;
-          if (isPointCloud) {
-            newModelName = 'Placental Vessel Network (Point Cloud)';
-          } else {
-            newModelName = this.useTubeRendering ? 
-              'Placental Vessel Network (Variable Radius Tubes)' :
-              'Placental Vessel Network (Line Rendering)';
+        onComplete: (mesh, isPointCloud, radiusData) => {
+          let newModelName = 'Placental Arterial Tree (3D)';
+          
+          // Log radius data availability
+          if (radiusData && radiusData.length > 0) {
+            const minRadius = Math.min(...radiusData);
+            const maxRadius = Math.max(...radiusData);
+            const avgRadius = radiusData.reduce((a, b) => a + b, 0) / radiusData.length;
+            
+            console.log(`[Model] Loaded radius data for ${radiusData.length} points`);
+            console.log(`[Model] Radius range: ${minRadius.toFixed(4)} - ${maxRadius.toFixed(4)}`);
+            console.log(`[Model] Average radius: ${avgRadius.toFixed(4)}`);
+            
+            newModelName += ` (${radiusData.length} vessels)`;
           }
           
           // Emit state update to parent
@@ -318,9 +321,9 @@ export default {
 
     /**
      * Manual reload function - triggered by user button click
-     * Uses the VTKLoader utility class
+     * Uses 3D cylinder geometry by default
      */
-    async reloadVTKModel() {
+    async reloadModel() {
       console.log("User requested VTK model reload...");
       
       const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk');
@@ -328,23 +331,19 @@ export default {
         displayName: 'Placental Arterial Tree',
         color: 0xff3333,
         opacity: 0.9,
-        modelSize: 420, // Target model size - automatically scales lineWidth and pointSize
-        enableTubeMesh: this.useTubeRendering, // Enable realistic tube rendering
-        tubeRadiusScale: this.getOptimalRadiusScale(), // Dynamic radius scale based on performance
-        tubeSegments: this.getOptimalTubeSegments(), // Dynamic segments based on performance mode
-        enableOptimization: true, // Enable LOD and batching optimizations
+        modelSize: 420,
+        useCylinderGeometry: true, // Default to 3D cylinder rendering
+        cylinderSegments: 10,
         onProgress: (message, progress) => {
           const progressMessage = `${message} (${Math.round(progress)}%)`;
           this.$emit('model-state-updated', { modelName: progressMessage });
         },
-        onComplete: (mesh, isPointCloud) => {
-          let newModelName;
-          if (isPointCloud) {
-            newModelName = 'Placental Arterial Tree (Point Cloud)';
-          } else {
-            newModelName = this.useTubeRendering ? 
-              'Placental Arterial Tree (Variable Radius Tubes)' :
-              'Placental Arterial Tree (Line Rendering)';
+        onComplete: (mesh, isPointCloud, radiusData) => {
+          let newModelName = 'Placental Arterial Tree (3D)';
+          
+          if (radiusData && radiusData.length > 0) {
+            console.log(`[Model] Loaded radius data for ${radiusData.length} points`);
+            newModelName += ` (${radiusData.length} vessels)`;
           }
           
           // Emit state update to parent
@@ -361,7 +360,54 @@ export default {
     },
 
     /**
-     * Load venous tree using VTKLoader utility
+     * Load arterial tree with cylinder geometry using radius data
+     */
+    async loadArterialTreeWithCylinders() {
+      console.log("Loading arterial tree with cylinder geometry...");
+      
+      const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk');
+      const result = await this.vtkLoader.loadVTKFile(vtkPath, {
+        displayName: 'Placental Arterial Tree (Cylinders)',
+        color: 0xff2222,
+        opacity: 0.9,
+        modelSize: 420,
+        useCylinderGeometry: true, // Enable cylinder geometry with radius data
+        cylinderSegments: 12, // Higher quality cylinders
+        onProgress: (message, progress) => {
+          const progressMessage = `${message} (${Math.round(progress)}%)`;
+          this.$emit('model-state-updated', { modelName: progressMessage });
+        },
+        onComplete: (mesh, isPointCloud, radiusData) => {
+          let newModelName = 'Placental Arterial Tree (3D Cylinders)';
+          
+          // Log detailed radius statistics
+          if (radiusData && radiusData.length > 0) {
+            const minRadius = Math.min(...radiusData);
+            const maxRadius = Math.max(...radiusData);
+            const avgRadius = radiusData.reduce((a, b) => a + b, 0) / radiusData.length;
+            
+            console.log(`[Model] Cylinder rendering with ${radiusData.length} radius values:`);
+            console.log(`[Model] Radius range: ${minRadius.toFixed(4)} - ${maxRadius.toFixed(4)}`);
+            console.log(`[Model] Average radius: ${avgRadius.toFixed(4)}`);
+            
+            newModelName += ` (${radiusData.length} vessels)`;
+          }
+          
+          // Emit state update to parent
+          this.$emit('model-state-updated', { modelName: newModelName });
+          
+          const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
+          this.scene.loadViewUrl(viewPath);
+        }
+      });
+      
+      if (!result.success) {
+        this.$emit('model-state-updated', { modelName: `Error: ${result.error.message}` });
+      }
+    },
+
+    /**
+     * Load venous tree using VTKLoader utility with 3D cylinders by default
      */
     async loadVenousTree() {
       const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk');
@@ -369,23 +415,74 @@ export default {
         displayName: 'Placental Venous Tree',
         color: 0x2222ff,
         opacity: 0.8,
-        modelSize: 420, // Target model size - automatically scales lineWidth and pointSize
-        enableTubeMesh: this.useTubeRendering, // Enable realistic tube rendering
-        tubeRadiusScale: this.getOptimalRadiusScale(), // Dynamic radius scale based on performance
-        tubeSegments: this.getOptimalTubeSegments(), // Dynamic segments based on performance mode
-        enableOptimization: true, // Enable LOD and batching optimizations
+        modelSize: 420,
+        useCylinderGeometry: true, // Default to 3D cylinder rendering
+        cylinderSegments: 10, // Good balance of quality and performance
         onProgress: (message, progress) => {
           const progressMessage = `${message} (${Math.round(progress)}%)`;
           this.$emit('model-state-updated', { modelName: progressMessage });
         },
-        onComplete: (mesh, isPointCloud) => {
-          let newModelName;
-          if (isPointCloud) {
-            newModelName = 'Placental Venous Tree (Point Cloud)';
-          } else {
-            newModelName = this.useTubeRendering ? 
-              'Placental Venous Tree (Variable Radius Tubes)' :
-              'Placental Venous Tree (Line Rendering)';
+        onComplete: (mesh, isPointCloud, radiusData) => {
+          let newModelName = 'Placental Venous Tree (3D)';
+          
+          // Log radius data availability
+          if (radiusData && radiusData.length > 0) {
+            const minRadius = Math.min(...radiusData);
+            const maxRadius = Math.max(...radiusData);
+            const avgRadius = radiusData.reduce((a, b) => a + b, 0) / radiusData.length;
+            
+            console.log(`[Model] Venous tree loaded with ${radiusData.length} radius values`);
+            console.log(`[Model] Radius range: ${minRadius.toFixed(4)} - ${maxRadius.toFixed(4)}`);
+            console.log(`[Model] Average radius: ${avgRadius.toFixed(4)}`);
+            
+            newModelName += ` (${radiusData.length} vessels)`;
+          }
+          
+          // Emit state update to parent
+          this.$emit('model-state-updated', { modelName: newModelName });
+          
+          const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
+          this.scene.loadViewUrl(viewPath);
+        }
+      });
+      
+      if (!result.success) {
+        this.$emit('model-state-updated', { modelName: `Error: ${result.error.message}` });
+      }
+    },
+
+    /**
+     * Load venous tree with cylinder geometry using radius data
+     */
+    async loadVenousTreeWithCylinders() {
+      console.log("Loading venous tree with cylinder geometry...");
+      
+      const vtkPath = this.getAssetPath('/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk');
+      const result = await this.vtkLoader.loadVTKFile(vtkPath, {
+        displayName: 'Placental Venous Tree (Cylinders)',
+        color: 0x2222ff,
+        opacity: 0.8,
+        modelSize: 420,
+        useCylinderGeometry: true, // Enable cylinder geometry with radius data
+        cylinderSegments: 8, // Good balance between quality and performance
+        onProgress: (message, progress) => {
+          const progressMessage = `${message} (${Math.round(progress)}%)`;
+          this.$emit('model-state-updated', { modelName: progressMessage });
+        },
+        onComplete: (mesh, isPointCloud, radiusData) => {
+          let newModelName = 'Placental Venous Tree (3D Cylinders)';
+          
+          // Log detailed radius statistics
+          if (radiusData && radiusData.length > 0) {
+            const minRadius = Math.min(...radiusData);
+            const maxRadius = Math.max(...radiusData);
+            const avgRadius = radiusData.reduce((a, b) => a + b, 0) / radiusData.length;
+            
+            console.log(`[Model] Venous cylinder rendering with ${radiusData.length} radius values:`);
+            console.log(`[Model] Radius range: ${minRadius.toFixed(4)} - ${maxRadius.toFixed(4)}`);
+            console.log(`[Model] Average radius: ${avgRadius.toFixed(4)}`);
+            
+            newModelName += ` (${radiusData.length} vessels)`;
           }
           
           // Emit state update to parent
@@ -417,22 +514,20 @@ export default {
       this.scene.onWindowResize();
     },
 
-    // Toggle between tube and line rendering modes
+    // Toggle between line rendering modes (simplified for basic VTK loader)
     toggleRenderMode() {
-      const newTubeRendering = !this.useTubeRendering;
-      console.log('[Model] Switched to', newTubeRendering ? 'tube' : 'line', 'rendering mode');
+      console.log('[Model] Toggle render mode called - reloading model');
       
       // Emit state changes to parent
       this.$emit('model-state-updated', { 
-        useTubeRendering: newTubeRendering,
-        modelName: "Switching render mode..."
+        modelName: "Reloading model..."
       });
       
-      // Reload current model with new rendering mode
+      // Reload current model
       this.start(); // Reload the default arterial model
     },
 
-    // Cycle through performance modes
+    // Cycle through performance modes (simplified for basic VTK loader)
     cyclePerformanceMode() {
       const modes = ['high', 'medium', 'low', 'auto'];
       const currentIndex = modes.indexOf(this.currentPerformanceMode);
@@ -445,34 +540,9 @@ export default {
       this.$emit('model-state-updated', { 
         currentPerformanceMode: newPerformanceMode
       });
-      
-      // Set performance mode in VTK loader if available
-      if (this.vtkLoader) {
-        this.vtkLoader.setPerformanceMode(newPerformanceMode);
-      }
     },
 
-    // Get optimal tube segments based on performance mode
-    getOptimalTubeSegments() {
-      const segmentMap = {
-        'high': 8,
-        'medium': 6,
-        'low': 4,
-        'auto': 6 // Auto mode starts with medium quality
-      };
-      return segmentMap[this.currentPerformanceMode] || 6;
-    },
 
-    // Get performance-optimized tube radius scale
-    getOptimalRadiusScale() {
-      const scaleMap = {
-        'high': 2.0,
-        'medium': 1.5,
-        'low': 1.0,
-        'auto': 1.5 // Auto mode starts with medium quality
-      };
-      return scaleMap[this.currentPerformanceMode] || 2.0;
-    }
   },
 
   watch: {},
