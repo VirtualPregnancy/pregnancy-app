@@ -288,10 +288,11 @@ export default {
           const progressMessage = `${message} (${Math.round(progress)}%)`;
           this.$emit('model-state-updated', { modelName: progressMessage });
         },
-        onComplete: (mesh, isPointCloud, radiusData) => {
+        onComplete: (mesh, isPointCloud, radiusData, pressureData) => {
           let newModelName = 'Placental Arterial Tree (3D)';
+          let pressureColorMapping = null;
           
-          // Log radius data availability
+          // Log radius and pressure data availability
           if (radiusData && radiusData.length > 0) {
             const minRadius = Math.min(...radiusData);
             const maxRadius = Math.max(...radiusData);
@@ -304,8 +305,26 @@ export default {
             newModelName += ` (${radiusData.length} vessels)`;
           }
           
-          // Emit state update to parent
-          this.$emit('model-state-updated', { modelName: newModelName });
+          if (pressureData && pressureData.length > 0) {
+            const minPressure = Math.min(...pressureData);
+            const maxPressure = Math.max(...pressureData);
+            const avgPressure = pressureData.reduce((a, b) => a + b, 0) / pressureData.length;
+            
+            console.log(`[Model] Loaded pressure data for ${pressureData.length} points`);
+            console.log(`[Model] Pressure range: ${minPressure.toFixed(4)} - ${maxPressure.toFixed(4)}`);
+            console.log(`[Model] Average pressure: ${avgPressure.toFixed(4)}`);
+            
+            // Get pressure color mapping for display
+            pressureColorMapping = this.vtkLoader.getPressureColorMapping(minPressure, maxPressure);
+            
+            newModelName += ' with pressure mapping';
+          }
+          
+          // Emit state update to parent with pressure color mapping
+          this.$emit('model-state-updated', { 
+            modelName: newModelName,
+            pressureColorMapping: pressureColorMapping
+          });
           
           // Load camera view
           const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
@@ -338,16 +357,31 @@ export default {
           const progressMessage = `${message} (${Math.round(progress)}%)`;
           this.$emit('model-state-updated', { modelName: progressMessage });
         },
-        onComplete: (mesh, isPointCloud, radiusData) => {
+        onComplete: (mesh, isPointCloud, radiusData, pressureData) => {
           let newModelName = 'Placental Arterial Tree (3D)';
+          let pressureColorMapping = null;
           
           if (radiusData && radiusData.length > 0) {
             console.log(`[Model] Loaded radius data for ${radiusData.length} points`);
             newModelName += ` (${radiusData.length} vessels)`;
           }
           
-          // Emit state update to parent
-          this.$emit('model-state-updated', { modelName: newModelName });
+          if (pressureData && pressureData.length > 0) {
+            console.log(`[Model] Loaded pressure data for ${pressureData.length} points`);
+            
+            // Get pressure color mapping for display
+            const minPressure = Math.min(...pressureData);
+            const maxPressure = Math.max(...pressureData);
+            pressureColorMapping = this.vtkLoader.getPressureColorMapping(minPressure, maxPressure);
+            
+            newModelName += ' with pressure mapping';
+          }
+          
+          // Emit state update to parent with pressure color mapping
+          this.$emit('model-state-updated', { 
+            modelName: newModelName,
+            pressureColorMapping: pressureColorMapping
+          });
           
           const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
           this.scene.loadViewUrl(viewPath);
@@ -377,24 +411,40 @@ export default {
           const progressMessage = `${message} (${Math.round(progress)}%)`;
           this.$emit('model-state-updated', { modelName: progressMessage });
         },
-        onComplete: (mesh, isPointCloud, radiusData) => {
-          let newModelName = 'Placental Arterial Tree (3D Cylinders)';
+        onComplete: (mesh, isPointCloud, radiusData, pressureData) => {
+          let newModelName = 'Placental Arterial Tree (High Quality)';
+          let pressureColorMapping = null;
           
-          // Log detailed radius statistics
+          // Log detailed radius and pressure statistics
           if (radiusData && radiusData.length > 0) {
             const minRadius = Math.min(...radiusData);
             const maxRadius = Math.max(...radiusData);
             const avgRadius = radiusData.reduce((a, b) => a + b, 0) / radiusData.length;
             
-            console.log(`[Model] Cylinder rendering with ${radiusData.length} radius values:`);
+            console.log(`[Model] High quality cylinder rendering with ${radiusData.length} radius values:`);
             console.log(`[Model] Radius range: ${minRadius.toFixed(4)} - ${maxRadius.toFixed(4)}`);
             console.log(`[Model] Average radius: ${avgRadius.toFixed(4)}`);
             
             newModelName += ` (${radiusData.length} vessels)`;
           }
           
-          // Emit state update to parent
-          this.$emit('model-state-updated', { modelName: newModelName });
+          if (pressureData && pressureData.length > 0) {
+            const minPressure = Math.min(...pressureData);
+            const maxPressure = Math.max(...pressureData);
+            
+            console.log(`[Model] Pressure mapping: ${minPressure.toFixed(4)} - ${maxPressure.toFixed(4)}`);
+            
+            // Get pressure color mapping for display
+            pressureColorMapping = this.vtkLoader.getPressureColorMapping(minPressure, maxPressure);
+            
+            newModelName += ' with pressure colors';
+          }
+          
+          // Emit state update to parent with pressure color mapping
+          this.$emit('model-state-updated', { 
+            modelName: newModelName,
+            pressureColorMapping: pressureColorMapping
+          });
           
           const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
           this.scene.loadViewUrl(viewPath);
@@ -422,10 +472,11 @@ export default {
           const progressMessage = `${message} (${Math.round(progress)}%)`;
           this.$emit('model-state-updated', { modelName: progressMessage });
         },
-        onComplete: (mesh, isPointCloud, radiusData) => {
+        onComplete: (mesh, isPointCloud, radiusData, pressureData) => {
           let newModelName = 'Placental Venous Tree (3D)';
+          let pressureColorMapping = null;
           
-          // Log radius data availability
+          // Log radius and pressure data availability
           if (radiusData && radiusData.length > 0) {
             const minRadius = Math.min(...radiusData);
             const maxRadius = Math.max(...radiusData);
@@ -438,8 +489,23 @@ export default {
             newModelName += ` (${radiusData.length} vessels)`;
           }
           
-          // Emit state update to parent
-          this.$emit('model-state-updated', { modelName: newModelName });
+          if (pressureData && pressureData.length > 0) {
+            const minPressure = Math.min(...pressureData);
+            const maxPressure = Math.max(...pressureData);
+            
+            console.log(`[Model] Venous pressure range: ${minPressure.toFixed(4)} - ${maxPressure.toFixed(4)}`);
+            
+            // Get pressure color mapping for display
+            pressureColorMapping = this.vtkLoader.getPressureColorMapping(minPressure, maxPressure);
+            
+            newModelName += ' with pressure mapping';
+          }
+          
+          // Emit state update to parent with pressure color mapping
+          this.$emit('model-state-updated', { 
+            modelName: newModelName,
+            pressureColorMapping: pressureColorMapping
+          });
           
           const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
           this.scene.loadViewUrl(viewPath);
@@ -464,29 +530,45 @@ export default {
         opacity: 0.8,
         modelSize: 420,
         useCylinderGeometry: true, // Enable cylinder geometry with radius data
-        cylinderSegments: 8, // Good balance between quality and performance
+        cylinderSegments: 12, // Good balance between quality and performance
         onProgress: (message, progress) => {
           const progressMessage = `${message} (${Math.round(progress)}%)`;
           this.$emit('model-state-updated', { modelName: progressMessage });
         },
-        onComplete: (mesh, isPointCloud, radiusData) => {
-          let newModelName = 'Placental Venous Tree (3D Cylinders)';
+        onComplete: (mesh, isPointCloud, radiusData, pressureData) => {
+          let newModelName = 'Placental Venous Tree (High Quality)';
+          let pressureColorMapping = null;
           
-          // Log detailed radius statistics
+          // Log detailed radius and pressure statistics
           if (radiusData && radiusData.length > 0) {
             const minRadius = Math.min(...radiusData);
             const maxRadius = Math.max(...radiusData);
             const avgRadius = radiusData.reduce((a, b) => a + b, 0) / radiusData.length;
             
-            console.log(`[Model] Venous cylinder rendering with ${radiusData.length} radius values:`);
+            console.log(`[Model] Venous high quality rendering with ${radiusData.length} radius values:`);
             console.log(`[Model] Radius range: ${minRadius.toFixed(4)} - ${maxRadius.toFixed(4)}`);
             console.log(`[Model] Average radius: ${avgRadius.toFixed(4)}`);
             
             newModelName += ` (${radiusData.length} vessels)`;
           }
           
-          // Emit state update to parent
-          this.$emit('model-state-updated', { modelName: newModelName });
+          if (pressureData && pressureData.length > 0) {
+            const minPressure = Math.min(...pressureData);
+            const maxPressure = Math.max(...pressureData);
+            
+            console.log(`[Model] Venous pressure mapping: ${minPressure.toFixed(4)} - ${maxPressure.toFixed(4)}`);
+            
+            // Get pressure color mapping for display
+            pressureColorMapping = this.vtkLoader.getPressureColorMapping(minPressure, maxPressure);
+            
+            newModelName += ' with pressure colors';
+          }
+          
+          // Emit state update to parent with pressure color mapping
+          this.$emit('model-state-updated', { 
+            modelName: newModelName,
+            pressureColorMapping: pressureColorMapping
+          });
           
           const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
           this.scene.loadViewUrl(viewPath);
