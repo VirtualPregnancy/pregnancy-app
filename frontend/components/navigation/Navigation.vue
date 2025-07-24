@@ -48,7 +48,7 @@
         @click="updateAbout()"
         :value="'about'"
       >
-        <span>About</span>
+        <span>Support</span>
         <v-icon>mdi-account-group</v-icon>
       </v-btn>
     </v-bottom-navigation>

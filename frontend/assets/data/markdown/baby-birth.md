@@ -1,0 +1,1 @@
+different types of ways babies can be born at a high level – spontaneous, induced labour, c-section. Something about shared decision making so they don’t feel freaked out (sublinks through to more detailed information/layers?).

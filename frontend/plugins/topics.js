@@ -16,13 +16,19 @@ export default (_, inject) => {
 };
 
 function getContentBySlug(slug) {
-  const [topicKey, subTopicKey] = slug.toLowerCase().split("-");
+  const slugParts = slug.toLowerCase().split("-");
   let content = null;
-  if (topicKey != null && subTopicKey != null) {
+  
+  // Try to match topic-subtopic combinations
+  // First try the first part as topic, rest as subtopic
+  if (slugParts.length >= 2) {
+    const topicKey = slugParts[0];
+    const subTopicKey = slugParts.slice(1).join("-"); // Join remaining parts with dashes
+    
     const topic = topics[topicKey];
     if (topic != null) {
       const subTopic = topic.subTopics[subTopicKey];
-      if (subTopic != null)
+      if (subTopic != null) {
         content = {
           ...subTopic,
           parentTopic: {
@@ -31,8 +37,10 @@ function getContentBySlug(slug) {
             title: topic.title,
           },
         };
+      }
     }
   }
+  
   return content;
 }
 

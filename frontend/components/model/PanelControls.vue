@@ -253,7 +253,7 @@ export default {
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
-  border-left: 4px solid #ff5722;
+  border-left: 4px solid #7A3520;
 }
 
 .color-bar-title {
@@ -356,7 +356,7 @@ export default {
   border-radius: 12px;
   padding: 16px;
   margin-top: 16px;
-  border-left: 4px solid #00bcd4;
+  border-left: 4px solid #2F414B;
 }
 
 .info-item {
@@ -414,15 +414,15 @@ export default {
 }
 
 .green-segment {
-  background: linear-gradient(to right, #3BB245, #7BC142); // American Green variations
+  background: linear-gradient(to right, #2B4B3C, #AA988A); // 深绿色到浅棕色
 }
 
 .orange-segment {
-  background: linear-gradient(to right, #7BC142, #FA8722); // Green to Princeton Orange
+  background: linear-gradient(to right, #AA988A, #B66A40); // 浅棕色到橙棕色
 }
 
 .red-segment {
-  background: linear-gradient(to right, #FA8722, #8E202A); // Orange to Vivid Auburn
+  background: linear-gradient(to right, #B66A40, #7A3520); // 橙棕色到深棕红色
 }
 
 .color-labels {
