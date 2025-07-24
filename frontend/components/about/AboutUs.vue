@@ -1,52 +1,100 @@
 <template>
-  <div class="pa-2">
-    <h1 class="pt-2 main-heading">About Us</h1>
+  <div class="pa-4">
+    <h1 class="pt-2 main-heading">
+      <v-icon left color="primary">mdi-heart-outline</v-icon>
+      Pregnancy Support Services
+    </h1>
+    
     <div class="about-panel">
-      <div class="navigate flexbox --vertical lg:-mt-10">
-        <div
-          class="button"
-          :class="researchSelected ? 'button --active' : 'button --inactive'"
-        >
-          <v-btn plain @click="toggleNavigation('research')">
-            Our Research
-          </v-btn>
-        </div>
-        <div
-          class="button"
-          :class="teamSelected ? 'button --active' : 'button --inactive'"
-        >
-          <v-btn plain @click="toggleNavigation('team')"> Our Team </v-btn>
-        </div>
-      </div>
-      <div class="feedback font-weight-medium text--primary">
-        Visit our
-        <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLScsab93B7uPg389gxCNfCSgG4sMNIFk_mxDFTFF_-UC2TcSJQ/viewform?usp=sf_link"
-          target="view_window"
-          >Online form</a
-        >
-        to give us your valuable feedback about this app.
+      <!-- Introduction Section -->
+      <div class="intro-section">
+        <p class="intro-text">
+          This application provides comprehensive information about support services available 
+          for pregnant people and their whānau throughout Aotearoa New Zealand.
+        </p>
       </div>
 
-      <div>
-        <div class="mx-auto contributor" max-width="344">
-          <v-card-text>
-            <div class="text-h6 text--darken-6">Website Developers</div>
-            <div class="text--darken-4 pl-6">
-              Members Here <br />
-            </div>
-          </v-card-text>
+      <!-- Quick Access Navigation -->
+      <div class="quick-access">
+        <h3 class="section-title">
+          <v-icon left color="accent">mdi-compass-outline</v-icon>
+          Quick Access
+        </h3>
+        
+        <div class="access-buttons">
+          <v-btn 
+            class="access-btn" 
+            color="success" 
+            large 
+            block
+            @click="scrollToSection('general')"
+          >
+            <v-icon left>mdi-account-group</v-icon>
+            General Pregnancy Services
+          </v-btn>
+          
+          <v-btn 
+            class="access-btn" 
+            color="warning" 
+            large 
+            block
+            @click="scrollToSection('specialist')"
+          >
+            <v-icon left>mdi-medical-bag</v-icon>
+            Specialist Support Services
+          </v-btn>
+          
+          <v-btn 
+            class="access-btn" 
+            color="accent" 
+            large 
+            block
+            @click="scrollToSection('resources')"
+          >
+            <v-icon left>mdi-book-open-variant</v-icon>
+            Contacts & Resources
+          </v-btn>
         </div>
-        <v-select
-          v-model="select"
-          :items="items"
-          class="select"
-          label="Switch versions"
-          dense
-          color="#fff"
-          height="20px"
-          @change="onselectChange(select)"
-        ></v-select>
+      </div>
+
+    
+         
+
+      <!-- Feedback Section -->
+      <div class="feedback-section">
+        <v-card class="feedback-card" elevation="2">
+          <v-card-title>
+            <v-icon left color="primary">mdi-comment-text-outline</v-icon>
+            Help Us Improve
+          </v-card-title>
+          <v-card-text>
+            <p class="feedback-text">
+              Your feedback helps us improve this resource for all pregnant people and their whānau.
+            </p>
+            <v-btn 
+              color="primary" 
+              outlined 
+              href="https://www.auckland.ac.nz/en/abi.html"
+              target="_blank"
+              class="feedback-btn"
+            >
+              <v-icon left>mdi-open-in-new</v-icon>
+              Give Feedback
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </div>
+
+      <!-- Attribution -->
+      <div class="attribution">
+        <div class="attribution-content">
+          <div class="text-h6 text--primary mb-2">Developed by</div>
+          <div class="text--secondary">
+            Auckland Bioengineering Institute<br>
+            University of Auckland<br>
+            
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -56,89 +104,275 @@
 export default {
   name: "AboutUs",
 
-  data() {
-    return {
-      teamSelected: false,
-      researchSelected: true,
-      select: "",
-      items: ["latest", "version 2.0", "version 1.0"],
-    };
-  },
-
   methods: {
-    toggleNavigation: function (componentName) {
-      this.teamSelected = !this.teamSelected;
-      this.researchSelected = !this.researchSelected;
-      $nuxt.$emit("about-navigation", componentName);
+    scrollToSection(sectionId) {
+      // Emit event to parent page to expand the specific section
+      this.$nuxt.$emit('scroll-to-section', sectionId);
+      
+      // Optional: Add smooth scrolling to the section
+      this.$nextTick(() => {
+        const element = document.querySelector(`.service-section:nth-child(${this.getSectionIndex(sectionId)})`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
     },
-    onselectChange(select) {
-      if (select === "latest")
-        window.location.href =
-          "https://uoa-heart-mechanics-research.github.io/medtech-heart/";
-      if (select === "version 2.0")
-        window.location.href =
-          "https://uoa-heart-mechanics-research.github.io/medtech-heart/v2/";
-      if (select === "version 1.0")
-        window.location.href =
-          "https://uoa-heart-mechanics-research.github.io/medtech-heart/v1/";
-    },
-  },
+
+    getSectionIndex(sectionId) {
+      const sectionMap = {
+        'general': 1,
+        'specialist': 2,
+        'resources': 3
+      };
+      return sectionMap[sectionId] || 1;
+    }
+  }
 };
 </script>
 
 <style scoped lang="scss">
-.navigate {
-  padding-top: 4rem;
-  padding-bottom: 2rem;
+.main-heading {
+  color: var(--v-primary-base);
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
+  display: flex;
   align-items: center;
-  row-gap: 1.5rem;
-
-  .button {
-    width: 80%;
-    max-width: 16rem;
-    padding: 1.2rem;
-    border-radius: 1.25rem;
-    text-align: center;
-    span {
-      font-size: 1.3rem;
-      font-weight: 600;
-    }
-
-    &.--active {
-      color: white;
-      background-color: rgba(150, 30, 150, 0.6);
-    }
-    &.--inactive {
-      color: rgba(175, 175, 175);
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-  }
+  justify-content: center;
+  gap: 15px;
 }
-.contributor {
-  background-color: rgba(150, 30, 150, 0.3);
-}
+
 .about-panel {
-  height: 75vh;
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  gap: 30px;
 }
 
-.feedback {
-  padding: 1rem;
-  line-height: 2rem;
-  a {
-    color: yellow;
+.intro-section {
+  text-align: center;
+  margin-bottom: 20px;
+  
+  .intro-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 800px;
+    margin: 0 auto;
   }
 }
-.select {
-  width: 127px;
+
+.section-title {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.v-input__slot {
-  background: #fff;
+
+.quick-access {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
-.theme--dark.v-list {
-  // v-secondary-base
-  background: rgba(150, 30, 150, 0.5);
+
+.access-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  
+  .access-btn {
+    height: 60px;
+    font-size: 1rem;
+    font-weight: 500;
+    text-transform: none;
+  }
+}
+
+.service-overview {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.overview-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.12);
+  }
+  
+  .card-icon {
+    margin-bottom: 15px;
+  }
+  
+  h4 {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    font-size: 0.95rem;
+  }
+}
+
+.contact-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 4px solid var(--v-error-base);
+}
+
+.emergency-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  
+  &.urgent {
+    border-left: 3px solid var(--v-error-base);
+  }
+  
+  .contact-details {
+    flex: 1;
+    
+    strong {
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 1rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+    
+    small {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.feedback-section {
+  .feedback-card {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    
+    .v-card__title {
+      color: rgba(255, 255, 255, 0.95);
+      font-size: 1.2rem;
+    }
+    
+    .feedback-text {
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    
+    .feedback-btn {
+      font-weight: 500;
+      text-transform: none;
+    }
+  }
+}
+
+.attribution {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  
+  .attribution-content {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    
+    .text-h6 {
+      color: rgba(255, 255, 255, 0.95) !important;
+      font-weight: 600;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .main-heading {
+    font-size: 1.6rem;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .about-panel {
+    gap: 20px;
+  }
+  
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .access-buttons {
+    .access-btn {
+      height: 50px;
+      font-size: 0.9rem;
+    }
+  }
+  
+  .contact-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+}
+
+// Custom button styles using new color scheme
+.v-btn {
+  text-transform: none !important;
+  font-weight: 500 !important;
+}
+
+.v-btn.theme--dark.v-btn--has-bg {
+  &.success {
+    background-color: var(--v-success-base) !important;
+  }
+  
+  &.warning {  
+    background-color: var(--v-warning-base) !important;
+  }
+  
+  &.accent {
+    background-color: var(--v-accent-base) !important;
+  }
 }
 </style>

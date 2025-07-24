@@ -1,113 +1,110 @@
 {
-  "model": {
-    "title": "Template",
-    "heading": "Te Manawa",
-    "icon": "mdi-home",
+  "pregnancy": {
+    "title": "Pregnancy",
+    "heading": "What is Happening in Pregnancy?",
+    "icon": "mdi-human-pregnant",
     "subTopics": {
-      "heart": {
-        "title": "Home",
-        "heading": "Heading",
-        "icon": "mdi-home-heart",
-        "dataFile": "heart-main",
+      "changes": {
+        "title": "Body Changes",
+        "heading": "Changes To Your Body",
+        "icon": "mdi-sine-wave",
+        "dataFile": "preganancy-changes",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NoInfarct" }
+      },
+      "placenta": {
+        "title": "Placenta Roles",
+        "heading": "Roles of the Placenta",
+        "icon": "mdi-bowl-outline",
+        "dataFile": "roles-of-placenta",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NoInfarct" }
+      },
+      "baby": {
+        "title": "Baby Health",
+        "heading": "How do we check on baby's health?",
+        "icon": "mdi-baby-face-outline",
+        "dataFile": "check-baby-health",
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NoInfarct" }
       }
     }
   },
-  "attack": {
-    "title": "Attack",
-    "heading": "Heart Attack",
-    "icon": "mdi-heart-broken",
+  "conditions": {
+    "title": "Concerns",
+    "heading": "Pregnancy Concerns",
+    "icon": "mdi-bell-outline",
     "subTopics": {
-      "healthy": {
-        "title": "Healthy",
-        "heading": "Coronary Arteries",
-        "icon": "mdi-heart-pulse",
-        "dataFile": "attack-healthy",
+      "fetal": {
+        "title": "Fetal Growth",
+        "heading": "Reduced Fetal Growth",
+        "icon": "mdi-heart-minus",
+        "dataFile": "fetal-growth-restruction",
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NoInfarct" }
       },
-      "minor": {
-        "slug": "minor",
-        "title": "Minor",
-        "heading": "Minor",
-        "icon": "mdi-heart-half-full",
-        "dataFile": "attack-minor",
-        "category": "warning",
-        "subTitle": "subWarning",
+      "birth": {
+        "title": "Birth",
+        "heading": "What does having a pregnancy issue mean for how my baby might be born?",
+        "icon": "mdi-baby-bottle-outline",
+        "dataFile": "baby-birth",
+        "category": "success",
+        "subTitle": "subSuccess",
         "model": { "name": "SmallInfarct" }
       },
-      "severe": {
-        "slug": "severe",
-        "title": "Severe",
-        "heading": "Severe",
-        "icon": "mdi-heart-minus",
-        "dataFile": "attack-severe",
-        "category": "error",
-        "subTitle": "subError",
+      "care": {
+        "title": "Cares",
+        "heading": "When baby needs extra care after birth",
+        "icon": "mdi-human-baby-changing-table",
+        "dataFile": "baby-care-after-birth",
+        "category": "success",
+        "subTitle": "subSuccess",
         "model": { "name": "LargeInfarct" }
       }
     }
   },
-  "electricity": {
-    "title": "Electricity",
-    "heading": "Heart Electricity",
-    "icon": "mdi-lightning-bolt",
+  "ultrasound": {
+    "title": "Ultrasound",
+    "heading": "What does my ultrasound scan mean",
+    "icon": "mdi-stethoscope",
     "subTopics": {
-      "healthy": {
-        "title": "Healthy",
-        "heading": "Electrocardiograms",
-        "icon": "mdi-battery-heart",
-        "dataFile": "electricity-healthy",
+      "model": {
+        "title": "Baby",
+        "heading": "Ultrasound",
+        "icon": "mdi-baby-face-outline",
+        "dataFile": "ultrasound",
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NormalElectricity" }
-      },
-      "fibrillation": {
-        "slug": "fibrillation",
-        "title": "Fibrillation",
-        "heading": "Fibrillation",
-        "icon": "mdi-heart-flash",
-        "dataFile": "electricity-fibrillation",
-        "category": "error",
-        "subTitle": "subError",
-        "model": { "name": "ArrythmiaElectricity" }
       }
     }
   },
-  "failure": {
-    "title": "Failure",
-    "heading": "Heart Failure",
+  "clinical": {
+    "title": "Clinical Care",
+    "heading": "Clinical care pathways for pregnancy in Aotearoa NZ.",
     "icon": "mdi-heart-off",
     "subTopics": {
-      "healthy": {
-        "title": "Healthy",
-        "heading": "Chronic Problems",
+      "mid-wife": {
+        "title": "Midwife Lead Care",
+        "heading": "Midwife",
         "icon": "mdi-account-heart",
-        "dataFile": "failure-healthy",
+        "dataFile": "clinical-care-mid-wife",
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NoInfarct" }
       },
-      "compensated": {
-        "title": "Compensated",
-        "heading": "Compensated",
+      "when-care-changes": {
+        "title": "When Care Changes",
+        "heading": "How clinical care pathways may change during your pregnancy if there are any concerns about mother or baby.",
         "icon": "mdi-heart-cog",
-        "dataFile": "failure-compensated",
-        "category": "warning",
-        "subTitle": "subWarning",
-        "model": { "name": "CompensatedFailure" }
-      },
-      "decompensated": {
-        "title": "Decompensated",
-        "heading": "Decompensated",
-        "icon": "mdi-heart-remove",
-        "dataFile": "failure-decompensated",
-        "category": "error",
-        "subTitle": "subError",
-        "model": { "name": "DecompensatedFailure" }
+        "dataFile": "when-care-changes",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NoInfarct" }
       }
     }
   }

@@ -69,21 +69,21 @@ export default class VTKLoader {
       // Fetch and parse VTK file
       const vtkData = await this.fetchVTKFile(vtkFilePath, config.onProgress);
       const parseResult = this.parseVTKData(vtkData, config.onProgress, config.modelSize, config.useCylinderGeometry);
-      const { geometry, isPointCloud, radiusData } = parseResult;
+      const { geometry, isPointCloud, radiusData, pressureData } = parseResult;
       
       // Create appropriate mesh with custom settings
-      const mesh = this.createVTKMesh(geometry, isPointCloud, config, radiusData);
+      const mesh = this.createVTKMesh(geometry, isPointCloud, config, radiusData, pressureData);
       
       // Add to scene with enhanced lighting
       this.addToScene(mesh, config);
       
       // Call completion callback
       if (config.onComplete) {
-        config.onComplete(mesh, isPointCloud, radiusData);
+        config.onComplete(mesh, isPointCloud, radiusData, pressureData);
       }
       
       console.log(`[VTKLoader] Successfully loaded: ${config.displayName}`);
-      return { success: true, mesh, isPointCloud, radiusData };
+      return { success: true, mesh, isPointCloud, radiusData, pressureData };
       
     } catch (error) {
       console.error(`[VTKLoader] Failed to load VTK file ${vtkFilePath}:`, error);
@@ -128,7 +128,7 @@ export default class VTKLoader {
    * @param {Function} onProgress - Progress callback
    * @param {number} modelSize - Target model size in units (default: 420)
    * @param {boolean} useCylinderGeometry - Whether to create cylinder geometry
-   * @returns {Object} - {geometry: THREE.BufferGeometry, isPointCloud: boolean, radiusData: Array}
+   * @returns {Object} - {geometry: THREE.BufferGeometry, isPointCloud: boolean, radiusData: Array, pressureData: Array}
    */
   parseVTKData(vtkData, onProgress = null, modelSize, useCylinderGeometry = false) {
     console.log("[VTKLoader] Starting VTK data parsing...");
@@ -144,8 +144,10 @@ export default class VTKLoader {
     let isReadingCells = false;  // Flag: currently reading cell connectivity
     let isReadingScalars = false; // Flag: currently reading scalar data
     let isReadingRadius = false;  // Flag: currently reading radius scalar data
+    let isReadingPressure = false; // Flag: currently reading pressure scalar data
     let points = [];            // Temporary storage for all point coordinates
     let radiusData = [];        // Array to store radius values for each point
+    let pressureData = [];      // Array to store pressure values for each point
     let pointCount = 0;         // Total number of points in file
     let cellCount = 0;
     let cellConnections = [];   // Store cell connectivity information
@@ -169,6 +171,7 @@ export default class VTKLoader {
         isReadingCells = false;
         isReadingScalars = false;
         isReadingRadius = false;
+        isReadingPressure = false;
         continue;
       }
       
@@ -183,6 +186,7 @@ export default class VTKLoader {
         isReadingCells = true;
         isReadingScalars = false;
         isReadingRadius = false;
+        isReadingPressure = false;
         continue;
       }
       
@@ -193,17 +197,27 @@ export default class VTKLoader {
         isReadingCells = false;
         isReadingScalars = true;
         isReadingRadius = false;
+        isReadingPressure = false;
         continue;
       }
       
-      // Detect SCALARS section - check if it's radius data
+      // Detect SCALARS section - check if it's radius or pressure data
       if (line.startsWith('SCALARS')) {
         const parts = line.split(' ');
-        if (parts.length > 1 && parts[1].toLowerCase() === 'radius') {
-          console.log("[VTKLoader] Found Radius scalar data");
-          isReadingRadius = true;
-        } else {
-          isReadingRadius = false;
+        if (parts.length > 1) {
+          const scalarName = parts[1].toLowerCase();
+          if (scalarName === 'radius') {
+            console.log("[VTKLoader] Found Radius scalar data");
+            isReadingRadius = true;
+            isReadingPressure = false;
+          } else if (scalarName === 'pressure') {
+            console.log("[VTKLoader] Found Pressure scalar data");
+            isReadingRadius = false;
+            isReadingPressure = true;
+          } else {
+            isReadingRadius = false;
+            isReadingPressure = false;
+          }
         }
         isReadingPoints = false;
         isReadingCells = false;
@@ -228,6 +242,12 @@ export default class VTKLoader {
         radiusData.push(...radii);
       }
       
+      // Read pressure scalar data
+      if (isReadingPressure && pressureData.length < pointCount) {
+        const pressures = line.split(' ').filter(x => x !== '').map(parseFloat);
+        pressureData.push(...pressures);
+      }
+      
       // Read cell connectivity data
       if (isReadingCells && line.trim() !== '' && 
           !line.startsWith('CELL_TYPES') && 
@@ -248,20 +268,20 @@ export default class VTKLoader {
             
             // For non-cylinder geometry, create line segments immediately
             if (!useCylinderGeometry) {
-              // For VTK lines/polylines, connect consecutive points in sequence
-              for (let j = 1; j < cellSize; j++) {
-                const idx1 = indices[j];     // Current point index
-                const idx2 = indices[j + 1]; // Next point index
-                
-                // Check if we have a valid next point (not the last point in cell)
-                if (idx2 !== undefined && !isNaN(idx1) && !isNaN(idx2)) {
-                  // Ensure indices are valid (within bounds of points array)
-                  if (idx1 * 3 + 2 < points.length && idx2 * 3 + 2 < points.length) {
-                    // Add line segment: 6 coordinates (x1,y1,z1,x2,y2,z2)
-                    vertices.push(
-                      points[idx1 * 3], points[idx1 * 3 + 1], points[idx1 * 3 + 2], // First point
-                      points[idx2 * 3], points[idx2 * 3 + 1], points[idx2 * 3 + 2]  // Second point
-                    );
+            // For VTK lines/polylines, connect consecutive points in sequence
+            for (let j = 1; j < cellSize; j++) {
+              const idx1 = indices[j];     // Current point index
+              const idx2 = indices[j + 1]; // Next point index
+              
+              // Check if we have a valid next point (not the last point in cell)
+              if (idx2 !== undefined && !isNaN(idx1) && !isNaN(idx2)) {
+                // Ensure indices are valid (within bounds of points array)
+                if (idx1 * 3 + 2 < points.length && idx2 * 3 + 2 < points.length) {
+                  // Add line segment: 6 coordinates (x1,y1,z1,x2,y2,z2)
+                  vertices.push(
+                    points[idx1 * 3], points[idx1 * 3 + 1], points[idx1 * 3 + 2], // First point
+                    points[idx2 * 3], points[idx2 * 3 + 1], points[idx2 * 3 + 2]  // Second point
+                  );
                   }
                 }
               }
@@ -278,6 +298,7 @@ export default class VTKLoader {
 
     console.log("[VTKLoader] Parsing complete:", points.length / 3, "points processed");
     console.log("[VTKLoader] Found", radiusData.length, "radius values");
+    console.log("[VTKLoader] Found", pressureData.length, "pressure values");
     console.log("[VTKLoader] Created", vertices.length / 6, "line segments for rendering");
     
     if (onProgress) {
@@ -289,9 +310,9 @@ export default class VTKLoader {
     
     // If cylinder geometry is requested and we have radius data, create cylinders
     if (useCylinderGeometry && radiusData.length > 0 && cellConnections.length > 0) {
-      console.log("[VTKLoader] Creating cylinder geometry with radius data...");
-      const cylinderGeometry = this.createCylinderGeometry(points, radiusData, cellConnections, modelSize);
-      return { geometry: cylinderGeometry, isPointCloud: false, radiusData };
+      console.log("[VTKLoader] Creating cylinder geometry with radius and pressure data...");
+      const cylinderGeometry = this.createCylinderGeometry(points, radiusData, pressureData, cellConnections, modelSize);
+      return { geometry: cylinderGeometry, isPointCloud: false, radiusData, pressureData };
     }
     
     // Debug: if no vertices created, there might be an issue with cell parsing
@@ -300,19 +321,22 @@ export default class VTKLoader {
       console.log("[VTKLoader] Points array length:", points.length);
       console.log("[VTKLoader] Expected points:", pointCount * 3);
     }
-
+    
     // If no line segments were created, create a point cloud as fallback
     if (vertices.length === 0 && points.length > 0) {
       console.log("[VTKLoader] Creating point cloud fallback visualization...");
       // Use original points for point cloud
       geometry.setAttribute('position', new this.THREE.Float32BufferAttribute(points, 3));
       
-      // Add radius data as an attribute if available
+      // Add radius and pressure data as attributes if available
       if (radiusData.length > 0) {
         geometry.setAttribute('radius', new this.THREE.Float32BufferAttribute(radiusData, 1));
       }
+      if (pressureData.length > 0) {
+        geometry.setAttribute('pressure', new this.THREE.Float32BufferAttribute(pressureData, 1));
+      }
       
-      return { geometry, isPointCloud: true, radiusData }; // Return flag to use different material
+      return { geometry, isPointCloud: true, radiusData, pressureData }; 
     } else {
       // Set vertex positions for line segments (each vertex has 3 coordinates: x, y, z)
       geometry.setAttribute('position', new this.THREE.Float32BufferAttribute(vertices, 3));
@@ -338,28 +362,39 @@ export default class VTKLoader {
       onProgress("Geometry created, building materials...", 80);
     }
     
-    return { geometry, isPointCloud: false, radiusData };
+    return { geometry, isPointCloud: false, radiusData, pressureData };
   }
 
   /**
-   * Create cylinder geometry from VTK data with radius information
+   * Create cylinder geometry from VTK data with radius and pressure information
    * @param {Array} points - Array of point coordinates
    * @param {Array} radiusData - Array of radius values for each point
+   * @param {Array} pressureData - Array of pressure values for each point
    * @param {Array} cellConnections - Array of cell connectivity data
    * @param {number} modelSize - Target model size for scaling
-   * @returns {THREE.BufferGeometry} - Combined cylinder geometry
+   * @returns {THREE.BufferGeometry} - Combined cylinder geometry with color mapping
    */
-  createCylinderGeometry(points, radiusData, cellConnections, modelSize) {
+  createCylinderGeometry(points, radiusData, pressureData, cellConnections, modelSize) {
     console.log("[VTKLoader] Creating cylinder geometry...");
     
     const combinedGeometry = new this.THREE.BufferGeometry();
     const vertices = [];
     const normals = [];
+    const colors = [];  // Add color array for pressure mapping
     const indices = [];
     let indexOffset = 0;
     
     // Number of radial segments for each cylinder
     const radialSegments = 8;
+    
+    // Calculate pressure range for color mapping
+    let minPressure = Infinity;
+    let maxPressure = -Infinity;
+    if (pressureData.length > 0) {
+      minPressure = Math.min(...pressureData);
+      maxPressure = Math.max(...pressureData);
+      console.log("[VTKLoader] Pressure range:", minPressure.toFixed(4), "to", maxPressure.toFixed(4));
+    }
     
     // Process each cell connection
     for (const connection of cellConnections) {
@@ -383,21 +418,31 @@ export default class VTKLoader {
             points[idx2 * 3 + 2]
           );
           
-          // Get radius values (use average if both points have radius data)
+          // Get radius values
           let radius1 = radiusData[idx1] || 0.1;
           let radius2 = radiusData[idx2] || 0.1;
           
-          // Create tapered cylinder segment
-          const cylinderSegment = this.createTaperedCylinder(p1, p2, radius1, radius2, radialSegments);
+          // Get pressure values and map to colors
+          let pressure1 = pressureData[idx1] || 0;
+          let pressure2 = pressureData[idx2] || 0;
           
-          // Add vertices, normals, and indices to combined geometry
+          // Map pressure to color (blue = low pressure, red = high pressure)
+          const color1 = this.pressureToColor(pressure1, minPressure, maxPressure);
+          const color2 = this.pressureToColor(pressure2, minPressure, maxPressure);
+          
+          // Create tapered cylinder segment
+          const cylinderSegment = this.createTaperedCylinder(p1, p2, radius1, radius2, radialSegments, color1, color2);
+          
+          // Add vertices, normals, colors, and indices to combined geometry
           const segmentVertices = cylinderSegment.vertices;
           const segmentNormals = cylinderSegment.normals;
+          const segmentColors = cylinderSegment.colors;
           const segmentIndices = cylinderSegment.indices;
           
-          // Add vertices and normals
+          // Add vertices, normals, and colors
           vertices.push(...segmentVertices);
           normals.push(...segmentNormals);
+          colors.push(...segmentColors);
           
           // Add indices with offset
           for (const index of segmentIndices) {
@@ -413,6 +458,7 @@ export default class VTKLoader {
     // Set geometry attributes
     combinedGeometry.setAttribute('position', new this.THREE.Float32BufferAttribute(vertices, 3));
     combinedGeometry.setAttribute('normal', new this.THREE.Float32BufferAttribute(normals, 3));
+    combinedGeometry.setAttribute('color', new this.THREE.Float32BufferAttribute(colors, 3));
     combinedGeometry.setIndex(indices);
     
     // Calculate bounding box and apply scaling
@@ -426,23 +472,98 @@ export default class VTKLoader {
     combinedGeometry.translate(-center.x, -center.y, -center.z);
     combinedGeometry.scale(scale, scale, scale);
     
-    console.log("[VTKLoader] Created cylinder geometry with", vertices.length / 3, "vertices");
+    console.log("[VTKLoader] Created cylinder geometry with", vertices.length / 3, "vertices and pressure color mapping");
     
     return combinedGeometry;
   }
 
   /**
-   * Create a tapered cylinder between two points with different radii
+   * Map pressure value to color using simplified blood pressure color scheme
+   * 3-color gradient: Green (low) → Orange (medium) → Red (high)
+   * @param {number} pressure - Pressure value
+   * @param {number} minPressure - Minimum pressure in dataset
+   * @param {number} maxPressure - Maximum pressure in dataset
+   * @returns {THREE.Color} - Color object
+   */
+  pressureToColor(pressure, minPressure, maxPressure) {
+    // Normalize and apply non-linear mapping
+    const linear = maxPressure > minPressure ? 
+      (pressure - minPressure) / (maxPressure - minPressure) : 0.5;
+    const t = Math.pow(linear, 0.4); // Non-linear for more red colors
+    
+    const color = new this.THREE.Color();
+    
+    if (t < 0.5) {
+      // Green to Orange (low to medium pressure)
+      const factor = t * 2; // 0 to 1
+      color.setRGB(
+        0.23 + factor * 0.75,  // 0.23 → 0.98 (green to orange red)
+        0.70 + factor * 0.23,  // 0.70 → 0.93 (green to orange green)  
+        0.27 - factor * 0.27   // 0.27 → 0.00 (green to orange blue)
+      );
+    } else {
+      // Orange to Dark Red (medium to high pressure)
+      const factor = (t - 0.5) * 2; // 0 to 1
+      color.setRGB(
+        0.98 - factor * 0.42,  // 0.98 → 0.56 (orange to dark red)
+        0.93 - factor * 0.81,  // 0.93 → 0.12 (orange to dark red)
+        0.00                   // Keep blue at 0
+      );
+    }
+    
+    return color;
+  }
+
+  /**
+   * Get simplified pressure color mapping information for UI display
+   * @param {number} minPressure - Minimum pressure in dataset
+   * @param {number} maxPressure - Maximum pressure in dataset
+   * @returns {Object} - Color mapping info with samples
+   */
+  getPressureColorMapping(minPressure, maxPressure) {
+    const samples = [];
+    const numSamples = 15; // Fewer samples for simpler display
+    
+    for (let i = 0; i < numSamples; i++) {
+      const t = i / (numSamples - 1);
+      const pressure = minPressure + (maxPressure - minPressure) * t;
+      const color = this.pressureToColor(pressure, minPressure, maxPressure);
+      
+      samples.push({
+        pressure: pressure,
+        normalizedValue: t,
+        color: `rgb(${Math.round(color.r * 255)}, ${Math.round(color.g * 255)}, ${Math.round(color.b * 255)})`
+      });
+    }
+    
+    return {
+      minPressure,
+      maxPressure,
+      samples,
+      description: 'Pressure Color Scale',
+      colorStops: [
+        { color: '#3BB245', label: 'Low', position: 0 },
+        { color: '#FA8722', label: 'Medium', position: 0.5 },
+        { color: '#8E202A', label: 'High', position: 1 }
+      ]
+    };
+  }
+
+  /**
+   * Create a tapered cylinder between two points with different radii and colors
    * @param {THREE.Vector3} p1 - Start point
    * @param {THREE.Vector3} p2 - End point
    * @param {number} radius1 - Radius at start point
    * @param {number} radius2 - Radius at end point
    * @param {number} radialSegments - Number of radial segments
-   * @returns {Object} - {vertices: Array, normals: Array, indices: Array}
+   * @param {THREE.Color} color1 - Color at start point
+   * @param {THREE.Color} color2 - Color at end point
+   * @returns {Object} - {vertices: Array, normals: Array, colors: Array, indices: Array}
    */
-  createTaperedCylinder(p1, p2, radius1, radius2, radialSegments) {
+  createTaperedCylinder(p1, p2, radius1, radius2, radialSegments, color1, color2) {
     const vertices = [];
     const normals = [];
+    const colors = [];
     const indices = [];
     
     // Calculate cylinder direction and perpendicular vectors
@@ -463,6 +584,7 @@ export default class VTKLoader {
       const t = ring; // 0 for start, 1 for end
       const currentPos = new this.THREE.Vector3().lerpVectors(p1, p2, t);
       const currentRadius = radius1 + (radius2 - radius1) * t;
+      const currentColor = new this.THREE.Color().lerpColors(color1, color2, t);
       
       for (let segment = 0; segment < radialSegments; segment++) {
         const angle = (segment / radialSegments) * Math.PI * 2;
@@ -484,6 +606,9 @@ export default class VTKLoader {
           .normalize();
         
         normals.push(normal.x, normal.y, normal.z);
+        
+        // Add color
+        colors.push(currentColor.r, currentColor.g, currentColor.b);
       }
     }
     
@@ -501,7 +626,7 @@ export default class VTKLoader {
       }
     }
     
-    return { vertices, normals, indices };
+    return { vertices, normals, colors, indices };
   }
 
   /**
@@ -510,9 +635,10 @@ export default class VTKLoader {
    * @param {boolean} isPointCloud - Whether to create point cloud or line segments
    * @param {Object} config - Configuration options
    * @param {Array} radiusData - Radius data for points (optional)
+   * @param {Array} pressureData - Pressure data for points (optional)
    * @returns {THREE.Object3D} - Created mesh
    */
-  createVTKMesh(geometry, isPointCloud, config, radiusData = null) {
+  createVTKMesh(geometry, isPointCloud, config, radiusData = null, pressureData = null) {
     let vtkMesh;
     
     if (isPointCloud) {
@@ -529,13 +655,15 @@ export default class VTKLoader {
       
     } else if (config.useCylinderGeometry && radiusData && radiusData.length > 0) {
       // Create cylinder mesh with proper material for 3D rendering
-      console.log("[VTKLoader] Creating cylinder mesh visualization with radius data");
+      console.log("[VTKLoader] Creating cylinder mesh visualization with radius and pressure data");
       
+      // Use vertex colors if pressure data is available
       const material = new this.THREE.MeshPhongMaterial({
-        color: config.color,
+        color: pressureData && pressureData.length > 0 ? 0xffffff : config.color,
         transparent: true,
         opacity: config.opacity,
-        shininess: 30
+        shininess: 30,
+        vertexColors: pressureData && pressureData.length > 0 // Enable vertex colors for pressure mapping
       });
       
       vtkMesh = new this.THREE.Mesh(geometry, material);

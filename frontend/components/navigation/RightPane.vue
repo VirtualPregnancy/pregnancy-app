@@ -19,12 +19,11 @@
           :current-performance-mode="modelStates.currentPerformanceMode"
           :model-name="modelStates.modelName"
           :rendering-type="modelStates.renderingType"
+          :pressure-color-mapping="modelStates.pressureColorMapping"
           @reload-arterial="handleReloadArterial"
           @load-venous="handleLoadVenous"
           @load-arterial-cylinders="handleLoadArterialCylinders"
           @load-venous-cylinders="handleLoadVenousCylinders"
-          @toggle-render-mode="handleToggleRenderMode"
-          @cycle-performance="handleCyclePerformance"
         />
       </div>
       <div
@@ -53,7 +52,8 @@ export default {
                 useTubeRendering: true,
                 currentPerformanceMode: 'high',
                 modelName: 'Loading...',
-                renderingType: '3D Cylinders' // Default to 3D cylinder rendering
+                renderingType: '3D Cylinders', // Default to 3D cylinder rendering
+                pressureColorMapping: null // Pressure color mapping for display
             }
         };
     },
@@ -108,25 +108,6 @@ export default {
             if (this.$refs.modelComponent && this.$refs.modelComponent.loadVenousTreeWithCylinders) {
                 this.$refs.modelComponent.loadVenousTreeWithCylinders();
                 this.modelStates.renderingType = 'High Quality 3D';
-            }
-        },
-        
-        handleToggleRenderMode() {
-            if (this.$refs.modelComponent && this.$refs.modelComponent.toggleRenderMode) {
-                this.$refs.modelComponent.toggleRenderMode();
-                // Update local state
-                this.modelStates.useTubeRendering = !this.modelStates.useTubeRendering;
-            }
-        },
-        
-        handleCyclePerformance() {
-            if (this.$refs.modelComponent && this.$refs.modelComponent.cyclePerformanceMode) {
-                this.$refs.modelComponent.cyclePerformanceMode();
-                // Update local state - cycle through modes
-                const modes = ['high', 'medium', 'low', 'auto'];
-                const currentIndex = modes.indexOf(this.modelStates.currentPerformanceMode);
-                const nextIndex = (currentIndex + 1) % modes.length;
-                this.modelStates.currentPerformanceMode = modes[nextIndex];
             }
         },
         

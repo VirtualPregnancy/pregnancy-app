@@ -1,62 +1,81 @@
 <template>
   <div class="model-control">
-    <!-- Main Model Controls -->
-    <div class="control-section">
-      <h4 class="control-title">Vessel Models</h4>
-      <div class="control-group">
-        <v-btn @click="$emit('reload-arterial')" color="error" block class="mb-2">
-          <v-icon left>mdi-arterial</v-icon>
-          Arterial Tree
-        </v-btn>
-        <v-btn @click="$emit('load-venous')" color="primary" block class="mb-2">
-          <v-icon left>mdi-heart-pulse</v-icon>
-          Venous Tree
-        </v-btn>
-      </div>
+    <!-- Collapse Toggle Button -->
+    <div class="collapse-header" @click="toggleCollapse">
+      <h3 class="panel-title">
+        <v-icon left>mdi-cog-outline</v-icon>
+        Model Controls
+      </h3>
+      <v-btn icon small class="collapse-btn">
+        <v-icon>{{ isCollapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' }}</v-icon>
+      </v-btn>
     </div>
 
-    <!-- Alternative Rendering -->
-    <div class="control-section">
-      <h4 class="control-title">High Quality</h4>
-      <div class="control-group">
-        <v-btn @click="$emit('load-arterial-cylinders')" color="error" outlined small class="mb-1 mr-1">
-          <v-icon left small>mdi-tube</v-icon>
-          Arterial (HQ)
-        </v-btn>
-        <v-btn @click="$emit('load-venous-cylinders')" color="primary" outlined small class="mb-1">
-          <v-icon left small>mdi-tube</v-icon>
-          Venous (HQ)
-        </v-btn>
-      </div>
-      <div class="rendering-info">
-        <small class="info-text">
-          High quality mode uses more radial segments for better visual detail
-        </small>
-      </div>
-    </div>
-
-    <!-- Performance Controls -->
-    <div class="control-section">
-      <h4 class="control-title">Performance</h4>
-      <div class="control-group">
-        <v-btn @click="$emit('cycle-performance')" color="accent" small block>
-          <v-icon left>mdi-speedometer</v-icon>
-          {{ getPerformanceLabel(currentPerformanceMode) }}
-        </v-btn>
-      </div>
-    </div>
-
-    <!-- Model Information -->
-    <div class="control-section">
-      <h4 class="control-title">Model Info</h4>
-      <div class="status-info">
-        <div class="status-row">
-          <span class="status-label">Current:</span>
-          <span class="status-value">{{ modelName }}</span>
+    <!-- Collapsible Content -->
+    <div v-show="!isCollapsed" class="panel-content">
+      <!-- Main Model Controls -->
+      <div class="control-section">
+        <h4 class="control-title">Vessel Models</h4>
+        <div class="control-group">
+          <v-btn @click="$emit('reload-arterial')" color="error" block class="mb-2">
+            <v-icon left>mdi-arterial</v-icon>
+            Arterial Tree
+          </v-btn>
+          <v-btn @click="$emit('load-venous')" color="primary" block class="mb-2">
+            <v-icon left>mdi-heart-pulse</v-icon>
+            Venous Tree
+          </v-btn>
         </div>
-        <div class="status-row">
-          <span class="status-label">Rendering:</span>
-          <span class="status-value">{{ renderingType }}</span>
+      </div>
+
+      <!-- Quality Toggle -->
+      <div class="control-section">
+        <h4 class="control-title">Quality Settings</h4>
+        <div class="control-row">
+          <v-btn-toggle 
+            v-model="currentQuality" 
+            @change="onQualityChange"
+            color="accent"
+            dense
+            mandatory
+          >
+            <v-btn small value="standard">
+              <v-icon left small>mdi-speedometer</v-icon>
+              Standard
+            </v-btn>
+            <v-btn small value="high">
+              <v-icon left small>mdi-quality-high</v-icon>
+              High Quality
+            </v-btn>
+          </v-btn-toggle>
+        </div>
+      </div>
+
+      <!-- Pressure Color Bar -->
+      <div class="control-section">
+        <h4 class="control-title">Pressure Scale</h4>
+        <div class="color-bar-container">
+          <div class="color-bar">
+            <div class="color-segment green-segment"></div>
+            <div class="color-segment orange-segment"></div>
+            <div class="color-segment red-segment"></div>
+          </div>
+          <div class="color-labels">
+            <span class="label-left">Low</span>
+            <span class="label-center">Normal</span>
+            <span class="label-right">High</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Model Information -->
+      <div class="control-section">
+        <h4 class="control-title">Model Info</h4>
+        <div class="status-info">
+          <div class="status-row">
+            <span class="status-label">Current:</span>
+            <span class="status-value">{{ modelName }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -82,10 +101,58 @@ export default {
     renderingType: {
       type: String,
       default: '3D Cylinders'
+    },
+    pressureColorMapping: {
+      type: Object,
+      default: null
+    }
+  },
+
+  data() {
+    return {
+      isCollapsed: false,
+      currentVesselType: 'arterial', // 'arterial' or 'venous'
+      currentQuality: 'standard'     // 'standard' or 'high'
+    };
+  },
+
+  computed: {
+    displayModelName() {
+      // Simplify the model name for display
+      if (this.modelName.includes('Arterial')) {
+        return 'Arterial Tree';
+      } else if (this.modelName.includes('Venous')) {
+        return 'Venous Tree';
+      }
+      return this.modelName;
     }
   },
 
   methods: {
+    // Toggle collapse state of the control panel
+    toggleCollapse() {
+      this.isCollapsed = !this.isCollapsed;
+    },
+
+    onQualityChange(quality) {
+      console.log('[PanelControls] Quality changed to:', quality);
+      
+      // Emit appropriate event based on current vessel type and new quality
+      if (this.currentVesselType === 'arterial') {
+        if (quality === 'high') {
+          this.$emit('load-arterial-cylinders');
+        } else {
+          this.$emit('reload-arterial');
+        }
+      } else if (this.currentVesselType === 'venous') {
+        if (quality === 'high') {
+          this.$emit('load-venous-cylinders');
+        } else {
+          this.$emit('load-venous');
+        }
+      }
+    },
+
     getPerformanceLabel(mode) {
       const labels = {
         'high': 'High Performance',
@@ -98,11 +165,10 @@ export default {
   },
 
   // Events emitted to parent component:
-  // - 'reload-arterial': reload arterial tree model (default 3D)
-  // - 'load-venous': load venous tree model (default 3D)
-  // - 'load-arterial-cylinders': load arterial tree with high-quality cylinders
-  // - 'load-venous-cylinders': load venous tree with high-quality cylinders
-  // - 'cycle-performance': cycle through performance modes
+  // - 'reload-arterial': load arterial tree (standard quality)
+  // - 'load-venous': load venous tree (standard quality)
+  // - 'load-arterial-cylinders': load arterial tree (high quality)
+  // - 'load-venous-cylinders': load venous tree (high quality)
 
   beforeDestroy() {
     // Component cleanup if needed
@@ -111,91 +177,273 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.model-control {
+.control-panel {
+  position: relative;
   width: 100%;
-  padding: 20px;
   background: rgba(0, 0, 0, 0.85);
   border-radius: 12px;
   color: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
 }
 
-.control-section {
-  margin-bottom: 24px;
-  
+.collapse-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+}
+
+.collapse-btn {
+  transition: transform 0.2s ease;
+}
+
+.panel-content {
+  padding: 20px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+.controls-content {
+  padding: 20px;
+  padding-top: 50px; // Make room for collapse button
+  color: white;
+}
+
+.control-row {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+
   &:last-child {
     margin-bottom: 0;
   }
 }
 
-.control-title {
-  font-size: 16px;
+.pressure-color-section {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-left: 4px solid #7A3520;
+}
+
+.color-bar-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 12px;
   font-weight: 600;
   margin-bottom: 12px;
-  color: rgba(255, 255, 255, 0.95);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-  padding-bottom: 6px;
+  display: flex;
+  align-items: center;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.control-group {
+.color-bar-container {
   margin-bottom: 8px;
-  
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 
-.rendering-info {
-  padding: 8px 12px;
-  background: rgba(255, 193, 7, 0.1);
-  border-radius: 6px;
-  border-left: 3px solid #ffc107;
+.color-bar {
+  width: 100%;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.color-segment {
+  flex: 1;
+  height: 100%;
+}
+
+.color-bar-labels {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+  
+}
+
+.label-min, .label-max {
+  font-family: 'Courier New', monospace;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.label-mid {
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+
+.color-bar-description {
+  text-align: center;
   margin-top: 8px;
   
-  .info-text {
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.4;
+  small {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 10px;
     font-style: italic;
-    font-size: 12px;
   }
 }
 
-.status-info {
-  padding: 12px;
-  background: rgba(0, 150, 255, 0.1);
-  border-radius: 8px;
-  border-left: 4px solid #0096ff;
+.color-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+  justify-content: center;
 }
 
-.status-row {
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.legend-text {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.info-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  border-left: 4px solid #2F414B;
+}
+
+.info-item {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 8px;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
 }
 
-.status-label {
+.info-label {
   color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
   font-weight: 500;
-  min-width: 70px;
-  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.status-value {
+.info-value {
   color: rgba(255, 255, 255, 0.95);
   font-size: 12px;
   font-weight: 600;
   text-align: right;
-  flex: 1;
-  margin-left: 8px;
+  max-width: 60%;
   word-break: break-word;
+}
+
+// Pressure Color Bar Styles
+.color-bar-container {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.color-bar {
+  display: flex;
+  height: 20px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.color-segment {
+  flex: 1;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scaleY(1.1);
+  }
+}
+
+.green-segment {
+  background: linear-gradient(to right, #2B4B3C, #AA988A); // 深绿色到浅棕色
+}
+
+.orange-segment {
+  background: linear-gradient(to right, #AA988A, #B66A40); // 浅棕色到橙棕色
+}
+
+.red-segment {
+  background: linear-gradient(to right, #B66A40, #7A3520); // 橙棕色到深棕红色
+}
+
+.color-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.label-left, .label-center, .label-right {
+  flex: 1;
+  text-align: center;
+}
+
+.label-left {
+  text-align: left;
+}
+
+.label-right {
+  text-align: right;
 }
 
 // Custom button styles
@@ -204,8 +452,39 @@ export default {
   font-weight: 500 !important;
 }
 
-.v-btn--block {
-  margin: 0 !important;
+.status-text {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 2px;
+}
+
+// Custom button group styles
+.v-btn-toggle {
+  border-radius: 8px !important;
+  
+  .v-btn {
+    text-transform: none !important;
+    font-weight: 500 !important;
+    min-width: 100px;
+    
+    &.v-btn--active {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+    }
+  }
+}
+
+// Animation for collapse/expand
+.control-panel {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  .controls-content {
+    transition: opacity 0.2s ease;
+  }
+  
+  &.collapsed .controls-content {
+    opacity: 0;
+  }
 }
 </style>
   

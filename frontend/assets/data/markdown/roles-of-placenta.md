@@ -1,0 +1,1 @@
+The role of the placenta is to provide nutrients and oxygen to the baby and remove waste products from the baby. It also helps to regulate the baby's temperature and blood pressure.

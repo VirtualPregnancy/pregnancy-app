@@ -9,12 +9,13 @@ $line-height-root: 1.2;
 //$font-size-root: 20px;
 
 /* These variables are NOT linked to Vuetify SASS */
+/* Updated color scheme: #AA988A, #B66A40, #2F414B, #2B4B3C, #7A3520, #7B8BA5 */
 
 $clear: white;
-$scroll: grey;
+$scroll: #AA988A; // light-brown / beige
 
-$text-color: #afafaf;
-$success-light: rgba(50, 205, 50, 1);
-$warning-light: rgba(255, 255, 0, 0.7);
-$error-light: rgba(255, 50, 0, 0.9);
-$secondary-color-light: rgba(150, 30, 150, 0);
+$text-color: #AA988A; // light-brown / beige
+$success-light: #2B4B3C; // dark-green
+$warning-light: #B66A40; // orange-brown
+$error-light: #7A3520; // dark-brown
+$secondary-color-light: #7B8BA5; // blue-grey

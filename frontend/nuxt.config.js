@@ -126,18 +126,16 @@ export default {
       dark: true,
       themes: {
         dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: "#7d1e7d",
-          info: colors.teal.lighten1,
-          warning: "#695e01",
-          subWarning: "#dede09",
-          error: "#451306",
-          subError: "#fc2400",
-          // success: "#558B2F",
-          // success: "#194b17",
-          success: "#162415",
-          subSuccess: "#27a425",
+          primary: "#B66A40",     // orange
+          accent: "#7B8BA5",      // blue-grey
+          secondary: "#AA988A",   // light-brown
+          info: "#2F414B",        // dark-blue-grey 
+          warning: "#7A3520",     // dark-brown
+          subWarning: "#B66A40",  // orange-brown
+          error: "#7A3520",       // dark-brown
+          subError: "#B66A40",    // orange-brown
+          success: "#2B4B3C",     // dark-green
+          subSuccess: "#AA988A",  // light-brown
         },
       },
     },
@@ -170,16 +168,21 @@ export default {
     //todo: modify routes afterwards
     routes: [
       // Modify these routes, when you config your routes for app
-      "/model-heart",
-      "/model-heart#video-div",
-      "/attack-healthy",
-      "/attack-minor",
-      "/attack-severe",
-      "/electricity-healthy",
-      "/electricity-fibrillation",
-      "/failure-healthy",
-      "/failure-compensated",
-      "/failure-decompensated",
+      "/ultrasound-model",
+      "/pregnancy-changes",
+      "/pregnancy-placenta",
+      "/pregnancy-baby",
+      "/conditions",
+      "/conditions/fetal",
+      "/conditions/birth",
+      "/conditions/care",
+      "/ultrasound",
+      "/ultrasound/ultrasound-model",
+      "/clinical",
+      "/clinical/mid-wife",
+      "/clinical/when-care-changes",
+      "/about",
+      
     ],
   },
 };
