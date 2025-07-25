@@ -50,6 +50,7 @@ export const regionalServices = {
     'Te Awamutu Maternity Unit',
     'Thames Maternity Unit'
   ]
+
 };
 
 export const serviceSections = [

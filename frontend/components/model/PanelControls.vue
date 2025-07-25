@@ -28,29 +28,11 @@
         </div>
       </div>
 
-      <!-- Quality Toggle -->
-      <div class="control-section">
-        <h4 class="control-title">Quality Settings</h4>
-        <div class="control-row">
-          <v-btn-toggle 
-            v-model="currentQuality" 
-            @change="onQualityChange"
-            color="accent"
-            dense
-            mandatory
-          >
-            <v-btn small value="standard">
-              <v-icon left small>mdi-speedometer</v-icon>
-              Standard
-            </v-btn>
-            <v-btn small value="high">
-              <v-icon left small>mdi-quality-high</v-icon>
-              High Quality
-            </v-btn>
-          </v-btn-toggle>
-        </div>
-      </div>
+    
 
+   
+      <br />
+      
       <!-- Pressure Color Bar -->
       <div class="control-section">
         <h4 class="control-title">Pressure Scale</h4>
@@ -83,6 +65,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     // Model states passed from parent component
@@ -105,14 +88,18 @@ export default {
     pressureColorMapping: {
       type: Object,
       default: null
-    }
+    },
+    waveform: { type: Array, default: () => [] }, // [{t, value}]
   },
 
   data() {
     return {
-      isCollapsed: false,
+      isCollapsed: true,
       currentVesselType: 'arterial', // 'arterial' or 'venous'
-      currentQuality: 'standard'     // 'standard' or 'high'
+      currentQuality: 'standard',     // 'standard' or 'high'
+      chart: null,
+      playheadTimer: null,
+     
     };
   },
 
@@ -128,30 +115,17 @@ export default {
     }
   },
 
+ 
+
+
   methods: {
     // Toggle collapse state of the control panel
     toggleCollapse() {
       this.isCollapsed = !this.isCollapsed;
     },
 
-    onQualityChange(quality) {
-      console.log('[PanelControls] Quality changed to:', quality);
-      
-      // Emit appropriate event based on current vessel type and new quality
-      if (this.currentVesselType === 'arterial') {
-        if (quality === 'high') {
-          this.$emit('load-arterial-cylinders');
-        } else {
-          this.$emit('reload-arterial');
-        }
-      } else if (this.currentVesselType === 'venous') {
-        if (quality === 'high') {
-          this.$emit('load-venous-cylinders');
-        } else {
-          this.$emit('load-venous');
-        }
-      }
-    },
+
+
 
     getPerformanceLabel(mode) {
       const labels = {
@@ -171,6 +145,8 @@ export default {
   // - 'load-venous-cylinders': load venous tree (high quality)
 
   beforeDestroy() {
+    if (this.playheadTimer) cancelAnimationFrame(this.playheadTimer);
+    if (this.chart) this.chart.dispose();
     // Component cleanup if needed
   }
 }
@@ -485,6 +461,10 @@ export default {
   &.collapsed .controls-content {
     opacity: 0;
   }
+}
+
+.waveform-section {
+  margin: 16px 0;
 }
 </style>
   

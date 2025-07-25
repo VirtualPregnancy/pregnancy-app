@@ -1,13 +1,13 @@
 <template>
   <div class="parent">
     <div class="model-panel">
-              <model 
-          ref="modelComponent"
-          :use-tube-rendering="modelStates.useTubeRendering"
-          :current-performance-mode="modelStates.currentPerformanceMode"
-          :model-name="modelStates.modelName"
-          @model-state-updated="handleModelStateUpdate"
-        />
+      <model
+        ref="modelComponent"
+        :use-tube-rendering="modelStates.useTubeRendering"
+        :current-performance-mode="modelStates.currentPerformanceMode"
+        :model-name="modelStates.modelName"
+        @model-state-updated="handleModelStateUpdate"
+      />
     </div>
     <div
       class="trace-main"
@@ -26,6 +26,10 @@
           @load-venous-cylinders="handleLoadVenousCylinders"
         />
       </div>
+      <div class="diagrams" :class="mdAndUp ? 'diagrams-md' : 'diagrams-sm'">
+        <Waveform :waveform="waveformData" />
+      </div>
+
       <div
         class="d-none d-md-flex justify-center"
         :class="mdAndUp ? 'logo-md' : 'logo-sm'"
@@ -41,87 +45,111 @@
 </template>
 
 <script>
-import PanelControls from '../model/PanelControls.vue';
-
+import PanelControls from "../model/PanelControls.vue";
+import Waveform from "../model/Waveform.vue";
 export default {
-    data() {
-        return {
-            clientMounted: false, // Track if component is mounted on client
-            // Centralized model state management
-            modelStates: {
-                useTubeRendering: true,
-                currentPerformanceMode: 'high',
-                modelName: 'Loading...',
-                renderingType: '3D Cylinders', // Default to 3D cylinder rendering
-                pressureColorMapping: null // Pressure color mapping for display
-            }
-        };
+  data() {
+    return {
+      clientMounted: false, // Track if component is mounted on client
+      // Centralized model state management
+      modelStates: {
+        useTubeRendering: true,
+        currentPerformanceMode: "high",
+        modelName: "Loading...",
+        renderingType: "3D Cylinders", // Default to 3D cylinder rendering
+        pressureColorMapping: null, // Pressure color mapping for display
+      },
+      // TODO: get waveform data from model
+      waveformData: {
+        data: [
+          3999,2999,1999,2999,3999,4999,3999,2999,1999,
+          3999,2999,1999,2999,3999,4999,3999,2999,1999,
+        ],
+        title: "Test Waveform",
+        isPlaying: true,
+        speed: 1,
+      },
+    };
+  },
+
+  mounted() {
+    this.clientMounted = true;
+    $nuxt.$emit(
+      "send-emitter-data",
+      "data in RightPanel.vue send to Model.vue"
+    );
+  },
+
+  computed: {
+    mdAndUp() {
+      // Ensure consistent behavior between SSR and client
+      if (!this.clientMounted) {
+        return false; // Default to mobile layout during SSR
+      }
+      // Add comprehensive null checks for $vuetify
+      try {
+        return (
+          this.$vuetify &&
+          this.$vuetify.breakpoint &&
+          this.$vuetify.breakpoint.mdAndUp
+        );
+      } catch (e) {
+        console.warn("[RightPane] Error accessing vuetify breakpoint:", e);
+        return false;
+      }
     },
-    
-    mounted() {
-        this.clientMounted = true;
-        $nuxt.$emit("send-emitter-data", "data in RightPanel.vue send to Model.vue");
+  },
+
+  methods: {
+    // Handle events from PanelControls and forward to Model component
+    handleReloadArterial() {
+      if (this.$refs.modelComponent && this.$refs.modelComponent.reloadModel) {
+        this.$refs.modelComponent.reloadModel();
+        this.modelStates.renderingType = "3D Cylinders";
+      }
     },
-    
-    computed: {
-        mdAndUp() {
-            // Ensure consistent behavior between SSR and client
-            if (!this.clientMounted) {
-                return false; // Default to mobile layout during SSR
-            }
-            // Add comprehensive null checks for $vuetify
-            try {
-                return this.$vuetify && 
-                       this.$vuetify.breakpoint && 
-                       this.$vuetify.breakpoint.mdAndUp;
-            } catch (e) {
-                console.warn("[RightPane] Error accessing vuetify breakpoint:", e);
-                return false;
-            }
-        },
+
+    handleLoadVenous() {
+      if (
+        this.$refs.modelComponent &&
+        this.$refs.modelComponent.loadVenousTree
+      ) {
+        this.$refs.modelComponent.loadVenousTree();
+        this.modelStates.renderingType = "3D Cylinders";
+      }
     },
-    
-    methods: {
-        // Handle events from PanelControls and forward to Model component
-        handleReloadArterial() {
-            if (this.$refs.modelComponent && this.$refs.modelComponent.reloadModel) {
-                this.$refs.modelComponent.reloadModel();
-                this.modelStates.renderingType = '3D Cylinders';
-            }
-        },
-        
-        handleLoadVenous() {
-            if (this.$refs.modelComponent && this.$refs.modelComponent.loadVenousTree) {
-                this.$refs.modelComponent.loadVenousTree();
-                this.modelStates.renderingType = '3D Cylinders';
-            }
-        },
-        
-        handleLoadArterialCylinders() {
-            if (this.$refs.modelComponent && this.$refs.modelComponent.loadArterialTreeWithCylinders) {
-                this.$refs.modelComponent.loadArterialTreeWithCylinders();
-                this.modelStates.renderingType = 'High Quality 3D';
-            }
-        },
-        
-        handleLoadVenousCylinders() {
-            if (this.$refs.modelComponent && this.$refs.modelComponent.loadVenousTreeWithCylinders) {
-                this.$refs.modelComponent.loadVenousTreeWithCylinders();
-                this.modelStates.renderingType = 'High Quality 3D';
-            }
-        },
-        
-        // Handle state updates from Model component
-        handleModelStateUpdate(newStates) {
-            Object.assign(this.modelStates, newStates);
-        }
+
+    handleLoadArterialCylinders() {
+      if (
+        this.$refs.modelComponent &&
+        this.$refs.modelComponent.loadArterialTreeWithCylinders
+      ) {
+        this.$refs.modelComponent.loadArterialTreeWithCylinders();
+        this.modelStates.renderingType = "High Quality 3D";
+      }
     },
-    components: { PanelControls }
+
+    handleLoadVenousCylinders() {
+      if (
+        this.$refs.modelComponent &&
+        this.$refs.modelComponent.loadVenousTreeWithCylinders
+      ) {
+        this.$refs.modelComponent.loadVenousTreeWithCylinders();
+        this.modelStates.renderingType = "High Quality 3D";
+      }
+    },
+
+    // Handle state updates from Model component
+    handleModelStateUpdate(newStates) {
+      Object.assign(this.modelStates, newStates);
+    },
+  },
+  components: { PanelControls, Waveform },
 };
 </script>
 
 <style scoped lang="scss">
-.parent{
+.parent {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -129,8 +157,7 @@ export default {
 .model-panel {
   // width: 100vw;
   // height: auto;
-  flex: 1; 
-  
+  flex: 1;
 }
 .model-rate {
   position: relative;
@@ -187,5 +214,16 @@ export default {
   width: 100%;
   margin-bottom: 100px;
   padding-right: 10px;
+}
+
+.diagrams-md {
+  min-height: 60%;
+  width: 100%;
+  margin-right: 20px;
+}
+.diagrams-sm {
+  width: 100%;
+  margin-bottom: 100px;
+  margin-right: 20px;
 }
 </style>
