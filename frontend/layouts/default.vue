@@ -27,7 +27,14 @@
                     class="pa-0 overflow-y-auto transparent"
                     :class="mdAndUp ? 'panel-height' + multiplier : ''"
                   >
-                    <left-pane :panel-height="panelHeight" />
+                    <left-pane 
+                      :panel-height="panelHeight"
+                      @ultrasound-metrics-updated="handleUltrasoundMetricsUpdate"
+                      @trigger-model-visualization="handleModelVisualization"
+                      @ultrasound-tool-ready="handleUltrasoundToolReady"
+                      @conditions-updated="handleConditionsUpdate"
+                      @trigger-condition-visualization="handleConditionVisualization"
+                    />
                   </v-card>
                 </v-col>
                 <v-col class="d-none d-md-block fix-it">
@@ -55,6 +62,7 @@ export default {
       panelHeight: 0,
       isVideo: true,
       load_app: true,
+      ultrasoundToolComponent: null, // Reference to ultrasound tool component
     };
   },
 
@@ -104,6 +112,55 @@ export default {
     this.$nuxt.$on("menu-height-changed", (multiplier) => {
       this.multiplier = multiplier;
     });
+  },
+
+  methods: {
+    // Handle ultrasound metrics updates from the tool
+    handleUltrasoundMetricsUpdate(data) {
+      console.log('[DefaultLayout] Ultrasound metrics updated:', data);
+      
+      // Emit global event for RightPane and other components to listen
+      this.$nuxt.$emit('ultrasound-metrics-updated', data);
+      
+      // Store metrics data for potential future use
+      this.lastUltrasoundMetrics = data;
+    },
+    
+    // Handle model visualization requests
+    handleModelVisualization(data) {
+      console.log('[DefaultLayout] Model visualization requested:', data);
+      
+      // Emit global event for RightPane model component to handle
+      this.$nuxt.$emit('trigger-model-visualization', data);
+    },
+    
+    // Handle ultrasound tool ready event
+    handleUltrasoundToolReady(toolComponent) {
+      console.log('[DefaultLayout] Ultrasound tool ready');
+      this.ultrasoundToolComponent = toolComponent;
+      
+      // Emit global event to notify other components that the tool is ready
+      this.$nuxt.$emit('ultrasound-tool-ready', toolComponent);
+    },
+    
+    // Handle pregnancy condition updates from the tool
+    handleConditionsUpdate(data) {
+      console.log('[DefaultLayout] Pregnancy conditions updated:', data);
+      
+      // Emit global event for RightPane and other components to listen
+      this.$nuxt.$emit('conditions-updated', data);
+      
+      // Store condition data for potential future use
+      this.lastConditionData = data;
+    },
+    
+    // Handle condition visualization requests
+    handleConditionVisualization(data) {
+      console.log('[DefaultLayout] Condition visualization requested:', data);
+      
+      // Emit global event for RightPane model component to handle
+      this.$nuxt.$emit('trigger-condition-visualization', data);
+    },
   },
 
   beforeDestroy() {

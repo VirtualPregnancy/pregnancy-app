@@ -20,6 +20,7 @@ export default class VTKLoader {
     this.currentVTKMesh = null;
     this.wireframeMesh = null;
     this.lightingInitialized = false;
+    this.performanceMode = 'high'; // Default performance mode
   }
 
   /**
@@ -58,8 +59,6 @@ export default class VTKLoader {
       ...options
     };
 
-    console.log(`[VTKLoader] Loading VTK file: ${vtkFilePath}`, config);
-    
     // Call progress callback
     if (config.onProgress) {
       config.onProgress(`Loading ${config.displayName}...`, 0);
@@ -82,7 +81,6 @@ export default class VTKLoader {
         config.onComplete(mesh, isPointCloud, radiusData, pressureData);
       }
       
-      console.log(`[VTKLoader] Successfully loaded: ${config.displayName}`);
       return { success: true, mesh, isPointCloud, radiusData, pressureData };
       
     } catch (error) {
@@ -98,7 +96,6 @@ export default class VTKLoader {
    * @returns {Promise<string>} - VTK file content as text
    */
   async fetchVTKFile(vtkFilePath, onProgress = null) {
-    console.log("[VTKLoader] Fetching VTK file...");
     
     if (onProgress) {
       onProgress("Downloading file...", 10);
@@ -113,7 +110,6 @@ export default class VTKLoader {
     
     // Read VTK file content as text
     const vtkData = await response.text();
-    console.log("[VTKLoader] VTK file loaded, size:", vtkData.length, "characters");
     
     if (onProgress) {
       onProgress("File downloaded, parsing data...", 30);
@@ -131,7 +127,6 @@ export default class VTKLoader {
    * @returns {Object} - {geometry: THREE.BufferGeometry, isPointCloud: boolean, radiusData: Array, pressureData: Array}
    */
   parseVTKData(vtkData, onProgress = null, modelSize, useCylinderGeometry = false) {
-    console.log("[VTKLoader] Starting VTK data parsing...");
     
     if (onProgress) {
       onProgress("Parsing VTK data structure...", 40);
@@ -166,7 +161,6 @@ export default class VTKLoader {
       if (line.startsWith('POINTS')) {
         const parts = line.split(' ');
         pointCount = parseInt(parts[1]); // Extract number of points
-        console.log("[VTKLoader] Found", pointCount, "3D points in VTK file");
         isReadingPoints = true;
         isReadingCells = false;
         isReadingScalars = false;
@@ -180,7 +174,6 @@ export default class VTKLoader {
         const parts = line.split(' ');
         if (parts.length > 1) {
           cellCount = parseInt(parts[1]); // Extract number of cells
-          console.log("[VTKLoader] Found", cellCount, "cells/connections in VTK file");
         }
         isReadingPoints = false;
         isReadingCells = true;
@@ -192,7 +185,6 @@ export default class VTKLoader {
       
       // Detect POINT_DATA section - contains scalar data
       if (line.startsWith('POINT_DATA')) {
-        console.log("[VTKLoader] Found POINT_DATA section");
         isReadingPoints = false;
         isReadingCells = false;
         isReadingScalars = true;
@@ -207,11 +199,9 @@ export default class VTKLoader {
         if (parts.length > 1) {
           const scalarName = parts[1].toLowerCase();
           if (scalarName === 'radius') {
-            console.log("[VTKLoader] Found Radius scalar data");
             isReadingRadius = true;
             isReadingPressure = false;
           } else if (scalarName === 'pressure') {
-            console.log("[VTKLoader] Found Pressure scalar data");
             isReadingRadius = false;
             isReadingPressure = true;
           } else {
@@ -296,21 +286,12 @@ export default class VTKLoader {
       }
     }
 
-    console.log("[VTKLoader] Parsing complete:", points.length / 3, "points processed");
-    console.log("[VTKLoader] Found", radiusData.length, "radius values");
-    console.log("[VTKLoader] Found", pressureData.length, "pressure values");
-    console.log("[VTKLoader] Created", vertices.length / 6, "line segments for rendering");
-    
-    if (onProgress) {
-      onProgress("Creating 3D geometry...", 70);
-    }
     
     // Create Three.js BufferGeometry from parsed data
     const geometry = new this.THREE.BufferGeometry();
     
     // If cylinder geometry is requested and we have radius data, create cylinders
     if (useCylinderGeometry && radiusData.length > 0 && cellConnections.length > 0) {
-      console.log("[VTKLoader] Creating cylinder geometry with radius and pressure data...");
       const cylinderGeometry = this.createCylinderGeometry(points, radiusData, pressureData, cellConnections, modelSize);
       return { geometry: cylinderGeometry, isPointCloud: false, radiusData, pressureData };
     }
@@ -318,13 +299,10 @@ export default class VTKLoader {
     // Debug: if no vertices created, there might be an issue with cell parsing
     if (vertices.length === 0) {
       console.warn("[VTKLoader] No line segments created! Using point cloud fallback.");
-      console.log("[VTKLoader] Points array length:", points.length);
-      console.log("[VTKLoader] Expected points:", pointCount * 3);
     }
     
     // If no line segments were created, create a point cloud as fallback
     if (vertices.length === 0 && points.length > 0) {
-      console.log("[VTKLoader] Creating point cloud fallback visualization...");
       // Use original points for point cloud
       geometry.setAttribute('position', new this.THREE.Float32BufferAttribute(points, 3));
       
@@ -349,18 +327,9 @@ export default class VTKLoader {
     const maxDim = Math.max(size.x, size.y, size.z);                        // Largest dimension
     const scale = modelSize / maxDim; // Use configurable model size 
     
-    console.log("[VTKLoader] Model bounding box size:", size);
-    console.log("[VTKLoader] Largest dimension:", maxDim);
-    console.log("[VTKLoader] Target model size:", modelSize, "units");
-    console.log("[VTKLoader] Applied scale factor:", scale);
-    
     // Transform geometry: center at origin and scale to appropriate size
     geometry.translate(-center.x, -center.y, -center.z); // Move to center
     geometry.scale(scale, scale, scale);                  // Scale uniformly
-    
-    if (onProgress) {
-      onProgress("Geometry created, building materials...", 80);
-    }
     
     return { geometry, isPointCloud: false, radiusData, pressureData };
   }
@@ -375,7 +344,6 @@ export default class VTKLoader {
    * @returns {THREE.BufferGeometry} - Combined cylinder geometry with color mapping
    */
   createCylinderGeometry(points, radiusData, pressureData, cellConnections, modelSize) {
-    console.log("[VTKLoader] Creating cylinder geometry...");
     
     const combinedGeometry = new this.THREE.BufferGeometry();
     const vertices = [];
@@ -393,7 +361,6 @@ export default class VTKLoader {
     if (pressureData.length > 0) {
       minPressure = Math.min(...pressureData);
       maxPressure = Math.max(...pressureData);
-      console.log("[VTKLoader] Pressure range:", minPressure.toFixed(4), "to", maxPressure.toFixed(4));
     }
     
     // Process each cell connection
@@ -471,8 +438,6 @@ export default class VTKLoader {
     // Transform geometry: center at origin and scale to appropriate size
     combinedGeometry.translate(-center.x, -center.y, -center.z);
     combinedGeometry.scale(scale, scale, scale);
-    
-    console.log("[VTKLoader] Created cylinder geometry with", vertices.length / 3, "vertices and pressure color mapping");
     
     return combinedGeometry;
   }
@@ -643,7 +608,6 @@ export default class VTKLoader {
     
     if (isPointCloud) {
       // Create enhanced point cloud material
-      console.log("[VTKLoader] Creating point cloud visualization");
       const material = new this.THREE.PointsMaterial({
         color: config.color,
         size: config.pointSize,
@@ -655,7 +619,6 @@ export default class VTKLoader {
       
     } else if (config.useCylinderGeometry && radiusData && radiusData.length > 0) {
       // Create cylinder mesh with proper material for 3D rendering
-      console.log("[VTKLoader] Creating cylinder mesh visualization with radius and pressure data");
       
       // Use vertex colors if pressure data is available
       const material = new this.THREE.MeshPhongMaterial({
@@ -670,7 +633,6 @@ export default class VTKLoader {
       
     } else {
       // Create line segment visualization
-      console.log("[VTKLoader] Creating line segment visualization");
       
       // Main vessel material
       const vesselMaterial = new this.THREE.LineBasicMaterial({
@@ -727,13 +689,6 @@ export default class VTKLoader {
     // Add wireframe overlay if it exists
     if (this.wireframeMesh) {
       this.scene.add(this.wireframeMesh);
-      console.log("[VTKLoader] Added wireframe overlay for enhanced detail");
-    }
-    
-    // Log success information
-    console.log("[VTKLoader] VTK model successfully added to scene:", mesh);
-    if (mesh.geometry && mesh.geometry.attributes && mesh.geometry.attributes.position) {
-      console.log("[VTKLoader] Total vertices in geometry:", mesh.geometry.attributes.position.count);
     }
   }
 
@@ -776,7 +731,6 @@ export default class VTKLoader {
     this.scene.add(internalLight2);
     
     this.lightingInitialized = true;
-    console.log("[VTKLoader] Enhanced lighting system initialized");
   }
 
   /**
@@ -794,7 +748,6 @@ export default class VTKLoader {
       ...cameraConfig
     };
 
-    console.log("[VTKLoader] Setting camera position:", config);
     
     // Validate camera position to prevent errors
     const position = new this.THREE.Vector3(...config.position);
@@ -826,7 +779,6 @@ export default class VTKLoader {
         camera.updateProjectionMatrix();
         camera.updateMatrixWorld();
         
-        console.log("[VTKLoader] Camera position updated successfully");
       } catch (error) {
         console.error("[VTKLoader] Error setting camera position:", error);
         // Fallback to safe position
@@ -890,10 +842,8 @@ export default class VTKLoader {
 
     if (views[viewName]) {
       this.setCameraPosition(views[viewName]);
-      console.log(`[VTKLoader] Set camera to ${viewName} view`);
     } else {
       console.warn(`[VTKLoader] Unknown view: ${viewName}`);
-      console.log("[VTKLoader] Available views:", Object.keys(views));
     }
   }
 
@@ -903,7 +853,6 @@ export default class VTKLoader {
    */
   setCopperScene(copperScene) {
     this.copperScene = copperScene;
-    console.log("[VTKLoader] Copper scene reference set for camera control");
   }
 
   /**
@@ -937,6 +886,25 @@ export default class VTKLoader {
   }
 
   /**
+   * Set performance mode for rendering
+   * @param {string} mode - Performance mode: 'high', 'medium', 'low', 'auto'
+   */
+  setPerformanceMode(mode) {
+    this.performanceMode = mode;
+    
+    // Future implementation: adjust rendering quality based on performance mode
+    // This could affect cylinder segments, line width, point size, etc.
+  }
+
+  /**
+   * Get current performance mode
+   * @returns {string} - Current performance mode
+   */
+  getPerformanceMode() {
+    return this.performanceMode || 'high';
+  }
+
+  /**
    * Clean up resources
    */
   dispose() {
@@ -951,7 +919,5 @@ export default class VTKLoader {
     }
     
     this.copperScene = null;
-    
-    console.log("[VTKLoader] Resources cleaned up");
   }
 } 
