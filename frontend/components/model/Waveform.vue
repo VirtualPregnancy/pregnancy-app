@@ -135,7 +135,7 @@ export default {
             z: 10,
           },
         ],
-        zoom: [
+        dataZoom: [
           {
             type: "inside",
             xAxisIndex: 0,
