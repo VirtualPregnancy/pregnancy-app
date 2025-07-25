@@ -14,15 +14,36 @@ export default {
   },
   mounted() {
     this.chart = echarts.init(this.$refs.chart);
-    this.chartTitle = this.waveform.title;
-    this.chartData = this.waveform.data;
-    this.isPlaying = this.waveform.isPlaying;
-    this.speed = this.waveform.speed;
-    this.drawChart();
-    this.startPlayheadAnimation();
+    console.log('[Waveform] Component mounted, received waveform:', this.waveform);
+    if (this.waveform && this.waveform.data && this.waveform.data.length > 0) {
+      this.chartTitle = this.waveform.title;
+      this.chartData = this.waveform.data;
+      this.isPlaying = this.waveform.isPlaying;
+      this.speed = this.waveform.speed;
+      console.log('[Waveform] Initializing chart with', this.chartData.length, 'data points');
+      this.drawChart();
+      this.startPlayheadAnimation();
+    } else {
+      console.log('[Waveform] No valid waveform data provided');
+    }
   },
   watch: {
-    waveform: "drawChart",
+    waveform: {
+      handler: function(newVal) {
+        console.log('[Waveform] Waveform data changed:', newVal);
+        if (newVal && newVal.data && newVal.data.length > 0) {
+          this.chartTitle = newVal.title;
+          this.chartData = newVal.data;
+          this.isPlaying = newVal.isPlaying;
+          this.speed = newVal.speed;
+          console.log('[Waveform] Updating chart with', this.chartData.length, 'data points');
+          this.drawChart();
+          this.startPlayheadAnimation();
+        }
+      },
+      deep: true,
+      immediate: true
+    }
   },
   data() {
     return {
@@ -36,59 +57,88 @@ export default {
     };
   },
   methods: {
+    resizeChart() {
+      if (this.chart) {
+        this.chart.resize();
+      }
+    },
+    
     drawChart() {
+      if (!this.chart || !this.chartData || this.chartData.length === 0) {
+        console.log('[Waveform] Cannot draw chart - missing data or chart not initialized');
+        return;
+      }
+      
       const xData = this.chartData.map((_, i) => i);
 
       this.chart.setOption({
-        grid: { left: 0, right: 0, top: 0, bottom: 0 },
+        grid: { 
+          left: 5, 
+          right: 5, 
+          top: 5, 
+          bottom: 5,
+          containLabel: false
+        },
         xAxis: {
           type: "category",
-          boundaryGap: false,    // ensures line aligns to edges
+          boundaryGap: false,
           data: xData,
           show: false,
+          axisTick: { show: false },
+          axisLine: { show: false },
+          splitLine: { show: false }
         },
         yAxis: {
           type: "value",
-          min: Math.min(...this.chartData) - 100,  // add margin
-          max: Math.max(...this.chartData) + 100,
+          min: Math.min(...this.chartData) - Math.abs(Math.min(...this.chartData)) * 0.1,
+          max: Math.max(...this.chartData) + Math.abs(Math.max(...this.chartData)) * 0.1,
           show: false,
+          axisTick: { show: false },
+          axisLine: { show: false },
+          splitLine: { show: false }
         },
-       
         series: [
           {
             data: this.chartData,
             type: "line",
             smooth: true,
             showSymbol: false,
-            lineStyle: { width: 1, color: "#4A90E2" },
+            sampling: 'none', // Ensure all data points are rendered
+            large: false, // Disable large mode to show all points
+            lineStyle: { 
+              width: 2, 
+              color: "#1F6683" 
+            },
+            areaStyle: {
+              color: {
+                type: 'linear',
+                x: 0,
+                y: 0,
+                x2: 0,
+                y2: 1,
+                colorStops: [{
+                  offset: 0, color: 'rgba(31, 102, 131, 0.3)'
+                }, {
+                  offset: 1, color: 'rgba(31, 102, 131, 0.05)'
+                }]
+              }
+            },
+            emphasis: {
+              focus: 'none'
+            }
           },
         ],
         dataZoom: [
           {
-            type: "inside", 
-            xAxisIndex: 0,
-            show: false,
-            endValue: Math.min(100, this.chartData.length - 1),
+            type: 'inside',
             start: 0,
-            end: 100,
-            height: 15,
-            bottom: 5,
-            handleSize: 8,
-            handleStyle: {
-              color: "#4A90E2"
-            },
-            textStyle: {
-              color: "#666"
-            },
-            borderColor: "#ddd",
-            fillerColor: "rgba(74, 144, 226, 0.2)",
-            backgroundColor: "#f5f5f5"
-          },
-          
+            end: 100
+          }
         ],
         animation: false,
+        backgroundColor: 'transparent'
       });
-
+      
       // initialize playhead
       this.updatePlayhead();
     },
@@ -129,28 +179,13 @@ export default {
               y2: this.chart.getHeight(),
             },
             style: {
-              stroke: "#A8ACAD",
-              lineWidth: 1,
+              stroke: "#DD3C51",
+              lineWidth: 2,
             },
             z: 10,
           },
         ],
-        dataZoom: [
-          {
-            type: "inside",
-            xAxisIndex: 0,
-            show: false,
-            endValue: Math.min(100, this.chartData.length - 1),
-            start: 0,
-            end: 100,
-            height: 15,
-            bottom: 5,
-            handleSize: 8,
-            handleStyle: {
-              color: "#4A90E2"
-            },
-          }
-        ]
+        // Remove dataZoom restrictions for full data display
       });
     },
   },
