@@ -18,6 +18,26 @@
 
 .left-pane {
   position: relative;
+  
+  .home-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    // Ensure button is visible on mobile
+    @media #{map-get($display-breakpoints, 'xs-only')} {
+      top: 12px;
+      right: 12px;
+    }
+  }
 }
 
 p {

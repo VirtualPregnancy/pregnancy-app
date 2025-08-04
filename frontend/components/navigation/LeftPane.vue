@@ -1,5 +1,17 @@
 <template>
   <div class="left-pane">
+    <!-- Home button in top right corner -->
+    <v-btn
+      fab
+      small
+      color="primary"
+      class="home-btn"
+      :to="{ path: '/' }"
+      @click="goHome"
+    >
+      <v-icon>mdi-home</v-icon>
+    </v-btn>
+    
     <div class="sm-logo d-md-none">
       <logo />
     </div>
@@ -45,6 +57,11 @@ export default {
   },
   
   methods: {
+    // Navigate to home route
+    goHome() {
+      console.log('[LeftPane] Navigating to home');
+    },
+    
     // Forward ultrasound metrics updates to parent components
     handleUltrasoundMetricsUpdate(data) {
       console.log('[LeftPane] Forwarding ultrasound metrics update:', data);
