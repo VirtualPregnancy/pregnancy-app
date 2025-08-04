@@ -2,7 +2,7 @@
   <v-app ref="base_background" class="root">
     <div class="rightPanel">
       <div>
-        <div class="pa-0 black">
+        <div class="pa-0">
           <Nuxt />
         </div>
       </div>

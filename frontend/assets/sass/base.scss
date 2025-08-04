@@ -1,5 +1,6 @@
 body{
-  background-color:black;
+  // background-color:black;
+  background-color:#D3D5D0;
   @media #{map-get($display-breakpoints, 'lg-and-down')}
   {
     font-size: 0.9rem;

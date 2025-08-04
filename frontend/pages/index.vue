@@ -110,7 +110,7 @@ export default {
           index: 0,
           title: 'What is happening in pregnancy?',
           description: 'Understand the changes to your body and fetal development, and the roles of placenta, and how do we check on baby\'s health',
-          image: '/img/landing/pregnant.svg',
+          image: '/img/landing/pregnancy.svg',
           backgroundColor: '#7A3520',
           link: '/pregnancy-changes'
         },
@@ -118,7 +118,7 @@ export default {
           index: 1,
           title: 'Pregnancy concerns',
           description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-          image: '/img/embryo_icon.svg',
+          image: '/img/landing/embryo_icon.svg',
           backgroundColor: '#313657',
           link: '/conditions'
         },
@@ -126,7 +126,7 @@ export default {
           index: 2,
           title: 'What does my ultrasound scan mean?',
           description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-          image: '/img/medical_record.svg',
+          image: '/img/landing/medical_record.svg',
           backgroundColor: '#1F6683',
           link: '/ultrasound-model'
         },
@@ -134,7 +134,7 @@ export default {
           index: 3,
           title: 'Clinical Cares',
           description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-          image: '/img/landing/pregnancy.png',
+          image: '/img/landing/clinic.svg',
           backgroundColor: '#6C90B9',
           link: '/clinical'
         },
@@ -142,7 +142,7 @@ export default {
           index: 4,
           title: 'Support',
           description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-          image: '/img/landing/pregnancy.png',
+          image: '/img/landing/heart.svg',
           backgroundColor: '#D1C7B5',
           link: '/about'
         }
@@ -154,7 +154,7 @@ export default {
 
 <style scoped lang="scss">
 .landing-page {
-  background-color: #000;
+  background-color: #D3D5D0;
   user-select: none;
 }
 
@@ -178,7 +178,6 @@ export default {
 .center-panel {
   position: relative;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.2);
 }
 
 .model-container {
