@@ -1,0 +1,1 @@
+The waveforms are the key to understanding the ultrasound image.
