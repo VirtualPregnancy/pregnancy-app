@@ -182,21 +182,20 @@ export default {
     //todo: modify routes afterwards
     routes: [
       // Modify these routes, when you config your routes for app
-      "/ultrasound-model",
       "/pregnancy-changes",
       "/pregnancy-placenta",
       "/pregnancy-baby",
-      "/conditions",
-      "/conditions/fetal",
-      "/conditions/birth",
-      "/conditions/care",
-      "/ultrasound",
-      "/ultrasound/ultrasound-model",
-      "/clinical",
-      "/clinical/mid-wife",
-      "/clinical/when-care-changes",
+      "/conditions-fetal",
+      "/conditions-birth", 
+      "/conditions-care",
+      "/ultrasound-what-is-ultrasound",
+      "/ultrasound-waveforms",
+      "/ultrasound-how",
+      "/ultrasound-metrics",
+      "/ultrasound-model",
+      "/clinical-mid-wife",
+      "/clinical-when-care-changes",
       "/about",
-      
     ],
   },
 };

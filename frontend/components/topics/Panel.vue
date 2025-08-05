@@ -11,28 +11,24 @@
       </div>
     </div>
     
-    <!-- Show interactive tool for ultrasound topics -->
-    <div v-if="isUltrasoundTopic" class="ultrasound-tool-container pt-2">
-      <lazy-ultrasound-metrics-tool 
-        @metrics-updated="handleMetricsUpdate"
-        @trigger-model-visualization="handleModelVisualization"
-        @ultrasound-tool-mounted="handleToolMounted"
-        @conditions-updated="handleConditionsUpdate"
-        @trigger-condition-visualization="handleConditionVisualization"
-      />
-    </div>
-    
-    <!-- Show regular content for non-ultrasound topics -->
-    <div v-else>
-      <div
-        v-if="fileFound"
-        ref="markedDiv"
-        class="pt-2 pt-xl-4 marked"
-        v-html="markedText"
-      ></div>
-      <div v-if="!fileFound" class="error-message">
-        <span>Data Not Found</span>
-      </div>
+    <!-- Show regular markdown content for all topics -->
+    <div>
+      <client-only>
+        <div
+          v-if="fileFound"
+          ref="markedDiv"
+          class="pt-2 pt-xl-4 marked"
+          v-html="markedText"
+        ></div>
+        <div v-if="!fileFound" class="error-message">
+          <span>Data Not Found</span>
+        </div>
+        <template #fallback>
+          <div class="loading-placeholder pt-2">
+            <v-skeleton-loader type="article" />
+          </div>
+        </template>
+      </client-only>
     </div>
   </div>
 </template>
@@ -50,6 +46,7 @@ export default {
       fileFound: false,
       items: ["latest", "version 2.0", "version 1.0"],
       ultrasoundToolRef: null, // Reference to the ultrasound tool component
+      isClient: false, // Track if we're on client side
     };
   },
 
@@ -84,8 +81,8 @@ export default {
       }
     },
     addVideoLinks: function () {
-      // Only add video links for non-ultrasound topics that have markdown content
-      if (this.fileFound && !this.isUltrasoundTopic && this.$refs.markedDiv) {
+      // Add video links for topics that have markdown content
+      if (this.fileFound && this.$refs.markedDiv) {
         const markedDiv = this.$refs.markedDiv;
         const links = markedDiv.getElementsByTagName("span");
         let i;
@@ -175,29 +172,26 @@ export default {
     markedText() {
       return marked(this.currentPanel);
     },
-    
-    isUltrasoundTopic() {
-      // Check if current route/topic is related to ultrasound
-      const currentRoute = this.$route.path;
-      const dataFile = this.$dataFile ? this.$dataFile() : '';
-      
-      return currentRoute.includes('ultrasound') || 
-             dataFile === 'ultrasound' ||
-             (this.$route.params && this.$route.params.slug === 'ultrasound-model');
-    },
   },
 
   mounted() {
+    this.isClient = true;
+    this.refreshContent();
     this.addVideoLinks();
   },
 
   created() {
-    this.refreshContent();
+    // Only run on client side to avoid SSR mismatch
+    if (process.client) {
+      this.refreshContent();
+    }
   },
 
   updated() {
-    this.refreshContent();
-    this.addVideoLinks();
+    if (this.isClient) {
+      this.refreshContent();
+      this.addVideoLinks();
+    }
   },
 };
 </script>

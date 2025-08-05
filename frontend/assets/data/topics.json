@@ -81,11 +81,38 @@
     "heading": "What does my ultrasound scan mean",
     "icon": "mdi-stethoscope",
     "subTopics": {
-      "model": {
-        "title": "Baby",
+      "what-is-ultrasound": {
+        "title": "What",
         "heading": "Ultrasound",
-        "icon": "mdi-baby-face-outline",
-        "dataFile": "ultrasound",
+        "icon": "mdi-help-circle",
+        "dataFile": "what-is-ultrasound",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NormalElectricity" }
+      },
+      "waveforms": {
+        "title": "Waveforms",
+        "heading": "Ultrasound Waveforms",
+        "icon": "mdi-chart-areaspline",
+        "dataFile": "ultrasound-waveforms",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NormalElectricity" }
+      },
+      "how": {
+        "title": "How",
+        "heading": "How ultrasound can be used to detect pregnancy issues",
+        "icon": "mdi-help-circle",
+        "dataFile": "how-ultrasound-works",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NormalElectricity" }
+      },
+      "metrics": {
+        "title": "Metrics",
+        "heading": "Ultrasound Metrics",
+        "icon": "mdi-progress-check",
+        "dataFile": "ultrasound-metrics",
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NormalElectricity" }
