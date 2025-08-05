@@ -123,19 +123,33 @@ export default {
     treeShake: true,
     theme: {
       options: { customProperties: true },
-      dark: true,
+      dark: false,
       themes: {
+        light: {
+          primary: "#DD3C51",     // red from palette
+          accent: "#6C90B9",      // blue from palette
+          secondary: "#B8BCC8",   // light grey for buttons
+          info: "#1F6683",        // teal from palette
+          warning: "#DD3C51",     // red from palette
+          subWarning: "#6C90B9",  // blue from palette
+          error: "#DD3C51",       // red from palette
+          subError: "#6C90B9",    // blue from palette
+          success: "#1F6683",     // teal from palette
+          subSuccess: "#6C90B9",  // blue from palette
+          background: "#dbd9d5",  // light grey background
+        },
         dark: {
-          primary: "#B66A40",     // orange
-          accent: "#7B8BA5",      // blue-grey
-          secondary: "#AA988A",   // light-brown
-          info: "#2F414B",        // dark-blue-grey 
-          warning: "#7A3520",     // dark-brown
-          subWarning: "#B66A40",  // orange-brown
-          error: "#7A3520",       // dark-brown
-          subError: "#B66A40",    // orange-brown
-          success: "#2B4B3C",     // dark-green
-          subSuccess: "#AA988A",  // light-brown
+          primary: "#DD3C51",     // red from palette
+          accent: "#6C90B9",      // blue from palette
+          secondary: "#B8BCC8",   // light grey for buttons
+          info: "#1F6683",        // teal from palette
+          warning: "#DD3C51",     // red from palette
+          subWarning: "#6C90B9",  // blue from palette
+          error: "#DD3C51",       // red from palette
+          subError: "#6C90B9",    // blue from palette
+          success: "#1F6683",     // teal from palette
+          subSuccess: "#6C90B9",  // blue from palette
+          background: "#313657",  // dark navy from palette
         },
       },
     },

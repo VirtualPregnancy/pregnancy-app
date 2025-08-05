@@ -60,7 +60,7 @@ export default {
 .item-card {
   width: 100%;
   max-width: 800px;
-  margin: 20px auto;
+  margin: 0;
   cursor: pointer;
   transition: transform 0.3s ease;
   border-radius: 8px;
@@ -102,6 +102,12 @@ export default {
   max-width: 80px;
   max-height: 80px;
   object-fit: contain;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.item-card:hover .icon-image {
+  filter: grayscale(0%);
 }
 
 .content-section {

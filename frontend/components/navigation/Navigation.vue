@@ -146,26 +146,34 @@ export default {
   -ms-user-select: none;
   user-select: none;
   height: 56px !important;
-  background: -webkit-linear-gradient(
-    rgba(5, 5, 5, 1),
-    rgba(30, 30, 30, 1) 4%,
-    rgba(5, 5, 5, 1)
-  ); /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(
-    rgba(5, 5, 5, 1),
-    rgba(30, 30, 30, 1) 4%,
-    rgba(5, 5, 5, 1)
-  ); /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(
-    rgba(5, 5, 5, 1),
-    rgba(30, 30, 30, 1) 4%,
-    rgba(5, 5, 5, 1)
-  ); /* For Firefox 3.6 to 15 */
-  background: linear-gradient(
-    rgba(5, 5, 5, 1),
-    rgba(30, 30, 30, 1) 4%,
-    rgba(5, 5, 5, 1)
-  ); /* Standard syntax */
-  border-left: 2px rgb(5, 5, 5) solid;
+  background: var(--v-secondary-base) !important;
+  color: white !important;
+  border-left: 2px solid var(--v-secondary-darken1);
+  transition: all 0.3s ease;
+  font-weight: 600 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  
+  &:hover {
+    background: var(--v-accent-base) !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  &.v-btn--active {
+    background: var(--v-accent-base) !important;
+    color: white !important;
+    border-left-color: var(--v-accent-base);
+    font-weight: 700 !important;
+  }
+  
+  .v-icon {
+    color: white !important;
+  }
+  
+  span {
+    color: white !important;
+    font-weight: inherit;
+  }
 }
 </style>
