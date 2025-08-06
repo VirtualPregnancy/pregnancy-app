@@ -59,7 +59,7 @@ export default {
 <style scoped lang="scss">
 .item-card {
   width: 100%;
-  max-width: 800px;
+  max-width: 100%;
   margin: 0;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -84,8 +84,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  
 }
 
 .icon-container {
@@ -99,20 +97,20 @@ export default {
 }
 
 .icon-image {
-  max-width: 80px;
-  max-height: 80px;
+  max-width: 60px;
+  max-height: 60px;
   object-fit: contain;
-  filter: grayscale(100%);
+  filter: grayscale(0%);
   transition: filter 0.3s ease;
 }
 
 .item-card:hover .icon-image {
-  filter: grayscale(0%);
+  filter: brightness(1.2) saturate(1.8) contrast(1.2);
 }
 
 .content-section {
   width: 70%;
-  padding: 20px;
+  padding: 10px;
   display: flex;
   align-items: center;
 }

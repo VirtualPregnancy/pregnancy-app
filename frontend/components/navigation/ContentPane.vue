@@ -1,11 +1,14 @@
 <template>
-  <div class="content-pane">
+  <div :class="mdAndUp ? 'content-pane-l' : 'content-pane-s'">
     <div class="content-container">
       <!-- Content Header -->
       <div class="content-header">
         <h2 class="page-title">{{ pageTitle }}</h2>
         <p class="page-description">{{ pageDescription }}</p>
       </div>
+
+      <!-- Custom Content Slot (before sections) -->
+      <slot name="before-sections" :pageData="{ pageTitle, pageDescription, contentSections }"></slot>
 
       <!-- Content Sections -->
       <div class="content-sections">
@@ -14,33 +17,82 @@
           :key="section.id"
           class="content-section"
         >
-          <div class="section-header" @click="toggleSection(section.id)">
-            <v-icon left :color="section.iconColor">{{ section.icon }}</v-icon>
-            <h3>{{ section.title }}</h3>
-            <v-icon class="expand-icon" :class="{ 'rotated': expandedSections[section.id] }">
-              mdi-chevron-down
-            </v-icon>
-          </div>
+          <!-- Custom Section Header Slot -->
+          <slot 
+            name="section-header" 
+            :section="section" 
+            :toggle="() => toggleSection(section.id)"
+            :expanded="expandedSections[section.id]"
+          >
+            <!-- Default section header -->
+            <div class="section-header" @click="toggleSection(section.id)">
+              <v-icon left :color="section.iconColor">{{ section.icon }}</v-icon>
+              <h3>{{ section.title }}</h3>
+              <v-icon class="expand-icon" :class="{ 'rotated': expandedSections[section.id] }">
+                mdi-chevron-down
+              </v-icon>
+            </div>
+          </slot>
+
           <v-expand-transition>
             <div v-show="expandedSections[section.id] === true" class="section-content">
-              <div 
-                v-for="item in section.items" 
-                :key="item.id"
-                class="content-item"
+              <!-- Custom Section Content Slot -->
+              <slot 
+                name="section-content" 
+                :section="section"
+                :expanded="expandedSections[section.id]"
               >
-                <h4>
-                  <v-icon left small :color="item.iconColor">{{ item.icon }}</v-icon>
-                  {{ item.title }}
-                </h4>
-                <p>{{ item.description }}</p>
-                <ul v-if="item.list" class="content-list">
-                  <li v-for="listItem in item.list" :key="listItem">{{ listItem }}</li>
-                </ul>
-              </div>
+                <!-- Default section content -->
+                <div 
+                  v-for="item in section.items" 
+                  :key="item.id"
+                  class="content-item"
+                >
+                  <!-- Custom Item Slot -->
+                  <slot 
+                    name="content-item" 
+                    :item="item"
+                    :section="section"
+                  >
+                    <!-- Default item content -->
+                    <h4>
+                      <v-icon left small :color="item.iconColor">{{ item.icon }}</v-icon>
+                      {{ item.title }}
+                    </h4>
+                    <p>{{ item.description }}</p>
+                    
+                    <!-- Custom List Slot -->
+                    <slot name="item-list" :item="item">
+                      <ul v-if="item.list" class="content-list">
+                        <li v-for="listItem in item.list" :key="listItem">
+                          <!-- Custom List Item Slot -->
+                          <slot name="list-item" :listItem="listItem" :item="item">
+                            {{ listItem }}
+                          </slot>
+                        </li>
+                      </ul>
+                    </slot>
+
+                    <!-- Custom Interactive Elements -->
+                    <div v-if="item.interactive" class="interactive-elements">
+                      <slot name="interactive-content" :item="item" :section="section">
+                        <!-- Default interactive placeholder -->
+                        <div class="interactive-placeholder">
+                          <v-icon color="accent" size="32">mdi-puzzle</v-icon>
+                          <p>Interactive content available</p>
+                        </div>
+                      </slot>
+                    </div>
+                  </slot>
+                </div>
+              </slot>
             </div>
           </v-expand-transition>
         </div>
       </div>
+
+      <!-- Custom Content Slot (after sections) -->
+      <slot name="after-sections" :pageData="{ pageTitle, pageDescription, contentSections }"></slot>
 
       <!-- Additional Resources -->
       <div class="additional-resources">
@@ -105,6 +157,12 @@ export default {
     }
   },
 
+  computed: {
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp;
+    }
+  },
+
   methods: {
     toggleSection(sectionId) {
       const currentState = this.expandedSections[sectionId] || false;
@@ -117,12 +175,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.content-pane {
-  width: 80%;
-  margin-left: 20%;
+.content-pane-l {
+  margin-left: 32vw;
+  width: calc(100% - 32vw);
   height: 100vh;
   overflow-y: auto;
   background: linear-gradient(135deg, rgba(209, 199, 181, 0.05) 0%, rgba(108, 144, 185, 0.03) 100%);
+}
+
+.content-pane-s {
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  background: linear-gradient(135deg, rgba(209, 199, 181, 0.05) 0%, rgba(108, 144, 185, 0.03) 100%);
+  margin-bottom: 30px;
 }
 
 .content-container {
@@ -329,6 +395,69 @@ export default {
       strong {
         color: #DD3C51 !important;
         font-weight: 600;
+      }
+    }
+  }
+}
+
+// Interactive elements styles
+.interactive-elements {
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(108, 144, 185, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #6C90B9;
+}
+
+.interactive-placeholder {
+  text-align: center;
+  padding: 20px;
+  
+  p {
+    margin-top: 10px;
+    color: #6C90B9;
+    font-weight: 500;
+    opacity: 0.8;
+  }
+}
+
+// Slot content containers
+.custom-content-wrapper {
+  margin: 20px 0;
+  padding: 20px;
+  background: rgba(31, 102, 131, 0.05);
+  border-radius: 8px;
+  border: 1px dashed rgba(108, 144, 185, 0.3);
+}
+
+// Enhanced list styles for slot content
+.content-list {
+  &.enhanced {
+    background: rgba(209, 199, 181, 0.05);
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 3px solid #DD3C51;
+    
+    li {
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(108, 144, 185, 0.1);
+      transition: all 0.3s ease;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      &:hover {
+        background: rgba(108, 144, 185, 0.1);
+        padding-left: 10px;
+        border-radius: 4px;
+      }
+      
+      &:before {
+        content: '▸';
+        color: #6C90B9;
+        margin-right: 10px;
+        font-weight: bold;
       }
     }
   }

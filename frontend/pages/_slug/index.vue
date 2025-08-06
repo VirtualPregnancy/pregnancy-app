@@ -1,67 +1,90 @@
 <template>
-  <div ref="outerDiv">
-    <div class="text-center">
-      <!-- Use 3D model for specific pages -->
-      <right-pane v-if="shouldShowModel" />
-      
-      <!-- Use content layout for other pages -->
-      <content-pane 
-        v-else
-        :page-title="pageTitle"
-        :page-description="pageDescription"
-        :content-sections="contentSections"
-      />
-    </div>
-  </div>
+  <component 
+    :is="pageComponent" 
+    v-bind="pageProps"
+  />
 </template>
 
 <script>
 import ContentPane from '@/components/navigation/ContentPane.vue';
-import pageData from './pageData.js';
+import RightPane from '@/components/navigation/RightPane.vue';
+import TimelineContentPane from '@/components/navigation/TimelineContentPane.vue';
+import InteractiveContentPane from '@/components/navigation/InteractiveContentPane.vue';
+import pageDataMap from './pageData/index.js';
 
 export default {
   layout: "default",
-  components: {
-    ContentPane
-  },
+  components: { ContentPane, RightPane, TimelineContentPane, InteractiveContentPane },
 
   async asyncData({ route, $getContentBySlug, error, store }) {
     const slug = route.params.slug;
-    let content = $getContentBySlug(slug);
-    if (content === null) {
-      error({ statusCode: 404, message: "Unexpected Error, Page not found" });
-    }
-    store.commit("setCurrentContent", content);
+    const content = $getContentBySlug(slug);
     
-    return {
-      slug,
-      content
-    };
+    if (!content) {
+      error({ statusCode: 404, message: "Page not found" });
+    }
+    
+    store.commit("setCurrentContent", content);
+    return { slug, content };
   },
 
   computed: {
-    shouldShowModel() {
-      return pageData.modelPages.includes(this.slug);
+    pageData() {
+      return pageDataMap[this.slug] || null;
     },
 
-    pageTitle() {
-      return pageData.titles[this.slug] || 'Page Title';
+    pageComponent() {
+      // Priority order: Model pages > Custom component type > Default content pane
+      if (this.pageData?.showModel) {
+        return 'RightPane';
+      }
+      
+      // Use custom component type if specified
+      if (this.pageData?.componentType) {
+        const availableComponents = [
+          'TimelineContentPane', 
+          'InteractiveContentPane', 
+          'ContentPane'
+        ];
+        
+        if (availableComponents.includes(this.pageData.componentType)) {
+          return this.pageData.componentType;
+        }
+      }
+      
+      // Default fallback
+      return 'ContentPane';
     },
 
-    pageDescription() {
-      return pageData.descriptions[this.slug] || 'Page description goes here';
-    },
+    pageProps() {
+      if (!this.pageData) {
+        return {
+          pageTitle: 'Page Not Found',
+          pageDescription: 'The requested page could not be found.',
+          contentSections: []
+        };
+      }
 
-    contentSections() {
-      return pageData.contentSections[this.slug] || [];
+      // For RightPane (model pages), return minimal props
+      if (this.pageComponent === 'RightPane') {
+        return {};
+      }
+
+      // For all content panes (including custom ones), provide full props
+      const baseProps = {
+        pageTitle: this.pageData.title,
+        pageDescription: this.pageData.description,
+        contentSections: this.pageData.contentSections
+      };
+
+      // Add renderConfig for custom components that support it
+      if (this.pageData.renderConfig && 
+          ['TimelineContentPane', 'InteractiveContentPane'].includes(this.pageComponent)) {
+        baseProps.renderConfig = this.pageData.renderConfig;
+      }
+
+      return baseProps;
     }
   }
 };
 </script>
-
-<style scoped lang="scss">
-.right-pane {
-  width: 100%;
-  color: $text-color;
-}
-</style>

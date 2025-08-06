@@ -25,12 +25,7 @@
                 <span class="title-highlight">exciting time!</span>
               </h1>
               <div class="content-text">
-                <p class="intro-text">Discover everything you need to know about your pregnancy journey - from understanding the changes in your body to monitoring your baby's health.</p>
-                <p class="feature-text">💕 learn about pregnancy<br>
-                🤱 understand fetal development<br>
-                📊 understand ultrasound technology<br>
-                👶 understand fetal development<br>
-              </p>
+                <p class="intro-text">Discover everything you need to know about your pregnancy journey - from understanding the changes in your body and your baby's development.</p>
 
               </div>
               
@@ -41,7 +36,7 @@
         <!-- Middle Panel - Three Cards -->
         <v-col 
           :cols="mdAndUp ? 5 : 12" 
-          class="middle-side justify-space-around"
+          class="middle-side justify-space-between"
         >
           <v-card 
             flat 
@@ -54,6 +49,7 @@
                 :key="item.title"
                 cols="12"
                 class="pa-2"
+                style="display: flex; justify-content: center; align-items: center;"
               >
                 <item-card 
                   :title="item.title" 
@@ -67,22 +63,23 @@
           </v-card>
         </v-col>
 
-        <!-- Right Panel  -->
+        <!-- Right Panel - Two Cards -->
         <v-col 
           :cols="mdAndUp ? 4 : 12" 
-          class="right-side"
+          class="right-side justify-space-around"
         >
           <v-card 
             flat 
             tile 
-            class="pa-4 transparent fill-height overflow-y-auto"
+            class="pa-4 transparent fill-height overflow-y-auto justify-space-around"
           >
-            <v-row no-gutters class="fill-height">
+            <v-row no-gutters class="fill-height right-side-row" style="display: flex; align-items: space-around; " >
               <v-col 
                 v-for="item in rightItems" 
                 :key="item.title"
                 cols="12"
                 class="pa-2"
+                style="display: flex; align-items: space-around; justify-content: center;"
               >
                 <item-card 
                   :title="item.title" 
@@ -93,9 +90,9 @@
                 />
               </v-col>
             </v-row>
-            <div class="logo-container">
-              <Logo />
-            </div>
+            <!-- <div class="logo-container">
+             <Logo />
+            </div>  -->
           </v-card>
         </v-col>
       </v-row>
@@ -132,7 +129,7 @@ export default {
   },
   methods: {
     navigateToUltrasound() {
-      this.$router.push('/ultrasound-model');
+      this.$router.push('/ultrasound-what-is-ultrasound');
     },
     scrollToCards() {
       const middleSection = document.querySelector('.middle-side');
@@ -148,10 +145,6 @@ export default {
 .landing-page {
   background: var(--v-background-base);
   user-select: none;
-  padding-top: 1%;
-  box-sizing: border-box;
-  position: relative;
-  overflow: hidden;
   
   &::before {
     content: '';
@@ -191,10 +184,11 @@ export default {
 }
 
 .landing-container {
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   position: relative;
   z-index: 1;
+  width: 100%;
 }
 
 .left-side {
@@ -203,6 +197,7 @@ export default {
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  height: 100dvh;
 }
 
 .title-section {
@@ -214,9 +209,6 @@ export default {
   padding: 40px 20px;
   position: relative;
 }
-
-
-
 
 .main-title {
   font-size: 2.8rem;
@@ -258,7 +250,6 @@ export default {
 .content-text {
   color: var(--v-secondary-base);
   line-height: 1.6;
-  max-width: 400px;
   margin: 0 auto 2rem;
   position: relative;
   z-index: 2;
@@ -267,68 +258,59 @@ export default {
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
     font-weight: 400;
-    color: var(--v-secondary-darken1);
-  }
-  
-  .feature-text {
-    font-size: 0.95rem;
-    line-height: 1.8;
-    background: rgba(255, 255, 255, 0.6);
-    color: var(--v-secondary-base);
-    padding: 1rem;
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.8);
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    color: var(--v-success-base);
   }
 }
-
 
 .middle-side {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 .middle-side .v-row {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   gap: 16px;
   padding: 20px 0;
+  height: 100%;
+  overflow: hidden;
 }
 
 .middle-side .v-col {
-  flex: 1;
-  max-height: calc((100vh - 120px) / 2.5);
+  flex: 0 0 auto;
 }
 
-.right-side {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  height: 100vh;
+.right-side-row {
+  margin-top: 10%;
 }
 
 .right-side .v-card {
   display: flex;
   flex-direction: column;
-  justify-content:space-around;
+  justify-content: space-around;
   align-items: center;
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 .right-side .v-row {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
+  gap: 20px;
   width: 100%;
   height: auto;
+  flex: 1;
+  overflow: hidden;
+  padding: 20px 0;
 }
 
 .right-side .v-col {
@@ -337,36 +319,62 @@ export default {
   align-items: center;
   width: 100%;
   max-width: 250px;
+  flex: 0 0 auto;
 }
 
-/* Logo container styling */
-.logo-container {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 50%;
-  
-  .logo {
-    img {
-      width: 60px;
-      height: auto;
-    }
-  }
-}
+
 
 /* Responsive adjustments */
 @media (max-width: 959px) {
   .landing-container {
     flex-direction: column;
     height: auto;
-    min-height: 100vh;
+    min-height: 100dvh;
+    overflow: visible;
   }
   
   .left-side,
   .middle-side,
   .right-side {
     height: auto;
-    min-height: 40vh;
+    overflow: visible;
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .right-side-row {
+    margin-top: -5%;
+  }
+  
+  .left-side .v-card,
+  .middle-side .v-card,
+  .right-side .v-card {
+    overflow: visible;
+    height: auto;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .middle-side .v-row,
+  .right-side .v-row {
+    height: auto;
+    overflow: visible;
+    gap: 20px;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .middle-side .v-col,
+  .right-side .v-col {
+    margin-bottom: 20px;
+    max-height: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .main-title {
@@ -375,22 +383,6 @@ export default {
   
   .content-text p {
     font-size: 0.9rem;
-  }
-  
-  .logo-container {
-    position: relative;
-    bottom: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    margin-top: 20px;
-    width: 60%;
-    
-    .logo {
-      img {
-        width: 50px;
-      }
-    }
   }
 }
 
@@ -402,21 +394,10 @@ export default {
   .content-text p {
     font-size: 0.85rem;
   }
-  
-  .logo-container {
-    .logo {
-      img {
-        width: 40px;
-      }
-    }
-  }
 }
 
 /* Transparent cards */
 .transparent {
-  margin: 0;
-  padding: 0;
-  opacity: 0.9;
   background: transparent !important;
 }
 </style>
