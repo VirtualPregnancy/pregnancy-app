@@ -1,8 +1,8 @@
 {
   "pregnancy": {
-    "title": "Pregnancy",
+    "title": "Pregnancy journey",
     "heading": "What is Happening in Pregnancy?",
-    "icon": "mdi-human-pregnant",
+    "icon": "/img/landing/pregnancy.svg",
     "subTopics": {
       "changes": {
         "title": "Body Change",
@@ -43,9 +43,9 @@
     }
   },
   "conditions": {
-    "title": "Concerns",
-    "heading": "Pregnancy Concerns",
-    "icon": "mdi-bell-outline",
+    "title": "Pregnancy Complications",
+    "heading": "Pregnancy Complications",
+    "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
       "fetal": {
         "title": "Fetal Growth",
@@ -107,22 +107,13 @@
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NormalElectricity" }
-      },
-      "metrics": {
-        "title": "Metrics",
-        "heading": "Ultrasound Metrics",
-        "icon": "mdi-progress-check",
-        "dataFile": "ultrasound-metrics",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": { "name": "NormalElectricity" }
       }
     }
   },
   "clinical": {
-    "title": "Clinical",
+    "title": "Care Pathways",
     "heading": "Clinical care pathways for pregnancy in Aotearoa NZ.",
-    "icon": "mdi-heart-off",
+    "icon": "mdi-routes",
     "subTopics": {
       "mid-wife": {
         "title": "Midwife Lead Care",

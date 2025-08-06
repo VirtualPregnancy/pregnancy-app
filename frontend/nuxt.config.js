@@ -128,6 +128,7 @@ export default {
         light: {
           primary: "#DD3C51",     // red from palette
           accent: "#6C90B9",      // blue from palette
+          accentLight: "#1F6683",     // teal from palette
           secondary: "#B8BCC8",   // light grey for buttons
           info: "#1F6683",        // teal from palette
           warning: "#DD3C51",     // red from palette
@@ -141,6 +142,7 @@ export default {
         dark: {
           primary: "#DD3C51",     // red from palette
           accent: "#6C90B9",      // blue from palette
+          accentLight: "#1F6683",     // teal from palette
           secondary: "#B8BCC8",   // light grey for buttons
           info: "#1F6683",        // teal from palette
           warning: "#DD3C51",     // red from palette
@@ -191,8 +193,6 @@ export default {
       "/ultrasound-what-is-ultrasound",
       "/ultrasound-waveforms",
       "/ultrasound-how",
-      "/ultrasound-metrics",
-      "/ultrasound-model",
       "/clinical-mid-wife",
       "/clinical-when-care-changes",
       "/about",

@@ -19,7 +19,6 @@
       <!-- currentBg  -->
       <div class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
         <lazy-panel 
-          @ultrasound-metrics-updated="handleUltrasoundMetricsUpdate"
           @trigger-model-visualization="handleModelVisualization"
           @ultrasound-tool-ready="handleUltrasoundToolReady"
           @conditions-updated="handleConditionsUpdate"
@@ -62,11 +61,6 @@ export default {
       console.log('[LeftPane] Navigating to home');
     },
     
-    // Forward ultrasound metrics updates to parent components
-    handleUltrasoundMetricsUpdate(data) {
-      console.log('[LeftPane] Forwarding ultrasound metrics update:', data);
-      this.$emit('ultrasound-metrics-updated', data);
-    },
     
     // Forward model visualization requests to parent components
     handleModelVisualization(data) {

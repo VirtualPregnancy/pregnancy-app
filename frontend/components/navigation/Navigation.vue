@@ -29,7 +29,7 @@
     >
       <v-btn
         v-for="(topic, index) in topics"
-        class="button-default"
+        class="button-default button-main-topic"
         :key="index"
         :value="index"
         :disabled="$isTopicDisabled(topic)"
@@ -40,10 +40,14 @@
         @click="handTopicClick(topic)"
       >
         <span>{{ topic.title }}</span>
-        <v-icon>{{ topic.icon }}</v-icon>
+        <SvgIcon 
+          v-if="topic.icon && topic.icon.startsWith('/')" 
+          :icon="topic.icon" 
+        />
+        <v-icon v-else>{{ topic.icon }}</v-icon>
       </v-btn>
       <v-btn
-        class="button-default"
+        class="button-default button-main-topic"
         :to="{ name: 'about' }"
         @click="updateAbout()"
         :value="'about'"
@@ -56,7 +60,12 @@
 </template>
 
 <script>
+import SvgIcon from '~/components/SvgIcon.vue'
+
 export default {
+  components: {
+    SvgIcon
+  },
   data: () => {
     return {
       selectedTopic: {},
@@ -136,7 +145,7 @@ export default {
 
 .sub-menu {
   position: fixed;
-  bottom: 56px;
+  bottom: 80px;
   width: 100%;
 }
 
@@ -145,13 +154,27 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  height: 56px !important;
   background: var(--v-secondary-base) !important;
-  color: white !important;
+  color: var(--v-secondary-base) !important;
   border-left: 2px solid var(--v-secondary-darken1);
   transition: all 0.3s ease;
-  font-weight: 600 !important;
+  font-weight: 400 !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: normal;
+  font-size: 0.6rem !important;
+  word-wrap: wrap;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  &.button-main-topic {
+    height: auto !important;
+    padding: 8px 12px !important;
+    font-size: 0.6rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
   
   &:hover {
     background: var(--v-accent-base) !important;
@@ -161,7 +184,7 @@ export default {
   }
   
   &.v-btn--active {
-    background: var(--v-accent-base) !important;
+    background: var(--v-accentLight-base) !important;
     color: white !important;
     border-left-color: var(--v-accent-base);
     font-weight: 700 !important;
@@ -170,7 +193,7 @@ export default {
   .v-icon {
     color: white !important;
   }
-  
+ 
   span {
     color: white !important;
     font-weight: inherit;

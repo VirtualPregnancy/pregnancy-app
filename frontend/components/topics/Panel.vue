@@ -106,7 +106,7 @@ export default {
       console.log('[Panel] Ultrasound metrics updated:', data);
       
       // Emit to parent components for potential handling
-      this.$emit('ultrasound-metrics-updated', data);
+      // Note: ultrasound-metrics functionality removed
       
       // Store metrics for potential future use
       this.lastMetricsData = data;
@@ -118,7 +118,7 @@ export default {
       
       // Emit to parent components (likely RightPane) to trigger model updates
       this.$emit('trigger-model-visualization', {
-        type: 'ultrasound-metrics',
+        type: 'model-visualization',
         data: data
       });
       

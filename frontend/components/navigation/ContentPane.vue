@@ -73,16 +73,7 @@
                       </ul>
                     </slot>
 
-                    <!-- Custom Interactive Elements -->
-                    <div v-if="item.interactive" class="interactive-elements">
-                      <slot name="interactive-content" :item="item" :section="section">
-                        <!-- Default interactive placeholder -->
-                        <div class="interactive-placeholder">
-                          <v-icon color="accent" size="32">mdi-puzzle</v-icon>
-                          <p>Interactive content available</p>
-                        </div>
-                      </slot>
-                    </div>
+                    
                   </slot>
                 </div>
               </slot>
@@ -177,10 +168,11 @@ export default {
 <style scoped lang="scss">
 .content-pane-l {
   margin-left: 32vw;
+
   width: calc(100% - 32vw);
   height: 100vh;
   overflow-y: auto;
-  background: linear-gradient(135deg, rgba(209, 199, 181, 0.05) 0%, rgba(108, 144, 185, 0.03) 100%);
+  background: var(--v-background-base);
 }
 
 .content-pane-s {

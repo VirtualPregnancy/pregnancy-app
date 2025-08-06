@@ -26,7 +26,6 @@
                   >
                     <left-pane 
                       :panel-height="panelHeight"
-                      @ultrasound-metrics-updated="handleUltrasoundMetricsUpdate"
                       @trigger-model-visualization="handleModelVisualization"
                       @ultrasound-tool-ready="handleUltrasoundToolReady"
                       @conditions-updated="handleConditionsUpdate"
@@ -110,16 +109,6 @@ export default {
   },
 
   methods: {
-    // Handle ultrasound metrics updates from the tool
-    handleUltrasoundMetricsUpdate(data) {
-      console.log('[DefaultLayout] Ultrasound metrics updated:', data);
-      
-      // Emit global event for RightPane and other components to listen
-      this.$nuxt.$emit('ultrasound-metrics-updated', data);
-      
-      // Store metrics data for potential future use
-      this.lastUltrasoundMetrics = data;
-    },
     
     // Handle model visualization requests
     handleModelVisualization(data) {
