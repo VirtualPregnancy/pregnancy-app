@@ -2,13 +2,8 @@ export default {
   title: 'What is Ultrasound',
   description: 'Understanding ultrasound technology, how it works, and what to expect during your ultrasound scans.',
   showModel: false,
-  componentType: 'InteractiveContentPane', // New: interactive component
-  layoutType: 'educational', // New: educational layout
-  renderConfig: {
-    showDiagrams: true,
-    enableInteraction: true,
-    showAnimations: true
-  },
+  componentType: 'ContentPane',
+  layoutType: 'educational',
   contentSections: [
     {
       id: 'ultrasound-basics',

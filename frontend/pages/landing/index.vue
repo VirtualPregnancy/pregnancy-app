@@ -25,7 +25,7 @@
                 <span class="title-highlight">exciting time!</span>
               </h1>
               <div class="content-text">
-                <p class="intro-text">Discover everything you need to know about your pregnancy journey - from understanding the changes in your body and your baby's development.</p>
+                <p class="intro-text">Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, this app is here to support you and your whānau every step of the way. Designed especially for people in Aotearoa New Zealand, we offer trusted information, helpful tools, and culturally respectful guidance to help you understand your health and make confident decisions. Your journey is unique, and we're honoured to walk alongside you because every pregnancy deserves care, connection, and compassion.</p>
 
               </div>
               
@@ -206,14 +206,13 @@ export default {
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  padding: 40px 20px;
   position: relative;
 }
 
 .main-title {
-  font-size: 2.8rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.2;
   letter-spacing: -0.5px;
   position: relative;
@@ -248,15 +247,11 @@ export default {
 }
 
 .content-text {
-  color: var(--v-secondary-base);
-  line-height: 1.6;
-  margin: 0 auto 2rem;
-  position: relative;
-  z-index: 2;
   
   .intro-text {
     margin-bottom: 1.5rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
+    line-height: 1.3;
     font-weight: 400;
     color: var(--v-success-base);
   }

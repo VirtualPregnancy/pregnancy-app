@@ -1,6 +1,5 @@
 // Individual page data imports
 import clinicalMidWife from './clinical-mid-wife.js';
-import ultrasoundModel from './ultrasound-model.js';
 import about from './about.js';
 import pregnancyChanges from './pregnancy-changes.js';
 import conditionsFetal from './conditions-fetal.js';
@@ -13,7 +12,6 @@ import whenCareChanges from './when-care-changes.js';
 // Export page data mapping
 export default {
   'clinical-mid-wife': clinicalMidWife,
-  'ultrasound-model': ultrasoundModel,
   'about': about,
   'pregnancy-changes': pregnancyChanges,
   'conditions-fetal': conditionsFetal,

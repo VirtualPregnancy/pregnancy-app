@@ -9,12 +9,11 @@
 import ContentPane from '@/components/navigation/ContentPane.vue';
 import RightPane from '@/components/navigation/RightPane.vue';
 import TimelineContentPane from '@/components/navigation/TimelineContentPane.vue';
-import InteractiveContentPane from '@/components/navigation/InteractiveContentPane.vue';
 import pageDataMap from './pageData/index.js';
 
 export default {
   layout: "default",
-  components: { ContentPane, RightPane, TimelineContentPane, InteractiveContentPane },
+  components: { ContentPane, RightPane, TimelineContentPane },
 
   async asyncData({ route, $getContentBySlug, error, store }) {
     const slug = route.params.slug;
@@ -43,7 +42,6 @@ export default {
       if (this.pageData?.componentType) {
         const availableComponents = [
           'TimelineContentPane', 
-          'InteractiveContentPane', 
           'ContentPane'
         ];
         
@@ -79,7 +77,7 @@ export default {
 
       // Add renderConfig for custom components that support it
       if (this.pageData.renderConfig && 
-          ['TimelineContentPane', 'InteractiveContentPane'].includes(this.pageComponent)) {
+          ['TimelineContentPane'].includes(this.pageComponent)) {
         baseProps.renderConfig = this.pageData.renderConfig;
       }
 
