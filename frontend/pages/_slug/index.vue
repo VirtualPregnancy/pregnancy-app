@@ -8,12 +8,11 @@
 <script>
 import ContentPane from '@/components/navigation/ContentPane.vue';
 import RightPane from '@/components/navigation/RightPane.vue';
-import TimelineContentPane from '@/components/navigation/TimelineContentPane.vue';
 import pageDataMap from './pageData/index.js';
 
 export default {
   layout: "default",
-  components: { ContentPane, RightPane, TimelineContentPane },
+  components: { ContentPane, RightPane },
 
   async asyncData({ route, $getContentBySlug, error, store }) {
     const slug = route.params.slug;
@@ -41,7 +40,6 @@ export default {
       // Use custom component type if specified
       if (this.pageData?.componentType) {
         const availableComponents = [
-          'TimelineContentPane', 
           'ContentPane'
         ];
         
@@ -71,13 +69,15 @@ export default {
       // For all content panes (including custom ones), provide full props
       const baseProps = {
         pageTitle: this.pageData.title,
-        pageDescription: this.pageData.description,
-        contentSections: this.pageData.contentSections
+        pageDescription: this.pageData.description
       };
+
+      // Add content sections
+      baseProps.contentSections = this.pageData.contentSections || [];
 
       // Add renderConfig for custom components that support it
       if (this.pageData.renderConfig && 
-          ['TimelineContentPane'].includes(this.pageComponent)) {
+          [].includes(this.pageComponent)) {
         baseProps.renderConfig = this.pageData.renderConfig;
       }
 

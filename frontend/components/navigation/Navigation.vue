@@ -40,11 +40,7 @@
         @click="handTopicClick(topic)"
       >
         <span>{{ topic.title }}</span>
-        <SvgIcon 
-          v-if="topic.icon && topic.icon.startsWith('/')" 
-          :icon="topic.icon" 
-        />
-        <v-icon v-else>{{ topic.icon }}</v-icon>
+        <v-icon>{{ topic.icon }}</v-icon>
       </v-btn>
       <v-btn
         class="button-default button-main-topic"
@@ -60,12 +56,7 @@
 </template>
 
 <script>
-import SvgIcon from '~/components/SvgIcon.vue'
-
 export default {
-  components: {
-    SvgIcon
-  },
   data: () => {
     return {
       selectedTopic: {},
@@ -162,11 +153,11 @@ export default {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: normal;
-  font-size: 0.6rem !important;
   word-wrap: wrap;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   &.button-main-topic {
     height: auto !important;
+    min-height: 56px !important;
     padding: 8px 12px !important;
     font-size: 0.6rem !important;
     display: flex !important;
@@ -193,7 +184,7 @@ export default {
   .v-icon {
     color: white !important;
   }
- 
+  
   span {
     color: white !important;
     font-weight: inherit;

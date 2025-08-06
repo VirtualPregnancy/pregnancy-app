@@ -1,16 +1,16 @@
 <template>
   <v-app class="landing-page">
     <!-- Hamburger Menu Icon -->
-    <div class="hamburger-menu" @click="navigateToUltrasound">
+    <div class="hamburger-menu fixed top-5 left-5 z-[1000] cursor-pointer p-2 rounded-xl transition-all duration-300 hover:-translate-y-0.5" @click="navigateToUltrasound">
       <v-icon size="28" color="#333">mdi-menu</v-icon>
     </div>
     
-    <v-container fluid class="pa-0 landing-container">
+    <v-container fluid class="pa-0 landing-container h-screen overflow-hidden relative z-[1] w-full">
       <v-row no-gutters class="fill-height">
         <!-- Left Panel - Title and Content -->
         <v-col 
           :cols="mdAndUp ? 3 : 12" 
-          class="left-side justify-space-around"
+          class="left-side justify-space-around mt-[5%] flex flex-col justify-start items-stretch h-screen"
         >
           <v-card 
             flat 
@@ -18,14 +18,14 @@
             class="pa-4 transparent fill-height overflow-y-auto"
           >
             <!-- Title Section -->
-            <div class="title-section">
+            <div class="title-section flex-1 flex flex-col justify-center text-center relative">
               
-              <h1 class="main-title">
-                <span class="title-gradient">Pregnancy is an</span>
-                <span class="title-highlight">exciting time!</span>
+              <h1 class="main-title text-[2.4rem] font-bold mb-6 leading-tight relative z-[2]">
+                <span class="title-gradient block mb-2">Pregnancy is an</span>
+                <span class="title-highlight block">exciting time!</span>
               </h1>
               <div class="content-text">
-                <p class="intro-text">Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, this app is here to support you and your whānau every step of the way. Designed especially for people in Aotearoa New Zealand, we offer trusted information, helpful tools, and culturally respectful guidance to help you understand your health and make confident decisions. Your journey is unique, and we're honoured to walk alongside you because every pregnancy deserves care, connection, and compassion.</p>
+                <p class="intro-text mb-6 text-base leading-snug font-normal">Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, this app is here to support you and your whānau every step of the way. Designed especially for people in Aotearoa New Zealand, we offer trusted information, helpful tools, and culturally respectful guidance to help you understand your health and make confident decisions. Your journey is unique, and we're honoured to walk alongside you because every pregnancy deserves care, connection, and compassion.</p>
 
               </div>
               
@@ -36,7 +36,7 @@
         <!-- Middle Panel - Three Cards -->
         <v-col 
           :cols="mdAndUp ? 5 : 12" 
-          class="middle-side justify-space-between"
+          class="middle-side justify-space-between flex flex-col justify-start items-stretch h-screen overflow-hidden"
         >
           <v-card 
             flat 
@@ -48,8 +48,7 @@
                 v-for="item in middleItems" 
                 :key="item.title"
                 cols="12"
-                class="pa-2"
-                style="display: flex; justify-content: center; align-items: center;"
+                class="pa-2 flex justify-center items-center"
               >
                 <item-card 
                   :title="item.title" 
@@ -73,13 +72,12 @@
             tile 
             class="pa-4 transparent fill-height overflow-y-auto justify-space-around"
           >
-            <v-row no-gutters class="fill-height right-side-row" style="display: flex; align-items: space-around; " >
+            <v-row no-gutters class="fill-height right-side-row flex items-around mt-[10%]">
               <v-col 
                 v-for="item in rightItems" 
                 :key="item.title"
                 cols="12"
-                class="pa-2"
-                style="display: flex; align-items: space-around; justify-content: center;"
+                class="pa-2 flex items-around justify-center"
               >
                 <item-card 
                   :title="item.title" 
@@ -162,69 +160,29 @@ export default {
 }
 
 .hamburger-menu {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  cursor: pointer;
-  padding: 8px;
-  border-radius: 12px;
   background: rgba(49, 54, 87, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(49, 54, 87, 0.2);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
   
   &:hover {
     background: var(--v-secondary-base);
     color: white;
-    transform: translateY(-2px);
     box-shadow: 0 6px 25px rgba(49, 54, 87, 0.3);
   }
 }
 
-.landing-container {
-  height: 100dvh;
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-  width: 100%;
-}
 
-.left-side {
-  margin-top: 5%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  height: 100dvh;
-}
 
-.title-section {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  position: relative;
-}
 
 .main-title {
-  font-size: 2.4rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  line-height: 1.2;
   letter-spacing: -0.5px;
-  position: relative;
-  z-index: 2;
   
   .title-gradient {
     background: linear-gradient(135deg, var(--v-secondary-base) 0%, var(--v-info-base) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    display: block;
-    margin-bottom: 0.5rem;
   }
   
   .title-highlight {
@@ -232,7 +190,6 @@ export default {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    display: block;
     animation: glow 2s ease-in-out infinite alternate;
   }
 }
@@ -249,22 +206,10 @@ export default {
 .content-text {
   
   .intro-text {
-    margin-bottom: 1.5rem;
-    font-size: 1rem;
-    line-height: 1.3;
-    font-weight: 400;
     color: var(--v-success-base);
   }
 }
 
-.middle-side {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
-  height: 100dvh;
-  overflow: hidden;
-}
 
 .middle-side .v-row {
   flex: 1;
@@ -281,9 +226,6 @@ export default {
   flex: 0 0 auto;
 }
 
-.right-side-row {
-  margin-top: 10%;
-}
 
 .right-side .v-card {
   display: flex;
@@ -321,12 +263,6 @@ export default {
 
 /* Responsive adjustments */
 @media (max-width: 959px) {
-  .landing-container {
-    flex-direction: column;
-    height: auto;
-    min-height: 100dvh;
-    overflow: visible;
-  }
   
   .left-side,
   .middle-side,
