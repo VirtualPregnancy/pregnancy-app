@@ -100,7 +100,7 @@
 <script>
 import ItemCard from '@/components/landing/itemCard.vue';
 import Logo from '@/components/support/Logo.vue';
-import landingPageData from './landingPageData';
+import landingPageData from '@/assets/data/landingPageData';
 import Menu from '@/components/landing/Menu.vue';
 
 export default {

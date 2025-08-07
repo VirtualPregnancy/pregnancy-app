@@ -174,7 +174,7 @@
 </template>
 
 <script>
-import { regions, regionalServices, serviceSections } from './supportData';
+import { regions, regionalServices, serviceSections } from '@/assets/data/supportData';
 
 export default {
   layout: "default",
