@@ -1,137 +1,113 @@
 <template>
   <v-app class="landing-page">
     <!-- Hamburger Menu Icon -->
-    <div class="hamburger-menu fixed top-5 left-5 z-[1000] cursor-pointer p-2 rounded-xl transition-all duration-300 hover:-translate-y-0.5">
+    <div class="hamburger-menu fixed top-5 left-5 z-50">
       <Menu />
     </div>
-    <v-container fluid class="pa-0 landing-container h-screen overflow-hidden relative z-[1] w-full">
-      <v-row no-gutters class="fill-height">
-        <!-- Left Panel - Title and Content -->
-        <v-col 
-          :cols="mdAndUp ? 3 : 12" 
-          class="left-side justify-space-around mt-[5%] flex flex-col justify-start items-stretch h-screen"
-        >
-          <v-card 
-            flat 
-            tile 
-            class="pa-4 transparent fill-height overflow-y-auto"
-          >
-            <!-- Title Section -->
-            <div class="title-section flex-1 flex flex-col justify-center text-center relative">
-              
-              <h1 class="main-title text-[2.4rem] font-bold mb-6 leading-tight relative z-[2]">
-                <span class="title-gradient block mb-2">Pregnancy is an</span>
-                <span class="title-highlight block">exciting time!</span>
-              </h1>
-              <div class="content-text">
-                <p class="intro-text mb-6 text-base leading-snug font-normal">Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, this app is here to support you and your whānau every step of the way. Designed especially for people in Aotearoa New Zealand, we offer trusted information, helpful tools, and culturally respectful guidance to help you understand your health and make confident decisions. Your journey is unique, and we're honoured to walk alongside you because every pregnancy deserves care, connection, and compassion.</p>
+    
+    <!-- Three Column Layout -->
+    <div class="landing-container">
+      <div class="landing-row">
+        
+        <!-- Left Column - Title and Content -->
+        <div class="column left-column">
+          <div class="column-content">
+            <h1 class="main-title">
+              <span class="title-gradient">Pregnancy is an</span>
+              <span class="title-highlight">exciting time!</span>
+            </h1>
+            <p class="intro-text">
+              Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, 
+              this app is here to support you and your whānau every step of the way. Designed especially for people 
+              in Aotearoa New Zealand, we offer trusted information, helpful tools, and culturally respectful guidance 
+              to help you understand your health and make confident decisions.
+            </p>
+          </div>
+        </div>
 
-              </div>
-              
-            </div>
-          </v-card>
-        </v-col>
-
-        <!-- Middle Panel - Three Cards -->
-        <v-col 
-          :cols="mdAndUp ? 5 : 12" 
-          class="middle-side justify-space-between flex flex-col justify-start items-stretch h-screen overflow-hidden"
-        >
-          <v-card 
-            flat 
-            tile 
-            class="pa-4 transparent fill-height overflow-y-auto"
-          >
-            <v-row no-gutters class="fill-height">
-              <v-col 
+        <!-- Middle Column - Three Cards -->
+        <div class="column middle-column">
+          <div class="column-content">
+            <div class="cards-container">
+              <div 
                 v-for="item in middleItems" 
                 :key="item.title"
-                cols="12"
-                class="pa-2 flex justify-center items-center"
+                class="card-item"
+                :style="{ backgroundColor: item.backgroundColor }"
+                @click="navigateToPage(item.link)"
               >
-                <item-card 
-                  :title="item.title" 
-                  :description="item.description" 
-                  :image="item.image" 
-                  :backgroundColor="item.backgroundColor" 
-                  :link="item.link" 
-                />
-              </v-col>
-            </v-row>
-          </v-card>
-        </v-col>
+                <div class="card-icon">
+                  <img :src="getImagePath(item.image)" :alt="item.title" />
+                </div>
+                <div class="card-content">
+                  <h3 class="card-title">{{ item.title }}</h3>
+                  <p class="card-description">{{ item.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <!-- Right Panel - Two Cards -->
-        <v-col 
-          :cols="mdAndUp ? 4 : 12" 
-          class="right-side justify-space-around"
-        >
-          <v-card 
-            flat 
-            tile 
-            class="pa-4 transparent fill-height overflow-y-auto justify-space-around"
-          >
-            <v-row no-gutters class="fill-height right-side-row flex items-around mt-[10%]">
-              <v-col 
+        <!-- Right Column - Two Cards -->
+        <div class="column right-column">
+          <div class="column-content">
+            <div class="cards-container">
+              <div 
                 v-for="item in rightItems" 
                 :key="item.title"
-                cols="12"
-                class="pa-2 flex items-around justify-center"
+                class="card-item"
+                :style="{ backgroundColor: item.backgroundColor }"
+                @click="navigateToPage(item.link)"
               >
-                <item-card 
-                  :title="item.title" 
-                  :description="item.description" 
-                  :image="item.image" 
-                  :backgroundColor="item.backgroundColor" 
-                  :link="item.link" 
-                />
-              </v-col>
-            </v-row>
-            <!-- <div class="logo-container">
-             <Logo />
-            </div>  -->
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+                <div class="card-icon">
+                  <img :src="getImagePath(item.image)" :alt="item.title" />
+                </div>
+                <div class="card-content">
+                  <h3 class="card-title">{{ item.title }}</h3>
+                  <p class="card-description">{{ item.description }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
   </v-app>
 </template>
 
 <script>
-import ItemCard from '@/components/landing/itemCard.vue';
-import Logo from '@/components/support/Logo.vue';
 import landingPageData from '@/assets/data/landingPageData';
 import Menu from '@/components/landing/Menu.vue';
 
 export default {
   layout: 'empty',
   components: {
-    ItemCard,
-    Logo,
     Menu
   },
+  
   computed: {
-    mdAndUp() {
-      return this.$vuetify.breakpoint.mdAndUp;
-    },
     middleItems() {
-      return this.items.filter(item => item.index <= 2);
+      return landingPageData.items.filter(item => item.index <= 2);
     },
     rightItems() {
-      return this.items.filter(item => item.index > 2);
+      return landingPageData.items.filter(item => item.index > 2);
     }
   },
-  data() {
-    return {
-      items: landingPageData.items
-    }
-  },
+  
   methods: {
-    scrollToCards() {
-      const middleSection = document.querySelector('.middle-side');
-      if (middleSection) {
-        middleSection.scrollIntoView({ behavior: 'smooth' });
+    navigateToPage(link) {
+      if (link) {
+        this.$router.push(link);
       }
+    },
+    
+    getImagePath(imagePath) {
+      const cleanPath = imagePath.replace('/pregnancy-app', '');
+      if (process.env.DEPLOY_ENV === 'GH_PAGES') {
+        return `/pregnancy-app${cleanPath}`;
+      }
+      return cleanPath;
     }
   }
 };
@@ -140,7 +116,29 @@ export default {
 <style scoped lang="scss">
 .landing-page {
   background: var(--v-background-base);
-  user-select: none;
+  min-height: 100vh;
+}
+
+.hamburger-menu {
+  background: rgba(49, 54, 87, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(49, 54, 87, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 8px;
+  
+  &:hover {
+    background: var(--v-secondary-base);
+    color: white;
+    box-shadow: 0 6px 25px rgba(49, 54, 87, 0.3);
+  }
+}
+
+.landing-container {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  position: relative;
   
   &::before {
     content: '';
@@ -157,39 +155,79 @@ export default {
   }
 }
 
-.hamburger-menu {
-  background: rgba(49, 54, 87, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(49, 54, 87, 0.2);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+.landing-row {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   
-  &:hover {
-    background: var(--v-secondary-base);
-    color: white;
-    box-shadow: 0 6px 25px rgba(49, 54, 87, 0.3);
+  &.left-column {
+    flex: 0 0 25%;
+    background: rgba(255, 255, 255, 0.02);
+  }
+  
+  &.middle-column {
+    flex: 0 0 42%;
+    background: rgba(255, 255, 255, 0.01);
+  }
+  
+  &.right-column {
+    flex: 0 0 33%;
+    background: rgba(255, 255, 255, 0.02);
   }
 }
 
+.column-content {
+  padding: 40px 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
-
+/* Left Column Styles */
+.left-column .column-content {
+  text-align: center;
+  align-items: center;
+}
 
 .main-title {
-  letter-spacing: -0.5px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 30px;
+  line-height: 1.2;
   
   .title-gradient {
+    display: block;
     background: linear-gradient(135deg, var(--v-secondary-base) 0%, var(--v-info-base) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    margin-bottom: 10px;
   }
   
   .title-highlight {
+    display: block;
     background: linear-gradient(135deg, var(--v-primary-base) 0%, var(--v-accent-base) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: glow 2s ease-in-out infinite alternate;
   }
+}
+
+.intro-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--v-success-base);
+  max-width: 400px;
 }
 
 @keyframes glow {
@@ -201,132 +239,160 @@ export default {
   }
 }
 
-.content-text {
-  
-  .intro-text {
-    color: var(--v-success-base);
-  }
-}
-
-
-.middle-side .v-row {
-  flex: 1;
+/* Cards Styles */
+.cards-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px 0;
-  height: 100%;
-  overflow: hidden;
-}
-
-.middle-side .v-col {
-  flex: 0 0 auto;
-}
-
-
-.right-side .v-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
-
-.right-side .v-row {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
   gap: 20px;
-  width: 100%;
-  height: auto;
-  flex: 1;
-  overflow: hidden;
-  padding: 20px 0;
-}
-
-.right-side .v-col {
-  display: flex;
+  height: 100%;
   justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 250px;
-  flex: 0 0 auto;
 }
 
+.card-item {
+  display: flex;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  min-height: 120px;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  }
+}
 
+.card-icon {
+  flex: 0 0 80px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  
+  img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+  }
+}
 
-/* Responsive adjustments */
-@media (max-width: 959px) {
-  
-  .left-side,
-  .middle-side,
-  .right-side {
-    height: auto;
-    overflow: visible;
-    min-height: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .right-side-row {
-    margin-top: -5%;
-  }
-  
-  .left-side .v-card,
-  .middle-side .v-card,
-  .right-side .v-card {
-    overflow: visible;
-    height: auto;
-    width: 100%;
-    max-width: 500px;
-    margin: 0 auto;
-  }
-  
-  .middle-side .v-row,
-  .right-side .v-row {
-    height: auto;
-    overflow: visible;
-    gap: 20px;
-    padding: 20px;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .middle-side .v-col,
-  .right-side .v-col {
-    margin-bottom: 20px;
-    max-height: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
+.card-content {
+  flex: 1;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-title {
+  color: white;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.card-description {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
   .main-title {
     font-size: 2rem;
   }
   
-  .content-text p {
+  .intro-text {
+    font-size: 0.9rem;
+  }
+  
+  .card-title {
+    font-size: 1.2rem;
+  }
+  
+  .card-description {
     font-size: 0.9rem;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .landing-page {
+    height: auto;
+    overflow-y: auto;
+  }
+  
+  .landing-container {
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .landing-row {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .column {
+    flex: none !important;
+    height: auto;
+    min-height: auto;
+    
+    &.left-column {
+      min-height: 50vh;
+      display: flex;
+      align-items: center;
+    }
+    
+    &.middle-column {
+      min-height: auto;
+      margin-bottom: 30px;
+    }
+    
+    &.right-column {
+      min-height: auto;
+      margin-top: -10%;
+    }
+  }
+  
+  .column-content {
+    padding: 20px 15px;
+    height: auto;
+    min-height: auto;
+  }
+  
   .main-title {
     font-size: 1.8rem;
   }
   
-  .content-text p {
+  .intro-text {
     font-size: 0.85rem;
   }
-}
-
-/* Transparent cards */
-.transparent {
-  background: transparent !important;
+  
+  .cards-container {
+    gap: 15px;
+    justify-content: flex-start;
+  }
+  
+  .card-item {
+    min-height: 100px;
+  }
+  
+  .card-icon {
+    flex: 0 0 60px;
+    
+    img {
+      width: 35px;
+      height: 35px;
+    }
+  }
+  
+  .hamburger-menu {
+    top: 10px;
+    left: 10px;
+  }
 }
 </style>

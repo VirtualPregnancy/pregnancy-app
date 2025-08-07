@@ -28,7 +28,7 @@ export default {
       {
         rel: "icon",
         type: "image/x-icon",
-        href: "/pregnancy-app/favicon2.ico",
+        href: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app/favicon2.ico" : "/favicon2.ico",
       },
       {
         rel: "stylesheet",
@@ -58,7 +58,7 @@ export default {
     script: [
       {
         type: "text/javascript",
-        src: "js/tailwindcss.js",
+        src: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app/js/tailwindcss.js" : "/js/tailwindcss.js",
       },
       {
         src: "https://www.googletagmanager.com/gtag/js?id=G-LXD5LJXP2Y",
@@ -159,6 +159,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    publicPath: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app/_nuxt/" : "/_nuxt/",
     extend(config) {
       config.module.rules.push({
         test: /\.md$/i,
@@ -181,6 +182,7 @@ export default {
   ...routerBase,
   generate: {
     dir: "build",
+    fallback: true,
     //todo: modify routes afterwards
     routes: [
       // Modify these routes, when you config your routes for app

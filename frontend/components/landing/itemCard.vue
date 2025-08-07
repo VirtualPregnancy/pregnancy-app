@@ -4,7 +4,13 @@
       <!-- Left side - Icon area -->
       <div class="icon-section bg-white flex items-center justify-center">
         <div class="icon-container w-full flex items-center justify-center rounded-lg bg-white">
-          <img :src="image" :alt="title" class="icon-image object-contain transition-all duration-300" />
+          <img 
+            :src="image" 
+            :alt="title" 
+            class="icon-image object-contain transition-all duration-300" 
+            @error="onImageError"
+            @load="onImageLoad"
+          />
         </div>
       </div>
       
@@ -51,6 +57,16 @@ export default {
       if (this.link) {
         this.$router.push(this.link);
       }
+    },
+    
+    onImageError(event) {
+      console.error('Image failed to load:', this.image);
+      // You could set a fallback image here if needed
+      // event.target.src = '/fallback-icon.svg';
+    },
+    
+    onImageLoad() {
+      console.log('Image loaded successfully:', this.image);
     }
   }
 }
@@ -81,7 +97,7 @@ export default {
 }
 
 .card-title {
-  font-size: 1.5rem;
+  font-size: 2rem;
   margin: 0 0 15px 0;
   line-height: 1.3;
 }
@@ -102,7 +118,7 @@ export default {
   }
   
   .card-title {
-    font-size: 1.3rem;
+    font-size: 2rem;
   }
   
   .card-description {
