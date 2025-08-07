@@ -32,13 +32,10 @@ release = '0.0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'recommonmark',
-    'sphinx.ext.autosectionlabel'
+    'sphinx.ext.autosectionlabel',
+    'myst_parser'
 ]
-source_parsers = {
-    '.rst': 'restructuredtext',
-    '.md': 'markdown',
-}
+
 source_suffix = ['.rst','.md']
 
 # Add any paths that contain templates here, relative to this directory.
