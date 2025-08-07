@@ -37,7 +37,12 @@
                 @click="navigateToPage(item.link)"
               >
                 <div class="card-icon">
-                  <img :src="getImagePath(item.image)" :alt="item.title" />
+                  <img 
+                    :src="item.image" 
+                    :alt="item.title"
+                    @error="onImageError"
+                    @load="onImageLoad"
+                  />
                 </div>
                 <div class="card-content">
                   <h3 class="card-title">{{ item.title }}</h3>
@@ -60,7 +65,12 @@
                 @click="navigateToPage(item.link)"
               >
                 <div class="card-icon">
-                  <img :src="getImagePath(item.image)" :alt="item.title" />
+                  <img 
+                    :src="item.image" 
+                    :alt="item.title"
+                    @error="onImageError"
+                    @load="onImageLoad"
+                  />
                 </div>
                 <div class="card-content">
                   <h3 class="card-title">{{ item.title }}</h3>
@@ -86,12 +96,47 @@ export default {
     Menu
   },
   
+  data() {
+    return {
+      forceRefresh: 0
+    };
+  },
+  
   computed: {
     middleItems() {
-      return landingPageData.items.filter(item => item.index <= 2);
+      // Force reactivity by accessing forceRefresh
+      this.forceRefresh;
+      return landingPageData.items.filter(item => item.index <= 2).map(item => ({
+        ...item,
+        image: this.getImagePath(item.image)
+      }));
     },
     rightItems() {
-      return landingPageData.items.filter(item => item.index > 2);
+      // Force reactivity by accessing forceRefresh
+      this.forceRefresh;
+      return landingPageData.items.filter(item => item.index > 2).map(item => ({
+        ...item,
+        image: this.getImagePath(item.image)
+      }));
+    }
+  },
+  
+  mounted() {
+    // Force refresh when component is mounted
+    this.forceRefresh++;
+  },
+  
+  activated() {
+    // Force refresh when component is activated (keep-alive)
+    this.forceRefresh++;
+  },
+  
+  watch: {
+    '$route'() {
+      // Force refresh when route changes
+      this.$nextTick(() => {
+        this.forceRefresh++;
+      });
     }
   },
   
@@ -108,6 +153,21 @@ export default {
         return `/pregnancy-app${cleanPath}`;
       }
       return cleanPath;
+    },
+    
+    onImageError(event) {
+      console.error('Image failed to load:', event.target.src);
+      // Try to reload the image with a slight delay
+      setTimeout(() => {
+        const img = event.target;
+        const originalSrc = img.src;
+        img.src = '';
+        img.src = originalSrc;
+      }, 100);
+    },
+    
+    onImageLoad(event) {
+      console.log('Image loaded successfully:', event.target.src);
     }
   }
 };
