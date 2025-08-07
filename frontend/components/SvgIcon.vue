@@ -29,12 +29,20 @@
     },
     computed: {
       iconPath() {
+        let path;
         // If it's an SVG path, use it directly
         if (this.icon.startsWith('/')) {
-          return this.icon;
+          path = this.icon;
+        } else {
+          // Otherwise use default icon
+          path = '/img/landing/pregnancy-icon.svg';
         }
-        // Otherwise use default icon
-        return '/img/landing/pregnancy-icon.svg';
+        
+        // Handle GitHub Pages deployment path
+        if (process.env.DEPLOY_ENV === 'GH_PAGES') {
+          return `/pregnancy-app${path}`;
+        }
+        return path;
       },
       
       iconClass() {
