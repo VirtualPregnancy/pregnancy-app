@@ -3,23 +3,31 @@ import clinicalMidWife from './clinical-mid-wife.js';
 import about from './about.js';
 import pregnancyChanges from './pregnancy-changes.js';
 import conditionsFetal from './conditions-fetal.js';
-import fetalDevelopment from './fetal-development.js';
-import rolesOfPlacenta from './roles-of-placenta.js';
-import checkBabyHealth from './check-baby-health.js';
-import whatIsUltrasound from './what-is-ultrasound.js';
-import whenCareChanges from './when-care-changes.js';
+import fetalDevelopment from './pregnancy-fetal-dev.js';
+import rolesOfPlacenta from './pregnancy-placenta.js';
+import pregnancyBaby from './pregnancy-baby.js';
+import whatIsUltrasound from './ultrasound-what-is-ultrasound.js';
+import clinicalWhenCareChanges from './clinical-when-care-changes.js';
+import ultrasoundWaveforms from './ultrasound-waveforms.js';
+import ultrasoundHow from './ultrasound-how.js';
+import conditionsBirth from './conditions-birth.js';
+import conditionsCare from './conditions-care.js';
 
 // Export page data mapping
 export default {
   'clinical-mid-wife': clinicalMidWife,
+  'clinical-when-care-changes': clinicalWhenCareChanges,
   'about': about,
   'pregnancy-changes': pregnancyChanges,
   'conditions-fetal': conditionsFetal,
-  'fetal-development': fetalDevelopment,
-  'roles-of-placenta': rolesOfPlacenta,
-  'check-baby-health': checkBabyHealth,
-  'what-is-ultrasound': whatIsUltrasound,
-  'when-care-changes': whenCareChanges
+  'pregnancy-fetal-dev': fetalDevelopment,
+  'pregnancy-placenta': rolesOfPlacenta,
+  'pregnancy-baby': pregnancyBaby,
+  'ultrasound-waveforms': ultrasoundWaveforms,
+  'ultrasound-what-is-ultrasound': whatIsUltrasound,
+  'ultrasound-how': ultrasoundHow,
+  'conditions-birth': conditionsBirth,
+  'conditions-care': conditionsCare
 };
 
 // Helper function to get page data by slug

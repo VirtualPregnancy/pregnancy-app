@@ -2,7 +2,7 @@
   "pregnancy": {
     "title": "Pregnancy journey",
     "heading": "What is Happening in Pregnancy?",
-    "icon": "mdi-human-pregnant",
+    "icon": "/img/landing/pregnancy.svg",
     "subTopics": {
       "changes": {
         "title": "Body Change",
@@ -44,8 +44,8 @@
   },
   "conditions": {
     "title": "Pregnancy Complications",
-    "heading": "Pregnancy Concerns",
-    "icon": "mdi-bell-outline",
+    "heading": "Pregnancy Complications",
+    "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
       "fetal": {
         "title": "Fetal Growth",

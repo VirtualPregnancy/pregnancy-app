@@ -1,5 +1,5 @@
 <template>
-  <div class="left-pane">
+  <div class="left-pane h-full">
     <!-- Home button in top right corner -->
     <v-btn
       fab

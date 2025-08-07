@@ -8,6 +8,7 @@
         grow
         :input-value="subMenuActive"
         :color="activeColor"
+        background-color="var(--v-background-base)"
       >
         <v-btn
           class="button-default"
@@ -17,7 +18,11 @@
           :to="{ name: 'slug', params: { slug: menuCaption + '-' + index } }"
         >
           <span>{{ subTopic.title }}</span>
-          <v-icon>{{ subTopic.icon }}</v-icon>
+          <SvgIcon 
+            v-if="subTopic.icon && subTopic.icon.startsWith('/')" 
+            :icon="subTopic.icon" 
+          />
+          <v-icon v-else>{{ subTopic.icon }}</v-icon>
         </v-btn>
       </v-bottom-navigation>
     </div>
@@ -25,7 +30,8 @@
       grow
       :fixed="$vuetify.breakpoint.smAndDown ? true : false"
       :color="activeColor"
-      v-model="menuCaption"
+      v-model="currentMenuCaption"
+      background-color="var(--v-background-base)"
     >
       <v-btn
         v-for="(topic, index) in topics"
@@ -40,7 +46,11 @@
         @click="handTopicClick(topic)"
       >
         <span>{{ topic.title }}</span>
-        <v-icon>{{ topic.icon }}</v-icon>
+        <SvgIcon 
+          v-if="topic.icon && topic.icon.startsWith('/')" 
+          :icon="topic.icon" 
+        />
+        <v-icon v-else>{{ topic.icon }}</v-icon>
       </v-btn>
       <v-btn
         class="button-default button-main-topic"
@@ -56,12 +66,16 @@
 </template>
 
 <script>
+import SvgIcon from '../SvgIcon.vue';
+
 export default {
+  components: { SvgIcon },
   data: () => {
     return {
       selectedTopic: {},
       topics: {},
       subMenuActive: false,
+      currentMenuCaption: "",
     };
   },
   methods: {
@@ -115,6 +129,7 @@ export default {
     if (this.$route.name === "slug") {
       const parentSlug = this.$parentTopic().slug.toLowerCase();
       this.selectedTopic = this.topics[parentSlug];
+      this.currentMenuCaption = this.$parentTopic().slug;
       
       // Set initial sub-menu state based on the selected topic
       if (this.selectedTopic && this.selectedTopic.subTopics) {
@@ -123,6 +138,8 @@ export default {
       } else {
         this.subMenuActive = false;
       }
+    } else {
+      this.currentMenuCaption = "about";
     }
   },
 };
@@ -136,8 +153,9 @@ export default {
 
 .sub-menu {
   position: fixed;
-  bottom: 80px;
+  bottom: 56px;
   width: 100%;
+  
 }
 
 .v-btn.button-default {
@@ -158,7 +176,6 @@ export default {
   &.button-main-topic {
     height: auto !important;
     min-height: 56px !important;
-    padding: 8px 12px !important;
     font-size: 0.6rem !important;
     display: flex !important;
     flex-direction: column !important;
