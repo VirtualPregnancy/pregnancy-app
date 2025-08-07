@@ -98,36 +98,16 @@ export default {
   
   computed: {
     middleItems() {
-      return landingPageData.items
-        .filter(item => item.index <= 2)
-        .map(item => ({
-          ...item,
-          image: this.getImagePath(item.image)
-        }));
+      return landingPageData.items.filter(item => item.index <= 2).map(item => ({
+        ...item,
+        image: this.getImagePath(item.image)
+      }));
     },
     rightItems() {
-      return landingPageData.items
-        .filter(item => item.index > 2)
-        .map(item => ({
-          ...item,
-          image: this.getImagePath(item.image)
-        }));
-    }
-  },
-  
-  mounted() {
-    // Force image reload when component mounts
-    this.$nextTick(() => {
-      this.forceImageReload();
-    });
-  },
-  
-  watch: {
-    '$route'() {
-      // Force image reload when route changes
-      this.$nextTick(() => {
-        this.forceImageReload();
-      });
+      return landingPageData.items.filter(item => item.index > 2).map(item => ({
+        ...item,
+        image: this.getImagePath(item.image)
+      }));
     }
   },
   
@@ -139,11 +119,10 @@ export default {
     },
     
     getImagePath(imagePath) {
-      const cleanPath = imagePath.replace('/pregnancy-app', '');
-      if (process.env.DEPLOY_ENV === 'GH_PAGES') {
-        return `/pregnancy-app${cleanPath}`;
-      }
-      return cleanPath;
+      const basePath = this.$config.basePath || '';
+      // Ensure we don't double-add the base path
+      const cleanPath = imagePath.replace(/^\/pregnancy-app/, '');
+      return basePath + cleanPath;
     },
     
     forceImageReload() {
@@ -164,18 +143,13 @@ export default {
     },
     
     onImageError(event) {
-      console.warn('Image failed to load:', event.target.src);
-      // Retry loading the image after a short delay
-      setTimeout(() => {
-        const img = event.target;
-        const originalSrc = img.src;
-        img.src = '';
-        img.src = originalSrc;
-      }, 500);
+      console.error('Image failed to load:', event.target.src);
+      // Set a fallback or hide the image instead of retrying
+      event.target.style.display = 'none';
     },
     
     onImageLoad(event) {
-      console.log('Image loaded successfully:', event.target.src);
+      // Image loaded successfully, no action needed
     }
   }
 };
