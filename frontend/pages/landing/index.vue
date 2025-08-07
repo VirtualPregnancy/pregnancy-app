@@ -1,10 +1,9 @@
 <template>
   <v-app class="landing-page">
     <!-- Hamburger Menu Icon -->
-    <div class="hamburger-menu fixed top-5 left-5 z-[1000] cursor-pointer p-2 rounded-xl transition-all duration-300 hover:-translate-y-0.5" @click="navigateToUltrasound">
-      <v-icon size="28" color="#333">mdi-menu</v-icon>
+    <div class="hamburger-menu fixed top-5 left-5 z-[1000] cursor-pointer p-2 rounded-xl transition-all duration-300 hover:-translate-y-0.5">
+      <Menu />
     </div>
-    
     <v-container fluid class="pa-0 landing-container h-screen overflow-hidden relative z-[1] w-full">
       <v-row no-gutters class="fill-height">
         <!-- Left Panel - Title and Content -->
@@ -100,14 +99,16 @@
 
 <script>
 import ItemCard from '@/components/landing/itemCard.vue';
-import Logo from '@/components/about/Logo.vue';
+import Logo from '@/components/support/Logo.vue';
 import landingPageData from './landingPageData';
+import Menu from '@/components/landing/menu.vue';
 
 export default {
   layout: 'empty',
   components: {
     ItemCard,
-    Logo
+    Logo,
+    Menu
   },
   computed: {
     mdAndUp() {
@@ -126,9 +127,6 @@ export default {
     }
   },
   methods: {
-    navigateToUltrasound() {
-      this.$router.push('/ultrasound-what-is-ultrasound');
-    },
     scrollToCards() {
       const middleSection = document.querySelector('.middle-side');
       if (middleSection) {

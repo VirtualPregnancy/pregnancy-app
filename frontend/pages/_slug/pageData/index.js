@@ -1,6 +1,6 @@
 // Individual page data imports
 import clinicalMidWife from './clinical-mid-wife.js';
-import about from './about.js';
+import support from './support.js';
 import pregnancyChanges from './pregnancy-changes.js';
 import conditionsFetal from './conditions-fetal.js';
 import fetalDevelopment from './pregnancy-fetal-dev.js';
@@ -17,7 +17,7 @@ import conditionsCare from './conditions-care.js';
 export default {
   'clinical-mid-wife': clinicalMidWife,
   'clinical-when-care-changes': clinicalWhenCareChanges,
-  'about': about,
+  'support': support,
   'pregnancy-changes': pregnancyChanges,
   'conditions-fetal': conditionsFetal,
   'pregnancy-fetal-dev': fetalDevelopment,

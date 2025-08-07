@@ -98,7 +98,7 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: {
     dirs: [
-      "~/components/about",
+      "~/components/support",
       "~/components/model",
       "~/components/navigation",
       "~/components/topics",
@@ -195,6 +195,7 @@ export default {
       "/ultrasound-how",
       "/clinical-mid-wife",
       "/clinical-when-care-changes",
+      "/support",
       "/about",
     ],
   },

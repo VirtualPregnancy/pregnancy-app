@@ -16,7 +16,7 @@ Main Features
 
 * Displays the topic interaction panel (``Panel``) when the route is ``slug`` (i.e., topic content page), including tools like pregnancy condition selectors and ultrasound metrics tools.
 
-* Displays the About page (``Support``) when the route is ``about``. At this page, the left part function as a navigation bar, and the right part is the main content, user can access the support materials.
+* Displays the Support page when the route is ``support``. At this page, the left part function as a navigation bar, and the right part is the main content, user can access the support materials.
 
 Main Tabs
 ---------

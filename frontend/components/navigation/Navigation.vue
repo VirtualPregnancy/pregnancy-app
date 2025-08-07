@@ -54,9 +54,9 @@
       </v-btn>
       <v-btn
         class="button-default button-main-topic"
-        :to="{ name: 'about' }"
-        @click="updateAbout()"
-        :value="'about'"
+        :to="{ name: 'support' }"
+        @click="updateSupport()"
+        :value="'support'"
       >
         <span>Support</span>
         <v-icon>mdi-account-group</v-icon>
@@ -79,7 +79,7 @@ export default {
     };
   },
   methods: {
-    updateAbout: function () {
+    updateSupport: function () {
       this.subMenuActive = false;
     },
     getDefaultSlug(topic) {
@@ -100,12 +100,12 @@ export default {
 
   computed: {
     activeColor() {
-      return this.$route.name === "about"
+      return this.$route.name === "support"
         ? this.$vuetify.theme.themes.dark.secondary
         : this.$subTitle();
     },
     menuCaption() {
-      return this.$route.name === "slug" ? this.$parentTopic().slug : "about";
+      return this.$route.name === "slug" ? this.$parentTopic().slug : "support";
     },
   },
 
@@ -139,7 +139,7 @@ export default {
         this.subMenuActive = false;
       }
     } else {
-      this.currentMenuCaption = "about";
+      this.currentMenuCaption = "support";
     }
   },
 };

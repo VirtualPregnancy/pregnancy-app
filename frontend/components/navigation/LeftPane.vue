@@ -26,9 +26,9 @@
         />
       </div>
     </div>
-    <div v-if="$route.name == 'about'">
+    <div v-if="$route.name == 'support'">
       <v-card class="pa-4 bg-secondary" :style="panelHeightStyle">
-        <lazy-about-us />
+        <lazy-support />
       </v-card>
     </div>
   </div>
@@ -89,6 +89,6 @@ export default {
 };
 </script>
 
-<!-- Not scoped, will be available at other places. Currently, also used in Panel(.md files) and AboutUs components -->
+<!-- Not scoped, will be available at other places. Currently, also used in Panel(.md files) and Support components -->
 
 <style lang="scss" src="@/assets/sass/components/left-panel.scss"></style>

@@ -38,7 +38,7 @@ export default {
       description: 'The pregnancy experience is different for everyone. Here you can find information on support services available for you and your whanau to help navigate your journey, whatever it may look like.',
       image: '/img/landing/heart.svg',
       backgroundColor: '#9AAEC5',
-      link: '/about'
+      link: '/support'
     }
   ]
 }

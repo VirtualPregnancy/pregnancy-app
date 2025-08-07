@@ -24,4 +24,4 @@ Pages
    maintained in the similar way as other topics, i.e. through
    topics.json, there is nothing to show at index.vue.
 
--  about/index.vue is the page for about section and has route “/about”.
+-  support/index.vue is the page for support section and has route "/support".

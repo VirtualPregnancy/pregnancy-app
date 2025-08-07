@@ -7,7 +7,7 @@ Components
 :green:`COMPONENTS`
 
 -  navigation/LeftPane.vue is included in default layout, and depending
-   upon the route, it displays either about/AboutUs.vue OR
+   upon the route, it displays either support/Support.vue OR
    topics/Panel.vue components.
 
 -  navigation/RightPane.vue is used in \_slug/index.vue page and

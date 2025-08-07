@@ -2,7 +2,7 @@
   "pregnancy": {
     "title": "Pregnancy journey",
     "heading": "What is Happening in Pregnancy?",
-    "icon": "/img/landing/pregnancy.svg",
+    "icon": "/img/landing/pregnancy.svg",   
     "subTopics": {
       "changes": {
         "title": "Body Change",
@@ -44,7 +44,7 @@
   },
   "conditions": {
     "title": "Pregnancy Complications",
-    "heading": "Pregnancy Complications",
+    "heading": "Pregnancy Concerns",
     "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
       "fetal": {
