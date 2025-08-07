@@ -96,46 +96,37 @@ export default {
     Menu
   },
   
-  data() {
-    return {
-      forceRefresh: 0
-    };
-  },
-  
   computed: {
     middleItems() {
-      // Force reactivity by accessing forceRefresh
-      this.forceRefresh;
-      return landingPageData.items.filter(item => item.index <= 2).map(item => ({
-        ...item,
-        image: this.getImagePath(item.image)
-      }));
+      return landingPageData.items
+        .filter(item => item.index <= 2)
+        .map(item => ({
+          ...item,
+          image: this.getImagePath(item.image)
+        }));
     },
     rightItems() {
-      // Force reactivity by accessing forceRefresh
-      this.forceRefresh;
-      return landingPageData.items.filter(item => item.index > 2).map(item => ({
-        ...item,
-        image: this.getImagePath(item.image)
-      }));
+      return landingPageData.items
+        .filter(item => item.index > 2)
+        .map(item => ({
+          ...item,
+          image: this.getImagePath(item.image)
+        }));
     }
   },
   
   mounted() {
-    // Force refresh when component is mounted
-    this.forceRefresh++;
-  },
-  
-  activated() {
-    // Force refresh when component is activated (keep-alive)
-    this.forceRefresh++;
+    // Force image reload when component mounts
+    this.$nextTick(() => {
+      this.forceImageReload();
+    });
   },
   
   watch: {
     '$route'() {
-      // Force refresh when route changes
+      // Force image reload when route changes
       this.$nextTick(() => {
-        this.forceRefresh++;
+        this.forceImageReload();
       });
     }
   },
@@ -155,15 +146,32 @@ export default {
       return cleanPath;
     },
     
+    forceImageReload() {
+      // Force recomputation of computed properties
+      this.$forceUpdate();
+      
+      // Add a small delay and try to reload images that failed
+      setTimeout(() => {
+        const images = this.$el.querySelectorAll('img');
+        images.forEach(img => {
+          if (!img.complete || img.naturalWidth === 0) {
+            const src = img.src;
+            img.src = '';
+            img.src = src;
+          }
+        });
+      }, 100);
+    },
+    
     onImageError(event) {
-      console.error('Image failed to load:', event.target.src);
-      // Try to reload the image with a slight delay
+      console.warn('Image failed to load:', event.target.src);
+      // Retry loading the image after a short delay
       setTimeout(() => {
         const img = event.target;
         const originalSrc = img.src;
         img.src = '';
         img.src = originalSrc;
-      }, 100);
+      }, 500);
     },
     
     onImageLoad(event) {
