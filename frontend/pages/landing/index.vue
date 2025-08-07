@@ -101,7 +101,7 @@
 import ItemCard from '@/components/landing/itemCard.vue';
 import Logo from '@/components/support/Logo.vue';
 import landingPageData from './landingPageData';
-import Menu from '@/components/landing/menu.vue';
+import Menu from '@/components/landing/Menu.vue';
 
 export default {
   layout: 'empty',
