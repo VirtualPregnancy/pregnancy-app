@@ -26,7 +26,7 @@ export default {
   
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "ABI Generic Web App Template",
+    title: "Pregnancy App",
     htmlAttrs: {
       lang: "en",
     },
@@ -52,13 +52,13 @@ export default {
         hid: "description",
         name: "description",
         content:
-          "An ABI Generic Web App Template",
+          "Pregnancy App",
       },
       { name: "format-detection", content: "telephone=no" },
       {
         name: "keywords",
         content:
-          "Your Key words",
+          "Pregnancy, Ultrasound, Pregnancy Complications, Pregnancy Journey, Care Pathways, Support",
       },
     ],
     script: [

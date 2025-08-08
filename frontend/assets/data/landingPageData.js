@@ -2,7 +2,7 @@ export default {
   items: [
     {
       index: 0,
-      title: 'The pregnancy journey',
+      title: 'What is happening in pregnancy?',
       description: 'Information on how your body changes to support your babys growth during pregnancy, and how your midwife/doctor will track the health of you and your baby.',
       image: '/img/landing/pregnancy.svg',
       backgroundColor: '#7A3520',

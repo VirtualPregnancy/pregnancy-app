@@ -99,7 +99,7 @@ export default {
 
   created() {
     console.log(
-      "%cABI Generic Web App Template %cBeta:v0.0.1",
+      "%cPregnancy App %cBeta:v0.0.1",
       "padding: 3px;color:white; background:#023047",
       "padding: 3px;color:white; background:#219EBC"
     );
