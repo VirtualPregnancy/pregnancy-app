@@ -205,7 +205,7 @@ export default {
   width: 100%;
   background: rgba(49, 54, 87, 0.9);
   border-radius: 12px;
-  color: #D1C7B5;
+  color: var(--v-secondary-base);
   box-shadow: 0 4px 20px rgba(31, 102, 131, 0.3);
   border: 2px solid #1F6683;
   overflow: hidden;
@@ -230,7 +230,7 @@ export default {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #D1C7B5;
+  color: var(--v-secondary-base);
   display: flex;
   align-items: center;
 }

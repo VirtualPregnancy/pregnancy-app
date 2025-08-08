@@ -5,9 +5,11 @@ Welcome to the Pregnancy App documentation. This section provides comprehensive 
 
 .. toctree::
     :maxdepth: 2
-    :numbered: 2
-
+    :numbered:
+    
+    00_pages
     01_load_model
     02_model_config
     03_model_control
     04_left_panel
+    05_assets

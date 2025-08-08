@@ -116,7 +116,6 @@ export default {
     console.log('[RightPane] Generated waveform data:', this.waveformData.data.length, 'points');
     
     // Listen for ultrasound tool events from the layout
-    this.$nuxt.$on('ultrasound-metrics-updated', this.handleUltrasoundMetricsUpdated);
     this.$nuxt.$on('trigger-model-visualization', this.handleTriggerModelVisualization);
     this.$nuxt.$on('ultrasound-tool-ready', this.handleUltrasoundToolReady);
     this.$nuxt.$on('conditions-updated', this.handleConditionsUpdated);
@@ -214,27 +213,12 @@ export default {
       }
     },
     
-    // Handle ultrasound metrics updates from the interactive tool
-    handleUltrasoundMetricsUpdated(data) {
-      console.log('[RightPane] Received ultrasound metrics:', data);
-      
-      // Store metrics for potential model integration
-      this.lastUltrasoundMetrics = data;
-      
-      // Future implementation: update model visualization based on metrics
-      if (this.$refs.modelComponent && this.modelStates.modelName !== 'Loading...') {
-        // This will be expanded when model integration is implemented
-        console.log('[RightPane] Model component ready for ultrasound visualization');
-      }
-    },
     
     // Handle model visualization requests from ultrasound tool
     handleTriggerModelVisualization(eventData) {
       console.log('[RightPane] Model visualization triggered:', eventData);
       
-      if (eventData.type === 'ultrasound-metrics') {
-        this.visualizeUltrasoundMetrics(eventData.data);
-      } else if (eventData.type === 'pregnancy-conditions') {
+      if (eventData.type === 'pregnancy-conditions') {
         this.visualizeConditions(eventData.data);
       }
     },
@@ -417,7 +401,6 @@ export default {
   
   beforeDestroy() {
     // Clean up event listeners
-    this.$nuxt.$off('ultrasound-metrics-updated', this.handleUltrasoundMetricsUpdated);
     this.$nuxt.$off('trigger-model-visualization', this.handleTriggerModelVisualization);
     this.$nuxt.$off('ultrasound-tool-ready', this.handleUltrasoundToolReady);
     this.$nuxt.$off('conditions-updated', this.handleConditionsUpdated);

@@ -22,6 +22,7 @@
             class="h-full w-full md:object-contain"
             @click="handleGestureIconClick"
             v-show="mdAndUp" 
+            style="background-color: #6C90B9; border-radius: 10px; padding: 10px; "
           />
           
         </div>
@@ -306,8 +307,6 @@ export default {
         // Set copper scene reference for camera control
         this.vtkLoader.setCopperScene(this.scene);
         
-        // Set initial performance mode
-        this.vtkLoader.setPerformanceMode(this.currentPerformanceMode);
         
         console.log("VTK Loader initialized with camera control and performance mode:", this.currentPerformanceMode);
       } catch (error) {
@@ -593,6 +592,7 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-content: center;
+  
   .baseModelCB {
     width: 240px;
     height: 70px;
@@ -620,8 +620,9 @@ export default {
   transform: translateX(-50%);
   top:1%;
   position: absolute;
-  color: #fff;
+  color: black;
   z-index: 1000;
+
 }
 .model {
   position: relative;
@@ -632,11 +633,13 @@ export default {
 .baseDom-md {
   width: 100%;
   height: 100vh;
+  background-color: var(--v-background-base);
 }
 
 .baseDom-sm {
   width: 100%;
   height: 100vw;
+  background-color: var(--v-background-base);
 }
 
 // Responsive adjustments for mobile

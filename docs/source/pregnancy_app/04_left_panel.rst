@@ -16,24 +16,24 @@ Main Features
 
 * Displays the topic interaction panel (``Panel``) when the route is ``slug`` (i.e., topic content page), including tools like pregnancy condition selectors and ultrasound metrics tools.
 
-* Displays the About page (``Support``) when the route is ``about``. At this page, the left part function as a navigation bar, and the right part is the main content, user can access the support materials.
+* Displays the Support page when the route is ``support``. At this page, the left part function as a navigation bar, and the right part is the main content, user can access the support materials.
 
 Main Tabs
 ---------
 
-1. **Pregnancy**
+1. **Pregnancy Journey**
 
    - **Body Changes**: Information about physical changes during pregnancy
    - **Placenta Roles**: Understanding the placenta's functions
    - **Baby Health**: How healthcare providers monitor fetal health
 
-2. **Concerns**
+2. **Pregnancy Complications**
 
    - **Fetal Growth**: Information about reduced fetal growth
    - **Birth**: How pregnancy issues affect birth plans
    - **Cares**: Post-birth care requirements
 
-3. **Ultrasound - The Home Page**
+3. **Ultrasound**
 
    - Understanding ultrasound scan results. When user click the "Ultrasound" tab / or access the home page, the left panel will display the ultrasound related information.
 
@@ -43,8 +43,7 @@ Main Tabs
       :alt: What is an ultrasound?
       :align: center
 
-
-4. **Clinical Care**
+4. **Care Pathways**
 
    - **Midwife Lead Care**: Midwife-led care pathways
    - **When Care Changes**: How care pathways may change during pregnancy

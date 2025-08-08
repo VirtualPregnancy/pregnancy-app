@@ -2,7 +2,7 @@
   <v-app ref="base_background" class="root">
     <div class="rightPanel">
       <div>
-        <div class="pa-0 black">
+        <div class="pa-0">
           <Nuxt />
         </div>
       </div>
@@ -26,7 +26,6 @@
                   >
                     <left-pane 
                       :panel-height="panelHeight"
-                      @ultrasound-metrics-updated="handleUltrasoundMetricsUpdate"
                       @trigger-model-visualization="handleModelVisualization"
                       @ultrasound-tool-ready="handleUltrasoundToolReady"
                       @conditions-updated="handleConditionsUpdate"
@@ -100,7 +99,7 @@ export default {
 
   created() {
     console.log(
-      "%cABI Generic Web App Template %cBeta:v0.0.1",
+      "%cPregnancy App %cBeta:v0.0.1",
       "padding: 3px;color:white; background:#023047",
       "padding: 3px;color:white; background:#219EBC"
     );
@@ -110,16 +109,6 @@ export default {
   },
 
   methods: {
-    // Handle ultrasound metrics updates from the tool
-    handleUltrasoundMetricsUpdate(data) {
-      console.log('[DefaultLayout] Ultrasound metrics updated:', data);
-      
-      // Emit global event for RightPane and other components to listen
-      this.$nuxt.$emit('ultrasound-metrics-updated', data);
-      
-      // Store metrics data for potential future use
-      this.lastUltrasoundMetrics = data;
-    },
     
     // Handle model visualization requests
     handleModelVisualization(data) {

@@ -1,5 +1,17 @@
 <template>
-  <div class="left-pane">
+  <div class="left-pane h-full">
+    <!-- Home button in top right corner -->
+    <v-btn
+      fab
+      small
+      color="primary"
+      class="home-btn"
+      :to="{ path: '/' }"
+      @click="goHome"
+    >
+      <v-icon>mdi-home</v-icon>
+    </v-btn>
+    
     <div class="sm-logo d-md-none">
       <logo />
     </div>
@@ -7,7 +19,6 @@
       <!-- currentBg  -->
       <div class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
         <lazy-panel 
-          @ultrasound-metrics-updated="handleUltrasoundMetricsUpdate"
           @trigger-model-visualization="handleModelVisualization"
           @ultrasound-tool-ready="handleUltrasoundToolReady"
           @conditions-updated="handleConditionsUpdate"
@@ -15,9 +26,9 @@
         />
       </div>
     </div>
-    <div v-if="$route.name == 'about'">
+    <div v-if="$route.name == 'support'">
       <v-card class="pa-4 bg-secondary" :style="panelHeightStyle">
-        <lazy-about-us />
+        <lazy-support />
       </v-card>
     </div>
   </div>
@@ -45,11 +56,11 @@ export default {
   },
   
   methods: {
-    // Forward ultrasound metrics updates to parent components
-    handleUltrasoundMetricsUpdate(data) {
-      console.log('[LeftPane] Forwarding ultrasound metrics update:', data);
-      this.$emit('ultrasound-metrics-updated', data);
+    // Navigate to home route
+    goHome() {
+      console.log('[LeftPane] Navigating to home');
     },
+    
     
     // Forward model visualization requests to parent components
     handleModelVisualization(data) {
@@ -78,6 +89,6 @@ export default {
 };
 </script>
 
-<!-- Not scoped, will be available at other places. Currently, also used in Panel(.md files) and AboutUs components -->
+<!-- Not scoped, will be available at other places. Currently, also used in Panel(.md files) and Support components -->
 
 <style lang="scss" src="@/assets/sass/components/left-panel.scss"></style>

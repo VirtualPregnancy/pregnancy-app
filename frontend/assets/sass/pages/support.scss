@@ -1,7 +1,9 @@
-.aboutPanel-l {
-  margin-left: 32vw;
+.supportPanel-l {
+  margin-left: 35vw;
+  margin-right: 2vw;
+  margin-top: 2vw;
 }
-.aboutPanel-s {
+.supportPanel-s {
   margin-bottom: 30px;
 }
 .research-page {
@@ -336,17 +338,17 @@
   }
 }
 
-.about-flex {
+.support-flex {
   display: flex;
   flex-direction: column;
 }
 @media (min-width: 1024px) {
-  .about-flex {
+  .support-flex {
     flex-direction: row;
     align-items: flex-start;
     gap: 40px;
   }
-  .about-left {
+  .support-left {
     flex: 0 0 380px;
     max-width: 400px;
     min-width: 320px;
@@ -355,14 +357,14 @@
     align-self: flex-start;
     z-index: 1;
   }
-  .about-right {
+  .support-right {
     flex: 1 1 0%;
     min-width: 0;
     z-index: 0;
   }
 }
 @media (max-width: 1023px) {
-  .about-left, .about-right {
+  .support-left, .support-right {
     width: 100%;
     max-width: 100%;
     min-width: 0;

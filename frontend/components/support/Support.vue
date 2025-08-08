@@ -5,7 +5,7 @@
       Pregnancy Support Services
     </h1>
     
-    <div class="about-panel">
+    <div class="support-panel">
       <!-- Introduction Section -->
       <div class="intro-section">
         <p class="intro-text">
@@ -102,7 +102,7 @@
 
 <script>
 export default {
-  name: "AboutUs",
+  name: "Support",
 
   methods: {
     scrollToSection(sectionId) {
@@ -143,7 +143,7 @@ export default {
   gap: 15px;
 }
 
-.about-panel {
+.support-panel {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
@@ -334,7 +334,7 @@ export default {
     gap: 10px;
   }
   
-  .about-panel {
+  .support-panel {
     gap: 20px;
   }
   

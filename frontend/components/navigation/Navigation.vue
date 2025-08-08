@@ -8,6 +8,7 @@
         grow
         :input-value="subMenuActive"
         :color="activeColor"
+        background-color="var(--v-background-base)"
       >
         <v-btn
           class="button-default"
@@ -17,7 +18,11 @@
           :to="{ name: 'slug', params: { slug: menuCaption + '-' + index } }"
         >
           <span>{{ subTopic.title }}</span>
-          <v-icon>{{ subTopic.icon }}</v-icon>
+          <SvgIcon 
+            v-if="subTopic.icon && subTopic.icon.startsWith('/')" 
+            :icon="subTopic.icon" 
+          />
+          <v-icon v-else>{{ subTopic.icon }}</v-icon>
         </v-btn>
       </v-bottom-navigation>
     </div>
@@ -25,11 +30,12 @@
       grow
       :fixed="$vuetify.breakpoint.smAndDown ? true : false"
       :color="activeColor"
-      v-model="menuCaption"
+      v-model="currentMenuCaption"
+      background-color="var(--v-background-base)"
     >
       <v-btn
         v-for="(topic, index) in topics"
-        class="button-default"
+        class="button-default button-main-topic"
         :key="index"
         :value="index"
         :disabled="$isTopicDisabled(topic)"
@@ -40,13 +46,17 @@
         @click="handTopicClick(topic)"
       >
         <span>{{ topic.title }}</span>
-        <v-icon>{{ topic.icon }}</v-icon>
+        <SvgIcon 
+          v-if="topic.icon && topic.icon.startsWith('/')" 
+          :icon="topic.icon" 
+        />
+        <v-icon v-else>{{ topic.icon }}</v-icon>
       </v-btn>
       <v-btn
-        class="button-default"
-        :to="{ name: 'about' }"
-        @click="updateAbout()"
-        :value="'about'"
+        class="button-default button-main-topic"
+        :to="{ name: 'support' }"
+        @click="updateSupport()"
+        :value="'support'"
       >
         <span>Support</span>
         <v-icon>mdi-account-group</v-icon>
@@ -56,16 +66,20 @@
 </template>
 
 <script>
+import SvgIcon from '@/components/SvgIcon.vue';
+
 export default {
+  components: { SvgIcon },
   data: () => {
     return {
       selectedTopic: {},
       topics: {},
       subMenuActive: false,
+      currentMenuCaption: "",
     };
   },
   methods: {
-    updateAbout: function () {
+    updateSupport: function () {
       this.subMenuActive = false;
     },
     getDefaultSlug(topic) {
@@ -86,12 +100,12 @@ export default {
 
   computed: {
     activeColor() {
-      return this.$route.name === "about"
+      return this.$route.name === "support"
         ? this.$vuetify.theme.themes.dark.secondary
         : this.$subTitle();
     },
     menuCaption() {
-      return this.$route.name === "slug" ? this.$parentTopic().slug : "about";
+      return this.$route.name === "slug" ? this.$parentTopic().slug : "support";
     },
   },
 
@@ -115,6 +129,7 @@ export default {
     if (this.$route.name === "slug") {
       const parentSlug = this.$parentTopic().slug.toLowerCase();
       this.selectedTopic = this.topics[parentSlug];
+      this.currentMenuCaption = this.$parentTopic().slug;
       
       // Set initial sub-menu state based on the selected topic
       if (this.selectedTopic && this.selectedTopic.subTopics) {
@@ -123,6 +138,8 @@ export default {
       } else {
         this.subMenuActive = false;
       }
+    } else {
+      this.currentMenuCaption = "support";
     }
   },
 };
@@ -138,6 +155,7 @@ export default {
   position: fixed;
   bottom: 56px;
   width: 100%;
+  
 }
 
 .v-btn.button-default {
@@ -145,27 +163,48 @@ export default {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  height: 56px !important;
-  background: -webkit-linear-gradient(
-    rgba(5, 5, 5, 1),
-    rgba(30, 30, 30, 1) 4%,
-    rgba(5, 5, 5, 1)
-  ); /* For Safari 5.1 to 6.0 */
-  background: -o-linear-gradient(
-    rgba(5, 5, 5, 1),
-    rgba(30, 30, 30, 1) 4%,
-    rgba(5, 5, 5, 1)
-  ); /* For Opera 11.1 to 12.0 */
-  background: -moz-linear-gradient(
-    rgba(5, 5, 5, 1),
-    rgba(30, 30, 30, 1) 4%,
-    rgba(5, 5, 5, 1)
-  ); /* For Firefox 3.6 to 15 */
-  background: linear-gradient(
-    rgba(5, 5, 5, 1),
-    rgba(30, 30, 30, 1) 4%,
-    rgba(5, 5, 5, 1)
-  ); /* Standard syntax */
-  border-left: 2px rgb(5, 5, 5) solid;
+  background: var(--v-secondary-base) !important;
+  color: var(--v-secondary-base) !important;
+  border-left: 2px solid var(--v-secondary-darken1);
+  transition: all 0.3s ease;
+  font-weight: 400 !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: normal;
+  word-wrap: wrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  &.button-main-topic {
+    height: auto !important;
+    min-height: 56px !important;
+    font-size: 0.6rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  
+  &:hover {
+    background: var(--v-accent-base) !important;
+    color: white !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  &.v-btn--active {
+    background: var(--v-accentLight-base) !important;
+    color: white !important;
+    border-left-color: var(--v-accent-base);
+    font-weight: 700 !important;
+  }
+  
+  .v-icon {
+    color: white !important;
+  }
+  
+  span {
+    color: white !important;
+    font-weight: inherit;
+  }
 }
 </style>

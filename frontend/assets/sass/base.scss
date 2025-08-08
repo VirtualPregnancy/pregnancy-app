@@ -1,5 +1,5 @@
 body{
-  background-color:black;
+  background-color: var(--v-background-base);
   @media #{map-get($display-breakpoints, 'lg-and-down')}
   {
     font-size: 0.9rem;

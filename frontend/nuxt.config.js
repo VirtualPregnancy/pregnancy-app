@@ -18,9 +18,15 @@ const routerBase =
       };
 
 export default {
+  // Runtime config to make environment variables available in browser
+  publicRuntimeConfig: {
+    deployEnv: process.env.DEPLOY_ENV || 'local',
+    basePath: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app" : ""
+  },
+  
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "ABI Generic Web App Template",
+    title: "Pregnancy App",
     htmlAttrs: {
       lang: "en",
     },
@@ -28,7 +34,7 @@ export default {
       {
         rel: "icon",
         type: "image/x-icon",
-        href: "/pregnancy-app/favicon2.ico",
+        href: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app/favicon2.ico" : "/favicon2.ico",
       },
       {
         rel: "stylesheet",
@@ -46,19 +52,19 @@ export default {
         hid: "description",
         name: "description",
         content:
-          "An ABI Generic Web App Template",
+          "Pregnancy App",
       },
       { name: "format-detection", content: "telephone=no" },
       {
         name: "keywords",
         content:
-          "Your Key words",
+          "Pregnancy, Ultrasound, Pregnancy Complications, Pregnancy Journey, Care Pathways, Support",
       },
     ],
     script: [
       {
         type: "text/javascript",
-        src: "js/tailwindcss.js",
+        src: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app/js/tailwindcss.js" : "/js/tailwindcss.js",
       },
       {
         src: "https://www.googletagmanager.com/gtag/js?id=G-LXD5LJXP2Y",
@@ -98,7 +104,7 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: {
     dirs: [
-      "~/components/about",
+      "~/components/support",
       "~/components/model",
       "~/components/navigation",
       "~/components/topics",
@@ -123,19 +129,35 @@ export default {
     treeShake: true,
     theme: {
       options: { customProperties: true },
-      dark: true,
+      dark: false,
       themes: {
+        light: {
+          primary: "#DD3C51",     // red from palette
+          accent: "#6C90B9",      // blue from palette
+          accentLight: "#1F6683",     // teal from palette
+          secondary: "#B8BCC8",   // light grey for buttons
+          info: "#1F6683",        // teal from palette
+          warning: "#DD3C51",     // red from palette
+          subWarning: "#6C90B9",  // blue from palette
+          error: "#DD3C51",       // red from palette
+          subError: "#6C90B9",    // blue from palette
+          success: "#1F6683",     // teal from palette
+          subSuccess: "#6C90B9",  // blue from palette
+          background: "#dbd9d5",  // light grey background
+        },
         dark: {
-          primary: "#B66A40",     // orange
-          accent: "#7B8BA5",      // blue-grey
-          secondary: "#AA988A",   // light-brown
-          info: "#2F414B",        // dark-blue-grey 
-          warning: "#7A3520",     // dark-brown
-          subWarning: "#B66A40",  // orange-brown
-          error: "#7A3520",       // dark-brown
-          subError: "#B66A40",    // orange-brown
-          success: "#2B4B3C",     // dark-green
-          subSuccess: "#AA988A",  // light-brown
+          primary: "#DD3C51",     // red from palette
+          accent: "#6C90B9",      // blue from palette
+          accentLight: "#1F6683",     // teal from palette
+          secondary: "#B8BCC8",   // light grey for buttons
+          info: "#1F6683",        // teal from palette
+          warning: "#DD3C51",     // red from palette
+          subWarning: "#6C90B9",  // blue from palette
+          error: "#DD3C51",       // red from palette
+          subError: "#6C90B9",    // blue from palette
+          success: "#1F6683",     // teal from palette
+          subSuccess: "#6C90B9",  // blue from palette
+          background: "#313657",  // dark navy from palette
         },
       },
     },
@@ -143,6 +165,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    publicPath: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app/_nuxt/" : "/_nuxt/",
     extend(config) {
       config.module.rules.push({
         test: /\.md$/i,
@@ -165,24 +188,23 @@ export default {
   ...routerBase,
   generate: {
     dir: "build",
+    fallback: true,
     //todo: modify routes afterwards
     routes: [
       // Modify these routes, when you config your routes for app
-      "/ultrasound-model",
       "/pregnancy-changes",
       "/pregnancy-placenta",
       "/pregnancy-baby",
-      "/conditions",
-      "/conditions/fetal",
-      "/conditions/birth",
-      "/conditions/care",
-      "/ultrasound",
-      "/ultrasound/ultrasound-model",
-      "/clinical",
-      "/clinical/mid-wife",
-      "/clinical/when-care-changes",
+      "/conditions-fetal",
+      "/conditions-birth", 
+      "/conditions-care",
+      "/ultrasound-what-is-ultrasound",
+      "/ultrasound-waveforms",
+      "/ultrasound-how",
+      "/clinical-mid-wife",
+      "/clinical-when-care-changes",
+      "/support",
       "/about",
-      
     ],
   },
 };

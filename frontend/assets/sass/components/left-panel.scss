@@ -18,6 +18,24 @@
 
 .left-pane {
   position: relative;
+  color:aliceblue;
+  .home-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+    transition: all 0.3s ease !important;
+    
+    &:hover {
+      transform: scale(1.1);
+    }
+    
+    // Ensure button is visible on mobile
+    @media #{map-get($display-breakpoints, 'xs-only')} {
+      top: 12px;
+      right: 12px;
+    }
+  }
 }
 
 p {

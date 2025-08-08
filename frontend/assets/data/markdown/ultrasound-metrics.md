@@ -1,0 +1,1 @@
+Metrics are the key to understanding the ultrasound image.

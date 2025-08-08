@@ -1,8 +1,28 @@
 import topics from "~/assets/data/topics.json";
 
-export default (_, inject) => {
+// Helper function to fix SVG paths for deployment
+function fixSvgPaths(obj, basePath = '') {
+  if (typeof obj !== 'object' || obj === null) return obj;
+  
+  const result = Array.isArray(obj) ? [] : {};
+  
+  for (const key in obj) {
+    if (key === 'icon' && typeof obj[key] === 'string' && obj[key].startsWith('/img/')) {
+      result[key] = basePath + obj[key];
+    } else if (typeof obj[key] === 'object') {
+      result[key] = fixSvgPaths(obj[key], basePath);
+    } else {
+      result[key] = obj[key];
+    }
+  }
+  
+  return result;
+}
+
+export default ({ $config }, inject) => {
   inject("getTopics", () => {
-    return topics;
+    const basePath = $config.basePath || '';
+    return fixSvgPaths(topics, basePath);
   }),
     inject("isTopicDisabled", (topic) => {
       return isTopicDisabled(topic);

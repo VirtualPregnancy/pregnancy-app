@@ -1,30 +1,93 @@
 <template>
-  <div ref="outerDiv">
-    <div class="text-center">
-      <right-pane />
-    </div>
-  </div>
+  <component 
+    :is="pageComponent" 
+    v-bind="pageProps"
+  />
 </template>
 
 <script>
+import ContentPane from '@/components/navigation/ContentPane.vue';
+import RightPane from '@/components/navigation/RightPane.vue';
+import pageDataMap from './pageData/index.js';
+
 export default {
   layout: "default",
+  components: { ContentPane, RightPane },
 
   async asyncData({ route, $getContentBySlug, error, store }) {
     const slug = route.params.slug;
-    let content = $getContentBySlug(slug);
-    if (content === null) {
-      error({ statusCode: 404, message: "Unexpected Error, Page not found" });
-    }
-    store.commit("setCurrentContent", content);
+    const content = $getContentBySlug(slug);
     
+    if (!content) {
+      error({ statusCode: 404, message: "Page not found" });
+    }
+    
+    store.commit("setCurrentContent", content);
+    return { slug, content };
   },
+
+  computed: {
+    pageData() {
+      return pageDataMap[this.slug] || null;
+    },
+
+    pageComponent() {
+      // Priority order: Model pages > Custom component type > Default content pane
+      if (this.pageData?.showModel) {
+        return 'RightPane';
+      }
+      
+      // Use custom component type if specified
+      if (this.pageData?.componentType) {
+        const availableComponents = [
+          'ContentPane'
+        ];
+        
+        if (availableComponents.includes(this.pageData.componentType)) {
+          return this.pageData.componentType;
+        }
+      }
+      
+      // Default fallback
+      return 'ContentPane';
+    },
+
+    pageProps() {
+      if (!this.pageData) {
+        return {
+          pageTitle: 'Page Not Found',
+          pageDescription: 'The requested page could not be found.',
+          contentSections: []
+        };
+      }
+
+      // For RightPane (model pages), return minimal props
+      if (this.pageComponent === 'RightPane') {
+        return {};
+      }
+
+      // For all content panes (including custom ones), provide full props
+      const baseProps = {
+        pageTitle: this.pageData.title,
+        pageDescription: this.pageData.description
+      };
+
+      // Add content sections
+      baseProps.contentSections = this.pageData.contentSections || [];
+
+      // Add renderConfig for custom components that support it
+      if (this.pageData.renderConfig && 
+          [].includes(this.pageComponent)) {
+        baseProps.renderConfig = this.pageData.renderConfig;
+      }
+
+      // Add cards
+      baseProps.cards = this.pageData.cards || [];
+
+      return baseProps;
+    },
+    
+    
+  }
 };
 </script>
-
-<style scoped lang="scss">
-.right-pane {
-  width: 100%;
-  color: $text-color;
-}
-</style>

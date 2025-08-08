@@ -1,8 +1,8 @@
 {
   "pregnancy": {
-    "title": "Pregnancy",
+    "title": "Pregnancy Journey",
     "heading": "What is Happening in Pregnancy?",
-    "icon": "mdi-human-pregnant",
+    "icon": "/img/landing/pregnancy.svg",   
     "subTopics": {
       "changes": {
         "title": "Body Change",
@@ -43,9 +43,9 @@
     }
   },
   "conditions": {
-    "title": "Concerns",
+    "title": "Pregnancy Complications",
     "heading": "Pregnancy Concerns",
-    "icon": "mdi-bell-outline",
+    "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
       "fetal": {
         "title": "Fetal Growth",
@@ -81,11 +81,29 @@
     "heading": "What does my ultrasound scan mean",
     "icon": "mdi-stethoscope",
     "subTopics": {
-      "model": {
-        "title": "Baby",
+      "what-is-ultrasound": {
+        "title": "What",
         "heading": "Ultrasound",
-        "icon": "mdi-baby-face-outline",
-        "dataFile": "ultrasound",
+        "icon": "mdi-help-circle",
+        "dataFile": "what-is-ultrasound",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NormalElectricity" }
+      },
+      "waveforms": {
+        "title": "Waveforms",
+        "heading": "Ultrasound Waveforms",
+        "icon": "mdi-chart-areaspline",
+        "dataFile": "ultrasound-waveforms",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NormalElectricity" }
+      },
+      "how": {
+        "title": "How",
+        "heading": "How ultrasound can be used to detect pregnancy issues",
+        "icon": "mdi-help-circle",
+        "dataFile": "how-ultrasound-works",
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NormalElectricity" }
@@ -93,9 +111,9 @@
     }
   },
   "clinical": {
-    "title": "Clinical",
+    "title": "Care Pathways",
     "heading": "Clinical care pathways for pregnancy in Aotearoa NZ.",
-    "icon": "mdi-heart-off",
+    "icon": "mdi-routes",
     "subTopics": {
       "mid-wife": {
         "title": "Midwife Lead Care",
