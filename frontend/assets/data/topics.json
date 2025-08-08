@@ -5,7 +5,7 @@
     "icon": "/img/landing/pregnancy.svg",   
     "subTopics": {
       "changes": {
-        "title": "Body Change",
+        "title": "Your Body",
         "heading": "Changes To Your Body",
         "icon": "mdi-sine-wave",
         "dataFile": "preganancy-changes",
@@ -14,7 +14,7 @@
         "model": { "name": "NoInfarct" }
       },
       "fetal-dev": {
-        "title": "Fetal Growth",
+        "title": "Fetal Development",
         "heading": "Fetal Development",
         "icon": "mdi-baby-face",
         "dataFile": "fetal-development",
@@ -23,7 +23,7 @@
         "model": { "name": "NoInfarct" }
       },
       "placenta": {
-        "title": "Placenta Roles",
+        "title": "Placenta",
         "heading": "Roles of the Placenta",
         "icon": "mdi-bowl-outline",
         "dataFile": "roles-of-placenta",
@@ -32,7 +32,7 @@
         "model": { "name": "NoInfarct" }
       },
       "baby": {
-        "title": "Baby Health",
+        "title": "Health Checks",
         "heading": "How do we check on baby's health?",
         "icon": "mdi-baby-face-outline",
         "dataFile": "check-baby-health",
@@ -44,7 +44,7 @@
   },
   "conditions": {
     "title": "Pregnancy Complications",
-    "heading": "Pregnancy Concerns",
+    "heading": "Navigating Pregnancy Complications",
     "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
       "fetal": {

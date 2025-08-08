@@ -84,7 +84,7 @@
               class="menu-main-item justify-start"
               @click="navigateToAbout"
             >
-              <span class="text-left">About</span>
+              <span class="text-left">About Us</span>
             </v-btn>
           </div>
         </div>

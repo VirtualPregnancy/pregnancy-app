@@ -62,15 +62,18 @@
           </v-card-text>
         </v-card>
       </div>
-
+      <Logo class="logo" />
     </div>
   </div>
 </template>
 
 <script>
+import Logo from '@/components/support/Logo.vue';
 export default {
-  name: 'ContentPane',
-  
+  name: 'ContentPane',  
+  components: {
+    Logo
+  },
   props: {
     pageTitle: {
       type: String,
@@ -87,7 +90,7 @@ export default {
     cards: {
       type: Array,
       default: () => []
-    }
+    },
   },
 
   data() {
@@ -182,5 +185,14 @@ export default {
 .resource-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.logo {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 20dvh;
+  height: 10dvh;
+  z-index: 1000;
 }
 </style> 

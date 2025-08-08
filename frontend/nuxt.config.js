@@ -144,6 +144,11 @@ export default {
           success: "#1F6683",     // teal from palette
           subSuccess: "#6C90B9",  // blue from palette
           background: "#dbd9d5",  // light grey background
+          // for menu buttons
+          buttonMain: "#3E7C93",           
+          buttonMainActive: "#CC5A63",   
+          buttonSubmenu: "#6C90B9",        
+          buttonSubmenuActive: "#34697C",    
         },
         dark: {
           primary: "#DD3C51",     // red from palette
