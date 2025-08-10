@@ -11,6 +11,8 @@
     >
       <v-icon>mdi-home</v-icon>
     </v-btn>
+
+   
     
     <div class="sm-logo d-md-none">
       <logo />
@@ -35,7 +37,9 @@
 </template>
 
 <script>
-export default {
+
+
+  export default {
   name: "LeftPane",
 
   props: {

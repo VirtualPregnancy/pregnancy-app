@@ -185,26 +185,35 @@ export default {
     text-align: center !important;
     background: var(--v-buttonMain-base);
     color: #fff;  
+    &:hover {
+      background: var(--v-buttonMainActive-base) !important;
+      transform: translateY(-2px);  
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    &.v-btn--active {
+      background: var(--v-buttonMainActive-base) !important;
+      font-weight: 700 !important;
+    }
   }
 
   &.button-sub-topic {
     font-size: 0.6rem !important;
     background: var(--v-buttonSubmenu-base);
+    border-left: 2px solid var(--v-secondary-darken1);
     color: #fff;  
     border-left: 2px solid #fff;
-
+    &:hover {
+      background: var(--v-buttonSubmenuActive-base) !important;
+      transform: translateY(-2px);  
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    &.v-btn--active {
+      background: var(--v-buttonSubmenuActive-base) !important;
+      font-weight: 700 !important;
+    }
   }
   
-  &:hover {
-    background: var(--v-buttonSubmenuActive-base) !important;
-transform: translateY(-2px);  
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-  
-  &.v-btn--active {
-    background: var(--v-buttonMainActive-base) !important;
-    font-weight: 700 !important;
-  }
+ 
   
   .v-icon {
     color: white !important;

@@ -3,14 +3,24 @@
     <div class="flexbox demo-head">
       <div>
         <h1 class="pt-2 main-heading">
-          {{ $parentTopic().heading }}
+          {{ $parentTopic().heading }} 
         </h1>
         <h4 :class="'sub-heading font-weight-black ' + $subTitle() + '--text'">
           {{ $heading() }}
         </h4>
       </div>
     </div>
-    
+    <div v-if="$showConditionSelector()">
+      <div class="conditions-panel">
+        <ConditionSelector
+          @conditions-changed="handleConditionsChanged"
+          @trigger-visualization="handleConditionVisualization"
+          @reset-to-normal="handleResetToNormal"
+          @panel-expanded="handleConditionsPanelExpanded"
+          @panel-collapsed="handleConditionsPanelCollapsed"
+        />
+      </div>
+    </div>
     <!-- Show regular markdown content for all topics -->
     <div>
       <client-only>
@@ -35,8 +45,10 @@
 
 <script>
 import { marked } from "marked";
+import ConditionSelector from "../model/ConditionSelector.vue"
 
 export default {
+  components: { ConditionSelector },
   name: "Panel",
 
   data() {
@@ -166,12 +178,44 @@ export default {
       // Future implementation: communicate with 3D model component
       // to show different placental models based on selected conditions
     },
+    
+    // Handle condition changes from ConditionSelector
+    handleConditionsChanged(data) {
+      console.log('[Panel] Conditions changed:', data);
+      
+      // Forward to parent components
+      this.$emit('conditions-updated', data);
+      
+      // Store condition data for potential future use
+      this.lastConditionData = data;
+    },
+    
+    // Handle reset to normal from ConditionSelector
+    handleResetToNormal() {
+      console.log('[Panel] Reset to normal conditions');
+      
+      // Forward to parent components
+      this.$emit('conditions-updated', { selectedConditions: [], reset: true });
+    },
+    
+    // Handle condition panel expansion
+    handleConditionsPanelExpanded() {
+      console.log('[Panel] Conditions panel expanded');
+      // Optional: handle layout adjustments if needed
+    },
+    
+    // Handle condition panel collapse
+    handleConditionsPanelCollapsed() {
+      console.log('[Panel] Conditions panel collapsed');
+      // Optional: handle layout adjustments if needed
+    },
   },
 
   computed: {
     markedText() {
       return marked(this.currentPanel);
     },
+    
   },
 
   mounted() {

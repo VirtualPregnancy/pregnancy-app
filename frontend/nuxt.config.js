@@ -146,9 +146,9 @@ export default {
           background: "#dbd9d5",  // light grey background
           // for menu buttons
           buttonMain: "#3E7C93",           
-          buttonMainActive: "#CC5A63",   
+          buttonMainActive: "#2b6378",   
           buttonSubmenu: "#6C90B9",        
-          buttonSubmenuActive: "#34697C",    
+          buttonSubmenuActive: "#4d6c8f",    
         },
         dark: {
           primary: "#DD3C51",     // red from palette

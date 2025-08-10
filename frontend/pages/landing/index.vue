@@ -41,7 +41,6 @@
                     :src="item.image" 
                     :alt="item.title"
                     @error="onImageError"
-                    @load="onImageLoad"
                   />
                 </div>
                 <div class="card-content">
@@ -69,7 +68,6 @@
                     :src="item.image" 
                     :alt="item.title"
                     @error="onImageError"
-                    @load="onImageLoad"
                   />
                 </div>
                 <div class="card-content">
