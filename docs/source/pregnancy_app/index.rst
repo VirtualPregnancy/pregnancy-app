@@ -13,3 +13,4 @@ Welcome to the Pregnancy App documentation. This section provides comprehensive 
     03_model_control
     04_left_panel
     05_assets
+    06_color
