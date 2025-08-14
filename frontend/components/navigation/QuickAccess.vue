@@ -9,15 +9,17 @@
     </div>
 
     <!-- Quick Access Buttons -->
-    <div class="access-buttons">
+    <div class="access-buttons ">
       <v-btn 
         v-for="section in contentSections" 
         :key="section.id"
-        class="access-btn" 
+        class="access-btn " 
         color="var(--v-background-base)" 
         large 
         block
+        
         @click="scrollToSection(section.id)"
+       
       >
         <v-icon left :color="section.iconColor">{{ section.icon }}</v-icon>
         {{ section.title }}

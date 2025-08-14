@@ -12,6 +12,7 @@ import ultrasoundDoppler from './ultrasound-doppler.js';
 import ultrasoundHow from './ultrasound-how.js';
 import conditionsBirth from './conditions-birth.js';
 import conditionsCare from './conditions-care.js';
+import keepBabyHealthy from './pregnancy-keep-baby-healthy.js';
 
 // Export page data mapping
 export default {
@@ -27,7 +28,8 @@ export default {
   'ultrasound-what-is-ultrasound': whatIsUltrasound,
   'ultrasound-how': ultrasoundHow,
   'conditions-birth': conditionsBirth,
-  'conditions-care': conditionsCare
+  'conditions-care': conditionsCare,
+  'pregnancy-keep-baby-healthy': keepBabyHealthy
 };
 
 // Helper function to get page data by slug

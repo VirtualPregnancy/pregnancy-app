@@ -201,6 +201,18 @@ export default {
     background: var(--v-buttonSubmenu-base);
     border-left: 2px solid var(--v-secondary-darken1);
     color: #fff;  
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: wrap;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px;
     border-left: 2px solid #fff;
     &:hover {
       background: var(--v-buttonSubmenuActive-base) !important;

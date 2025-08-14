@@ -15,6 +15,16 @@
         "subTitle": "subSuccess",
         "model": { "name": "NoInfarct" }
       },
+      "placenta": {
+        "title": "Placenta",
+        "showConditionSelector": false,
+        "heading": "Roles of the Placenta",
+        "icon": "mdi-bowl-outline",
+        "dataFile": "roles-of-placenta",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NoInfarct" }
+      },
       "fetal-dev": {
         "title": "Fetal Development",
         "showConditionSelector": false,
@@ -25,12 +35,12 @@
         "subTitle": "subSuccess",
         "model": { "name": "NoInfarct" }
       },
-      "placenta": {
-        "title": "Placenta",
+      "keep-baby-healthy": {
+        "title": "Keep Baby Healthy",
         "showConditionSelector": false,
-        "heading": "Roles of the Placenta",
-        "icon": "mdi-bowl-outline",
-        "dataFile": "roles-of-placenta",
+        "heading": "Keep Baby Healthy",
+        "icon": "mdi-heart-plus", 
+        "dataFile": "keep-baby-healthy",
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NoInfarct" }
