@@ -167,6 +167,27 @@ export default {
           }
         }, 300); // Wait for expansion animation
       });
+    },
+    
+    // Fix internal links to work with the app's routing system
+    fixInternalLinks() {
+      const basePath = this.$config.basePath || '';
+      const links = this.$el.querySelectorAll('a[href^="/"]');
+      
+      links.forEach(link => {
+        const href = link.getAttribute('href');
+        // Add click event to handle internal navigation
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          // Use Nuxt router to navigate
+          this.$router.push(href);
+        });
+        
+        // Update href for proper display (but click handler will override)
+        if (basePath && !href.startsWith(basePath)) {
+          link.setAttribute('href', basePath + href);
+        }
+      });
     }
   },
 
@@ -175,6 +196,11 @@ export default {
     
     // Listen for scroll to section events from quick access navigation
     this.$nuxt.$on('scroll-to-content-section', this.handleScrollToSection);
+    
+    // Fix internal links after component is mounted
+    this.$nextTick(() => {
+      this.fixInternalLinks();
+    });
   },
   
   beforeDestroy() {
