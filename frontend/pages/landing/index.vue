@@ -269,7 +269,6 @@ export default {
   font-size: 1rem;
   line-height: 1.6;
   color: var(--v-success-base);
-  max-width: 22dvw;
 }
 
 @keyframes glow {
