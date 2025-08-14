@@ -39,7 +39,7 @@ export default {
       title: "Blood flow to the placenta",
       icon: "mdi-water-plus",
       iconColor: "var(--v-primary-base)",
-      content:"A special type of ultrasound called Doppler ultrasound is used to assess how maternal blood is flowing to the placenta (by measuring flow in the uterine artery – the large blood vessel that runs up the side of the uterus through which blood being delivered to the placenta passes) and how blood is flowing between the fetus and the placenta (by measuring flow in the umbilical artery within the cord). Doppler ultrasound produces a signal in the form of a wave. <a href='./#/ultrasound-waveforms'> Interpreting the shape of that wave provides information about fetal health </a>."
+      content:"A special type of ultrasound called Doppler ultrasound is used to assess how maternal blood is flowing to the placenta (by measuring flow in the uterine artery – the large blood vessel that runs up the side of the uterus through which blood being delivered to the placenta passes) and how blood is flowing between the fetus and the placenta (by measuring flow in the umbilical artery within the cord). Doppler ultrasound produces a signal in the form of a wave. <a href='./ultrasound-waveforms'> Interpreting the shape of that wave provides information about fetal health </a>."
     }
   ],
   // Cards are the cards in the content pane

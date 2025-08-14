@@ -4,7 +4,7 @@ The placenta’s other very important job is as an exchange organ that takes up 
 
 Your placenta will be delivered after you baby, and often appears about the size of a dinner plate, and around 4cm thick – although not all placentas are round, and even unusual looking placentas can do a great job at growing a healthy baby. Whilst it might appear like a solid organ after delivery, the placenta is actually built like a very complex and tightly packed tree. Maternal blood flows around the outside of the tree, whilst the baby’s blood flows in blood vessels inside the branches.  This means your blood stream never mixes with that of your baby’s, but rather nutrients and oxygen are passed across the outer surface layer of the tree.  The branching tree structure means that the placenta has a huge surface area across which this exchange can happen – if the surface was stretched out it would be as large as half a tennis court.  
 
-<div>Some of the most important parts of placental development happen early in pregnancy (in the first trimester), when the foundations of the placentas structure are laid down.  This makes early pregnancy a very important time for setting up a <a style="display: inline-block;" href="./#/pregnancy-baby">healthy pregnancy</a>.</div>
+<div>Some of the most important parts of placental development happen early in pregnancy (in the first trimester), when the foundations of the placentas structure are laid down.  This makes early pregnancy a very important time for setting up a <a style="display: inline-block;" href="./pregnancy-baby">healthy pregnancy</a>.</div>
 
 <div class="sub-heading">Placental development</div>
 
