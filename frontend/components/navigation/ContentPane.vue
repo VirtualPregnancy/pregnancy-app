@@ -1,4 +1,5 @@
 <template>
+  <!-- All the data is in _slug/pageData -->
   <div :class="mdAndUp ? 'h-screen w-screen full_main_content' : 'w-full h-screen small_main_content'" style="background-color: var(--v-background-base);">
     <div class="max-w-4xl mx-auto p-6 md:p-8">
       <!-- Header -->
@@ -6,8 +7,7 @@
         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
           {{ pageTitle }}
         </h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-          {{ pageDescription }}
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto" v-html="pageDescription">
         </p>
       </div>
 
@@ -16,6 +16,7 @@
         <v-card 
           v-for="section in contentSections" 
           :key="section.id"
+          :data-section-id="section.id"
           class="section-card elevation-2 overflow-hidden"
           :class="{ 'section-card--expanded': expandedSections[section.id] }"
         >
@@ -37,8 +38,15 @@
           <!-- Section Content -->
           <div class="section-content" :class="{ 'section-content--expanded': expandedSections[section.id] }">
             <v-card-text class="content-text">
-              <div class="space-y-6">
-                {{ section.content }}
+              <!-- Use custom component if specified -->
+              <component 
+                v-if="section.component" 
+                :is="section.component"
+                v-bind="section.props || {}"
+                class="space-y-6"
+              />
+              <!-- Fallback to HTML content -->
+              <div v-else class="space-y-6" v-html="section.content">
               </div>
             </v-card-text>
           </div>
@@ -58,7 +66,7 @@
             <span class="resource-title">{{ card.title }}</span>
           </v-card-title>
           <v-card-text :style="{ color: card.textColor }" class="resource-content">
-            {{ card.content }}
+            <div v-html="card.content"></div>
           </v-card-text>
         </v-card>
       </div>
@@ -69,10 +77,15 @@
 
 <script>
 import Logo from '@/components/support/Logo.vue';
+import UltrasoundWhatIsFetalDevelopment from '@/components/content/UltrasoundWhatIsFetalDevelopment.vue';
+import UltrasoundWhatIsPlacentaPosition from '@/components/content/UltrasoundWhatIsPlacentaPosition.vue';
+
 export default {
   name: 'ContentPane',  
   components: {
-    Logo
+    Logo,
+    UltrasoundWhatIsFetalDevelopment,
+    UltrasoundWhatIsPlacentaPosition
   },
   props: {
     pageTitle: {
@@ -108,11 +121,38 @@ export default {
   methods: {
     toggleSection(sectionId) {
       this.$set(this.expandedSections, sectionId, !this.expandedSections[sectionId]);
+    },
+    
+    // Handle scroll to section requests from quick access navigation
+    handleScrollToSection(sectionId) {
+      // First expand the section if it's not already expanded
+      if (!this.expandedSections[sectionId]) {
+        this.$set(this.expandedSections, sectionId, true);
+      }
+      
+      
+      // Wait for section to expand, then scroll to it
+      this.$nextTick(() => {
+        setTimeout(() => {
+          const element = document.querySelector(`[data-section-id="${sectionId}"]`);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }, 300); // Wait for expansion animation
+      });
     }
   },
 
   mounted() {
     // No sections expanded by default for cleaner initial appearance
+    
+    // Listen for scroll to section events from quick access navigation
+    this.$nuxt.$on('scroll-to-content-section', this.handleScrollToSection);
+  },
+  
+  beforeDestroy() {
+    // Clean up event listeners
+    this.$nuxt.$off('scroll-to-content-section', this.handleScrollToSection);
   }
 }
 </script>
@@ -121,9 +161,11 @@ export default {
 .full_main_content {
   background-color: var(--v-background-base);
   padding-left: 35%;
+  
 }
 .small_main_content {
   background-color: var(--v-background-base);
+  margin-bottom: 10%;
 }
 
 /* Section Cards */
@@ -188,11 +230,63 @@ export default {
 }
 
 .logo {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   right: 0;
   width: 20dvh;
   height: 10dvh;
   z-index: 1000;
+}
+
+/* HTML Content Styles */
+.content-text ::v-deep a {
+  color: var(--v-primary-base);
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.content-text ::v-deep a:hover {
+  color: var(--v-secondary-base);
+  text-decoration: none;
+}
+
+.content-text ::v-deep a:visited {
+  color: var(--v-accent-base);
+}
+
+.resource-content ::v-deep a {
+  color: inherit;
+  text-decoration: underline;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.resource-content ::v-deep a:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+/* HTML Content Typography */
+.content-text ::v-deep p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.content-text ::v-deep ul,
+.content-text ::v-deep ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.content-text ::v-deep li {
+  margin-bottom: 0.5rem;
+}
+
+.content-text ::v-deep strong {
+  font-weight: 600;
+}
+
+.content-text ::v-deep em {
+  font-style: italic;
 }
 </style> 

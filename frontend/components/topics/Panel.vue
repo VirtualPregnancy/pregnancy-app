@@ -241,6 +241,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.conditions-panel {
+  margin-top: 2dvh;
+}
 .select {
   width: 127px;
 }
