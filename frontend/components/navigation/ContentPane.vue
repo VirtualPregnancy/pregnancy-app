@@ -70,7 +70,7 @@
           </v-card-text>
         </v-card>
       </div>
-      <Logo class="logo" />
+      <Logo v-if="mdAndUp" class="logo" />
     </div>
   </div>
 </template>
@@ -165,7 +165,7 @@ export default {
 }
 .small_main_content {
   background-color: var(--v-background-base);
-  margin-bottom: 10%;
+  height: 80dvh;
 }
 
 /* Section Cards */
