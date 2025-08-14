@@ -204,7 +204,7 @@ export default {
       "/conditions-birth", 
       "/conditions-care",
       "/ultrasound-what-is-ultrasound",
-      "/ultrasound-waveforms",
+      "/ultrasound-doppler",
       "/ultrasound-how",
       "/clinical-mid-wife",
       "/clinical-when-care-changes",

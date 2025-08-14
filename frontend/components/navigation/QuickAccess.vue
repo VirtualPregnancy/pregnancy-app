@@ -1,5 +1,5 @@
 <template>
-  <div class="quick-access-container" v-if="contentSections.length > 0">
+  <div class="quick-access-container" v-if="contentSections.length > 1">
     <!-- Header -->
     <div class="quick-access-header">
       <h3 class="section-title">
@@ -61,7 +61,8 @@ export default {
     cards: {
       type: Array,
       default: () => []
-    }
+    },
+    
   },
 
   methods: {

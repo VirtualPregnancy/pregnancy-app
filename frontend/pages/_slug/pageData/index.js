@@ -8,7 +8,7 @@ import rolesOfPlacenta from './pregnancy-placenta.js';
 import pregnancyBaby from './pregnancy-baby.js';
 import whatIsUltrasound from './ultrasound-what-is-ultrasound.js';
 import clinicalWhenCareChanges from './clinical-when-care-changes.js';
-import ultrasoundWaveforms from './ultrasound-waveforms.js';
+import ultrasoundDoppler from './ultrasound-doppler.js';
 import ultrasoundHow from './ultrasound-how.js';
 import conditionsBirth from './conditions-birth.js';
 import conditionsCare from './conditions-care.js';
@@ -23,7 +23,7 @@ export default {
   'pregnancy-fetal-dev': fetalDevelopment,
   'pregnancy-placenta': rolesOfPlacenta,
   'pregnancy-baby': pregnancyBaby,
-  'ultrasound-waveforms': ultrasoundWaveforms,
+  'ultrasound-doppler': ultrasoundDoppler,
   'ultrasound-what-is-ultrasound': whatIsUltrasound,
   'ultrasound-how': ultrasoundHow,
   'conditions-birth': conditionsBirth,

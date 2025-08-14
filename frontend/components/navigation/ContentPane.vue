@@ -13,44 +13,66 @@
 
       <!-- Content Sections -->
       <div class="space-y-6 mb-8">
-        <v-card 
-          v-for="section in contentSections" 
-          :key="section.id"
-          :data-section-id="section.id"
-          class="section-card elevation-2 overflow-hidden"
-          :class="{ 'section-card--expanded': expandedSections[section.id] }"
-        >
-          <!-- Section Header -->
-          <v-card-title 
-            class="section-header cursor-pointer"
-            @click="toggleSection(section.id)"
-          >
-            <v-icon left :color="section.iconColor" class="section-icon">{{ section.icon }}</v-icon>
-            <span class="text-xl font-semibold flex-1 section-title">{{ section.title }}</span>
-            <v-icon 
-              :class="{ 'chevron-rotated': expandedSections[section.id] }"
-              class="chevron-icon"
-            >
-              mdi-chevron-down
-            </v-icon>
-          </v-card-title>
-
-          <!-- Section Content -->
-          <div class="section-content" :class="{ 'section-content--expanded': expandedSections[section.id] }">
-            <v-card-text class="content-text">
+        <!-- Single section article layout -->
+        <div v-if="isSingleSection" class="w-full">
+          <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+            
+            <div class="p-6 md:p-10">
               <!-- Use custom component if specified -->
               <component 
-                v-if="section.component" 
-                :is="section.component"
-                v-bind="section.props || {}"
-                class="space-y-6"
+                v-if="contentSections[0].component" 
+                :is="contentSections[0].component"
+                v-bind="contentSections[0].props || {}"
+                class="prose prose-lg max-w-none prose-slate prose-headings:text-slate-800 prose-headings:font-semibold prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-a:font-medium"
               />
               <!-- Fallback to HTML content -->
-              <div v-else class="space-y-6" v-html="section.content">
+              <div v-else class="prose prose-lg max-w-none prose-slate prose-headings:text-slate-800 prose-headings:font-semibold prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-a:font-medium prose-blockquote:border-l-blue-500 prose-blockquote:bg-slate-50 prose-blockquote:rounded-r-lg prose-code:bg-slate-100 prose-code:rounded prose-pre:bg-slate-50" v-html="contentSections[0].content">
               </div>
-            </v-card-text>
-          </div>
-        </v-card>
+            </div>
+          </article>
+        </div>
+
+        <!-- Multiple sections expandable layout -->
+        <template v-else>
+          <v-card 
+            v-for="section in contentSections" 
+            :key="section.id"
+            :data-section-id="section.id"
+            class="section-card elevation-2 overflow-hidden"
+            :class="{ 'section-card--expanded': expandedSections[section.id] }"
+          >
+            <!-- Section Header -->
+            <v-card-title 
+              class="section-header cursor-pointer"
+              @click="toggleSection(section.id)"
+            >
+              <v-icon left :color="section.iconColor" class="section-icon">{{ section.icon }}</v-icon>
+              <span class="text-xl font-semibold flex-1 section-title">{{ section.title }}</span>
+              <v-icon 
+                :class="{ 'chevron-rotated': expandedSections[section.id] }"
+                class="chevron-icon"
+              >
+                mdi-chevron-down
+              </v-icon>
+            </v-card-title>
+
+            <!-- Section Content -->
+            <div class="section-content" :class="{ 'section-content--expanded': expandedSections[section.id] }">
+              <v-card-text class="content-text">
+                <!-- Use custom component if specified -->
+                <component 
+                  v-if="section.component" 
+                  :is="section.component"
+                  v-bind="section.props || {}"
+                  class="space-y-6"
+                />
+                <!-- Fallback to HTML content -->
+                <div v-else class="space-y-6" v-html="section.content">
+                </div>
+              </v-card-text>
+            </div>
+          </v-card>
+        </template>
       </div>
 
       <!-- Resources -->
@@ -79,13 +101,15 @@
 import Logo from '@/components/support/Logo.vue';
 import UltrasoundWhatIsFetalDevelopment from '@/components/content/UltrasoundWhatIsFetalDevelopment.vue';
 import UltrasoundWhatIsPlacentaPosition from '@/components/content/UltrasoundWhatIsPlacentaPosition.vue';
+import UltrasoundDoppler from '@/components/content/UltrasoundDoppler.vue';
 
 export default {
   name: 'ContentPane',  
   components: {
     Logo,
     UltrasoundWhatIsFetalDevelopment,
-    UltrasoundWhatIsPlacentaPosition
+    UltrasoundWhatIsPlacentaPosition,
+    UltrasoundDoppler
   },
   props: {
     pageTitle: {
@@ -115,6 +139,9 @@ export default {
   computed: {
     mdAndUp() {
       return this.$vuetify.breakpoint.mdAndUp;
+    },
+    isSingleSection() {
+      return this.contentSections && this.contentSections.length === 1;
     }
   },
 

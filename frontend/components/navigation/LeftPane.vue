@@ -40,6 +40,7 @@
         <QuickAccess 
           :content-sections="currentPageData.contentSections"
           :cards="currentPageData.cards"
+          :mdAndUp="mdAndUp"
         />
       </div>
     </div>
@@ -92,6 +93,11 @@ import pageDataMap from '@/pages/_slug/pageData/index.js';
       const showModel = this.currentPageData.showModel || false;
       console.log('[LeftPane] isModelPage:', showModel, 'for page:', this.$route.params.slug);
       return showModel;
+    },
+    
+    // Vuetify breakpoint helper
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp;
     },
   },
   

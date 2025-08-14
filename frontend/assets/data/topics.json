@@ -100,12 +100,12 @@
         "subTitle": "subSuccess",
         "model": { "name": "NormalElectricity" }
       },
-      "waveforms": {
-        "title": "Waveforms",
+      "doppler": {
+        "title": "Doppler Ultrasound",
         "showConditionSelector": false,
-        "heading": "Ultrasound Waveforms",
+        "heading": "Doppler Ultrasound in Pregnancy ",
         "icon": "mdi-chart-areaspline",
-        "dataFile": "ultrasound-waveforms",
+        "dataFile": "ultrasound-doppler",
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NormalElectricity" }
