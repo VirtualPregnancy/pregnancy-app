@@ -11,7 +11,7 @@
         background-color="var(--v-background-base)"
       >
         <v-btn
-          class="button-default"
+          class="button-default button-sub-topic"
           v-for="(subTopic, index) in selectedTopic.subTopics"
           :key="index"
           :disabled="$isSubTopicDisabled(subTopic)"
@@ -58,7 +58,7 @@
         @click="updateSupport()"
         :value="'support'"
       >
-        <span>Support</span>
+        <span>Pregnancy Support</span>
         <v-icon>mdi-account-group</v-icon>
       </v-btn>
     </v-bottom-navigation>
@@ -153,19 +153,19 @@ export default {
 
 .sub-menu {
   position: fixed;
-  bottom: 56px;
+  bottom: 8dvh;
   width: 100%;
   
 }
+
+
 
 .v-btn.button-default {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background: var(--v-secondary-base) !important;
-  color: var(--v-secondary-base) !important;
-  border-left: 2px solid var(--v-secondary-darken1);
+  
   transition: all 0.3s ease;
   font-weight: 400 !important;
   text-overflow: ellipsis;
@@ -179,24 +179,41 @@ export default {
     font-size: 0.6rem !important;
     display: flex !important;
     flex-direction: column !important;
+    border-left: 2px solid var(--v-secondary-darken1);
     justify-content: center !important;
     align-items: center !important;
     text-align: center !important;
+    background: var(--v-buttonMain-base);
+    color: #fff;  
+    &:hover {
+      background: var(--v-buttonMainActive-base) !important;
+      transform: translateY(-2px);  
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    &.v-btn--active {
+      background: var(--v-buttonMainActive-base) !important;
+      font-weight: 700 !important;
+    }
+  }
+
+  &.button-sub-topic {
+    font-size: 0.6rem !important;
+    background: var(--v-buttonSubmenu-base);
+    border-left: 2px solid var(--v-secondary-darken1);
+    color: #fff;  
+    border-left: 2px solid #fff;
+    &:hover {
+      background: var(--v-buttonSubmenuActive-base) !important;
+      transform: translateY(-2px);  
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+    &.v-btn--active {
+      background: var(--v-buttonSubmenuActive-base) !important;
+      font-weight: 700 !important;
+    }
   }
   
-  &:hover {
-    background: var(--v-accent-base) !important;
-    color: white !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
-  
-  &.v-btn--active {
-    background: var(--v-accentLight-base) !important;
-    color: white !important;
-    border-left-color: var(--v-accent-base);
-    font-weight: 700 !important;
-  }
+ 
   
   .v-icon {
     color: white !important;

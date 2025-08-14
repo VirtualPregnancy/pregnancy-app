@@ -55,6 +55,7 @@ function getContentBySlug(slug) {
             slug: topicKey,
             heading: topic.heading,
             title: topic.title,
+            showConditionSelector: topic.showConditionSelector,
           },
         };
       }

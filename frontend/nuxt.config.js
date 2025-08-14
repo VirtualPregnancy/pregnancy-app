@@ -144,6 +144,11 @@ export default {
           success: "#1F6683",     // teal from palette
           subSuccess: "#6C90B9",  // blue from palette
           background: "#dbd9d5",  // light grey background
+          // for menu buttons
+          buttonMain: "#3E7C93",           
+          buttonMainActive: "#2b6378",   
+          buttonSubmenu: "#6C90B9",        
+          buttonSubmenuActive: "#4d6c8f",    
         },
         dark: {
           primary: "#DD3C51",     // red from palette
@@ -199,7 +204,7 @@ export default {
       "/conditions-birth", 
       "/conditions-care",
       "/ultrasound-what-is-ultrasound",
-      "/ultrasound-waveforms",
+      "/ultrasound-doppler",
       "/ultrasound-how",
       "/clinical-mid-wife",
       "/clinical-when-care-changes",

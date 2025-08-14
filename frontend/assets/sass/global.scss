@@ -40,7 +40,8 @@ canvas {
 }
 
 .sub-heading {
-  margin: 0;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
   font-size: 1.2rem;
   @media #{map-get($display-breakpoints, 'xl-only')} {
     font-size: 1.6rem;

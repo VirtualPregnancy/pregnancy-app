@@ -18,7 +18,14 @@ The core features of the app are:
 - Ultrasound: The ultrasound related information, including the what is an ultrasound, ultrasound waveforms, detecting pregnancy concerns, and an interactive tool for ultrasound waveform.
 - Care Pathways: The care pathways of the pregnancy, including the midwife lead care pathways, when care changes, and support.
 
-The data of above topics are stored in the ``topics.json`` file.
+The data of above topics are stored in the ``topics.json`` file, including the tab's name and icon.
+
+There are 2 types of pages, which defined in the ``pages/_slug_/pageData/`` folder, each page has its own data file, including the title, description, contentSections, Cards and showModel. the content of the left side is defined in `frontend/assets/data/markdown` folder, the model is defined in the ``pages/_slug_/pageData/model.js`` file
+- Page with model: the model will be displayed on the right side of the page, the model is a Vue component.
+- Page without model: the content of the left side is defined in `pages/_slug_/pageData/` folder, where the `ContentSections` in the js file defined the items on the right side, if the content need fancy style, replace the "content" with "component" in the js file, and create a new component in the ``frontend/components/content`` folder, then import the component in the ``ContentPane.vue`` file, and add the component name in this page's js file. Note the id of each section should be unique. The icon, title, color and IconColor can also be defined in the js file.
+
+Both content field and the markdown file can use HTML to do some simple styling.
+
 
 Support
 -------

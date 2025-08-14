@@ -11,18 +11,36 @@
     >
       <v-icon>mdi-home</v-icon>
     </v-btn>
+
+   
     
     <div class="sm-logo d-md-none">
       <logo />
     </div>
     <div v-if="$route.name == 'slug'">
-      <!-- currentBg  -->
-      <div class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
+      
+      <!-- Show different content based on page type -->
+      <div v-if="isModelPage" class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
         <lazy-panel 
           @trigger-model-visualization="handleModelVisualization"
           @ultrasound-tool-ready="handleUltrasoundToolReady"
           @conditions-updated="handleConditionsUpdate"
           @trigger-condition-visualization="handleConditionVisualization"
+        />
+      </div>
+      
+      <!-- Show quick access for content pages -->
+      <div v-else class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
+        <lazy-panel 
+          @trigger-model-visualization="handleModelVisualization"
+          @ultrasound-tool-ready="handleUltrasoundToolReady"
+          @conditions-updated="handleConditionsUpdate"
+          @trigger-condition-visualization="handleConditionVisualization"
+        />
+        <QuickAccess 
+          :content-sections="currentPageData.contentSections"
+          :cards="currentPageData.cards"
+          :mdAndUp="mdAndUp"
         />
       </div>
     </div>
@@ -35,8 +53,15 @@
 </template>
 
 <script>
-export default {
+import QuickAccess from './QuickAccess.vue';
+import pageDataMap from '@/pages/_slug/pageData/index.js';
+
+  export default {
   name: "LeftPane",
+  
+  components: {
+    QuickAccess
+  },
 
   props: {
     panelHeight: {
@@ -52,6 +77,27 @@ export default {
       if (this.$vuetify.breakpoint.mdAndUp) {
         return { "min-height": this.panelHeight - 2 + "px" };
       } else return { height: "auto" };
+    },
+    
+    // Get current page data
+    currentPageData() {
+      const slug = this.$route.params.slug;
+      const pageData = pageDataMap[slug] || { contentSections: [], cards: [] };
+      console.log('[LeftPane] Current slug:', slug);
+      console.log('[LeftPane] Page data:', pageData);
+      return pageData;
+    },
+    
+    // Check if current page should show model
+    isModelPage() {
+      const showModel = this.currentPageData.showModel || false;
+      console.log('[LeftPane] isModelPage:', showModel, 'for page:', this.$route.params.slug);
+      return showModel;
+    },
+    
+    // Vuetify breakpoint helper
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp;
     },
   },
   

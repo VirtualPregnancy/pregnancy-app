@@ -31,22 +31,8 @@
         />
       </div>
 
-      <!-- Conditions Panel -->
-      <div class="conditions-panel">
-        <ConditionSelector
-          @conditions-changed="handleConditionsChanged"
-          @trigger-visualization="handleConditionVisualization"
-          @reset-to-normal="handleResetToNormal"
-          @panel-expanded="handleConditionsPanelExpanded"
-          @panel-collapsed="handleConditionsPanelCollapsed"
-        />
-      </div>
-
       <!-- Waveform Panel -->
-      <div 
-        class="waveform-panel"
-        :class="{ 'waveform-pushed': isConditionsPanelExpanded }"
-      >
+      <div class="waveform-panel">
         <div class="waveform-header">
           <h4>Blood Flow Analysis</h4>
         </div>
@@ -70,7 +56,7 @@
 <script>
 import PanelControls from "../model/PanelControls.vue";
 import Waveform from "../model/Waveform.vue";
-import ConditionSelector from "../model/ConditionSelector.vue";
+
 export default {
   data() {
     return {
@@ -99,8 +85,7 @@ export default {
       lastUltrasoundMetrics: null,
       lastConditionData: null,
       
-      // UI state properties
-      isConditionsPanelExpanded: false,
+
     };
   },
 
@@ -342,40 +327,7 @@ export default {
       // - Highlighting specific areas affected by conditions
     },
     
-    // Condition selector event handlers
-    handleConditionsChanged(data) {
-      console.log('[RightPane] Conditions changed:', data);
-      this.lastConditionData = data;
-      
-      // Update visualization status in model states if needed
-      if (data.selectedConditions.length > 0) {
-        const conditionNames = data.conditionDetails.map(c => c.abbreviation).join(', ');
-        // Could update model state here if needed
-      }
-    },
-    
-    handleConditionVisualization(data) {
-      console.log('[RightPane] Condition visualization from selector:', data);
-      this.visualizeConditions(data);
-    },
-    
-    handleResetToNormal() {
-      console.log('[RightPane] Reset to normal placenta');
-      this.modelStates.modelName = 'Placental Model';
-      this.lastConditionData = null;
-      
-      // Future: Reset model to normal state
-      // Could trigger loading normal placental model here
-    },
-    
-    // Handle conditions panel expand/collapse
-    handleConditionsPanelExpanded() {
-      this.isConditionsPanelExpanded = true;
-    },
-    
-    handleConditionsPanelCollapsed() {
-      this.isConditionsPanelExpanded = false;
-    },
+
     
     // Generate realistic placental blood flow waveform data
     generateWaveformData(numPoints = 200) {
@@ -407,7 +359,7 @@ export default {
     this.$nuxt.$off('trigger-condition-visualization', this.handleTriggerConditionVisualization);
   },
   
-  components: { PanelControls, Waveform, ConditionSelector },
+  components: { PanelControls, Waveform },
 };
 </script>
 
@@ -479,17 +431,6 @@ export default {
   }
 }
 
-.conditions-panel {
-  margin-bottom: 15px;
-  
-  .controls-section-mobile & {
-    flex: 1;
-    min-width: 300px;
-    margin-right: 15px;
-    margin-bottom: 10px;
-  }
-}
-
 .waveform-panel {
   flex: 1;
   min-height: 160px;
@@ -500,11 +441,7 @@ export default {
   border: 1px solid rgba(31, 102, 131, 0.3);
   transition: all 0.3s ease;
   
-  &.waveform-pushed {
-    margin-top: 20px;
-    background: rgba(49, 54, 87, 0.15);
-    border-color: rgba(31, 102, 131, 0.5);
-  }
+
   
   .controls-section-mobile & {
     width: 100%;

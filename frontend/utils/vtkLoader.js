@@ -34,9 +34,22 @@ const COLOR_CONSTANTS = {
 };
 
 export default class VTKLoader {
-  constructor(THREE, scene) {
-    this.THREE = THREE;
-    this.scene = scene;
+  constructor(threeOrRenderer, sceneOrName) {
+    // Support both old and new constructor signatures
+    if (threeOrRenderer && threeOrRenderer.createScene) {
+      // New signature: VTKLoader(copperRenderer, sceneName)
+      this.copperRenderer = threeOrRenderer;
+      this.sceneName = sceneOrName || 'placental-scene';
+      this.scene = this.getOrCreateScene(this.sceneName);
+      this.THREE = window.THREE || threeOrRenderer.THREE;
+    } else {
+      // Old signature: VTKLoader(THREE, scene)
+      this.THREE = threeOrRenderer;
+      this.scene = sceneOrName;
+      this.copperRenderer = null;
+      this.sceneName = 'placental-scene';
+    }
+    
     this.currentVTKMesh = null;
     this.wireframeMesh = null;
     this.lightingInitialized = false;
@@ -44,6 +57,33 @@ export default class VTKLoader {
     this.allVTKMeshes = [];
     this.enableLoD = true;
     this.lodCache = new Map();
+    this.geometryCache = new Map();  // Cache for processed geometries
+    this.materialCache = new Map();  // Cache for materials
+  }
+
+  /**
+   * Get or create Copper3D scene with automatic lighting setup
+   */
+  getOrCreateScene(name) {
+    if (!this.copperRenderer) {
+      return this.scene; // Return existing scene for old signature
+    }
+    
+    let scene = this.copperRenderer.getSceneByName?.(name);
+    if (!scene) {
+      scene = this.copperRenderer.createScene?.(name) || this.copperRenderer.scene;
+      
+      // Use Copper3D's built-in environment and lighting
+      if (scene.updateBackground) {
+        scene.updateBackground("#313657", "#1F6683");
+      }
+      
+      // Let Copper3D handle lighting automatically
+      if (this.copperRenderer.updateEnvironment) {
+        this.copperRenderer.updateEnvironment();
+      }
+    }
+    return scene;
   }
 
   // Main VTK file loader with options for color mapping, geometry type, etc.
@@ -56,9 +96,9 @@ export default class VTKLoader {
       modelSize: modelSize,
       lineWidth: options.lineWidth || Math.max(2, Math.round(modelSize / 70)),
       pointSize: options.pointSize || Math.max(8, Math.round(modelSize / 17)),
-      enableWireframe: true,
+      enableWireframe: false,  // Disable wireframe for better performance
       useCylinderGeometry: true,
-      cylinderSegments: 10,
+      cylinderSegments: Math.max(6, Math.min(8, Math.round(modelSize / 60))), // Dynamic segments for performance
       colorMappingType: 'pressure',
       clearScene: true,
       useLoD: true,
@@ -124,8 +164,8 @@ export default class VTKLoader {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
       
-      // Update progress periodically
-      if (onProgress && i % 1000 === 0) {
+      // Update progress less frequently for better performance
+      if (onProgress && i % 2000 === 0) {
         const progress = 60 + (i / lines.length) * 20; // 60-80% progress
         onProgress("Building model geometry", progress);
       }
@@ -320,17 +360,17 @@ export default class VTKLoader {
   }
 
   /**
-   * Create cylinder geometry from VTK data with radius and pressure information
-   * @param {Array} points - Array of point coordinates
-   * @param {Array} radiusData - Array of radius values for each point
-   * @param {Array} pressureData - Array of pressure values for each point
-   * @param {Array} fluxData - Array of flux values for each point
-   * @param {Array} cellConnections - Array of cell connectivity data
-   * @param {number} modelSize - Target model size for scaling
-   * @param {Object} config - Configuration options including colorMappingType
-   * @returns {THREE.BufferGeometry} - Combined cylinder geometry with color mapping
+   * Create cylinder geometry with caching for better performance
    */
   createCylinderGeometry(points, radiusData, pressureData, fluxData, cellConnections, modelSize, config) {
+    // Create cache key based on data
+    const cacheKey = `${points.length}_${radiusData.length}_${config.colorMappingType}_${this.performanceMode}`;
+    
+    // Check geometry cache first
+    if (this.geometryCache.has(cacheKey)) {
+      console.log('[VTKLoader] Using cached geometry for performance');
+      return this.geometryCache.get(cacheKey).clone();
+    }
     const combinedGeometry = new this.THREE.BufferGeometry();
     const vertices = [];
     const normals = [];
@@ -338,8 +378,9 @@ export default class VTKLoader {
     const indices = [];
     let indexOffset = 0;
     
-    // Number of radial segments for each cylinder
-    const radialSegments = 8;
+    // Optimized radial segments based on performance mode
+    const radialSegments = this.performanceMode === 'high' ? 6 : 
+                          this.performanceMode === 'medium' ? 4 : 3;
     
     // Calculate data ranges for color mapping based on colorMappingType
     let minPressure = Infinity;
@@ -462,6 +503,11 @@ export default class VTKLoader {
     // Transform geometry: center at origin and scale to appropriate size
     combinedGeometry.translate(-center.x, -center.y, -center.z);
     combinedGeometry.scale(scale, scale, scale);
+    
+    // Cache the geometry for future use
+    if (this.geometryCache.size < 10) {  // Limit cache size
+      this.geometryCache.set(cacheKey, combinedGeometry.clone());
+    }
     
     return combinedGeometry;
   }
@@ -782,12 +828,26 @@ midToHigh.BLUE_START
         baseColor = 0xffffff; // White to allow vertex colors to show through
       }
       
-      const material = new this.THREE.MeshMatcapMaterial({
-        color: baseColor,
-        transparent: true,
-        opacity: config.opacity,
-        vertexColors: useVertexColors
-      });
+      // Check material cache
+      const materialKey = `${baseColor}_${config.opacity}_${useVertexColors}`;
+      let material = this.materialCache.get(materialKey);
+      
+      if (!material) {
+        material = new this.THREE.MeshMatcapMaterial({
+          color: baseColor,
+          transparent: config.opacity < 1.0,
+          opacity: config.opacity,
+          vertexColors: useVertexColors,
+          side: this.THREE.FrontSide,  // Only render front faces for performance
+          depthWrite: config.opacity >= 1.0,  // Optimize depth writing
+          alphaTest: config.opacity < 1.0 ? 0.01 : 0  // Skip transparent pixels
+        });
+        
+        // Cache material for reuse
+        if (this.materialCache.size < 20) {
+          this.materialCache.set(materialKey, material);
+        }
+      }
       
       vtkMesh = new this.THREE.Mesh(geometry, material);
       
@@ -834,18 +894,32 @@ midToHigh.BLUE_START
     // Clear existing meshes only if clearPrevious is not explicitly set to false
     if (config.clearPrevious !== false) {
       if (this.currentVTKMesh) {
-        this.scene.remove(this.currentVTKMesh);
+        const targetScene = this.scene?.scene || this.scene;
+        if (targetScene && targetScene.remove) {
+          targetScene.remove(this.currentVTKMesh);
+        }
       }
       if (this.wireframeMesh && this.wireframeMesh !== mesh) {
-        this.scene.remove(this.wireframeMesh);
+        const targetScene = this.scene?.scene || this.scene;
+        if (targetScene && targetScene.remove) {
+          targetScene.remove(this.wireframeMesh);
+        }
       }
     }
     
     // Setup enhanced lighting (only once)
     this.setupSceneLighting();
     
-    // Add mesh to scene and track it
-    this.scene.add(mesh);
+    // Get the actual Three.js scene object
+    const targetScene = this.scene?.scene || this.scene;
+    
+    if (targetScene && targetScene.add) {
+      targetScene.add(mesh);
+    } else {
+      console.warn('[VTKLoader] Unable to add mesh to scene - scene not available');
+      return;
+    }
+    
     this.allVTKMeshes.push(mesh); // Track this mesh for future cleanup
     
     // Store current mesh reference
@@ -853,7 +927,12 @@ midToHigh.BLUE_START
     
     // Add wireframe overlay if it exists
     if (this.wireframeMesh) {
-      this.scene.add(this.wireframeMesh);
+      targetScene.add(this.wireframeMesh);
+    }
+    
+    // Let Copper3D handle rendering
+    if (this.copperRenderer && this.copperRenderer.render) {
+      this.copperRenderer.render();
     }
   }
 
@@ -924,7 +1003,58 @@ midToHigh.BLUE_START
    */
   setPerformanceMode(mode) {
     this.performanceMode = mode;
+    
+    // Clear caches when performance mode changes
+    this.geometryCache.clear();
+    this.materialCache.clear();
+    
     console.log(`[VTKLoader] Performance mode set to: ${mode}`);
+  }
+
+  /**
+   * Enable fast rendering mode with reduced quality for better performance
+   */
+  enableFastMode() {
+    this.performanceMode = 'low';
+    this.enableLoD = false;  // Disable LoD for faster loading
+    
+    // Clear existing caches
+    this.geometryCache.clear();
+    this.materialCache.clear();
+    this.lodCache.clear();
+    
+    console.log('[VTKLoader] Fast mode enabled - reduced quality for better performance');
+  }
+
+  /**
+   * Get optimal configuration based on model complexity
+   */
+  getOptimalConfig(vertexCount) {
+    const isLargeModel = vertexCount > 50000;
+    const isMediumModel = vertexCount > 10000;
+    
+    if (isLargeModel) {
+      return {
+        cylinderSegments: 4,
+        enableWireframe: false,
+        useLoD: true,
+        colorMappingType: 'default'  // Skip complex color calculations
+      };
+    } else if (isMediumModel) {
+      return {
+        cylinderSegments: 6,
+        enableWireframe: false,
+        useLoD: false,
+        colorMappingType: 'pressure'
+      };
+    } else {
+      return {
+        cylinderSegments: 8,
+        enableWireframe: false,
+        useLoD: false,
+        colorMappingType: 'pressure'
+      };
+    }
   }
 
 
@@ -1248,6 +1378,7 @@ midToHigh.BLUE_START
         config.onComplete(mesh, cachedData.isPointCloud, cachedData.radiusData, cachedData.pressureData, cachedData.fluxData);
       }
       
+      
       return { success: true, mesh, isPointCloud: cachedData.isPointCloud, radiusData: cachedData.radiusData, pressureData: cachedData.pressureData, fluxData: cachedData.fluxData };
     }
 
@@ -1309,11 +1440,25 @@ midToHigh.BLUE_START
   }
 
   /**
-   * Clear LoD cache
+   * Clear all caches
    */
   clearCache() {
     this.lodCache.clear();
-    console.log('[VTKLoader] LoD cache cleared');
+    this.geometryCache.clear();
+    this.materialCache.clear();
+    console.log('[VTKLoader] All caches cleared');
+  }
+
+  /**
+   * Get cache statistics for debugging
+   */
+  getCacheStats() {
+    return {
+      lodCache: this.lodCache.size,
+      geometryCache: this.geometryCache.size,
+      materialCache: this.materialCache.size,
+      performanceMode: this.performanceMode
+    };
   }
 
   /**

@@ -41,7 +41,6 @@
                     :src="item.image" 
                     :alt="item.title"
                     @error="onImageError"
-                    @load="onImageLoad"
                   />
                 </div>
                 <div class="card-content">
@@ -69,7 +68,6 @@
                     :src="item.image" 
                     :alt="item.title"
                     @error="onImageError"
-                    @load="onImageLoad"
                   />
                 </div>
                 <div class="card-content">
@@ -77,9 +75,12 @@
                   <p class="card-description">{{ item.description }}</p>
                 </div>
               </div>
+             
             </div>
+            <Logo />
           </div>
         </div>
+        
 
       </div>
     </div>
@@ -89,11 +90,12 @@
 <script>
 import landingPageData from '@/assets/data/landingPageData';
 import Menu from '@/components/landing/Menu.vue';
-
+import Logo from '@/components/support/Logo.vue';
 export default {
   layout: 'empty',
   components: {
-    Menu
+    Menu,
+    Logo
   },
   
   computed: {
@@ -225,7 +227,7 @@ export default {
 }
 
 .column-content {
-  padding: 40px 20px;
+  padding: 5em 2em;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -241,7 +243,7 @@ export default {
 .main-title {
   font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 30px;
+  margin-bottom: 1em;
   line-height: 1.2;
   
   .title-gradient {
@@ -250,7 +252,7 @@ export default {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 10px;
+    margin-bottom: 0.5em;
   }
   
   .title-highlight {
@@ -267,7 +269,6 @@ export default {
   font-size: 1rem;
   line-height: 1.6;
   color: var(--v-success-base);
-  max-width: 400px;
 }
 
 @keyframes glow {
@@ -283,7 +284,7 @@ export default {
 .cards-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 2dvh;
   height: 100%;
   justify-content: center;
 }
@@ -295,7 +296,7 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  min-height: 120px;
+  min-height: 20dvh;
   
   &:hover {
     transform: translateY(-5px);
@@ -304,23 +305,23 @@ export default {
 }
 
 .card-icon {
-  flex: 0 0 80px;
+  flex: 0 0 10dvh;
   background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 15px;
+  padding: 1dvh;
   
   img {
-    width: 50px;
-    height: 50px;
+    width: 10dvh;
+    height: 10dvh;
     object-fit: contain;
   }
 }
 
 .card-content {
   flex: 1;
-  padding: 15px 20px;
+  padding: 1dvh 2dvh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -328,15 +329,15 @@ export default {
 
 .card-title {
   color: white;
-  font-size: 1.3rem;
+  font-size: 1.5em;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 0.5dvh;
   line-height: 1.3;
 }
 
 .card-description {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1rem;
+  font-size: 1em;    
   line-height: 1.4;
   margin: 0;
 }

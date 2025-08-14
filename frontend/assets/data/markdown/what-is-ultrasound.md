@@ -1,1 +1,1 @@
-Understand the basics of ultrasound.
+Ultrasound is a safe and widely used imaging technique during pregnancy that uses high-frequency sound waves to create real-time pictures of the baby inside the womb. Unlike X-rays, it doesn’t use radiation, making it ideal for monitoring fetal development throughout pregnancy.
