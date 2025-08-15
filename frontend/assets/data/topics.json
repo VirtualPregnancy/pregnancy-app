@@ -10,7 +10,7 @@
         "showConditionSelector": false,
         "heading": "Changes To Your Body",
         "icon": "mdi-sine-wave",
-        "dataFile": "preganancy-changes",
+        "dataFile": "pregnancy-changes",
         "category": "success",
         "subTitle": "subSuccess",
         "model": { "name": "NoInfarct" }

@@ -1,6 +1,13 @@
 export default {
   title: 'Fetal Development',
-  description: 'Understanding how your baby develops throughout pregnancy - from conception to birth.',
-  showModel: true,
-  contentSections: []
+  description: 'Fetal development unfolds in three key stages—each packed with incredible milestones as a small ball of cells transforms into a tiny person.',
+  showModel: false,
+  contentSections: [
+    {
+      id: "1",
+      title: "Fetal Development",
+      icon: "mdi-baby-face",
+      iconColor: "var(--v-primary-base)",
+    }
+  ]
 };

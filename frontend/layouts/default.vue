@@ -33,16 +33,17 @@
                     />
                   </v-card>
                 </v-col>
-                <v-col class="d-none d-md-block fix-it">
-                  <navigation />
-                </v-col>
               </v-row>
             </div>
           </v-col>
         </v-row>
-        <div class="d-md-none fixed left-0 bottom-0">
-          <navigation />
-        </div>
+      </div>
+    </div>
+    
+    <!-- Central Navigation -->
+    <div class="central-navigation">
+      <div class="navigation-container">
+        <navigation />
       </div>
     </div>
   </v-app>
@@ -163,9 +164,13 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
+  height: 100vh;
 }
 .outer-small {
   width: 100vw;
+}
+.full-height {
+  height: 100vh;
 }
 .firefox {
   z-index: 1;
@@ -177,10 +182,10 @@ export default {
 }
 
 .panel-height1 {
-  height: calc(100vh - 56px);
+  height: 100dvh;
 }
 .panel-height2 {
-  height: calc(100vh - 112px);
+  height: 100vh;
 }
 .transparent {
   margin: 0;
@@ -195,5 +200,36 @@ export default {
 
 .rightPanel {
   order: 2;
+}
+
+.central-navigation {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: auto;
+  max-width: 90vw;
+}
+
+.navigation-container {
+  backdrop-filter: blur(10px);
+  /* padding: 8px; */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 959px) {
+  .central-navigation {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100vw - 20px);
+    max-width: none;
+  }
+  
+  .navigation-container {
+    border-radius: 15px;
+    padding: 6px;
+  }
 }
 </style>
