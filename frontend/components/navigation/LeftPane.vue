@@ -27,7 +27,11 @@
           @conditions-updated="handleConditionsUpdate"
           @trigger-condition-visualization="handleConditionVisualization"
         />
-        
+        <QuickAccess 
+          :subtopics="currentTopicSubtopics"
+          :parent-slug="currentParentSlug"
+          :topic-title="currentTopicTitle"
+        />
       </div>
       
       <!-- Show quick access for content pages -->

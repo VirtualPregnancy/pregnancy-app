@@ -25,6 +25,16 @@
         "subTitle": "subSuccess",
         "model": { "name": "NoInfarct" }
       },
+      "interact-with-your-placenta": {
+        "title": "Interact With Your Placenta",
+        "showConditionSelector": true,
+        "heading": "Interact With Your Placenta",
+        "icon": "mdi-bowl-outline",
+        "dataFile": "interact-with-your-placenta",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": { "name": "NormalElectricity" }
+      },
       "fetal-dev": {
         "title": "Fetal Development",
         "showConditionSelector": false,

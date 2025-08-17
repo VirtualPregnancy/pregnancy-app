@@ -10,17 +10,7 @@
         </h4>
       </div>
     </div>
-    <div v-if="$showConditionSelector()">
-      <div class="conditions-panel">
-        <ConditionSelector
-          @conditions-changed="handleConditionsChanged"
-          @trigger-visualization="handleConditionVisualization"
-          @reset-to-normal="handleResetToNormal"
-          @panel-expanded="handleConditionsPanelExpanded"
-          @panel-collapsed="handleConditionsPanelCollapsed"
-        />
-      </div>
-    </div>
+   
     <!-- Show regular markdown content for all topics -->
     
     <div>
@@ -33,6 +23,17 @@
         >
 
       </div>
+      <div v-if="$showConditionSelector()">
+        <div class="conditions-panel">
+          <ConditionSelector
+            @conditions-changed="handleConditionsChanged"
+            @trigger-visualization="handleConditionVisualization"
+            @reset-to-normal="handleResetToNormal"
+            @panel-expanded="handleConditionsPanelExpanded"
+            @panel-collapsed="handleConditionsPanelCollapsed"
+          />
+        </div>
+      </div>
         <div v-if="!fileFound" class="error-message">
           <span>Data Not Found</span>
         </div>
@@ -40,6 +41,7 @@
           <div class="loading-placeholder pt-2">
             <v-skeleton-loader type="article" />
           </div>
+            
         </template>
       </client-only>
     </div>

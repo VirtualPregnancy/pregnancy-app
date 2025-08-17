@@ -13,7 +13,7 @@ import ultrasoundHow from './ultrasound-how.js';
 import conditionsBirth from './conditions-birth.js';
 import conditionsCare from './conditions-care.js';
 import keepBabyHealthy from './pregnancy-keep-baby-healthy.js';
-import interactWithPlacenta from './pregnancy-interact.js';
+import interactWithPlacenta from './pregnancy-interact-with-your-placenta.js';
 
 // Export page data mapping
 export default {
@@ -31,7 +31,7 @@ export default {
   'conditions-birth': conditionsBirth,
   'conditions-care': conditionsCare,
   'pregnancy-keep-baby-healthy': keepBabyHealthy,
-  'pregnancy-interact': interactWithPlacenta
+  'pregnancy-interact-with-your-placenta': interactWithPlacenta
 };
 
 // Helper function to get page data by slug
