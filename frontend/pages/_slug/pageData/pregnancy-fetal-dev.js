@@ -8,6 +8,7 @@ export default {
       title: "Fetal Development",
       icon: "mdi-baby-face",
       iconColor: "var(--v-primary-base)",
+      component: "PregnancyFetalDev"
     }
   ]
 };

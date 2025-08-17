@@ -1,7 +1,7 @@
 <template>
   <!-- All the data is in _slug/pageData -->
-  <div :class="mdAndUp ? 'h-screen w-screen full_main_content' : 'w-full h-screen small_main_content'" style="background-color: var(--v-background-base);">
-    <div class="max-w-4xl mx-auto p-6 md:p-8">
+  <div :class="mdAndUp ? ' w-full full_main_content' : 'w-full h-screen small_main_content'" style="background-color: var(--v-background-base);">
+    <div class="max-w-4xl mx-auto md:p-8 pb-32 md:pb-40">
       <!-- Header -->
       <div class="text-center mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -15,7 +15,7 @@
       <div class="space-y-6 mb-8">
         <!-- Single section article layout -->
         <div v-if="isSingleSection" class="w-full">
-          <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
+          <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-scroll">
             
             <div class="p-6 md:p-10">
               <!-- Use custom component if specified -->
@@ -102,14 +102,17 @@ import Logo from '@/components/support/Logo.vue';
 import UltrasoundWhatIsFetalDevelopment from '@/components/content/UltrasoundWhatIsFetalDevelopment.vue';
 import UltrasoundWhatIsPlacentaPosition from '@/components/content/UltrasoundWhatIsPlacentaPosition.vue';
 import UltrasoundDoppler from '@/components/content/UltrasoundDoppler.vue';
-
+import PregnancyFetalDev from '@/components/content/PregnancyFetalDev.vue';
+import PregnancyPersonalisedAssessment from '@/components/content/PregnancyPersonalisedAssessment.vue';
 export default {
   name: 'ContentPane',  
   components: {
     Logo,
     UltrasoundWhatIsFetalDevelopment,
     UltrasoundWhatIsPlacentaPosition,
-    UltrasoundDoppler
+    UltrasoundDoppler,
+    PregnancyFetalDev,
+    PregnancyPersonalisedAssessment
   },
   props: {
     pageTitle: {
@@ -213,7 +216,6 @@ export default {
 <style scoped>
 .full_main_content {
   background-color: var(--v-background-base);
-  padding-left: 35%;
   
 }
 .small_main_content {
@@ -261,7 +263,7 @@ export default {
 /* Content Animation */
 .section-content {
   max-height: 0;
-  overflow: hidden;
+  overflow: scroll;
   transition: all 0.3s ease;
   opacity: 0;
 }
@@ -327,7 +329,6 @@ export default {
 
 .content-text ::v-deep ul,
 .content-text ::v-deep ol {
-  margin-left: 1.5rem;
   margin-bottom: 1rem;
 }
 

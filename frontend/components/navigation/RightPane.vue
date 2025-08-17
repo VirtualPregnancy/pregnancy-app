@@ -1,7 +1,7 @@
 <template>
-  <div class="responsive-container">
+  <div class="responsive-container display-flex">
     <!-- Model Section -->
-    <div class="model-section" :class="{ 'model-section-mobile': !mdAndUp }">
+    <div class="model-section " :class="{ 'model-section-mobile': !mdAndUp }">
       <model
         ref="modelComponent"
         :use-tube-rendering="modelStates.useTubeRendering"
@@ -366,10 +366,11 @@ export default {
 <style scoped lang="scss">
 // Responsive Container
 .responsive-container {
-  width: 100vw;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: row;
+  width: 100%;
+  background-color: var(--v-background-base);
   
   @media (max-width: 768px) {
     flex-direction: column;
@@ -378,9 +379,10 @@ export default {
 
 // Model Section
 .model-section {
-  flex: 1;
   position: relative;
   min-height: 60vh;
+  width: 60dvw;
+  right: 10dvw;
   
   &.model-section-mobile {
     min-height: 40vh;
@@ -396,9 +398,10 @@ export default {
   top: 0;
   right: 0;
   height: 100vh;
-  width: 350px;
+  width: 25dvw;
   max-width: 30vw;
   padding: 15px;
+  padding-bottom: 120px; // Leave space for navigation
   overflow-y: auto;
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(10px);
@@ -414,6 +417,7 @@ export default {
     flex-direction: row;
     flex-wrap: wrap;
     padding: 10px;
+    padding-bottom: 100px; // Leave space for navigation on mobile
     border-left: none;
     border-top: 1px solid rgba(31, 102, 131, 0.2);
   }

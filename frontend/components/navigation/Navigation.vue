@@ -1,6 +1,6 @@
 <template>
   <div class="navi">
-    <div
+    <!-- <div
       v-if="subMenuActive"
       :class="$vuetify.breakpoint.smAndDown ? 'sub-menu' : ''"
     >
@@ -25,7 +25,7 @@
           <v-icon v-else>{{ subTopic.icon }}</v-icon>
         </v-btn>
       </v-bottom-navigation>
-    </div>
+    </div> -->
     <v-bottom-navigation
       grow
       :fixed="$vuetify.breakpoint.smAndDown ? true : false"
@@ -149,6 +149,7 @@ export default {
 .navi {
   position: relative;
   width: 100%;
+  z-index: 1000;
 }
 
 .sub-menu {

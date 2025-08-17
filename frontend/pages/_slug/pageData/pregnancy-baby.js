@@ -23,6 +23,19 @@ export default {
       icon: "mdi-baby-face",
       iconColor: "var(--v-primary-base)",
       content: "clinician/midwife checks."
+    },
+    {
+      id: "4",
+      title: "Ultrasound",
+      icon: "mdi-baby-face",
+      iconColor: "var(--v-primary-base)",
+      content: " <a href='/ultrasound-what-is-ultrasound'> Ultrasound </a> is a safe and important tool that uses sound waves to create images of your baby in the womb. It helps healthcare providers monitor your baby’s development and detect any potential issues throughout pregnancy. <br />  In New Zealand all pregnant people can have publicly funded ultrasounds at two important times in pregnancy – the end of the first trimester (~12 weeks of gestation), and in the middle of pregnancy <a href='/ultrasound-what-is-ultrasound'> (~20 weeks of gestation) </a> .  You may also be referred for an ultrasound later in pregnancy to check baby’s health more closely if your doctor/midwife has any concerns about their growth or health, or to check the baby’s position as birth nears. Our ultrasound tool [link to ultrasound page 3.d] helps visualise and explain more about what is being measured by ultrasound in pregnancy, and what this can mean."
+    },{
+      id: "5",
+      title: "Personalised assessment of pregnancy ",
+      icon: "mdi-baby-face",
+      iconColor: "var(--v-primary-base)",
+      component: "PregnancyPersonalisedAssessment"
     }
   ]
 };

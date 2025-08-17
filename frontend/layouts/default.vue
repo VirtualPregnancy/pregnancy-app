@@ -1,57 +1,53 @@
 <template>
   <v-app ref="base_background" class="root">
-    <div class="rightPanel">
-      <div>
-        <div class="pa-0">
+    <!-- Main Container: Upper and Lower sections -->
+    <div class="main-container">
+      
+      <!-- Upper Section: LeftPane + ContentPane -->
+      <div class="upper-section">
+        
+        <!-- Left Panel -->
+        <div class="left-panel" ref="leftPanel">
+          <v-card
+            outlined
+            tile
+            class="pa-0 overflow-y-auto h-full"
+            :class="mdAndUp ? 'panel-height' + multiplier : ''"
+          >
+            <left-pane 
+              :panel-height="panelHeight"
+              @trigger-model-visualization="handleModelVisualization"
+              @ultrasound-tool-ready="handleUltrasoundToolReady"
+              @conditions-updated="handleConditionsUpdate"
+              @trigger-condition-visualization="handleConditionVisualization"
+            />
+          </v-card>
+        </div>
+        
+        <!-- Content Panel -->
+        <div class="content-panel">
           <Nuxt />
         </div>
+        
       </div>
-    </div>
-    <div
-      class="firefox"
-      :class="mdAndUp ? 'outer-large' : 'outer-small'"
-      ref="leftPanel"
-    >
-      <div class="pa-0">
-        <v-row class="d-flex" no-gutters>
-          <v-col>
-            <div class="pa-0" :class="mdAndUp ? 'full-height' : 'auto-height'">
-              <v-row class="d-flex flex-column" no-gutters>
-                <v-col ref="panel" class="out-card">
-                  <v-card
-                    outlined
-                    tile
-                    class="pa-0 overflow-y-auto transparent"
-                    :class="mdAndUp ? 'panel-height' + multiplier : ''"
-                  >
-                    <left-pane 
-                      :panel-height="panelHeight"
-                      @trigger-model-visualization="handleModelVisualization"
-                      @ultrasound-tool-ready="handleUltrasoundToolReady"
-                      @conditions-updated="handleConditionsUpdate"
-                      @trigger-condition-visualization="handleConditionVisualization"
-                    />
-                  </v-card>
-                </v-col>
-              </v-row>
-            </div>
-          </v-col>
-        </v-row>
-      </div>
-    </div>
-    
-    <!-- Central Navigation -->
-    <div class="central-navigation">
-      <div class="navigation-container">
+      
+      <!-- Lower Section: Navigation -->
+      <div class="lower-section">
         <navigation />
       </div>
+      
     </div>
   </v-app>
 </template>
 
 <script>
+import Navigation from '@/components/navigation/Navigation.vue';
+
 export default {
   name: "DefaultLayout",
+  components: {
+    Navigation
+  },
 
   data: () => {
     return {
@@ -69,33 +65,36 @@ export default {
   },
 
   mounted() {
-    // this.panelHeight = this.$refs.panel.clientHeight;
     const base_background = this.$refs.base_background.$el;
     const Copper = this.$Copper();
 
-    const updateFullscreen = () => {
+    // Set initial panel height (flexbox handles actual sizing)
+    this.panelHeight = window.innerHeight - 56; // viewport height minus nav height
+
+    // Store references for cleanup
+    this.handleResize = () => {
+      this.panelHeight = window.innerHeight - 56;
+    };
+
+    this.handleFullscreen = () => {
       setTimeout(() => {
-        this.panelHeight = this.$refs.panel.clientHeight;
+        this.panelHeight = window.innerHeight - 56;
       }, 200);
     };
 
-    document.addEventListener("fullscreenchange", () => {
-      updateFullscreen();
-    });
-
-    document.addEventListener("keydown", (e) => {
+    this.handleKeydown = (e) => {
       if (e.code === "KeyF") {
         Copper.fullScreenListenner(base_background);
       }
-    });
-  },
+    };
 
-  watch: {
-    panelHeight: (height) => {},
+    document.addEventListener("fullscreenchange", this.handleFullscreen);
+    document.addEventListener("keydown", this.handleKeydown);
+    window.addEventListener("resize", this.handleResize);
   },
 
   updated() {
-    this.panelHeight = this.$refs.panel.clientHeight;
+    // Panel height is now managed by CSS flexbox
   },
 
   created() {
@@ -150,6 +149,11 @@ export default {
 
   beforeDestroy() {
     this.$nuxt.$off("menu-height-changed");
+    
+    // Clean up event listeners
+    window.removeEventListener("resize", this.handleResize);
+    document.removeEventListener("fullscreenchange", this.handleFullscreen);
+    document.removeEventListener("keydown", this.handleKeydown);
   },
 };
 </script>
@@ -158,78 +162,56 @@ export default {
 .root {
   user-select: none;
 }
-.outer-large {
-  min-width: 409px;
-  width: 30vw;
-  position: fixed;
-  top: 0;
-  left: 0;
+
+// Main container: full height with flex layout
+.main-container {
   height: 100vh;
-}
-.outer-small {
-  width: 100vw;
-}
-.full-height {
-  height: 100vh;
-}
-.firefox {
-  z-index: 1;
-}
-.fix-it {
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  bottom: 0;
+  display: flex;
+  flex-direction: column;
 }
 
+// Upper section: takes remaining space, horizontal split
+.upper-section {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+// Left panel: fixed width on desktop, full width on mobile
+.left-panel {
+  width: 30vw;
+  min-width: 409px;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  
+  @media (max-width: 960px) {
+    width: 100vw;
+    min-width: unset;
+    border-right: none;
+  }
+}
+
+// Content panel: takes remaining space
+.content-panel {
+  flex: 1;
+  overflow-y: scroll;
+  
+  @media (max-width: 960px) {
+    display: none; // Hide on mobile, show only left panel
+  }
+}
+
+// Lower section: navigation bar
+.lower-section {
+  height: 56px;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+// Panel height calculations (adjusted for new layout)
 .panel-height1 {
-  height: 100dvh;
+  height: 100%;
 }
 .panel-height2 {
-  height: 100vh;
-}
-.transparent {
-  margin: 0;
-  padding: 0;
-  opacity: 0.8;
-}
-.out-card {
-  border-left: 1px solid black;
-  margin: 0;
-  padding: 0;
-}
-
-.rightPanel {
-  order: 2;
-}
-
-.central-navigation {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  width: auto;
-  max-width: 90vw;
-}
-
-.navigation-container {
-  backdrop-filter: blur(10px);
-  /* padding: 8px; */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-@media (max-width: 959px) {
-  .central-navigation {
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100vw - 20px);
-    max-width: none;
-  }
-  
-  .navigation-container {
-    border-radius: 15px;
-    padding: 6px;
-  }
+  height: 100%;
 }
 </style>

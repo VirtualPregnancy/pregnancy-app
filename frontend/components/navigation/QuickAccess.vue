@@ -1,52 +1,26 @@
 <template>
-  <div class="quick-access-container" v-if="contentSections.length > 1">
-    <!-- Header -->
+  <div class="quick-access-container" v-if="Object.keys(subtopics).length > 1">
     <div class="quick-access-header">
       <h3 class="section-title">
         <v-icon left color="accent">mdi-compass-outline</v-icon>
-        Quick Access
+        {{ topicTitle || 'Quick Access' }}
       </h3>
     </div>
 
-    <!-- Quick Access Buttons -->
-    <div class="access-buttons ">
+    <div class="access-buttons">
       <v-btn 
-        v-for="section in contentSections" 
-        :key="section.id"
-        class="access-btn " 
-        color="var(--v-background-base)" 
+        v-for="(subtopic, key) in subtopics" 
+        :key="key"
+        class="access-btn" 
+        :color="getSubtopicColor(subtopic.category)"
         large 
         block
-        
-        @click="scrollToSection(section.id)"
-       
+        :to="{ name: 'slug', params: { slug: `${parentSlug}-${key}` }}"
+        style="white-space: normal !important; height: auto !important;"
       >
-        <v-icon left :color="section.iconColor">{{ section.icon }}</v-icon>
-        {{ section.title }}
+        <v-icon left>{{ subtopic.icon }}</v-icon>
+        <span class="btn-text">{{ subtopic.heading }}</span>
       </v-btn>
-    </div>
-
-    <!-- Additional Cards Quick Access -->
-    <div v-if="cards && cards.length > 0" class="cards-section">
-      <h4 class="cards-title">
-        <v-icon left color="primary">mdi-card-text-outline</v-icon>
-        Resources
-      </h4>
-      
-      <div class="cards-buttons">
-        <v-btn 
-          v-for="(card, index) in cards" 
-          :key="'card-' + index"
-          class="card-btn" 
-          :color="getCardBtnColor(card.backgroundColor)" 
-          outlined
-          block
-          @click="scrollToCards"
-        >
-          <v-icon left :color="card.iconColor">{{ card.icon }}</v-icon>
-          {{ card.title }}
-        </v-btn>
-      </div>
     </div>
   </div>
 </template>
@@ -56,61 +30,29 @@ export default {
   name: "QuickAccess",
   
   props: {
-    contentSections: {
-      type: Array,
-      default: () => []
+    subtopics: {
+      type: Object,
+      default: () => ({})
     },
-    cards: {
-      type: Array,
-      default: () => []
+    parentSlug: {
+      type: String,
+      default: ''
     },
-    
+    topicTitle: {
+      type: String,
+      default: ''
+    }
   },
 
   methods: {
-    scrollToSection(sectionId) {
-      // Emit event to parent to expand the specific section
-      this.$nuxt.$emit('scroll-to-content-section', sectionId);
-      
-      // Scroll to the section in the content pane
-      this.$nextTick(() => {
-        setTimeout(() => {
-          const element = document.querySelector(`[data-section-id="${sectionId}"]`);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 300);
-      });
-    },
-
-    scrollToCards() {
-      // Scroll to the cards section
-      this.$nextTick(() => {
-        const element = document.querySelector('.grid.md\\:grid-cols-2');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    },
-
-    getBtnColor(iconColor) {
-      // Convert CSS variable colors to Vuetify color names
-      if (iconColor && iconColor.includes('primary')) return 'primary';
-      if (iconColor && iconColor.includes('success')) return 'success';
-      if (iconColor && iconColor.includes('warning')) return 'warning';
-      if (iconColor && iconColor.includes('error')) return 'error';
-      if (iconColor && iconColor.includes('accent')) return 'accent';
-      return 'primary'; // default
-    },
-
-    getCardBtnColor(backgroundColor) {
-      // Convert CSS variable colors to Vuetify color names for outlined buttons
-      if (backgroundColor && backgroundColor.includes('success')) return 'success';
-      if (backgroundColor && backgroundColor.includes('primary')) return 'primary';
-      if (backgroundColor && backgroundColor.includes('warning')) return 'warning';
-      if (backgroundColor && backgroundColor.includes('error')) return 'error';
-      if (backgroundColor && backgroundColor.includes('accent')) return 'accent';
-      return 'primary'; // default
+    getSubtopicColor(category) {
+      const colorMap = {
+        success: 'success',
+        warning: 'warning',
+        error: 'error',
+        primary: 'primary'
+      };
+      return colorMap[category] || 'primary';
     }
   }
 };
@@ -118,11 +60,11 @@ export default {
 
 <style scoped lang="scss">
 .quick-access-container {
-  padding: 20px;
+  padding: 15px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .quick-access-header {
@@ -143,15 +85,33 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  padding: 0.5rem;
   
   .access-btn {
-    height: 50px;
+    min-height: 50px;
+    height: auto;
     font-size: 0.95rem;
     font-weight: 500;
     text-transform: none;
     justify-content: flex-start;
-    padding-left: 20px;
+    padding: 12px 15px;
+    white-space: normal !important;
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+    
+    .btn-text {
+      white-space: normal !important;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      line-height: 1.3;
+      flex: 1;
+      display: block;
+      text-align: left;
+      hyphens: auto;
+    }
     
     &:hover {
       transform: translateX(4px);
@@ -181,7 +141,6 @@ export default {
   gap: 10px;
   
   .card-btn {
-    height: 45px;
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: none;
@@ -207,8 +166,14 @@ export default {
   }
   
   .access-buttons .access-btn {
-    height: 45px;
+    min-height: 45px;
+    height: auto;
     font-size: 0.9rem;
+    padding: 10px 12px;
+    
+    .btn-text {
+      line-height: 1.2;
+    }
   }
   
   .cards-buttons .card-btn {

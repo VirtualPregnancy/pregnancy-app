@@ -22,6 +22,7 @@
       </div>
     </div>
     <!-- Show regular markdown content for all topics -->
+    
     <div>
       <client-only>
         <div
@@ -29,7 +30,9 @@
           ref="markedDiv"
           class="pt-2 pt-xl-4 marked"
           v-html="markedText"
-        ></div>
+        >
+
+      </div>
         <div v-if="!fileFound" class="error-message">
           <span>Data Not Found</span>
         </div>
@@ -82,14 +85,62 @@ export default {
         });
       }
     },
-    refreshContent: function () {
+    async refreshContent() {
       const fileName = this.$dataFile();
+      //console.log(`[Panel] Attempting to load markdown file: ${fileName}.md`);
+      //console.log(`[Panel] Current route:`, this.$route);
+      //console.log(`[Panel] Current content:`, this.$store.getters.getCurrentContent);
+      
       try {
-        const panelData = require(`@/assets/data/markdown/${fileName}.md`);
-        this.fileFound = true;
-        this.currentPanel = panelData.default;
+        // Try dynamic import first (better for webpack)
+        const panelData = await import(`@/assets/data/markdown/${fileName}.md`);
+        //console.log(`[Panel] Dynamic import data:`, panelData);
+        
+        let content = '';
+        if (panelData && panelData.default) {
+          content = panelData.default;
+        } else if (typeof panelData === 'string') {
+          content = panelData;
+        }
+        
+        if (content && content.trim()) {
+          this.fileFound = true;
+          this.currentPanel = content;
+          //console.log(`[Panel] Successfully loaded markdown file: ${fileName}.md with content length:`, content.length);
+        } else {
+          this.fileFound = false;
+          this.currentPanel = '';
+          //console.warn(`[Panel] Markdown file loaded but no usable content: ${fileName}.md`);
+        }
       } catch (e) {
-        this.fileFound = false;
+        //console.error(`[Panel] Failed to load markdown file with dynamic import: ${fileName}.md`, e);
+        
+        // Fallback to require
+        try {
+          const panelData = require(`@/assets/data/markdown/${fileName}.md`);
+          //console.log(`[Panel] Fallback require data:`, panelData);
+          
+          let content = '';
+          if (typeof panelData === 'string') {
+            content = panelData;
+          } else if (panelData && panelData.default) {
+            content = panelData.default;
+          }
+          
+          if (content && content.trim()) {
+            this.fileFound = true;
+            this.currentPanel = content;
+            //console.log(`[Panel] Successfully loaded markdown file with require: ${fileName}.md`);
+          } else {
+            this.fileFound = false;
+            this.currentPanel = '';
+            //console.warn(`[Panel] Require fallback: no usable content: ${fileName}.md`);
+          }
+        } catch (requireError) {
+          //console.error(`[Panel] Both dynamic import and require failed for: ${fileName}.md`, requireError);
+          this.fileFound = false;
+          this.currentPanel = '';
+        }
       }
     },
     addVideoLinks: function () {
@@ -115,7 +166,7 @@ export default {
     
     // Handle metrics updates from the ultrasound tool
     handleMetricsUpdate(data) {
-      console.log('[Panel] Ultrasound metrics updated:', data);
+      //console.log('[Panel] Ultrasound metrics updated:', data);
       
       // Emit to parent components for potential handling
       // Note: ultrasound-metrics functionality removed
@@ -126,7 +177,7 @@ export default {
     
     // Handle model visualization requests from the ultrasound tool
     handleModelVisualization(data) {
-      console.log('[Panel] Model visualization requested:', data);
+      //console.log('[Panel] Model visualization requested:', data);
       
       // Emit to parent components (likely RightPane) to trigger model updates
       this.$emit('trigger-model-visualization', {
@@ -140,7 +191,7 @@ export default {
     
     // Handle ultrasound tool component mounting
     handleToolMounted(toolComponent) {
-      console.log('[Panel] Ultrasound tool mounted and ready');
+      //console.log('[Panel] Ultrasound tool mounted and ready');
       this.ultrasoundToolRef = toolComponent;
       
       // Emit to parent to notify that the interactive tool is ready
@@ -156,7 +207,7 @@ export default {
     
     // Handle pregnancy condition updates from the ultrasound tool
     handleConditionsUpdate(data) {
-      console.log('[Panel] Pregnancy conditions updated:', data);
+      //console.log('[Panel] Pregnancy conditions updated:', data);
       
       // Emit to parent components for potential handling
       this.$emit('conditions-updated', data);
@@ -167,7 +218,7 @@ export default {
     
     // Handle condition visualization requests from the ultrasound tool
     handleConditionVisualization(data) {
-      console.log('[Panel] Condition visualization requested:', data);
+      //console.log('[Panel] Condition visualization requested:', data);
       
       // Emit to parent components (likely RightPane) to trigger model updates
       this.$emit('trigger-condition-visualization', {
@@ -181,7 +232,7 @@ export default {
     
     // Handle condition changes from ConditionSelector
     handleConditionsChanged(data) {
-      console.log('[Panel] Conditions changed:', data);
+      //console.log('[Panel] Conditions changed:', data);
       
       // Forward to parent components
       this.$emit('conditions-updated', data);
@@ -192,7 +243,7 @@ export default {
     
     // Handle reset to normal from ConditionSelector
     handleResetToNormal() {
-      console.log('[Panel] Reset to normal conditions');
+      //console.log('[Panel] Reset to normal conditions');
       
       // Forward to parent components
       this.$emit('conditions-updated', { selectedConditions: [], reset: true });
@@ -200,19 +251,22 @@ export default {
     
     // Handle condition panel expansion
     handleConditionsPanelExpanded() {
-      console.log('[Panel] Conditions panel expanded');
+      //console.log('[Panel] Conditions panel expanded');
       // Optional: handle layout adjustments if needed
     },
     
     // Handle condition panel collapse
     handleConditionsPanelCollapsed() {
-      console.log('[Panel] Conditions panel collapsed');
+      //console.log('[Panel] Conditions panel collapsed');
       // Optional: handle layout adjustments if needed
     },
   },
 
   computed: {
     markedText() {
+      if (!this.currentPanel || typeof this.currentPanel !== 'string') {
+        return '';
+      }
       return marked(this.currentPanel);
     },
     
