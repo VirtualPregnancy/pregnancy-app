@@ -1,6 +1,6 @@
 <template>
   <!-- All the data is in _slug/pageData -->
-  <div :class="mdAndUp ? ' w-full full_main_content' : 'w-full h-screen small_main_content'" style="background-color: var(--v-background-base);">
+  <div :class="mdAndUp ? ' w-full h-screen full_main_content' : 'w-full small_main_content'" style="background-color: var(--v-background-base);">
     <div class="max-w-4xl mx-auto md:p-8 pb-32 md:pb-40">
       <!-- Header -->
       <div class="text-center mb-8">
@@ -220,7 +220,8 @@ export default {
 }
 .small_main_content {
   background-color: var(--v-background-base);
-  height: 80dvh;
+  min-height: 100vh;
+  padding-bottom: 120px; /* Extra space for navigation */
 }
 
 /* Section Cards */

@@ -170,11 +170,16 @@ export default {
   flex-direction: column;
 }
 
-// Upper section: takes remaining space, horizontal split
+// Upper section: takes remaining space, horizontal split on desktop, vertical on mobile
 .upper-section {
   flex: 1;
   display: flex;
   min-height: 0;
+  
+  @media (max-width: 960px) {
+    flex-direction: column;
+    overflow-y: auto;
+  }
 }
 
 // Left panel: fixed width on desktop, full width on mobile
@@ -187,6 +192,8 @@ export default {
     width: 100vw;
     min-width: unset;
     border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    flex-shrink: 0;
   }
 }
 
@@ -196,7 +203,9 @@ export default {
   overflow-y: scroll;
   
   @media (max-width: 960px) {
-    display: none; // Hide on mobile, show only left panel
+    width: 100vw;
+    min-height: 100vh;
+    overflow-y: visible;
   }
 }
 
