@@ -195,5 +195,33 @@
         }
       }
     }
+  },
+  "support": {
+    "title": "Pregnancy Support",
+    "heading": "Pregnancy Support Services",
+    "icon": "mdi-account-group",
+    "content": "This application provides comprehensive information about support services available for pregnant people and their whānau throughout Aotearoa New Zealand.",
+    "subTopics": {
+      "services": {
+        "title": "For Everyone Pregnant",
+        "heading": "For Everyone Pregnant",
+        "icon": "mdi-account-group",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": {
+          "name": "NoInfarct"
+        }
+      },
+      "specialist": {
+        "title": "Specialist Services",
+        "heading": "Specialist Services",
+        "icon": "mdi-account-group",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": {
+          "name": "NoInfarct"
+        }
+      }
+    }
   }
 }

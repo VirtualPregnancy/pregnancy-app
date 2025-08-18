@@ -92,7 +92,6 @@
           <div class="text--secondary">
             Auckland Bioengineering Institute<br>
             University of Auckland<br>
-            <Logo />
           </div>
         </div>
       </div>
@@ -101,11 +100,9 @@
 </template>
 
 <script>
-import Logo from '@/components/support/Logo.vue';
 export default {
-  name: "Support",
+  name: "SupportLeft",
   components: {
-    Logo
   },
   methods: {
     scrollToSection(sectionId) {

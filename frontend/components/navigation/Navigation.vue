@@ -52,15 +52,6 @@
         />
         <v-icon v-else>{{ topic.icon }}</v-icon>
       </v-btn>
-      <v-btn
-        class="button-default button-main-topic"
-        :to="{ name: 'support' }"
-        @click="updateSupport()"
-        :value="'support'"
-      >
-        <span>Pregnancy Support</span>
-        <v-icon>mdi-account-group</v-icon>
-      </v-btn>
     </v-bottom-navigation>
   </div>
 </template>

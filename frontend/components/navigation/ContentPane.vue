@@ -98,23 +98,23 @@
 </template>
 
 <script>
-import Logo from '@/components/support/Logo.vue';
 import UltrasoundWhatIsFetalDevelopment from '@/components/content/UltrasoundWhatIsFetalDevelopment.vue';
 import UltrasoundWhatIsPlacentaPosition from '@/components/content/UltrasoundWhatIsPlacentaPosition.vue';
 import UltrasoundDoppler from '@/components/content/UltrasoundDoppler.vue';
 import UltrasoundDopplerMetrics from '@/components/content/UltrasoundDopplerMetrics.vue';
 import PregnancyFetalDev from '@/components/content/PregnancyFetalDev.vue';
 import PregnancyPersonalisedAssessment from '@/components/content/PregnancyPersonalisedAssessment.vue';
+import Support from '@/components/content/Support.vue';
 export default {
   name: 'ContentPane',  
   components: {
-    Logo,
     UltrasoundWhatIsFetalDevelopment,
     UltrasoundWhatIsPlacentaPosition,
     UltrasoundDoppler,
     UltrasoundDopplerMetrics,
     PregnancyFetalDev,
-    PregnancyPersonalisedAssessment
+    PregnancyPersonalisedAssessment,
+    Support
   },
   props: {
     pageTitle: {

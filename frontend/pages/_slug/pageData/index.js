@@ -1,6 +1,5 @@
 // Individual page data imports
 import clinicalMidWife from './clinical-mid-wife.js';
-import support from './support.js';
 import pregnancyChanges from './pregnancy-changes.js';
 import conditionsFetal from './conditions-fetal.js';
 import fetalDevelopment from './pregnancy-fetal-dev.js';
@@ -15,12 +14,15 @@ import conditionsCare from './conditions-care.js';
 import keepBabyHealthy from './pregnancy-keep-baby-healthy.js';
 import interactWithPlacenta from './pregnancy-interact.js';
 import ultrasoundWhatUltrasoundMeans from './ultrasound-what-ultrasound-means.js';
+import support from './support.js';
+import supportSpecialist from './support-specialist.js';
 
 // Export page data mapping
 export default {
   'clinical-mid-wife': clinicalMidWife,
   'clinical-when-care-changes': clinicalWhenCareChanges,
-  'support': support,
+  'support-services': support,
+  'support-specialist': supportSpecialist,
   'pregnancy-changes': pregnancyChanges,
   'conditions-fetal': conditionsFetal,
   'pregnancy-fetal-dev': fetalDevelopment,

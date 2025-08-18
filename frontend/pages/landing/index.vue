@@ -77,7 +77,7 @@
               </div>
              
             </div>
-            <Logo />
+            
           </div>
         </div>
         
@@ -90,12 +90,10 @@
 <script>
 import landingPageData from '@/assets/data/landingPageData';
 import Menu from '@/components/landing/Menu.vue';
-import Logo from '@/components/support/Logo.vue';
 export default {
   layout: 'empty',
   components: {
-    Menu,
-    Logo
+    Menu
   },
   
   computed: {

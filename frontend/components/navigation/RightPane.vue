@@ -44,7 +44,6 @@
       <!-- Logo Section for Desktop -->
       <div v-if="mdAndUp" class="logo-section">
         <div class="logo-container">
-          <logo />
         </div>
       </div>
     </div>
