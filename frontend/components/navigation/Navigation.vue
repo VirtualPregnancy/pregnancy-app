@@ -1,6 +1,6 @@
 <template>
   <div class="navi">
-    <div
+    <!-- <div
       v-if="subMenuActive"
       :class="$vuetify.breakpoint.smAndDown ? 'sub-menu' : ''"
     >
@@ -25,7 +25,7 @@
           <v-icon v-else>{{ subTopic.icon }}</v-icon>
         </v-btn>
       </v-bottom-navigation>
-    </div>
+    </div> -->
     <v-bottom-navigation
       grow
       :fixed="$vuetify.breakpoint.smAndDown ? true : false"
@@ -149,6 +149,7 @@ export default {
 .navi {
   position: relative;
   width: 100%;
+  z-index: 1000;
 }
 
 .sub-menu {
@@ -176,7 +177,7 @@ export default {
   &.button-main-topic {
     height: auto !important;
     min-height: 56px !important;
-    font-size: 0.6rem !important;
+    font-size: 0.8rem !important;
     display: flex !important;
     flex-direction: column !important;
     border-left: 2px solid var(--v-secondary-darken1);
@@ -201,6 +202,18 @@ export default {
     background: var(--v-buttonSubmenu-base);
     border-left: 2px solid var(--v-secondary-darken1);
     color: #fff;  
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: normal;
+    word-wrap: wrap;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px;
     border-left: 2px solid #fff;
     &:hover {
       background: var(--v-buttonSubmenuActive-base) !important;

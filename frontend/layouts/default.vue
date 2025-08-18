@@ -1,56 +1,53 @@
 <template>
-  <v-app ref="base_background" class="root">
-    <div class="rightPanel">
-      <div>
-        <div class="pa-0">
+  <v-app ref="base_background" class="root" style="background-color: var(--v-background-base);">
+    <!-- Main Container: Upper and Lower sections -->
+    <div class="main-container">
+      
+      <!-- Upper Section: LeftPane + ContentPane -->
+      <div class="upper-section">
+        
+        <!-- Left Panel -->
+        <div class="left-panel" ref="leftPanel">
+          <v-card
+            outlined
+            tile
+            class="pa-0 overflow-y-auto h-full"
+            :class="mdAndUp ? 'panel-height' + multiplier : ''"
+          >
+            <left-pane 
+              :panel-height="panelHeight"
+              @trigger-model-visualization="handleModelVisualization"
+              @ultrasound-tool-ready="handleUltrasoundToolReady"
+              @conditions-updated="handleConditionsUpdate"
+              @trigger-condition-visualization="handleConditionVisualization"
+            />
+          </v-card>
+        </div>
+        
+        <!-- Content Panel -->
+        <div class="content-panel">
           <Nuxt />
         </div>
+        
       </div>
-    </div>
-    <div
-      class="firefox"
-      :class="mdAndUp ? 'outer-large' : 'outer-small'"
-      ref="leftPanel"
-    >
-      <div class="pa-0">
-        <v-row class="d-flex" no-gutters>
-          <v-col>
-            <div class="pa-0" :class="mdAndUp ? 'full-height' : 'auto-height'">
-              <v-row class="d-flex flex-column" no-gutters>
-                <v-col ref="panel" class="out-card">
-                  <v-card
-                    outlined
-                    tile
-                    class="pa-0 overflow-y-auto transparent"
-                    :class="mdAndUp ? 'panel-height' + multiplier : ''"
-                  >
-                    <left-pane 
-                      :panel-height="panelHeight"
-                      @trigger-model-visualization="handleModelVisualization"
-                      @ultrasound-tool-ready="handleUltrasoundToolReady"
-                      @conditions-updated="handleConditionsUpdate"
-                      @trigger-condition-visualization="handleConditionVisualization"
-                    />
-                  </v-card>
-                </v-col>
-                <v-col class="d-none d-md-block fix-it">
-                  <navigation />
-                </v-col>
-              </v-row>
-            </div>
-          </v-col>
-        </v-row>
-        <div class="d-md-none fixed left-0 bottom-0">
-          <navigation />
-        </div>
+      
+      <!-- Lower Section: Navigation -->
+      <div class="lower-section">
+        <navigation />
       </div>
+      
     </div>
   </v-app>
 </template>
 
 <script>
+import Navigation from '@/components/navigation/Navigation.vue';
+
 export default {
   name: "DefaultLayout",
+  components: {
+    Navigation
+  },
 
   data: () => {
     return {
@@ -68,33 +65,36 @@ export default {
   },
 
   mounted() {
-    // this.panelHeight = this.$refs.panel.clientHeight;
     const base_background = this.$refs.base_background.$el;
     const Copper = this.$Copper();
 
-    const updateFullscreen = () => {
+    // Set initial panel height (flexbox handles actual sizing)
+    this.panelHeight = window.innerHeight - 56; // viewport height minus nav height
+
+    // Store references for cleanup
+    this.handleResize = () => {
+      this.panelHeight = window.innerHeight - 56;
+    };
+
+    this.handleFullscreen = () => {
       setTimeout(() => {
-        this.panelHeight = this.$refs.panel.clientHeight;
+        this.panelHeight = window.innerHeight - 56;
       }, 200);
     };
 
-    document.addEventListener("fullscreenchange", () => {
-      updateFullscreen();
-    });
-
-    document.addEventListener("keydown", (e) => {
+    this.handleKeydown = (e) => {
       if (e.code === "KeyF") {
         Copper.fullScreenListenner(base_background);
       }
-    });
-  },
+    };
 
-  watch: {
-    panelHeight: (height) => {},
+    document.addEventListener("fullscreenchange", this.handleFullscreen);
+    document.addEventListener("keydown", this.handleKeydown);
+    window.addEventListener("resize", this.handleResize);
   },
 
   updated() {
-    this.panelHeight = this.$refs.panel.clientHeight;
+    // Panel height is now managed by CSS flexbox
   },
 
   created() {
@@ -149,6 +149,11 @@ export default {
 
   beforeDestroy() {
     this.$nuxt.$off("menu-height-changed");
+    
+    // Clean up event listeners
+    window.removeEventListener("resize", this.handleResize);
+    document.removeEventListener("fullscreenchange", this.handleFullscreen);
+    document.removeEventListener("keydown", this.handleKeydown);
   },
 };
 </script>
@@ -157,43 +162,67 @@ export default {
 .root {
   user-select: none;
 }
-.outer-large {
-  min-width: 409px;
-  width: 30vw;
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-.outer-small {
-  width: 100vw;
-}
-.firefox {
-  z-index: 1;
-}
-.fix-it {
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  bottom: 0;
+
+// Main container: full height with flex layout
+.main-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
+// Upper section: takes remaining space, horizontal split on desktop, vertical on mobile
+.upper-section {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  height: 100%;
+  
+  @media (max-width: 960px) {
+    flex-direction: column;
+    overflow-y: auto;
+  }
+}
+
+// Left panel: fixed width on desktop, full width on mobile
+.left-panel {
+  width: 30vw;
+  min-width: 409px;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: var(--v-background-base);
+  
+  @media (max-width: 960px) {
+    width: 100vw;
+    min-width: unset;
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    flex-shrink: 0;
+  }
+}
+
+// Content panel: takes remaining space
+.content-panel {
+  flex: 1;
+  overflow-y: scroll;
+  
+  @media (max-width: 960px) {
+    width: 100vw;
+    min-height: 100vh;
+    overflow-y: visible;
+  }
+}
+
+// Lower section: navigation bar
+.lower-section {
+  height: 56px;
+  flex-shrink: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+// Panel height calculations (adjusted for new layout)
 .panel-height1 {
-  height: calc(100vh - 56px);
+  height: 100%;
 }
 .panel-height2 {
-  height: calc(100vh - 112px);
-}
-.transparent {
-  margin: 0;
-  padding: 0;
-  opacity: 0.8;
-}
-.out-card {
-  border-left: 1px solid black;
-  margin: 0;
-  padding: 0;
-}
-
-.rightPanel {
-  order: 2;
+  height: 100%;
 }
 </style>

@@ -194,12 +194,13 @@ export default {
   generate: {
     dir: "build",
     fallback: true,
-    //todo: modify routes afterwards
     routes: [
       // Modify these routes, when you config your routes for app
       "/pregnancy-changes",
       "/pregnancy-placenta",
       "/pregnancy-baby",
+      "/pregnancy-fetal-dev",
+      "/pregnancy-keep-baby-healthy",
       "/conditions-fetal",
       "/conditions-birth", 
       "/conditions-care",

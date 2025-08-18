@@ -1,7 +1,7 @@
 <template>
   <!-- All the data is in _slug/pageData -->
-  <div :class="mdAndUp ? 'h-screen w-screen full_main_content' : 'w-full h-screen small_main_content'" style="background-color: var(--v-background-base);">
-    <div class="max-w-4xl mx-auto p-6 md:p-8">
+  <div :class="mdAndUp ? ' w-full h-100 full_main_content' : 'w-full small_main_content'" style="background-color: var(--v-background-base);">
+    <div class="max-w-4xl mx-auto md:p-8 pb-32 md:pb-40">
       <!-- Header -->
       <div class="text-center mb-8">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -92,7 +92,7 @@
           </v-card-text>
         </v-card>
       </div>
-      <Logo v-if="mdAndUp" class="logo" />
+      
     </div>
   </div>
 </template>
@@ -102,14 +102,19 @@ import Logo from '@/components/support/Logo.vue';
 import UltrasoundWhatIsFetalDevelopment from '@/components/content/UltrasoundWhatIsFetalDevelopment.vue';
 import UltrasoundWhatIsPlacentaPosition from '@/components/content/UltrasoundWhatIsPlacentaPosition.vue';
 import UltrasoundDoppler from '@/components/content/UltrasoundDoppler.vue';
-
+import UltrasoundDopplerMetrics from '@/components/content/UltrasoundDopplerMetrics.vue';
+import PregnancyFetalDev from '@/components/content/PregnancyFetalDev.vue';
+import PregnancyPersonalisedAssessment from '@/components/content/PregnancyPersonalisedAssessment.vue';
 export default {
   name: 'ContentPane',  
   components: {
     Logo,
     UltrasoundWhatIsFetalDevelopment,
     UltrasoundWhatIsPlacentaPosition,
-    UltrasoundDoppler
+    UltrasoundDoppler,
+    UltrasoundDopplerMetrics,
+    PregnancyFetalDev,
+    PregnancyPersonalisedAssessment
   },
   props: {
     pageTitle: {
@@ -213,12 +218,12 @@ export default {
 <style scoped>
 .full_main_content {
   background-color: var(--v-background-base);
-  padding-left: 35%;
   
 }
 .small_main_content {
   background-color: var(--v-background-base);
-  height: 80dvh;
+  min-height: 100vh;
+  padding-bottom: 120px; /* Extra space for navigation */
 }
 
 /* Section Cards */
@@ -261,7 +266,7 @@ export default {
 /* Content Animation */
 .section-content {
   max-height: 0;
-  overflow: hidden;
+  overflow: scroll;
   transition: all 0.3s ease;
   opacity: 0;
 }
@@ -282,14 +287,7 @@ export default {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-.logo {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 20dvh;
-  height: 10dvh;
-  z-index: 1000;
-}
+
 
 /* HTML Content Styles */
 .content-text ::v-deep a {
@@ -327,7 +325,6 @@ export default {
 
 .content-text ::v-deep ul,
 .content-text ::v-deep ol {
-  margin-left: 1.5rem;
   margin-bottom: 1rem;
 }
 

@@ -5,34 +5,28 @@
         <h1 class="pt-2 main-heading">
           {{ $parentTopic().heading }} 
         </h1>
-        <h4 :class="'sub-heading font-weight-black ' + $subTitle() + '--text'">
-          {{ $heading() }}
-        </h4>
       </div>
     </div>
-    <div v-if="$showConditionSelector()">
-      <div class="conditions-panel">
-        <ConditionSelector
-          @conditions-changed="handleConditionsChanged"
-          @trigger-visualization="handleConditionVisualization"
-          @reset-to-normal="handleResetToNormal"
-          @panel-expanded="handleConditionsPanelExpanded"
-          @panel-collapsed="handleConditionsPanelCollapsed"
-        />
-      </div>
-    </div>
-    <!-- Show regular markdown content for all topics -->
+   
     <div>
       <client-only>
         <div
-          v-if="fileFound"
-          ref="markedDiv"
+          v-if="$parentTopic().content"
           class="pt-2 pt-xl-4 marked"
-          v-html="markedText"
-        ></div>
-        <div v-if="!fileFound" class="error-message">
-          <span>Data Not Found</span>
+        >
+        {{ $parentTopic().content }}
+      </div>
+      <div v-if="$showConditionSelector()">
+        <div class="conditions-panel">
+          <ConditionSelector
+            @conditions-changed="handleConditionsChanged"
+            @trigger-visualization="handleConditionVisualization"
+            @reset-to-normal="handleResetToNormal"
+            @panel-expanded="handleConditionsPanelExpanded"
+            @panel-collapsed="handleConditionsPanelCollapsed"
+          />
         </div>
+      </div>
         <template #fallback>
           <div class="loading-placeholder pt-2">
             <v-skeleton-loader type="article" />
@@ -44,7 +38,6 @@
 </template>
 
 <script>
-import { marked } from "marked";
 import ConditionSelector from "../model/ConditionSelector.vue"
 
 export default {
@@ -55,7 +48,6 @@ export default {
     return {
       select: "",
       currentPanel: "",
-      fileFound: false,
       items: ["latest", "version 2.0", "version 1.0"],
       ultrasoundToolRef: null, // Reference to the ultrasound tool component
       isClient: false, // Track if we're on client side
@@ -82,40 +74,10 @@ export default {
         });
       }
     },
-    refreshContent: function () {
-      const fileName = this.$dataFile();
-      try {
-        const panelData = require(`@/assets/data/markdown/${fileName}.md`);
-        this.fileFound = true;
-        this.currentPanel = panelData.default;
-      } catch (e) {
-        this.fileFound = false;
-      }
-    },
-    addVideoLinks: function () {
-      // Add video links for topics that have markdown content
-      if (this.fileFound && this.$refs.markedDiv) {
-        const markedDiv = this.$refs.markedDiv;
-        const links = markedDiv.getElementsByTagName("span");
-        let i;
-        for (i = 0; i < links.length; i++) {
-          let element = links[i];
-
-          if (element.getAttribute("data-aed-play") == "aed_img") {
-            element.addEventListener("click", () => {
-              this.$router.push("/electricity-healthy");
-            });
-          }
-          if (element.getAttribute("data-play") == "video") {
-            element.addEventListener("click", this.play);
-          }
-        }
-      }
-    },
     
     // Handle metrics updates from the ultrasound tool
     handleMetricsUpdate(data) {
-      console.log('[Panel] Ultrasound metrics updated:', data);
+      //console.log('[Panel] Ultrasound metrics updated:', data);
       
       // Emit to parent components for potential handling
       // Note: ultrasound-metrics functionality removed
@@ -126,7 +88,7 @@ export default {
     
     // Handle model visualization requests from the ultrasound tool
     handleModelVisualization(data) {
-      console.log('[Panel] Model visualization requested:', data);
+      //console.log('[Panel] Model visualization requested:', data);
       
       // Emit to parent components (likely RightPane) to trigger model updates
       this.$emit('trigger-model-visualization', {
@@ -140,7 +102,7 @@ export default {
     
     // Handle ultrasound tool component mounting
     handleToolMounted(toolComponent) {
-      console.log('[Panel] Ultrasound tool mounted and ready');
+      //console.log('[Panel] Ultrasound tool mounted and ready');
       this.ultrasoundToolRef = toolComponent;
       
       // Emit to parent to notify that the interactive tool is ready
@@ -156,7 +118,7 @@ export default {
     
     // Handle pregnancy condition updates from the ultrasound tool
     handleConditionsUpdate(data) {
-      console.log('[Panel] Pregnancy conditions updated:', data);
+      //console.log('[Panel] Pregnancy conditions updated:', data);
       
       // Emit to parent components for potential handling
       this.$emit('conditions-updated', data);
@@ -167,7 +129,7 @@ export default {
     
     // Handle condition visualization requests from the ultrasound tool
     handleConditionVisualization(data) {
-      console.log('[Panel] Condition visualization requested:', data);
+      //console.log('[Panel] Condition visualization requested:', data);
       
       // Emit to parent components (likely RightPane) to trigger model updates
       this.$emit('trigger-condition-visualization', {
@@ -181,7 +143,7 @@ export default {
     
     // Handle condition changes from ConditionSelector
     handleConditionsChanged(data) {
-      console.log('[Panel] Conditions changed:', data);
+      //console.log('[Panel] Conditions changed:', data);
       
       // Forward to parent components
       this.$emit('conditions-updated', data);
@@ -192,7 +154,7 @@ export default {
     
     // Handle reset to normal from ConditionSelector
     handleResetToNormal() {
-      console.log('[Panel] Reset to normal conditions');
+      //console.log('[Panel] Reset to normal conditions');
       
       // Forward to parent components
       this.$emit('conditions-updated', { selectedConditions: [], reset: true });
@@ -200,41 +162,31 @@ export default {
     
     // Handle condition panel expansion
     handleConditionsPanelExpanded() {
-      console.log('[Panel] Conditions panel expanded');
+      //console.log('[Panel] Conditions panel expanded');
       // Optional: handle layout adjustments if needed
     },
     
     // Handle condition panel collapse
     handleConditionsPanelCollapsed() {
-      console.log('[Panel] Conditions panel collapsed');
+      //console.log('[Panel] Conditions panel collapsed');
       // Optional: handle layout adjustments if needed
     },
   },
 
-  computed: {
-    markedText() {
-      return marked(this.currentPanel);
-    },
-    
-  },
-
   mounted() {
     this.isClient = true;
-    this.refreshContent();
-    this.addVideoLinks();
   },
 
   created() {
     // Only run on client side to avoid SSR mismatch
     if (process.client) {
-      this.refreshContent();
+      // Client-side initialization if needed
     }
   },
 
   updated() {
     if (this.isClient) {
-      this.refreshContent();
-      this.addVideoLinks();
+      // Client-side updates if needed
     }
   },
 };
@@ -254,6 +206,7 @@ export default {
   // v-secondary-base
   background: rgba(34, 155, 34, 1);
 }
+
 // .primary--text {
 //   // color: var(--v-secondary-base) !important;
 //   // caret-color: var(--v-secondary-base) !important;

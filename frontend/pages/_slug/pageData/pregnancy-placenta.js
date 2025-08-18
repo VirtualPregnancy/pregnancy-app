@@ -3,6 +3,17 @@ export default {
   description: 'Understanding the vital functions of the placenta in supporting your baby\'s growth and development throughout pregnancy.',
   showModel: false,
   contentSections: [
-    
+    {
+      id: "1",
+      title: "Placenta",
+      icon: "mdi-baby-face",
+      iconColor: "var(--v-primary-base)",
+      content: "The placenta (whenua) is an organ grown by your baby from the very start of pregnancy.  It plays essential roles in adapt your body to <a href='/pregnancy-changes'>  support pregnancy </a> by secreting hormones and other signals that can change how your heart, blood vessels, and immune system are operating. <br />"+ 
+"The placenta’s other very important job is as an exchange organ that takes up nutrients and oxygen from your blood stream and transports them to the baby, while also removing waste products from the baby’s blood back into your body. "+
+"<br /> Your placenta will be delivered after your baby, and often appears about the size of a dinner plate, and around 4cm thick – although not all placentas are round, and even unusual looking placentas can do a great job at growing a healthy baby. "+
+"<br /> Whilst it might appear like a solid organ if you see it after delivery, the placenta is actually built like a very complex and tightly packed tree. Maternal blood flows around the outside of the tree, whilst the baby’s blood flows in blood vessels inside the branches.  This means your blood stream never mixes with that of your baby’s, but rather nutrients and oxygen are passed across the outer surface layer of the tree.  "+
+"<br /> The branching tree structure means that the placenta has a huge surface area across which this exchange can happen – if the surface was stretched out it would be as large as half a tennis court.  "+
+"<br /> Some of the most important parts of placental development happen early in pregnancy (in the first trimester), when the foundations of the placentas structure are laid down.  This makes early pregnancy a very important time for <a href='/pregnancy-keep-baby-healthy'> setting up a healthy pregnancy </a> "
+    }
   ]
 };

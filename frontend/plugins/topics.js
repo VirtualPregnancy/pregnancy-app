@@ -55,6 +55,7 @@ function getContentBySlug(slug) {
             slug: topicKey,
             heading: topic.heading,
             title: topic.title,
+            content: topic.content,
             showConditionSelector: topic.showConditionSelector,
           },
         };
@@ -88,7 +89,6 @@ function isSubTopicDisabled(subTopic) {
     subTopic.title == null ||
     subTopic.heading == null ||
     subTopic.icon == null ||
-    subTopic.dataFile == null ||
     subTopic.category == null ||
     subTopic.model == null
   );

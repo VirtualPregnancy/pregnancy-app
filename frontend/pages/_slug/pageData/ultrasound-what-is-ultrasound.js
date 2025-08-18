@@ -1,6 +1,6 @@
 export default {
   title: 'What is ultrasound, and what does it measure?',
-  description: 'Ultrasound allows healthcare providers to measure and assess several key aspects of pregnancy:',
+  description: 'Ultrasound is a safe and widely used imaging technique during pregnancy that uses high-frequency sound waves to create real-time pictures of the baby inside the womb. Unlike X-rays, it doesn’t use radiation, making it ideal for monitoring fetal development throughout pregnancy. <br />Ultrasound allows healthcare providers to measure and assess several key aspects of pregnancy:',
   showModel: false,
   // Content sections are the expandable sections in the content pane
   contentSections: [
@@ -24,7 +24,7 @@ export default {
       title: "3D or 4D ultrasound",
       icon: "mdi-video-3d",
       iconColor: "var(--v-primary-base)",
-      content:"Some clinics may offer 3D or 4D ultrasound as an optional add on (not covered by public funding in New Zealand). In 3D ultrasound, multiple angles of flat 2D images are captured and used to create a more lifelike and detailed 3D image of your baby. 4D ultrasound builds on this by creating a live video of your baby in the womb, allowing you to see your baby’s movements in real time, such as yawning, stretching, or smiling.  3D and 4D ultrasound imaging are not generally used for medical or diagnostic purposes."
+      content:"Some clinics may offer 3D or 4D ultrasound as an optional add on (not covered by public funding in New Zealand), but these are not generally used for medical or diagnostic purposes. <br /> <br /> In 3D ultrasound, multiple angles of flat 2D images are captured and used to create a more lifelike and detailed 3D image of your baby.  <br /> <br />4D ultrasound builds on this by creating a live video of your baby in the womb, allowing you to see your baby’s movements in real time, such as yawning, stretching, or smiling.  "
 
     },
     {

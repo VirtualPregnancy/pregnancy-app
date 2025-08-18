@@ -1,50 +1,25 @@
 <template>
-  <div class="quick-access-container" v-if="contentSections.length > 1">
-    <!-- Header -->
+  <div class="quick-access-container" v-if="Object.keys(subtopics).length > 1">
     <div class="quick-access-header">
       <h3 class="section-title">
         <v-icon left color="accent">mdi-compass-outline</v-icon>
-        Quick Access
+        {{ topicTitle || 'Quick Access' }}
       </h3>
     </div>
 
-    <!-- Quick Access Buttons -->
     <div class="access-buttons">
       <v-btn 
-        v-for="section in contentSections" 
-        :key="section.id"
+        v-for="(subtopic, key) in subtopics" 
+        :key="key"
         class="access-btn" 
-        color="var(--v-background-base)" 
+        :color="getSubtopicColor(subtopic.category)"
         large 
         block
-        @click="scrollToSection(section.id)"
+        :to="{ name: 'slug', params: { slug: `${parentSlug}-${key}` }}"
       >
-        <v-icon left :color="section.iconColor">{{ section.icon }}</v-icon>
-        {{ section.title }}
+        <v-icon left>{{ subtopic. icon }}</v-icon>
+        <span class="btn-text">{{ subtopic.heading }}</span>
       </v-btn>
-    </div>
-
-    <!-- Additional Cards Quick Access -->
-    <div v-if="cards && cards.length > 0" class="cards-section">
-      <h4 class="cards-title">
-        <v-icon left color="primary">mdi-card-text-outline</v-icon>
-        Resources
-      </h4>
-      
-      <div class="cards-buttons">
-        <v-btn 
-          v-for="(card, index) in cards" 
-          :key="'card-' + index"
-          class="card-btn" 
-          :color="getCardBtnColor(card.backgroundColor)" 
-          outlined
-          block
-          @click="scrollToCards"
-        >
-          <v-icon left :color="card.iconColor">{{ card.icon }}</v-icon>
-          {{ card.title }}
-        </v-btn>
-      </div>
     </div>
   </div>
 </template>
@@ -54,61 +29,29 @@ export default {
   name: "QuickAccess",
   
   props: {
-    contentSections: {
-      type: Array,
-      default: () => []
+    subtopics: {
+      type: Object,
+      default: () => ({})
     },
-    cards: {
-      type: Array,
-      default: () => []
+    parentSlug: {
+      type: String,
+      default: ''
     },
-    
+    topicTitle: {
+      type: String,
+      default: ''
+    }
   },
 
   methods: {
-    scrollToSection(sectionId) {
-      // Emit event to parent to expand the specific section
-      this.$nuxt.$emit('scroll-to-content-section', sectionId);
-      
-      // Scroll to the section in the content pane
-      this.$nextTick(() => {
-        setTimeout(() => {
-          const element = document.querySelector(`[data-section-id="${sectionId}"]`);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 300);
-      });
-    },
-
-    scrollToCards() {
-      // Scroll to the cards section
-      this.$nextTick(() => {
-        const element = document.querySelector('.grid.md\\:grid-cols-2');
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    },
-
-    getBtnColor(iconColor) {
-      // Convert CSS variable colors to Vuetify color names
-      if (iconColor && iconColor.includes('primary')) return 'primary';
-      if (iconColor && iconColor.includes('success')) return 'success';
-      if (iconColor && iconColor.includes('warning')) return 'warning';
-      if (iconColor && iconColor.includes('error')) return 'error';
-      if (iconColor && iconColor.includes('accent')) return 'accent';
-      return 'primary'; // default
-    },
-
-    getCardBtnColor(backgroundColor) {
-      // Convert CSS variable colors to Vuetify color names for outlined buttons
-      if (backgroundColor && backgroundColor.includes('success')) return 'success';
-      if (backgroundColor && backgroundColor.includes('primary')) return 'primary';
-      if (backgroundColor && backgroundColor.includes('warning')) return 'warning';
-      if (backgroundColor && backgroundColor.includes('error')) return 'error';
-      if (backgroundColor && backgroundColor.includes('accent')) return 'accent';
-      return 'primary'; // default
+    getSubtopicColor(category) {
+      const colorMap = {
+        success: 'success',
+        warning: 'warning',
+        error: 'error',
+        primary: 'primary'
+      };
+      return colorMap[category] || 'primary';
     }
   }
 };
@@ -116,11 +59,11 @@ export default {
 
 <style scoped lang="scss">
 .quick-access-container {
-  padding: 20px;
+  padding: 15px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .quick-access-header {
@@ -141,15 +84,58 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  padding: 0.5rem;
   
   .access-btn {
-    height: 50px;
-    font-size: 0.95rem;
+    min-height: 50px;
+    height: auto !important;
     font-weight: 500;
     text-transform: none;
     justify-content: flex-start;
-    padding-left: 20px;
+    text-align: left;
+    padding: 12px 16px !important;
+    
+    
+    ::v-deep .v-btn__content {
+      width: 100%;
+      height: auto !important;
+      white-space: normal !important;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      gap: 8px;
+      padding: 4px 0;
+    }
+    
+    
+    ::v-deep .v-icon {
+      margin-right: 0 !important;
+      margin-left: 0 !important;
+      flex-shrink: 0;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+    
+    .btn-text {
+      white-space: normal !important;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      width: 100%;
+      line-height: 1.4;
+      flex: 1;
+      display: block;
+      text-align: left;
+      font-size: 0.95rem;
+      
+     
+      word-wrap: break-word;
+      -webkit-hyphens: auto;
+      -moz-hyphens: auto;
+      -ms-hyphens: auto;
+    }
     
     &:hover {
       transform: translateX(4px);
@@ -179,7 +165,6 @@ export default {
   gap: 10px;
   
   .card-btn {
-    height: 45px;
     font-size: 0.9rem;
     font-weight: 500;
     text-transform: none;
@@ -193,7 +178,7 @@ export default {
   }
 }
 
-// Responsive design
+
 @media (max-width: 768px) {
   .quick-access-container {
     padding: 15px;
@@ -205,8 +190,17 @@ export default {
   }
   
   .access-buttons .access-btn {
-    height: 45px;
-    font-size: 0.9rem;
+    min-height: 45px;
+    padding: 10px 12px !important;
+    
+    ::v-deep .v-btn__content {
+      gap: 6px;
+    }
+    
+    .btn-text {
+      line-height: 1.3;
+      font-size: 0.9rem;
+    }
   }
   
   .cards-buttons .card-btn {
@@ -215,9 +209,18 @@ export default {
   }
 }
 
-// Custom button styles
-.v-btn {
+
+::v-deep .v-btn {
   text-transform: none !important;
   font-weight: 500 !important;
+  
+  &.access-btn {
+    white-space: normal !important;
+    
+    .v-btn__content {
+      white-space: normal !important;
+      height: auto !important;
+    }
+  }
 }
 </style>

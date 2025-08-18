@@ -1,6 +1,6 @@
 export default {
   title: "Doppler ultrasound in pregnancy",
-  description: "",
+  description: "Umbilical and uterine artery Doppler – why do we measure them, what do they normally look like, what does this mean for the baby?",
   showModel: false,
   contentSections: [
     {

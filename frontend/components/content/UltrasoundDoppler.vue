@@ -13,14 +13,14 @@
         >
           Doppler effect
         </v-btn>
-        to measure the movement of blood through vessels. In pregnancy, the main blood vessels that are checked by Doppler ultrasound are the uterine
+        to measure the movement of blood through vessels. In pregnancy, the main blood vessels that are checked by Doppler ultrasound are the 
         <v-btn 
           text 
           color="primary" 
           class="medical-term-btn"
           @click="showUterineDialog = true"
         >
-          artery
+        uterine artery
         </v-btn>
         and the
         <v-btn 
@@ -31,9 +31,9 @@
         >
           umbilical artery
         </v-btn>
-        . These vessels are chosen as they are large enough to easily image and produce useful information about downstream blood flow to the uterus and the placenta respectively. Sometimes if blood flow in the uterine or umbilical artery is abnormal Doppler ultrasound of some of the major blood vessels in the fetus may also be measured (usually the middle cerebral artery (MCA) which tells us about blood flow in the brain, or the ductus venosus (DV) which tells us about blood flow around the heart).
+        . These vessels are chosen as they are large enough to easily image and produce useful information about downstream blood flow to the uterus and the placenta respectively.  <br /> <br />Sometimes if blood flow in the uterine or umbilical artery is abnormal Doppler ultrasound of some of the major blood vessels in the fetus may also be measured (usually the middle cerebral artery (MCA) which tells us about blood flow in the brain, or the ductus venosis (DV) which tells us about blood flow around the wider fetal circulation).
 </p>
-        <p class="text-lg leading-relaxed mb-6">Doppler ultrasound produces a waveform shape across each heartbeat.  Each major vessel in the body produces a ‘signature’ shape, and your clinical team can use different measurements and features taken from the shape of these waveforms to understand if blood is flowing to the placenta and baby normally, or if it may be reduced.  </p>
+        <p class="text-lg leading-relaxed mb-6">Doppler ultrasound produces a signal in the form of a wave across each heartbeat. Interpreting the shape of that wave provides information about fetal health. Each major vessel in the body produces a ‘signature’ shape, and your clinical team can use different measurements and features taken from the shape of these waveforms to understand if blood is flowing to the placenta and baby normally, or if it may be reduced.  </p>
       
 
       <!-- Normal Doppler -->

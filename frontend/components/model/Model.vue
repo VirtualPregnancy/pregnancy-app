@@ -1,30 +1,31 @@
 <template>
-  <div class="model">
-    <!-- Only render in client-side to avoid SSR mismatch -->
-     <header class="model-info">{{modelName}}</header>
+  <div class="model-container">
+    <!-- Model Info Header -->
+    <header class="model-info">{{modelName}}</header>
+    
     <client-only>
-      <!-- 3D model container div, responsive sizing based on screen size -->
-      <div
+      <!-- 3D model container -->
+      <div class="model-viewport">
+        <div
           ref="baseDomObject"
           :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
-          style="width: 100%; height: 100%;"
         />
+      </div>
 
-        <div
+      <!-- Controls - positioned at bottom -->
+      <div
         ref="threeDControls"
         class="baseModelControl"
         :class="mdAndUp ? 'baseModelControl-md' : 'baseModelControl-sm'"
       >
         <div class="baseModelCB" :class="mdAndUp ? 'baseModelCB-md' : ''">
-         
           <img
             src="~/assets/images/gestures-icons.png"
             class="h-full w-full md:object-contain"
             @click="handleGestureIconClick"
             v-show="mdAndUp" 
-            style="background-color: #6C90B9; border-radius: 10px; padding: 10px; "
+            style="background-color: #6C90B9; border-radius: 10px; padding: 10px;"
           />
-          
         </div>
       </div>
       
@@ -242,11 +243,10 @@ export default {
       
         // Setup container with slight delay to ensure DOM is ready
         setTimeout(() => {
-          // Set responsive height based on screen size with null checks
+          // Set container size to match parent element
           if (baseContainer && this.container) {
-            this.mdAndUp
-              ? (baseContainer.style.height = "100vh")  // Full height on desktop
-              : (baseContainer.style.height = "100vw"); // Square on mobile
+            baseContainer.style.width = "100%";
+            baseContainer.style.height = "100%";
             
             this.container.appendChild(baseContainer);
           }
@@ -586,12 +586,15 @@ export default {
 <style scoped lang="scss">
 
 .baseModelControl {
-  width: 100vw;
-  height: 120px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: 70px;
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   
   .baseModelCB {
     width: 240px;
@@ -605,40 +608,60 @@ export default {
 }
 
 .baseModelControl-md {
-  position: fixed;
-  bottom: 10px;
-  padding-left: 100px;
+  // Desktop specific styles
+  bottom: 20px;
 }
 .baseModelControl-sm {
-  order: -1; // Move to the top of the stack
   height: 60px;
+  bottom: 10px;
+  
+  .baseModelCB {
+    width: 200px;
+    height: 60px;
+  }
 }
 
-.model-info{
-  font-size: 1.2em;
-  left:50%;
-  transform: translateX(-50%);
-  top:1%;
+.model-info {
   position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2em;
   color: black;
   z-index: 1000;
-
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 8px 16px;
+  border-radius: 4px;
 }
-.model {
+.model-container {
   position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--v-background-base);
+}
+
+.model-viewport {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
 }
 
 .baseDom-md {
-  width: 100%;
-  height: 100vh;
+  width: 80vw;
+  height: 80vh;
+  max-width: 800px;
+  max-height: 600px;
   background-color: var(--v-background-base);
 }
 
 .baseDom-sm {
-  width: 100%;
-  height: 100vw;
+  width: 90vw;
+  height: 70vh;
   background-color: var(--v-background-base);
 }
 
