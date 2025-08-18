@@ -1,1 +1,0 @@
-During pregnancy your baby will be checked on using ultrasound imaging.  This is a safe and widely used tool, that can help your midwife/doctor know that baby is healthy. This page helps you understand what ultrasound is and the different ways it is used and includes an interactive tool to help you understand your own ultrasound scan better. 

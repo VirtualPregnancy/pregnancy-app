@@ -5,23 +5,16 @@
         <h1 class="pt-2 main-heading">
           {{ $parentTopic().heading }} 
         </h1>
-        <!-- <h4 :class="'sub-heading font-weight-black ' + $subTitle() + '--text'">
-          {{ $heading() }}
-        </h4> -->
       </div>
     </div>
    
-    <!-- Show regular markdown content for all topics -->
-    
     <div>
       <client-only>
         <div
-          v-if="fileFound"
-          ref="markedDiv"
+          v-if="$parentTopic().content"
           class="pt-2 pt-xl-4 marked"
-          v-html="markedText"
         >
-
+        {{ $parentTopic().content }}
       </div>
       <div v-if="$showConditionSelector()">
         <div class="conditions-panel">
@@ -33,25 +26,18 @@
             @panel-collapsed="handleConditionsPanelCollapsed"
           />
         </div>
-        
       </div>
-        <div v-if="!fileFound" class="error-message">
-          <span>Data Not Found</span>
-        </div>
         <template #fallback>
           <div class="loading-placeholder pt-2">
             <v-skeleton-loader type="article" />
           </div>
-            
         </template>
-        
       </client-only>
     </div>
   </div>
 </template>
 
 <script>
-import { marked } from "marked";
 import ConditionSelector from "../model/ConditionSelector.vue"
 
 export default {
@@ -62,7 +48,6 @@ export default {
     return {
       select: "",
       currentPanel: "",
-      fileFound: false,
       items: ["latest", "version 2.0", "version 1.0"],
       ultrasoundToolRef: null, // Reference to the ultrasound tool component
       isClient: false, // Track if we're on client side
@@ -87,84 +72,6 @@ export default {
           name: "video",
           params: { videoId: event.target.id, originPath: routeStr },
         });
-      }
-    },
-    async refreshContent() {
-      const fileName = this.$dataFile();
-      //console.log(`[Panel] Attempting to load markdown file: ${fileName}.md`);
-      //console.log(`[Panel] Current route:`, this.$route);
-      //console.log(`[Panel] Current content:`, this.$store.getters.getCurrentContent);
-      
-      try {
-        // Try dynamic import first (better for webpack)
-        const panelData = await import(`@/assets/data/markdown/${fileName}.md`);
-        //console.log(`[Panel] Dynamic import data:`, panelData);
-        
-        let content = '';
-        if (panelData && panelData.default) {
-          content = panelData.default;
-        } else if (typeof panelData === 'string') {
-          content = panelData;
-        }
-        
-        if (content && content.trim()) {
-          this.fileFound = true;
-          this.currentPanel = content;
-          //console.log(`[Panel] Successfully loaded markdown file: ${fileName}.md with content length:`, content.length);
-        } else {
-          this.fileFound = false;
-          this.currentPanel = '';
-          //console.warn(`[Panel] Markdown file loaded but no usable content: ${fileName}.md`);
-        }
-      } catch (e) {
-        //console.error(`[Panel] Failed to load markdown file with dynamic import: ${fileName}.md`, e);
-        
-        // Fallback to require
-        try {
-          const panelData = require(`@/assets/data/markdown/${fileName}.md`);
-          //console.log(`[Panel] Fallback require data:`, panelData);
-          
-          let content = '';
-          if (typeof panelData === 'string') {
-            content = panelData;
-          } else if (panelData && panelData.default) {
-            content = panelData.default;
-          }
-          
-          if (content && content.trim()) {
-            this.fileFound = true;
-            this.currentPanel = content;
-            //console.log(`[Panel] Successfully loaded markdown file with require: ${fileName}.md`);
-          } else {
-            this.fileFound = false;
-            this.currentPanel = '';
-            //console.warn(`[Panel] Require fallback: no usable content: ${fileName}.md`);
-          }
-        } catch (requireError) {
-          //console.error(`[Panel] Both dynamic import and require failed for: ${fileName}.md`, requireError);
-          this.fileFound = false;
-          this.currentPanel = '';
-        }
-      }
-    },
-    addVideoLinks: function () {
-      // Add video links for topics that have markdown content
-      if (this.fileFound && this.$refs.markedDiv) {
-        const markedDiv = this.$refs.markedDiv;
-        const links = markedDiv.getElementsByTagName("span");
-        let i;
-        for (i = 0; i < links.length; i++) {
-          let element = links[i];
-
-          if (element.getAttribute("data-aed-play") == "aed_img") {
-            element.addEventListener("click", () => {
-              this.$router.push("/electricity-healthy");
-            });
-          }
-          if (element.getAttribute("data-play") == "video") {
-            element.addEventListener("click", this.play);
-          }
-        }
       }
     },
     
@@ -266,33 +173,20 @@ export default {
     },
   },
 
-  computed: {
-    markedText() {
-      if (!this.currentPanel || typeof this.currentPanel !== 'string') {
-        return '';
-      }
-      return marked(this.currentPanel);
-    },
-    
-  },
-
   mounted() {
     this.isClient = true;
-    this.refreshContent();
-    this.addVideoLinks();
   },
 
   created() {
     // Only run on client side to avoid SSR mismatch
     if (process.client) {
-      this.refreshContent();
+      // Client-side initialization if needed
     }
   },
 
   updated() {
     if (this.isClient) {
-      this.refreshContent();
-      this.addVideoLinks();
+      // Client-side updates if needed
     }
   },
 };

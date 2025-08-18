@@ -3,67 +3,74 @@
     "title": "Pregnancy Journey",
     "showConditionSelector": false,
     "heading": "What is Happening in Pregnancy?",
-    "icon": "/img/landing/pregnancy.svg",   
+    "content":"During pregnancy your body undergoes a remarkable transformation to accommodate the growth of new life. Here, you can find information on what is happening to your body, how the fetus grows and is nourished by the placenta, and the different ways your midwife or doctor may check on your baby’s health during pregnancy.",
+    "icon": "/img/landing/pregnancy.svg",
     "subTopics": {
       "changes": {
         "title": "Your Body",
         "showConditionSelector": false,
         "heading": "Changes To Your Body",
         "icon": "mdi-sine-wave",
-        "dataFile": "pregnancy-changes",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NoInfarct" }
+        "model": {
+          "name": "NoInfarct"
+        }
       },
       "placenta": {
         "title": "Placenta",
         "showConditionSelector": false,
         "heading": "Roles of the Placenta",
         "icon": "mdi-bowl-outline",
-        "dataFile": "roles-of-placenta",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NoInfarct" }
+        "model": {
+          "name": "NoInfarct"
+        }
       },
       "interact-with-your-placenta": {
         "title": "Interact With Your Placenta",
         "showConditionSelector": true,
         "heading": "Interact With Your Placenta",
         "icon": "mdi-bowl-outline",
-        "dataFile": "interact-with-your-placenta",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NormalElectricity" }
+        "model": {
+          "name": "NormalElectricity"
+        }
       },
       "fetal-dev": {
         "title": "Fetal Development",
         "showConditionSelector": false,
         "heading": "Fetal Development",
         "icon": "mdi-baby-face",
-        "dataFile": "fetal-development",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NoInfarct" }
+        "model": {
+          "name": "NoInfarct"
+        }
       },
       "keep-baby-healthy": {
         "title": "Keep Baby Healthy",
         "showConditionSelector": false,
         "heading": "Keep Baby Healthy",
-        "icon": "mdi-heart-plus", 
-        "dataFile": "keep-baby-healthy",
+        "icon": "mdi-heart-plus",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NoInfarct" }
+        "model": {
+          "name": "NoInfarct"
+        }
       },
       "baby": {
         "title": "Health Checks",
         "showConditionSelector": false,
         "heading": "How do we check on baby's health?",
         "icon": "mdi-baby-face-outline",
-        "dataFile": "check-baby-health",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NoInfarct" }
+        "model": {
+          "name": "NoInfarct"
+        }
       }
     }
   },
@@ -77,30 +84,33 @@
         "showConditionSelector": false,
         "heading": "Reduced Fetal Growth",
         "icon": "mdi-heart-minus",
-        "dataFile": "fetal-growth-restruction",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NoInfarct" }
+        "model": {
+          "name": "NoInfarct"
+        }
       },
       "birth": {
         "title": "Birth",
         "showConditionSelector": false,
         "heading": "What does having a pregnancy issue mean for how my baby might be born?",
         "icon": "mdi-baby-bottle-outline",
-        "dataFile": "baby-birth",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "SmallInfarct" }
+        "model": {
+          "name": "SmallInfarct"
+        }
       },
       "care": {
         "title": "Cares",
         "showConditionSelector": false,
         "heading": "When baby needs extra care after birth",
         "icon": "mdi-human-baby-changing-table",
-        "dataFile": "baby-care-after-birth",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "LargeInfarct" }
+        "model": {
+          "name": "LargeInfarct"
+        }
       }
     }
   },
@@ -109,46 +119,51 @@
     "showConditionSelector": false,
     "heading": "What does my ultrasound scan mean",
     "icon": "mdi-stethoscope",
+    "content":"During pregnancy your baby will be checked on using ultrasound imaging.  This is a safe and widely used tool, that can help your midwife/doctor know that baby is healthy. This page helps you understand what ultrasound is and the different ways it is used and includes an interactive tool to help you understand your own ultrasound scan better. ",
     "subTopics": {
       "what-is-ultrasound": {
         "title": "What Ultrasound Means",
         "showConditionSelector": true,
         "heading": "Ultrasound",
         "icon": "mdi-help-circle",
-        "dataFile": "what-is-ultrasound",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NormalElectricity" }
+        "model": {
+          "name": "NormalElectricity"
+        }
       },
       "doppler": {
         "title": "Doppler Ultrasound",
         "showConditionSelector": false,
         "heading": "Doppler Ultrasound in Pregnancy ",
         "icon": "mdi-chart-areaspline",
-        "dataFile": "ultrasound-doppler",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NormalElectricity" }
+        "model": {
+          "name": "NormalElectricity"
+        }
       },
       "how": {
         "title": "How ",
         "showConditionSelector": true,
         "heading": "How ultrasound can be used to detect pregnancy issues",
         "icon": "mdi-help-circle",
-        "dataFile": "how-ultrasound-works",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NormalElectricity" }
+        "model": {
+          "name": "NormalElectricity"
+        }
       },
       "what-ultrasound-means": {
         "title": "What Ultrasound Means",
         "showConditionSelector": false,
         "heading": "What does my ultrasound scan mean? ",
         "icon": "mdi-help-circle",
-        "dataFile": "what-ultrasound-means",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NormalElectricity" }
+        "model": {
+          "name": "NormalElectricity"
+        }
       }
     }
   },
@@ -162,20 +177,22 @@
         "showConditionSelector": false,
         "heading": "Midwife",
         "icon": "mdi-account-heart",
-        "dataFile": "clinical-care-mid-wife",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NoInfarct" }
+        "model": {
+          "name": "NoInfarct"
+        }
       },
       "when-care-changes": {
         "title": "When Care Changes",
         "showConditionSelector": false,
         "heading": "How clinical care pathways may change during your pregnancy if there are any concerns about mother or baby.",
         "icon": "mdi-heart-cog",
-        "dataFile": "when-care-changes",
         "category": "success",
         "subTitle": "subSuccess",
-        "model": { "name": "NoInfarct" }
+        "model": {
+          "name": "NoInfarct"
+        }
       }
     }
   }
