@@ -5,21 +5,13 @@
     are derived from certain parts of the waveform, and large clinical studies
     have allowed us to understand how these numbers relate to fetal health.
     <div class="d-flex flex-row gap-4 mt-4 mb-4 justify-center">
-      <v-card style="background: var(--v-accentLight-base); color: white">
-        <v-card-title style="color: white"> Resistive Index (RI) </v-card-title>
-        <v-card-text style="color: white"> </v-card-text>
-      </v-card>
-
-      <v-card style="background: var(--v-accent-base); color: white">
-        <v-card-title style="color: white">
-          Pulsatility index (PI)
-        </v-card-title>
-        <v-card-text style="color: white"> </v-card-text>
-      </v-card>
-
-      <v-card style="background: var(--v-success-base); color: white">
-        <v-card-title style="color: white"> S/D ratio </v-card-title>
-        <v-card-text style="color: white"> </v-card-text>
+      <v-card
+        v-for="item in cardItems"
+        :key="item.title"
+        :style="{ background: item.color, color: 'white' }"
+      >
+        <v-card-title style="color: white">{{ item.title }}</v-card-title>
+        <v-card-text style="color: white">{{ item.content }}</v-card-text>
       </v-card>
     </div>
     What may be a 'normal' or 'abnormal' value for each of these metrics varies
@@ -56,44 +48,15 @@
 
         <v-card-text class="pa-0">
           <v-tabs v-model="activeTab" centered color="primary">
-            <v-tab>
+            <v-tab v-for="item in dialogData" :key="item.title">
               <v-icon left>mdi-heart</v-icon>
-              Umbilical Artery
-            </v-tab>
-            <v-tab>
-              <v-icon left>mdi-water</v-icon>
-              Uterine Artery
+              {{ item.title }}
             </v-tab>
           </v-tabs>
 
           <v-tabs-items v-model="activeTab">
-            <!-- Umbilical Artery Table -->
-            <v-tab-item>
-              <div class="pa-6">
-                <v-alert
-                  type="info"
-                  outlined
-                  class="mb-4"
-                  style="border-color: var(--v-accent-base)"
-                >
-                  <div class="text-sm">
-                    <strong>Umbilical Artery:</strong> Lorem ipsum dolor sit
-                    amet, consectetur adipiscing elit. Sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua.
-                  </div>
-                </v-alert>
-
-                <v-data-table
-                  :headers="headers"
-                  :items="umbilicalData"
-                  hide-default-footer
-                  class="elevation-1"
-                />
-              </div>
-            </v-tab-item>
-
             <!-- Uterine Artery Table -->
-            <v-tab-item>
+            <v-tab-item v-for="item in dialogData" :key="item.title">
               <div class="pa-6">
                 <v-alert
                   type="info"
@@ -102,15 +65,13 @@
                   style="border-color: var(--v-accent-base)"
                 >
                   <div class="text-sm">
-                    <strong>Uterine Artery:</strong> Lorem ipsum dolor sit amet,
-                    consectetur adipiscing elit. Sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua.
+                    <strong>{{ item.title }}:</strong> {{ item.content }}
                   </div>
                 </v-alert>
 
                 <v-data-table
-                  :headers="headers"
-                  :items="uterineData"
+                  :headers="item.headers"
+                  :items="item.data"
                   hide-default-footer
                   class="elevation-1"
                 />
@@ -145,8 +106,86 @@ export default {
     return {
       showRangesDialog: false,
       activeTab: 0,
+      cardItems: [
+        {
+          title: "Resistive Index (RI)",
+          color: "var(--v-accentLight-base)",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        },
 
-      headers: [
+        {
+          title: "Pulsatility Index (PI)",
+          color: "var(--v-accent-base)",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        },
+
+        {
+          title: "S/D Ratio",
+          color: "var(--v-success-base)",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        },
+      ],
+      dialogData: {
+        umbilical: {
+          title: "Umbilical Artery",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          headers: [
+            {
+              text: "Gestational Age",
+              value: "gestation",
+              sortable: false,
+              width: "25%",
+            },
+            {
+              text: "Resistive Index (RI)",
+              value: "ri",
+              sortable: false,
+              width: "25%",
+            },
+            {
+              text: "Pulsatility Index (PI)",
+              value: "pi",
+              sortable: false,
+              width: "25%",
+            },
+            { text: "S/D Ratio", value: "sd", sortable: false, width: "25%" },
+          ],
+          data: [
+            {
+              gestation: "28-30 weeks",
+              ri: "0.60-0.75",
+              pi: "0.90-1.35",
+              sd: "2.5-4.0",
+            },
+            {
+              gestation: "31-33 weeks",
+              ri: "0.58-0.72",
+              pi: "0.85-1.30",
+              sd: "2.3-3.8",
+            },
+            {
+              gestation: "34-36 weeks",
+              ri: "0.55-0.70",
+              pi: "0.80-1.25",
+              sd: "2.0-3.5",
+            },
+            {
+              gestation: "37-40 weeks",
+              ri: "0.52-0.68",
+              pi: "0.75-1.20",
+              sd: "1.8-3.2",
+            },
+          ],
+        },
+        uterine: {
+          title: "Uterine Artery",
+          content:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            headers: [
         {
           text: "Gestational Age",
           value: "gestation",
@@ -168,34 +207,7 @@ export default {
         { text: "S/D Ratio", value: "sd", sortable: false, width: "25%" },
       ],
 
-      umbilicalData: [
-        {
-          gestation: "28-30 weeks",
-          ri: "0.60-0.75",
-          pi: "0.90-1.35",
-          sd: "2.5-4.0",
-        },
-        {
-          gestation: "31-33 weeks",
-          ri: "0.58-0.72",
-          pi: "0.85-1.30",
-          sd: "2.3-3.8",
-        },
-        {
-          gestation: "34-36 weeks",
-          ri: "0.55-0.70",
-          pi: "0.80-1.25",
-          sd: "2.0-3.5",
-        },
-        {
-          gestation: "37-40 weeks",
-          ri: "0.52-0.68",
-          pi: "0.75-1.20",
-          sd: "1.8-3.2",
-        },
-      ],
-
-      uterineData: [
+      data: [
         {
           gestation: "28-30 weeks",
           ri: "0.45-0.60",
@@ -221,6 +233,10 @@ export default {
           sd: "1.5-2.3",
         },
       ],
+        },
+      },
+
+      
     };
   },
 

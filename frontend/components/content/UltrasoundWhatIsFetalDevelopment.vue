@@ -95,8 +95,8 @@
       </v-card>
     </v-dialog>
 
-    <!-- Nuchal Translucency Dialog - Vuetify 2.x compatible -->
-    <v-dialog v-model="showNuchalDialog" max-width="500" persistent>
+    <!-- Nuchal Translucency Dialog  -->
+    <v-dialog v-model="showNuchalDialog" max-width="500" z-index="1000" persistent>
       <v-card>
         <v-card-title class="headline">
           <v-icon left color="info">mdi-ruler</v-icon>
