@@ -1,6 +1,6 @@
 <template>
   <!-- All the data is in _slug/pageData -->
-  <div :class="mdAndUp ? ' w-full h-screen full_main_content' : 'w-full small_main_content'" style="background-color: var(--v-background-base);">
+  <div :class="mdAndUp ? ' w-full h-100 full_main_content' : 'w-full small_main_content'" style="background-color: var(--v-background-base);">
     <div class="max-w-4xl mx-auto md:p-8 pb-32 md:pb-40">
       <!-- Header -->
       <div class="text-center mb-8">
@@ -15,7 +15,7 @@
       <div class="space-y-6 mb-8">
         <!-- Single section article layout -->
         <div v-if="isSingleSection" class="w-full">
-          <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-scroll">
+          <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
             
             <div class="p-6 md:p-10">
               <!-- Use custom component if specified -->

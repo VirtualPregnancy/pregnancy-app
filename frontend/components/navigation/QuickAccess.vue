@@ -16,9 +16,8 @@
         large 
         block
         :to="{ name: 'slug', params: { slug: `${parentSlug}-${key}` }}"
-        style="white-space: normal !important; height: auto !important;"
       >
-        <v-icon left>{{ subtopic.icon }}</v-icon>
+        <v-icon left>{{ subtopic. icon }}</v-icon>
         <span class="btn-text">{{ subtopic.heading }}</span>
       </v-btn>
     </div>
@@ -90,27 +89,52 @@ export default {
   
   .access-btn {
     min-height: 50px;
-    height: auto;
-    font-size: 0.95rem;
+    height: auto !important;
     font-weight: 500;
     text-transform: none;
     justify-content: flex-start;
-    padding: 12px 15px;
-    white-space: normal !important;
     text-align: left;
-    word-wrap: break-word;
-    overflow-wrap: anywhere;
-    hyphens: auto;
+    padding: 12px 16px !important;
+    
+    
+    ::v-deep .v-btn__content {
+      width: 100%;
+      height: auto !important;
+      white-space: normal !important;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-wrap: nowrap;
+      gap: 8px;
+      padding: 4px 0;
+    }
+    
+    
+    ::v-deep .v-icon {
+      margin-right: 0 !important;
+      margin-left: 0 !important;
+      flex-shrink: 0;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
     
     .btn-text {
       white-space: normal !important;
       word-break: break-word;
-      overflow-wrap: anywhere;
-      line-height: 1.3;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      width: 100%;
+      line-height: 1.4;
       flex: 1;
       display: block;
       text-align: left;
-      hyphens: auto;
+      font-size: 0.95rem;
+      
+     
+      word-wrap: break-word;
+      -webkit-hyphens: auto;
+      -moz-hyphens: auto;
+      -ms-hyphens: auto;
     }
     
     &:hover {
@@ -154,7 +178,7 @@ export default {
   }
 }
 
-// Responsive design
+
 @media (max-width: 768px) {
   .quick-access-container {
     padding: 15px;
@@ -167,12 +191,15 @@ export default {
   
   .access-buttons .access-btn {
     min-height: 45px;
-    height: auto;
-    font-size: 0.9rem;
-    padding: 10px 12px;
+    padding: 10px 12px !important;
+    
+    ::v-deep .v-btn__content {
+      gap: 6px;
+    }
     
     .btn-text {
-      line-height: 1.2;
+      line-height: 1.3;
+      font-size: 0.9rem;
     }
   }
   
@@ -182,9 +209,18 @@ export default {
   }
 }
 
-// Custom button styles
-.v-btn {
+
+::v-deep .v-btn {
   text-transform: none !important;
   font-weight: 500 !important;
+  
+  &.access-btn {
+    white-space: normal !important;
+    
+    .v-btn__content {
+      white-space: normal !important;
+      height: auto !important;
+    }
+  }
 }
 </style>

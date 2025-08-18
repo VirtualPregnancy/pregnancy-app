@@ -1,5 +1,5 @@
 <template>
-  <v-app ref="base_background" class="root">
+  <v-app ref="base_background" class="root" style="background-color: var(--v-background-base);">
     <!-- Main Container: Upper and Lower sections -->
     <div class="main-container">
       
@@ -175,6 +175,7 @@ export default {
   flex: 1;
   display: flex;
   min-height: 0;
+  height: 100%;
   
   @media (max-width: 960px) {
     flex-direction: column;
