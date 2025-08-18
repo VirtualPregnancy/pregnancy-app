@@ -5,9 +5,9 @@
         <h1 class="pt-2 main-heading">
           {{ $parentTopic().heading }} 
         </h1>
-        <h4 :class="'sub-heading font-weight-black ' + $subTitle() + '--text'">
+        <!-- <h4 :class="'sub-heading font-weight-black ' + $subTitle() + '--text'">
           {{ $heading() }}
-        </h4>
+        </h4> -->
       </div>
     </div>
    
@@ -33,6 +33,7 @@
             @panel-collapsed="handleConditionsPanelCollapsed"
           />
         </div>
+        
       </div>
         <div v-if="!fileFound" class="error-message">
           <span>Data Not Found</span>
@@ -43,6 +44,7 @@
           </div>
             
         </template>
+        
       </client-only>
     </div>
   </div>
@@ -310,6 +312,7 @@ export default {
   // v-secondary-base
   background: rgba(34, 155, 34, 1);
 }
+
 // .primary--text {
 //   // color: var(--v-secondary-base) !important;
 //   // caret-color: var(--v-secondary-base) !important;

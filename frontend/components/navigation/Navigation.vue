@@ -177,7 +177,7 @@ export default {
   &.button-main-topic {
     height: auto !important;
     min-height: 56px !important;
-    font-size: 0.6rem !important;
+    font-size: 0.8rem !important;
     display: flex !important;
     flex-direction: column !important;
     border-left: 2px solid var(--v-secondary-darken1);

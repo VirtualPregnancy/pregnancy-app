@@ -14,9 +14,7 @@
 
    
     
-    <div class="sm-logo d-md-none">
-      <logo />
-    </div>
+  
     <div v-if="$route.name == 'slug'">
       
       <!-- Show different content based on page type -->
@@ -32,6 +30,8 @@
           :parent-slug="currentParentSlug"
           :topic-title="currentTopicTitle"
         />
+      
+        <!-- <Logo v-if="mdAndUp" :class="mdAndUp ? 'logo' : 'sm-logo'" /> -->
       </div>
       
       <!-- Show quick access for content pages -->
@@ -47,6 +47,7 @@
           :parent-slug="currentParentSlug"
           :topic-title="currentTopicTitle"
         />
+        <!-- <Logo v-if="mdAndUp" class="logo" /> -->
       </div>
     </div>
     <div v-if="$route.name == 'support'">

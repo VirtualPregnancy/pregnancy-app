@@ -92,7 +92,7 @@
           </v-card-text>
         </v-card>
       </div>
-      <Logo v-if="mdAndUp" class="logo" />
+      
     </div>
   </div>
 </template>
@@ -102,6 +102,7 @@ import Logo from '@/components/support/Logo.vue';
 import UltrasoundWhatIsFetalDevelopment from '@/components/content/UltrasoundWhatIsFetalDevelopment.vue';
 import UltrasoundWhatIsPlacentaPosition from '@/components/content/UltrasoundWhatIsPlacentaPosition.vue';
 import UltrasoundDoppler from '@/components/content/UltrasoundDoppler.vue';
+import UltrasoundDopplerMetrics from '@/components/content/UltrasoundDopplerMetrics.vue';
 import PregnancyFetalDev from '@/components/content/PregnancyFetalDev.vue';
 import PregnancyPersonalisedAssessment from '@/components/content/PregnancyPersonalisedAssessment.vue';
 export default {
@@ -111,6 +112,7 @@ export default {
     UltrasoundWhatIsFetalDevelopment,
     UltrasoundWhatIsPlacentaPosition,
     UltrasoundDoppler,
+    UltrasoundDopplerMetrics,
     PregnancyFetalDev,
     PregnancyPersonalisedAssessment
   },
@@ -285,14 +287,7 @@ export default {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-.logo {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  width: 20dvh;
-  height: 10dvh;
-  z-index: 1000;
-}
+
 
 /* HTML Content Styles */
 .content-text ::v-deep a {

@@ -188,6 +188,7 @@ export default {
   width: 30vw;
   min-width: 409px;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: var(--v-background-base);
   
   @media (max-width: 960px) {
     width: 100vw;

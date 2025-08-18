@@ -1,8 +1,11 @@
 <template>
   <div>
     
-        Ultrasound helps determine where the placenta is located in the uterus (ie if it is at the front (anterior), back (posterior), or fundal (top) positions) and its proximity to the opening of the cervix (the opening at the bottom of the uterus through which the baby will pass during birth). If the placenta has implanted in a way that blocks the cervix this is called 
-        <v-btn
+    Ultrasound can show where the placenta is located in the uterus (ie if it is at the front (anterior), back (posterior), or fundal (top) positions) and its proximity to the opening of the cervix (the opening at the bottom of the uterus through which the baby will pass during birth). 
+    <br />
+    <br />
+    If the placenta has implanted in a way that blocks the cervix this is called  
+    <v-btn
           text
           small
           color="primary"
