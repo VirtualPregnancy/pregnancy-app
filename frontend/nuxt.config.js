@@ -132,24 +132,29 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: "#DD3C51",     // red from palette
-          accent: "#6C90B9",      // blue from palette
-          accentLight: "#1F6683",     // teal from palette
-          secondary: "#B8BCC8",   // light grey for buttons
-          info: "#1F6683",        // teal from palette
-          warning: "#DD3C51",     // red from palette
-          subWarning: "#6C90B9",  // blue from palette
-          error: "#DD3C51",       // red from palette
-          subError: "#6C90B9",    // blue from palette
-          success: "#1F6683",     // teal from palette
-          subSuccess: "#6C90B9",  // blue from palette
-          background: "#dbd9d5",  // light grey background
-          // for menu buttons
-          buttonMain: "#3E7C93",           
-          buttonMainActive: "#2b6378",   
-          buttonSubmenu: "#6C90B9",        
-          buttonSubmenuActive: "#4d6c8f",    
+          primary: "#DD3C51",        
+          accent: "#313657",         
+          accentLight: "#1F6683",    
+          secondary: "#B8BCC8",      
+        
+          info: "#1F6683",          
+          warning: "#DD3C51",        
+          subWarning: "#FAF6F7",     
+          error: "#DD3C51",          
+          subError: "#FAF6F7",       
+          success: "#1F6683",       
+          subSuccess: "#E0EBF5",     
+        
+          background: "#F5F9FC",     
+          backgroundAlt: "#FAF6F7",  
+        
+          buttonMain: "#F5F9FC",        
+          buttonMainActive: "#6C90B9",  
+          buttonMainHover: "#E0EBF5",   
+          buttonText: "#313657",        
+          buttonTextActive: "#FFFFFF"    
         },
+        
         dark: {
           primary: "#DD3C51",     // red from palette
           accent: "#6C90B9",      // blue from palette
@@ -163,7 +168,7 @@ export default {
           success: "#1F6683",     // teal from palette
           subSuccess: "#6C90B9",  // blue from palette
           background: "#313657",  // dark navy from palette
-        },
+        }
       },
     },
   },

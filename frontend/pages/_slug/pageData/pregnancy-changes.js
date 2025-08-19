@@ -32,8 +32,8 @@ export default {
       icon: "mdi-heart-pulse",
       iconColor: "var(--v-primary-base)",
       content: "1. <text style='font-weight: bold;'>Progesterone</text> (often called the “pregnancy hormone”) is first produced by the scar left behind in the ovary after it releases the egg (a structure called the corpus luteum). Progesterone plays an important role at the very start of pregnancy in maintaining the uterine lining (the endometrium) to support implantation. "+
-"<br /> The placenta also produces progesterone, and becomes the main source of this hormone near the end of the first trimester, increasing the amount it produces across pregnancy as it grows.   Progesterone has important roles in adapting the blood vessels in the uterus to supply blood to the placenta, helping the uterine muscle layer (the myometrium) stretch to accommodate the baby, and in preparing breast tissue to produce milk after birth.  "+
-"<br /> 2. <text style='font-weight: bold;'>Estrogen</text> is also produced by the placenta in increasing amounts during pregnancy.  Estrogen plays important roles in adapting your cardiovascular system to support pregnancy. It also helps adapt the uterus both directly and by making it more responsive to progesterone, and promotes the growth of milk ducts in the breasts. "
+"<br /> <br /> The placenta also produces progesterone, and becomes the main source of this hormone near the end of the first trimester, increasing the amount it produces across pregnancy as it grows.   Progesterone has important roles in adapting the blood vessels in the uterus to supply blood to the placenta, helping the uterine muscle layer (the myometrium) stretch to accommodate the baby, and in preparing breast tissue to produce milk after birth.  "+
+"<br /> <br /> 2. <text style='font-weight: bold;'>Estrogen</text> is also produced by the placenta in increasing amounts during pregnancy.  Estrogen plays important roles in adapting your cardiovascular system to support pregnancy. It also helps adapt the uterus both directly and by making it more responsive to progesterone, and promotes the growth of milk ducts in the breasts. "
 
     }
   ]

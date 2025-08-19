@@ -21,7 +21,7 @@ export default {
       title: 'What does my ultrasound scan mean?',
       description: 'Ultrasound scans let doctors check on the health of your baby (and its placenta). Use our interactive tool to better understand what ultrasound is measuring, how it can tell us about baby\'s health, and what your scan may mean.',
       image: '/img/landing/medical_record.svg',
-      backgroundColor: '#1F6683',
+      backgroundColor: '#185168',
       link: '/ultrasound-what-is-ultrasound'
     },
     {
@@ -29,7 +29,7 @@ export default {
       title: 'Pregnancy care in Aotearoa NZ',
       description: 'Information on care pathways you can choose in NZ for your pregnancy, how to find a midwife, and how care may change if there are any concerns about the pregnancy.',
       image: '/img/landing/clinic.svg',
-      backgroundColor: '#6C90B9',
+      backgroundColor: '#24507F',
       link: '/clinical-mid-wife'
     },
     {
@@ -37,8 +37,8 @@ export default {
       title: 'Support services',
       description: 'The pregnancy experience is different for everyone. Here you can find information on support services available for you and your whanau to help navigate your journey, whatever it may look like.',
       image: '/img/landing/heart.svg',
-      backgroundColor: '#9AAEC5',
-      link: '/support'
+      backgroundColor: '#212D3B',
+      link: '/support-services'
     }
   ]
 }

@@ -62,19 +62,6 @@
             </v-expand-transition>
           </div>
 
-          <!-- Support -->
-          <div class="menu-item">
-            <v-btn
-              block
-              text
-              small
-              class="menu-main-item justify-start"
-              @click="navigateToSupport"
-            >
-              <span class="text-left">Support</span>
-            </v-btn>
-          </div>
-
           <!-- About -->
           <div class="menu-item">
             <v-btn
@@ -221,8 +208,8 @@ export default {
 }
 
 .menu-header {
-  background: var(--v-primary-base);
-  color: white;
+  background: var(--v-success-base);
+  color:white;
   padding: 12px 16px;
   display: flex;
   justify-content: space-between;
@@ -254,7 +241,7 @@ export default {
 
 .topic-expanded {
   background-color: rgba(25, 118, 210, 0.08);
-  border-left: 3px solid var(--v-primary-base);
+  border-left: 3px solid var(--v-accent-base);
 }
 
 .menu-sub-item {

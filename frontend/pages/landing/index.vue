@@ -155,14 +155,14 @@ export default {
 
 <style scoped lang="scss">
 .landing-page {
-  background: var(--v-background-base);
+  background: var(--v-backgroundAlt-base);
   min-height: 100vh;
 }
 
 .hamburger-menu {
-  background: rgba(49, 54, 87, 0.1);
+  background: var(--v-background-base);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(49, 54, 87, 0.2);
+  border: 1px solid var(--v-background-base);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   padding: 8px;
@@ -246,7 +246,7 @@ export default {
   
   .title-gradient {
     display: block;
-    background: linear-gradient(135deg, var(--v-secondary-base) 0%, var(--v-info-base) 100%);
+    background:  var(--v-info-base);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -255,7 +255,7 @@ export default {
   
   .title-highlight {
     display: block;
-    background: linear-gradient(135deg, var(--v-primary-base) 0%, var(--v-accent-base) 100%);
+    background: var(--v-accent-base);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -269,14 +269,6 @@ export default {
   color: var(--v-success-base);
 }
 
-@keyframes glow {
-  from {
-    filter: drop-shadow(0 0 5px var(--v-primary-lighten1));
-  }
-  to {
-    filter: drop-shadow(0 0 15px var(--v-primary-base));
-  }
-}
 
 /* Cards Styles */
 .cards-container {
