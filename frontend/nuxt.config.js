@@ -148,11 +148,16 @@ export default {
           background: "#F5F9FC",     
           backgroundAlt: "#FAF6F7",  
         
-          buttonMain: "#F5F9FC",        
-          buttonMainActive: "#6C90B9",  
-          buttonMainHover: "#E0EBF5",   
-          buttonText: "#313657",        
-          buttonTextActive: "#FFFFFF"    
+          
+            buttonMain: "#4d74a8",        
+            buttonMainHover: "#486FA3",   
+            buttonMainActive: "#313657",  
+            
+            buttonText: "#FFFFFF",        
+            buttonTextHover: "#FFFFFF",  
+            buttonTextActive: "#FFFFFF"  
+          
+             
         },
         
         dark: {

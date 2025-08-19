@@ -639,7 +639,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--v-background-base);
+  background-color: var(--v-backgroundAlt-base);
 }
 
 .model-viewport {

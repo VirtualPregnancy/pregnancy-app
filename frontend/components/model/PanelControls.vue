@@ -2,11 +2,11 @@
   <div class="model-control">
     <!-- Collapse Toggle Button -->
     <div class="collapse-header" @click="toggleCollapse">
-      <h3 class="panel-title">
-        <v-icon left>mdi-cog-outline</v-icon>
+      <h3 class="panel-title ">
+        <v-icon left color="white">mdi-cog-outline</v-icon>
         Model Controls
       </h3>
-      <v-btn icon small class="collapse-btn">
+      <v-btn icon small class="collapse-btn" color="white">
         <v-icon>{{ isCollapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' }}</v-icon>
       </v-btn>
     </div>
@@ -15,7 +15,6 @@
     <div v-show="!isCollapsed" class="panel-content">
       <!-- Main Model Controls -->
       <div class="control-section">
-        <h4 class="control-title">Vessel Models</h4>
         <div class="control-group">
           <v-btn 
             @click="$emit('reload-arterial')" 
@@ -45,15 +44,15 @@
             <v-icon left>mdi-network</v-icon>
             Combined Trees
           </v-btn>
-          <div class="colored-models">
+          <div class="colored-models" style="color: white;">
             Colored Models by: {{ coloredModelsBy }}
-            <v-radio-group inline v-model="coloredModelsBy" @change="$emit('colored-models-by-changed', coloredModelsBy)" :disabled="isLoading || !renderingComplete">
+            <v-radio-group v-model="coloredModelsBy" @change="$emit('colored-models-by-changed', coloredModelsBy)" :disabled="isLoading || !renderingComplete" class="custom-radio-group">
               <v-radio label="Pressure" value="pressure"></v-radio>
               <v-radio label="Flux" value="flux"></v-radio>
               <v-radio label="Default" value="default"></v-radio>
             </v-radio-group>
             <div v-if="!renderingComplete && !isLoading" class="rendering-status">
-              <small style="color: #FFA500; font-style: italic;">Waiting for model to fully render...</small>
+              <small style="color: white; font-style: italic;">Waiting for model to fully render...</small>
             </div>
           </div>
         </div>
@@ -64,7 +63,7 @@
       
       <!-- Dynamic Color Bar -->
       <div class="control-section" v-if="coloredModelsBy !== 'default'">
-        <h4 class="control-title">{{this.coloredModelsBy.slice(0, 1).toUpperCase() + this.coloredModelsBy.slice(1)}} Scale</h4>
+        <h4 class="control-title" style="color: white;">{{this.coloredModelsBy.slice(0, 1).toUpperCase() + this.coloredModelsBy.slice(1)}} Scale</h4>
         <div class="color-bar-container">
           <!-- Pressure Color Bar -->
           <div v-if="coloredModelsBy === 'pressure'" class="color-bar">
@@ -203,11 +202,9 @@ export default {
 .model-control {
   position: relative;
   width: 100%;
-  background: rgba(49, 54, 87, 0.9);
+  background: var(--v-accent-base);
   border-radius: 12px;
-  color: var(--v-secondary-base);
-  box-shadow: 0 4px 20px rgba(31, 102, 131, 0.3);
-  border: 2px solid #1F6683;
+  color: white;
   overflow: hidden;
   margin-bottom: 16px;
 }
@@ -230,7 +227,7 @@ export default {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: var(--v-secondary-base);
+  color: white;
   display: flex;
   align-items: center;
 }
@@ -611,6 +608,47 @@ export default {
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 2px;
+}
+
+// Custom radio group styles
+.custom-radio-group {
+  ::v-deep .v-radio {
+    .v-input__control {
+      .v-input__slot {
+        .v-radio__input {
+          .v-radio__radio {
+            .v-radio__radio--native {
+              color: white !important;
+            }
+            
+            .v-radio__radio--outer {
+              border-color: rgba(255, 255, 255, 0.7) !important;
+            }
+            
+            .v-radio__radio--inner {
+              border-color: rgba(255, 255, 255, 0.7) !important;
+            }
+          }
+          
+          .v-radio__radio--checked {
+            .v-radio__radio--outer {
+              border-color: white !important;
+            }
+            
+            .v-radio__radio--inner {
+              background-color: white !important;
+              border-color: white !important;
+            }
+          }
+        }
+      }
+    }
+    
+    .v-label {
+      color: white !important;
+      font-weight: 500;
+    }
+  }
 }
 
 // Custom button group styles

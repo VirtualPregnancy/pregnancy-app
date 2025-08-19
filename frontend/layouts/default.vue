@@ -1,5 +1,5 @@
 <template>
-  <v-app ref="base_background" class="root" style="background-color: var(--v-background-base);">
+  <v-app ref="base_background" class="root" style="background-color: var(--v-backgroundAlt-base);">
     <!-- Main Container: Upper and Lower sections -->
     <div class="main-container">
       
@@ -216,6 +216,7 @@ export default {
   height: 56px;
   flex-shrink: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
+  background-color: var(--v-background-base);
 }
 
 // Panel height calculations (adjusted for new layout)

@@ -2,11 +2,11 @@
   <div class="condition-control">
     <!-- Collapse Toggle Button -->
     <div class="collapse-header" @click="toggleCollapse">
-      <h3 class="panel-title">
-        <v-icon left>mdi-medical-bag</v-icon>
+      <h3 class="panel-title" style="color: white;">
+        <v-icon left color="white">mdi-medical-bag</v-icon>
         {{ textContent.panelTitle }}
       </h3>
-      <v-btn icon small class="collapse-btn">
+      <v-btn icon small class="collapse-btn" color="white">
         <v-icon>{{ isCollapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' }}</v-icon>
       </v-btn>
     </div>
@@ -76,10 +76,10 @@
         <div class="control-group">
           <v-btn 
             @click="triggerVisualization" 
-            :disabled="selectedConditions.length === 0"
-            color="secondary" 
             block 
             class="mb-2"
+            color="var(--v-buttonMain-base)"
+            style="background-color: var(--v-buttonMain-base); color: white;"
           >
             <v-icon left>mdi-eye</v-icon>
             Visualize Changes
@@ -101,11 +101,11 @@
         <h4 class="control-title">Status</h4>
         <div class="status-info">
           <div class="status-row">
-            <span class="status-label">Active Conditions:</span>
+            <span class="status-label" style="color: white;">Active Conditions:</span>
             <span class="status-value">{{ selectedConditions.length }}</span>
           </div>
           <div class="status-row">
-            <span class="status-label">Model State:</span>
+            <span class="status-label" style="color: white;">Model State:</span>
             <span class="status-value">{{ visualizationStatus }}</span>
           </div>
         </div>
@@ -305,11 +305,9 @@ export default {
 .condition-control {
   position: relative;
   width: 100%;
-  background: rgba(49, 54, 87, 0.9);
+  background: var(--v-accent-base);
   border-radius: 12px;
-  color: #D1C7B5;
-  box-shadow: 0 4px 20px rgba(31, 102, 131, 0.3);
-  border: 2px solid #1F6683;
+  color: white;
   overflow: hidden;
   margin-bottom: 16px;
 }
@@ -339,11 +337,13 @@ export default {
 
 .collapse-btn {
   transition: transform 0.2s ease;
+  color: white;
 }
 
 .panel-content {
   padding: 20px;
   animation: slideDown 0.3s ease-out;
+  color: white;
 }
 
 @keyframes slideDown {
@@ -366,7 +366,7 @@ export default {
 }
 
 .control-title {
-  color: #6C90B9;
+  color: white;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 12px;
@@ -391,6 +391,7 @@ export default {
 .status-info {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 8px;
+  color: white;
   padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
