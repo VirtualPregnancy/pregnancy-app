@@ -1,5 +1,6 @@
 <template>
   <div class="navi">
+    
     <v-bottom-navigation
       grow
       :fixed="$vuetify.breakpoint.smAndDown ? true : false"

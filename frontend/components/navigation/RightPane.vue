@@ -42,8 +42,9 @@
       </div>
 
       <!-- Logo Section for Desktop -->
-      <div v-if="mdAndUp" class="logo-section">
+      <div  class="logo-section">
         <div class="logo-container">
+          <Logo />
         </div>
       </div>
     </div>
@@ -55,7 +56,7 @@
 <script>
 import PanelControls from "../model/PanelControls.vue";
 import Waveform from "../model/Waveform.vue";
-
+import Logo from '@/components/Logo.vue';
 export default {
   data() {
     return {
@@ -358,7 +359,7 @@ export default {
     this.$nuxt.$off('trigger-condition-visualization', this.handleTriggerConditionVisualization);
   },
   
-  components: { PanelControls, Waveform },
+  components: { PanelControls, Waveform, Logo },
 };
 </script>
 
@@ -478,15 +479,11 @@ export default {
   width: 100%;
 }
 
-.logo-section {
-  margin-top: auto;
-  padding: 20px 0;
-  text-align: center;
-}
 
 .logo-container {
   max-width: 150px;
   margin: 0 auto;
+  margin-top: 10px;
   opacity: 0.8;
   
   &:hover {

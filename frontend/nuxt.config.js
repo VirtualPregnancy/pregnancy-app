@@ -104,11 +104,11 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: {
     dirs: [
-      "~/components/support",
       "~/components/model",
       "~/components/navigation",
       "~/components/topics",
       "~/components/loading",
+      "~/components/content",
     ],
   },
 

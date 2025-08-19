@@ -50,11 +50,7 @@
         <!-- <Logo v-if="mdAndUp" class="logo" /> -->
       </div>
     </div>
-    <div v-if="$route.name == 'support'">
-      <v-card class="pa-4 bg-secondary" :style="panelHeightStyle">
-        <lazy-support />
-      </v-card>
-    </div>
+    
   </div>
 </template>
 

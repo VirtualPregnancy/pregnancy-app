@@ -93,29 +93,19 @@
           </v-card-text>
         </v-card>
       </div>
-      
+      <div class="logo">
+        <Logo />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import UltrasoundWhatIsFetalDevelopment from '@/components/content/UltrasoundWhatIsFetalDevelopment.vue';
-import UltrasoundWhatIsPlacentaPosition from '@/components/content/UltrasoundWhatIsPlacentaPosition.vue';
-import UltrasoundDoppler from '@/components/content/UltrasoundDoppler.vue';
-import UltrasoundDopplerMetrics from '@/components/content/UltrasoundDopplerMetrics.vue';
-import PregnancyFetalDev from '@/components/content/PregnancyFetalDev.vue';
-import PregnancyPersonalisedAssessment from '@/components/content/PregnancyPersonalisedAssessment.vue';
-import Support from '@/components/content/Support.vue';
+import Logo from '@/components/Logo.vue';
 export default {
   name: 'ContentPane',  
   components: {
-    UltrasoundWhatIsFetalDevelopment,
-    UltrasoundWhatIsPlacentaPosition,
-    UltrasoundDoppler,
-    UltrasoundDopplerMetrics,
-    PregnancyFetalDev,
-    PregnancyPersonalisedAssessment,
-    Support
+    Logo
   },
   props: {
     pageTitle: {
@@ -289,6 +279,13 @@ export default {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
+.logo {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 
 /* HTML Content Styles */

@@ -1,5 +1,5 @@
 <template>
-  <v-app class="landing-page">
+  <v-app :class="mdAndUp ? 'landing-page' : 'landing-page-md'">
     <!-- Hamburger Menu Icon -->
     <div class="hamburger-menu fixed top-5 left-5 z-50">
       <Menu />
@@ -13,8 +13,7 @@
         <div class="column left-column">
           <div class="column-content">
             <h1 class="main-title">
-              <span class="title-gradient">Pregnancy is an</span>
-              <span class="title-highlight">exciting time!</span>
+              Pregnancy is an exciting time!
             </h1>
             <p class="intro-text">
               Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, 
@@ -108,7 +107,11 @@ export default {
         ...item,
         image: this.getImagePath(item.image)
       }));
-    }
+    },
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp;
+    },
+    
   },
   
   methods: {
@@ -158,6 +161,10 @@ export default {
   background: var(--v-backgroundAlt-base);
   min-height: 100vh;
 }
+.landing-page-md {
+  margin-top: 30px;
+  box-sizing: border-box;
+}
 
 .hamburger-menu {
   background: var(--v-background-base);
@@ -177,6 +184,7 @@ export default {
 .landing-container {
   min-height: 100vh;
   width: 100vw;
+  background: var(--v-backgroundAlt-base);
   display: flex;
   position: relative;
   
@@ -241,6 +249,7 @@ export default {
 .main-title {
   font-size: 2.5rem;
   font-weight: bold;
+  color: var(--v-primary-base);
   margin-bottom: 1em;
   line-height: 1.2;
   
@@ -266,7 +275,7 @@ export default {
 .intro-text {
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--v-success-base);
+  color: var(--v-info-base);
 }
 
 
