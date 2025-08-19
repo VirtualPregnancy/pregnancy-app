@@ -223,8 +223,9 @@ export default {
 }
 .small_main_content {
   background-color: var(--v-background-base);
+  padding:10px;
   min-height: 100vh;
-  padding-bottom: 120px; /* Extra space for navigation */
+  padding-bottom: 100px; /* Extra space for navigation */
 }
 
 /* Section Cards */

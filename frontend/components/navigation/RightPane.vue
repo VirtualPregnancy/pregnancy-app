@@ -34,7 +34,7 @@
       <!-- Waveform Panel -->
       <div class="waveform-panel">
         <div class="waveform-header">
-          <h4>Blood Flow Analysis</h4>
+          <h4 style="color: black;">Blood Flow Analysis</h4>
         </div>
         <div class="waveform-content">
           <Waveform :waveform="waveformData" />
@@ -369,7 +369,6 @@ export default {
   display: flex;
   flex-direction: row;
   width: 100%;
-  background-color: var(--v-background-base);
   
   @media (max-width: 768px) {
     flex-direction: column;
@@ -384,8 +383,14 @@ export default {
   right: 10dvw;
   
   &.model-section-mobile {
-    min-height: 40vh;
-    height: 40vh;
+    width: 100vw;
+    min-width: 100vw;
+    flex: 1;
+    height: 50vh;
+    right: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -410,8 +415,9 @@ export default {
     position: relative;
     width: 100%;
     max-width: 100%;
+    justify-content: center;
+    align-items: center;
     height: auto;
-    max-height: 60vh;
     overflow-y: auto;
     flex-direction: row;
     flex-wrap: wrap;
