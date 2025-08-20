@@ -23,7 +23,7 @@ export default (context, inject) => {
   inject("model", () => {
     return context.store.getters.getCurrentContent.model;
   }),
-  inject("showConditionSelector", () => {
-    return context.store.getters.getCurrentContent.showConditionSelector;
+  inject("component", () => {
+    return context.store.getters.getCurrentContent.component;
   });
 };

@@ -1,14 +1,14 @@
 {
   "pregnancy": {
     "title": "Pregnancy Journey",
-    "showConditionSelector": false,
+    "component": "none",
     "heading": "What is Happening in Pregnancy?",
-    "content":"During pregnancy your body undergoes a remarkable transformation to accommodate the growth of new life. Here, you can find information on what is happening to your body, how the fetus grows and is nourished by the placenta, and the different ways your midwife or doctor may check on your baby’s health during pregnancy.",
+    "content": "During pregnancy your body undergoes a remarkable transformation to accommodate the growth of new life. Here, you can find information on what is happening to your body, how the fetus grows and is nourished by the placenta, and the different ways your midwife or doctor may check on your baby’s health during pregnancy.",
     "icon": "/img/landing/pregnancy.svg",
     "subTopics": {
       "changes": {
         "title": "Your Body",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "Changes To Your Body",
         "icon": "mdi-radar",
         "category": "success",
@@ -19,7 +19,7 @@
       },
       "placenta": {
         "title": "Placenta",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "Roles of the Placenta",
         "icon": "mdi-bowl-outline",
         "category": "success",
@@ -30,7 +30,7 @@
       },
       "interact-with-your-placenta": {
         "title": "Interact With Your Placenta",
-        "showConditionSelector": true,
+        "component": "ConditionSelector",
         "heading": "Interact With Your Placenta",
         "icon": "mdi-gesture-tap",
         "category": "success",
@@ -41,7 +41,7 @@
       },
       "fetal-dev": {
         "title": "Fetal Development",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "Fetal Development",
         "icon": "mdi-flower-outline",
         "category": "success",
@@ -52,7 +52,7 @@
       },
       "keep-baby-healthy": {
         "title": "Keep Baby Healthy",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "Keep Baby Healthy",
         "icon": "mdi-charity",
         "category": "success",
@@ -63,7 +63,7 @@
       },
       "baby": {
         "title": "Health Checks",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "How do we check on baby's health?",
         "icon": "mdi-baby-face-outline",
         "category": "success",
@@ -76,12 +76,13 @@
   },
   "conditions": {
     "title": "Pregnancy Complications",
+    "component": "none",
     "heading": "Navigating Pregnancy Complications",
     "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
       "fetal": {
         "title": "Fetal Growth",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "Reduced Fetal Growth",
         "icon": "mdi-heart-minus",
         "category": "success",
@@ -92,7 +93,7 @@
       },
       "birth": {
         "title": "Birth",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "What does having a pregnancy issue mean for how my baby might be born?",
         "icon": "mdi-baby-bottle-outline",
         "category": "success",
@@ -103,7 +104,7 @@
       },
       "care": {
         "title": "Cares",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "When baby needs extra care after birth",
         "icon": "mdi-human-baby-changing-table",
         "category": "success",
@@ -116,14 +117,14 @@
   },
   "ultrasound": {
     "title": "Ultrasound",
-    "showConditionSelector": false,
+    "component": "none",
     "heading": "What does my ultrasound scan mean",
     "icon": "mdi-stethoscope",
-    "content":"During pregnancy your baby will be checked on using ultrasound imaging.  This is a safe and widely used tool, that can help your midwife/doctor know that baby is healthy. This page helps you understand what ultrasound is and the different ways it is used and includes an interactive tool to help you understand your own ultrasound scan better. ",
+    "content": "During pregnancy your baby will be checked on using ultrasound imaging.  This is a safe and widely used tool, that can help your midwife/doctor know that baby is healthy. This page helps you understand what ultrasound is and the different ways it is used and includes an interactive tool to help you understand your own ultrasound scan better. ",
     "subTopics": {
       "what-is-ultrasound": {
         "title": "What Ultrasound Means",
-        "showConditionSelector": true,
+        "component": "ConditionSelector",
         "heading": "Ultrasound",
         "icon": "mdi-stethoscope",
         "category": "success",
@@ -134,7 +135,7 @@
       },
       "doppler": {
         "title": "Doppler Ultrasound",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "Doppler Ultrasound in Pregnancy ",
         "icon": "mdi-chart-areaspline",
         "category": "success",
@@ -145,7 +146,7 @@
       },
       "how": {
         "title": "How ",
-        "showConditionSelector": true,
+        "component": "ConditionSelector",
         "heading": "How ultrasound can be used to detect pregnancy issues",
         "icon": "mdi-alert-circle",
         "category": "success",
@@ -156,7 +157,7 @@
       },
       "what-ultrasound-means": {
         "title": "What Ultrasound Means",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "What does my ultrasound scan mean? ",
         "icon": "mdi-help-circle",
         "category": "success",
@@ -169,12 +170,13 @@
   },
   "clinical": {
     "title": "Care Pathways",
+    "component": "none",
     "heading": "Clinical care pathways for pregnancy in Aotearoa NZ.",
     "icon": "mdi-routes",
     "subTopics": {
       "mid-wife": {
         "title": "Midwife Lead Care",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "Midwife",
         "icon": "mdi-account-heart",
         "category": "success",
@@ -185,7 +187,7 @@
       },
       "when-care-changes": {
         "title": "When Care Changes",
-        "showConditionSelector": false,
+        "component": "none",
         "heading": "How clinical care pathways may change during your pregnancy if there are any concerns about mother or baby.",
         "icon": "mdi-heart-cog",
         "category": "success",
@@ -198,12 +200,14 @@
   },
   "support": {
     "title": "Pregnancy Support",
+    "component": "none",
     "heading": "Pregnancy Support Services",
     "icon": "mdi-account-group",
     "content": "This application provides comprehensive information about support services available for pregnant people and their whānau throughout Aotearoa New Zealand.",
     "subTopics": {
       "services": {
         "title": "For Everyone Pregnant",
+        "component": "none",
         "heading": "For Everyone Pregnant",
         "icon": "mdi-account-group",
         "category": "success",
@@ -214,6 +218,7 @@
       },
       "specialist": {
         "title": "Specialist Services",
+        "component": "none",
         "heading": "Specialist Services",
         "icon": "mdi-account-group",
         "category": "success",
