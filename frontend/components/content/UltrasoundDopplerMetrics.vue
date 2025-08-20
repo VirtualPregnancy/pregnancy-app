@@ -1,9 +1,5 @@
 <template>
   <div>
-    Your ultrasound report or clinical team may talk about some of the common
-    metrics that are reported from your Doppler ultrasound scan. These metrics
-    are derived from certain parts of the waveform, and large clinical studies
-    have allowed us to understand how these numbers relate to fetal health.
     <div class="d-flex flex-row gap-4 mt-4 mb-4 justify-center">
       <v-card
         v-for="item in cardItems"
@@ -18,7 +14,7 @@
     depending on the blood vessel being examined, and the gestation of your
     pregnancy (how far along you are). Indicators of normal ranges for these
     values for the umbilical artery and uterine artery are below.
-
+   
     <!-- Normal Ranges Table Section -->
     <div class="mt-6 d-flex justify-center">
       <v-btn
@@ -30,6 +26,55 @@
         View Normal Ranges Table
       </v-btn>
     </div>
+
+     <!-- PI Checker -->
+     <v-card class="my-6 pa-4" outlined>
+      <h3 class="mb-4">QuickPI Value Checker</h3>
+
+      <div class="d-flex flex-wrap gap-4 mb-4">
+        <v-text-field
+          v-model.number="week"
+          label="Gestational Week (18-40)"
+          type="number"
+          min="18"
+          max="40"
+          outlined
+          dense
+          style="max-width: 300px"
+        />
+
+        <v-select
+          v-model="artery"
+          :items="['umbilical', 'uterine']"
+          label="Artery"
+          outlined
+          dense
+          style="max-width: 120px"
+        />
+
+        <v-text-field
+          v-model.number="piValue"
+          label="PI Value"
+          type="number"
+          step="0.01"
+          outlined
+          dense
+          style="max-width: 120px"
+        />
+
+        <v-btn color="primary" @click="check" :disabled="!isValid">
+          Check
+        </v-btn>
+
+        <v-btn text @click="clear" v-if="hasInput"> Clear </v-btn>
+      </div>
+
+      <div v-if="result" :class="`pa-3 rounded ${resultClass}`">
+        <strong>{{ result.status }}</strong
+        ><br />
+        {{ result.message }}
+      </div>
+    </v-card>
 
     <!-- Popup Dialog for Normal Ranges -->
     <v-dialog
@@ -73,6 +118,7 @@
                   :headers="item.headers"
                   :items="item.data"
                   hide-default-footer
+                  :items-per-page="-1"
                   class="elevation-1"
                 />
               </div>
@@ -82,8 +128,21 @@
 
         <v-card-text style="background: var(--v-background-base)">
           <div class="text-sm" style="color: var(--v-text-color)">
-            <v-icon small color="accent" class="mr-2">mdi-information</v-icon>
-            <strong>Note:</strong> Just example data
+            <v-icon small color="accent" class="mr-2"
+              >mdi-book-open-outline</v-icon
+            >
+            <strong>References:</strong>
+            <br />
+            * Acharya G, et al. Reference ranges for serial measurements of
+            blood velocity and pulsatility index at the intra-abdominal portion,
+            and fetal and placental ends of umbilical artery. Ultrasound Obstet
+            Gynecol 2005; 26:162-169.s
+            <br />
+             <a
+              href="https://www.tewhatuora.govt.nz/assets/For-the-health-sector/Maternity-Services/NZMFMN-Obstetric-Doppler-Guideline-2015.pdf"
+              target="_blank"
+              >New Zealand Obstetric Doppler Guideline
+            </a>
           </div>
         </v-card-text>
 
@@ -106,6 +165,10 @@ export default {
     return {
       showRangesDialog: false,
       activeTab: 0,
+      week: null,
+      artery: null,
+      piValue: null,
+      result: null,
       cardItems: [
         {
           title: "Resistive Index (RI)",
@@ -128,119 +191,182 @@ export default {
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
         },
       ],
-      dialogData: {
-        umbilical: {
-          title: "Umbilical Artery",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      dialogData: [
+        {
+          title: "Umbilical Artery PI",
+          content: "> 95th percentile is abnormal",
           headers: [
             {
-              text: "Gestational Age",
+              text: "Gestation Weeks",
               value: "gestation",
               sortable: false,
-              width: "25%",
+              width: "33%",
             },
             {
-              text: "Resistive Index (RI)",
-              value: "ri",
+              text: "50th percentile",
+              value: "percentile50",
               sortable: false,
-              width: "25%",
+              width: "33%",
             },
             {
-              text: "Pulsatility Index (PI)",
-              value: "pi",
+              text: "95th percentile",
+              value: "percentile95",
               sortable: false,
-              width: "25%",
+              width: "34%",
             },
-            { text: "S/D Ratio", value: "sd", sortable: false, width: "25%" },
           ],
           data: [
-            {
-              gestation: "28-30 weeks",
-              ri: "0.60-0.75",
-              pi: "0.90-1.35",
-              sd: "2.5-4.0",
-            },
-            {
-              gestation: "31-33 weeks",
-              ri: "0.58-0.72",
-              pi: "0.85-1.30",
-              sd: "2.3-3.8",
-            },
-            {
-              gestation: "34-36 weeks",
-              ri: "0.55-0.70",
-              pi: "0.80-1.25",
-              sd: "2.0-3.5",
-            },
-            {
-              gestation: "37-40 weeks",
-              ri: "0.52-0.68",
-              pi: "0.75-1.20",
-              sd: "1.8-3.2",
-            },
+            { gestation: "19", percentile50: "1.25*", percentile95: "1.63*" },
+            { gestation: "20", percentile50: "1.22*", percentile95: "1.59*" },
+            { gestation: "21", percentile50: "1.15", percentile95: "1.46" },
+            { gestation: "22", percentile50: "1.13", percentile95: "1.43" },
+            { gestation: "23", percentile50: "1.10", percentile95: "1.40" },
+            { gestation: "24", percentile50: "1.08", percentile95: "1.38" },
+            { gestation: "25", percentile50: "1.06", percentile95: "1.35" },
+            { gestation: "26", percentile50: "1.04", percentile95: "1.33" },
+            { gestation: "27", percentile50: "1.02", percentile95: "1.31" },
+            { gestation: "28", percentile50: "1.00", percentile95: "1.28" },
+            { gestation: "29", percentile50: "0.98", percentile95: "1.26" },
+            { gestation: "30", percentile50: "0.96", percentile95: "1.24" },
+            { gestation: "31", percentile50: "0.94", percentile95: "1.21" },
+            { gestation: "32", percentile50: "0.92", percentile95: "1.19" },
+            { gestation: "33", percentile50: "0.90", percentile95: "1.16" },
+            { gestation: "34", percentile50: "0.88", percentile95: "1.14" },
+            { gestation: "35", percentile50: "0.86", percentile95: "1.11" },
+            { gestation: "36", percentile50: "0.84", percentile95: "1.09" },
+            { gestation: "37", percentile50: "0.81", percentile95: "1.06" },
+            { gestation: "38", percentile50: "0.79", percentile95: "1.03" },
+            { gestation: "39", percentile50: "0.77", percentile95: "1.00" },
+            { gestation: "40", percentile50: "0.75*", percentile95: "1.07*" },
           ],
         },
-        uterine: {
-          title: "Uterine Artery",
+        {
+          title: "Mean Uterine Artery PI",
           content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-            headers: [
-        {
-          text: "Gestational Age",
-          value: "gestation",
-          sortable: false,
-          width: "25%",
+            "Mean PI = (RT PI + LT PI) / 2. >95th percentile is abnormal",
+          headers: [
+            {
+              text: "Gestation Weeks",
+              value: "gestation",
+              sortable: false,
+              width: "33%",
+            },
+            {
+              text: "50th percentile",
+              value: "percentile50",
+              sortable: false,
+              width: "33%",
+            },
+            {
+              text: "95th percentile",
+              value: "percentile95",
+              sortable: false,
+              width: "34%",
+            },
+          ],
+          data: [
+            { gestation: "18", percentile50: "1.20", percentile95: "1.79" },
+            { gestation: "19", percentile50: "1.15", percentile95: "1.70" },
+            { gestation: "20", percentile50: "1.10", percentile95: "1.61" },
+            { gestation: "21", percentile50: "1.05", percentile95: "1.54" },
+            { gestation: "22", percentile50: "1.00", percentile95: "1.47" },
+            { gestation: "23", percentile50: "0.96", percentile95: "1.41" },
+            { gestation: "24", percentile50: "0.93", percentile95: "1.35" },
+            { gestation: "25", percentile50: "0.89", percentile95: "1.30" },
+            { gestation: "26", percentile50: "0.86", percentile95: "1.25" },
+            { gestation: "27", percentile50: "0.84", percentile95: "1.21" },
+            { gestation: "28", percentile50: "0.81", percentile95: "1.17" },
+            { gestation: "29", percentile50: "0.79", percentile95: "1.13" },
+            { gestation: "30", percentile50: "0.77", percentile95: "1.10" },
+            { gestation: "31", percentile50: "0.75", percentile95: "1.06" },
+            { gestation: "32", percentile50: "0.73", percentile95: "1.04" },
+            { gestation: "33", percentile50: "0.71", percentile95: "1.01" },
+            { gestation: "34", percentile50: "0.70", percentile95: "0.99" },
+            { gestation: "35", percentile50: "0.69", percentile95: "0.97" },
+            { gestation: "36", percentile50: "0.68", percentile95: "0.95" },
+            { gestation: "37", percentile50: "0.67", percentile95: "0.94" },
+            { gestation: "38", percentile50: "0.66", percentile95: "0.92" },
+            { gestation: "39", percentile50: "0.65", percentile95: "0.91" },
+            { gestation: "40", percentile50: "0.65", percentile95: "0.90" },
+          ],
         },
-        {
-          text: "Resistive Index (RI)",
-          value: "ri",
-          sortable: false,
-          width: "25%",
-        },
-        {
-          text: "Pulsatility Index (PI)",
-          value: "pi",
-          sortable: false,
-          width: "25%",
-        },
-        { text: "S/D Ratio", value: "sd", sortable: false, width: "25%" },
       ],
-
-      data: [
-        {
-          gestation: "28-30 weeks",
-          ri: "0.45-0.60",
-          pi: "0.70-1.00",
-          sd: "1.8-2.6",
-        },
-        {
-          gestation: "31-33 weeks",
-          ri: "0.42-0.58",
-          pi: "0.68-0.98",
-          sd: "1.7-2.5",
-        },
-        {
-          gestation: "34-36 weeks",
-          ri: "0.40-0.55",
-          pi: "0.65-0.95",
-          sd: "1.6-2.4",
-        },
-        {
-          gestation: "37-40 weeks",
-          ri: "0.38-0.52",
-          pi: "0.62-0.92",
-          sd: "1.5-2.3",
-        },
-      ],
-        },
-      },
-
-      
     };
   },
 
-  methods: {},
+  computed: {
+    isValid() {
+      return (
+        this.week >= 18 && this.week <= 40 && this.artery && this.piValue > 0
+      );
+    },
+
+    hasInput() {
+      return this.week || this.artery || this.piValue;
+    },
+
+    resultClass() {
+      if (!this.result) return "";
+      return this.result.abnormal
+        ? "error--text bg-red-50"
+        : this.result.high
+        ? "warning--text bg-orange-50"
+        : "success--text bg-green-50";
+    },
+  },
+
+  methods: {
+    check() {
+      if (!this.isValid) return;
+
+      const data = this.dialogData
+        .find((d) => d.title.toLowerCase().includes(this.artery))
+        ?.data.find((w) => parseInt(w.gestation) === this.week);
+
+      if (!data) {
+        this.result = {
+          status: "No Data",
+          message: `No reference data for week ${this.week}`,
+          abnormal: false,
+          high: true,
+        };
+        return;
+      }
+
+      const p95 = parseFloat(data.percentile95.replace("*", ""));
+      const p50 = parseFloat(data.percentile50.replace("*", ""));
+
+      if (this.piValue > p95) {
+        this.result = {
+          status: "ABNORMAL",
+          message: `${this.piValue} > ${p95} (95th percentile). Consult healthcare provider.`,
+          abnormal: true,
+          high: false,
+        };
+      } else if (this.piValue > p50) {
+        this.result = {
+          status: "Normal - Above Average",
+          message: `${this.piValue} is between 50th (${p50}) and 95th (${p95}) percentile.`,
+          abnormal: false,
+          high: false,
+        };
+      } else {
+        this.result = {
+          status: "Normal ",
+          message: `${this.piValue} ≤ ${p50} (50th percentile)`,
+          abnormal: false,
+          high: false,
+        };
+      }
+    },
+
+    clear() {
+      this.week = null;
+      this.artery = null;
+      this.piValue = null;
+      this.result = null;
+    },
+  },
 };
 </script>
 
