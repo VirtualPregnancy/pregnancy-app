@@ -10,7 +10,7 @@
         "title": "Your Body",
         "showConditionSelector": false,
         "heading": "Changes To Your Body",
-        "icon": "mdi-sine-wave",
+        "icon": "mdi-radar",
         "category": "success",
         "subTitle": "subSuccess",
         "model": {
@@ -32,7 +32,7 @@
         "title": "Interact With Your Placenta",
         "showConditionSelector": true,
         "heading": "Interact With Your Placenta",
-        "icon": "mdi-bowl-outline",
+        "icon": "mdi-gesture-tap",
         "category": "success",
         "subTitle": "subSuccess",
         "model": {
@@ -43,7 +43,7 @@
         "title": "Fetal Development",
         "showConditionSelector": false,
         "heading": "Fetal Development",
-        "icon": "mdi-baby-face",
+        "icon": "mdi-flower-outline",
         "category": "success",
         "subTitle": "subSuccess",
         "model": {
@@ -54,7 +54,7 @@
         "title": "Keep Baby Healthy",
         "showConditionSelector": false,
         "heading": "Keep Baby Healthy",
-        "icon": "mdi-heart-plus",
+        "icon": "mdi-charity",
         "category": "success",
         "subTitle": "subSuccess",
         "model": {
@@ -125,7 +125,7 @@
         "title": "What Ultrasound Means",
         "showConditionSelector": true,
         "heading": "Ultrasound",
-        "icon": "mdi-help-circle",
+        "icon": "mdi-stethoscope",
         "category": "success",
         "subTitle": "subSuccess",
         "model": {
@@ -147,7 +147,7 @@
         "title": "How ",
         "showConditionSelector": true,
         "heading": "How ultrasound can be used to detect pregnancy issues",
-        "icon": "mdi-help-circle",
+        "icon": "mdi-alert-circle",
         "category": "success",
         "subTitle": "subSuccess",
         "model": {

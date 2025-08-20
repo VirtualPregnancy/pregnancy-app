@@ -6,14 +6,14 @@ export default {
         {
             id: "1",
             title: "Smoking/nutrition in pregnancy",
-            icon: "mdi-heart-plus",
+            icon: "mdi-smoke",
             iconColor: "var(--v-primary-base)",
             content: "Public health based information on smoking/nutrition in pregnancy"
         },
         {
             id: "2",
             title: "Vegetarian/different diets",
-            icon: "mdi-heart-plus",
+            icon: "mdi-food-fork-drink",
             iconColor: "var(--v-primary-base)",
             content: "Vegrtarian/different diets in pregnancy"
         }

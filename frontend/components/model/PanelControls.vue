@@ -70,6 +70,8 @@
             <div class="color-segment pressure-low-segment"></div>
             <div class="color-segment pressure-mid-segment"></div>
             <div class="color-segment pressure-high-segment"></div>
+            <div class="color-segment pressure-max-segment"></div>
+            <div class="color-segment pressure-ultra-segment"></div>
           </div>
           
           <!-- Flux Color Bar -->
@@ -82,12 +84,11 @@
           </div>
           
           <div class="color-labels">
-            <span v-if="coloredModelsBy === 'pressure'" class="label-left">Low Pressure</span>
-            <span v-if="coloredModelsBy === 'pressure'" class="label-center">Normal</span>
-            <span v-if="coloredModelsBy === 'pressure'" class="label-right">High Pressure</span>
+            <span v-if="coloredModelsBy === 'pressure'" class="label-left">Low</span>
+            <span v-if="coloredModelsBy === 'pressure'" class="label-right">High</span>
             
-            <span v-if="coloredModelsBy === 'flux'" class="label-left">Low  Flow</span>
-            <span v-if="coloredModelsBy === 'flux'" class="label-right">High Flow</span>
+            <span v-if="coloredModelsBy === 'flux'" class="label-left">Low</span>
+            <span v-if="coloredModelsBy === 'flux'" class="label-right">High</span>
           </div>
         </div>
       </div>
@@ -446,44 +447,57 @@ export default {
 .color-segment {
   flex: 1;
   transition: transform 0.2s ease;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+
+  &:last-child {
+    border-right: none;
+  }
 
   &:hover {
     transform: scaleY(1.1);
   }
 }
 
-// Pressure Color Segments (Green → Orange → Red)
+// Pressure Color Segments using specified colors (solid colors)
 .pressure-low-segment {
-  background: linear-gradient(to right, #2B4B3C, #AA988A); 
+  background: rgb(173, 204, 83); 
 }
 
 .pressure-mid-segment {
-  background: linear-gradient(to right, #AA988A, #B66A40); 
+  background: rgb(250, 236, 79); 
 }
 
 .pressure-high-segment {
-  background: linear-gradient(to right, #B66A40, #7A3520); 
+  background: rgb(242, 183, 68); 
 }
 
-// Flux Color Segments (Blue → Cyan → Green → Yellow → Red)
+.pressure-max-segment {
+  background: rgb(170, 68, 47); 
+}
+
+.pressure-ultra-segment {
+  background: rgb(140, 41, 38); 
+}
+
+// Flux Color Segments (Blue → Cyan → Green → Yellow → Red) - solid colors
 .flux-reverse-segment {
-  background: linear-gradient(to right, #001ACC, #1A4DCC); // Deep blue to light blue
+  background: rgb(0, 0, 204); // Blue
 }
 
 .flux-low-segment {
-  background: linear-gradient(to right, #1A4DCC, #00CCCC); // Light blue to cyan
+  background: rgb(0, 204, 204); // Cyan
 }
 
 .flux-mid-segment {
-  background: linear-gradient(to right, #00CCCC, #4DFF4D); // Cyan to green
+  background: rgb(0, 204, 0); // Green
 }
 
 .flux-high-segment {
-  background: linear-gradient(to right, #4DFF4D, #FFFF00); // Green to yellow
+  background: rgb(204, 204, 0); // Yellow
 }
 
 .flux-max-segment {
-  background: linear-gradient(to right, #FFFF00, #FF0000); // Yellow to red
+  background: rgb(204, 0, 0); // Red
 }
 
 // Default Color Legend
@@ -527,11 +541,11 @@ export default {
   font-size: 11px;
   color: #D1C7B5;
   font-weight: 500;
+  margin-top: 4px;
 }
 
-.label-left, .label-center, .label-right {
+.label-left, .label-right {
   flex: 1;
-  text-align: center;
 }
 
 .label-left {

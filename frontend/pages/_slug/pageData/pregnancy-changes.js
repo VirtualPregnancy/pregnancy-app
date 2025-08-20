@@ -6,7 +6,7 @@ export default {
     {
       id: "1",
       title: "Changes to organs in your body",
-      icon: "mdi-heart-pulse",
+      icon: "mdi-human",
       iconColor: "var(--v-primary-base)",
       content: "  Over the course of pregnancy your uterus increases in size and weight by about 10 times as the baby grows within it.  The blood vessels within the uterus also get remodelled in the first half of pregnancy, becoming at least twice as wide by 20 weeks so that they can deliver increasing amounts of nutrient and oxygen rich blood to the placenta as the baby starts to grow more rapidly in the second half of gestation. "+
 "The pregnant uterus taking up so much space in the body also brings about other anatomical changes. As the other internal organs get pushed upwards, the space the lungs have to expand is reduced, although they become more efficient to help combat this. "+
@@ -29,7 +29,7 @@ export default {
     {
       id: "3",
       title: "Hormonal changes",
-      icon: "mdi-heart-pulse",
+      icon: "mdi-shore",
       iconColor: "var(--v-primary-base)",
       content: "1. <text style='font-weight: bold;'>Progesterone</text> (often called the “pregnancy hormone”) is first produced by the scar left behind in the ovary after it releases the egg (a structure called the corpus luteum). Progesterone plays an important role at the very start of pregnancy in maintaining the uterine lining (the endometrium) to support implantation. "+
 "<br /> <br /> The placenta also produces progesterone, and becomes the main source of this hormone near the end of the first trimester, increasing the amount it produces across pregnancy as it grows.   Progesterone has important roles in adapting the blood vessels in the uterus to supply blood to the placenta, helping the uterine muscle layer (the myometrium) stretch to accommodate the baby, and in preparing breast tissue to produce milk after birth.  "+
