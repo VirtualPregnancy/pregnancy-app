@@ -29,9 +29,11 @@
 
      <!-- PI Checker -->
      <v-card class="my-6 pa-4" outlined>
+      <div class="flex justify-center align-center flex-column">
       <h3 class="mb-4">QuickPI Value Checker</h3>
 
-      <div class="d-flex flex-wrap gap-4 mb-4">
+      <div class="width-full d-flex  gap-4">
+        
         <v-text-field
           v-model.number="week"
           label="Gestational Week (18-40)"
@@ -40,7 +42,8 @@
           max="40"
           outlined
           dense
-          style="max-width: 300px"
+          style="width: 70%"
+          
         />
 
         <v-select
@@ -49,7 +52,6 @@
           label="Artery"
           outlined
           dense
-          style="max-width: 120px"
         />
 
         <v-text-field
@@ -59,15 +61,18 @@
           step="0.01"
           outlined
           dense
-          style="max-width: 120px"
         />
+        </div>
+         <!-- divider -->
+        <div>
 
         <v-btn color="primary" @click="check" :disabled="!isValid">
           Check
         </v-btn>
 
-        <v-btn text @click="clear" v-if="hasInput"> Clear </v-btn>
+        <v-btn @click="clear" v-if="hasInput"> Clear </v-btn>
       </div>
+    </div>
 
       <div v-if="result" :class="`pa-3 rounded ${resultClass}`">
         <strong>{{ result.status }}</strong
