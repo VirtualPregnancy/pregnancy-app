@@ -1,6 +1,6 @@
 <template>
   <!-- All the data is in _slug/pageData -->
-  <div :class="mdAndUp ? ' w-full h-100 full_main_content' : 'w-full small_main_content'" style="background-color: var(--v-background-base);">
+  <div :class="mdAndUp ? ' w-full h-100 full_main_content' : 'w-full small_main_content'" style="background-color: var(--v-backgroundAlt-base);">
     <div class="max-w-4xl mx-auto md:p-8 pb-32 md:pb-40">
       <!-- Header -->
       <div class="text-center mb-8">
@@ -51,6 +51,7 @@
               <v-icon 
                 :class="{ 'chevron-rotated': expandedSections[section.id] }"
                 class="chevron-icon"
+                color="primary"
               >
                 mdi-chevron-down
               </v-icon>
@@ -92,29 +93,19 @@
           </v-card-text>
         </v-card>
       </div>
-      
+      <div class="logo">
+        <Logo />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '@/components/support/Logo.vue';
-import UltrasoundWhatIsFetalDevelopment from '@/components/content/UltrasoundWhatIsFetalDevelopment.vue';
-import UltrasoundWhatIsPlacentaPosition from '@/components/content/UltrasoundWhatIsPlacentaPosition.vue';
-import UltrasoundDoppler from '@/components/content/UltrasoundDoppler.vue';
-import UltrasoundDopplerMetrics from '@/components/content/UltrasoundDopplerMetrics.vue';
-import PregnancyFetalDev from '@/components/content/PregnancyFetalDev.vue';
-import PregnancyPersonalisedAssessment from '@/components/content/PregnancyPersonalisedAssessment.vue';
+import Logo from '@/components/Logo.vue';
 export default {
   name: 'ContentPane',  
   components: {
-    Logo,
-    UltrasoundWhatIsFetalDevelopment,
-    UltrasoundWhatIsPlacentaPosition,
-    UltrasoundDoppler,
-    UltrasoundDopplerMetrics,
-    PregnancyFetalDev,
-    PregnancyPersonalisedAssessment
+    Logo
   },
   props: {
     pageTitle: {
@@ -222,8 +213,9 @@ export default {
 }
 .small_main_content {
   background-color: var(--v-background-base);
+  padding:10px;
   min-height: 100vh;
-  padding-bottom: 120px; /* Extra space for navigation */
+  padding-bottom: 100px; /* Extra space for navigation */
 }
 
 /* Section Cards */
@@ -287,6 +279,13 @@ export default {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
+.logo {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 
 /* HTML Content Styles */

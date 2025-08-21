@@ -34,7 +34,7 @@
       <!-- Waveform Panel -->
       <div class="waveform-panel">
         <div class="waveform-header">
-          <h4>Blood Flow Analysis</h4>
+          <h4 style="color: black;">Blood Flow Analysis</h4>
         </div>
         <div class="waveform-content">
           <Waveform :waveform="waveformData" />
@@ -42,9 +42,9 @@
       </div>
 
       <!-- Logo Section for Desktop -->
-      <div v-if="mdAndUp" class="logo-section">
+      <div  class="logo-section">
         <div class="logo-container">
-          <logo />
+          <Logo />
         </div>
       </div>
     </div>
@@ -56,7 +56,7 @@
 <script>
 import PanelControls from "../model/PanelControls.vue";
 import Waveform from "../model/Waveform.vue";
-
+import Logo from '@/components/Logo.vue';
 export default {
   data() {
     return {
@@ -359,7 +359,7 @@ export default {
     this.$nuxt.$off('trigger-condition-visualization', this.handleTriggerConditionVisualization);
   },
   
-  components: { PanelControls, Waveform },
+  components: { PanelControls, Waveform, Logo },
 };
 </script>
 
@@ -370,7 +370,6 @@ export default {
   display: flex;
   flex-direction: row;
   width: 100%;
-  background-color: var(--v-background-base);
   
   @media (max-width: 768px) {
     flex-direction: column;
@@ -385,8 +384,14 @@ export default {
   right: 10dvw;
   
   &.model-section-mobile {
-    min-height: 40vh;
-    height: 40vh;
+    width: 100vw;
+    min-width: 100vw;
+    flex: 1;
+    height: 50vh;
+    right: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -411,8 +416,9 @@ export default {
     position: relative;
     width: 100%;
     max-width: 100%;
+    justify-content: center;
+    align-items: center;
     height: auto;
-    max-height: 60vh;
     overflow-y: auto;
     flex-direction: row;
     flex-wrap: wrap;
@@ -473,15 +479,11 @@ export default {
   width: 100%;
 }
 
-.logo-section {
-  margin-top: auto;
-  padding: 20px 0;
-  text-align: center;
-}
 
 .logo-container {
   max-width: 150px;
   margin: 0 auto;
+  margin-top: 10px;
   opacity: 0.8;
   
   &:hover {

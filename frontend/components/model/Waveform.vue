@@ -248,7 +248,7 @@ export default {
 
 .waveform-title {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: black;
   text-align: center;
   margin-top: 8px;
   padding: 0 5px;

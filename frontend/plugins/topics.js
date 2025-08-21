@@ -56,7 +56,7 @@ function getContentBySlug(slug) {
             heading: topic.heading,
             title: topic.title,
             content: topic.content,
-            showConditionSelector: topic.showConditionSelector,
+            component: topic.component,
           },
         };
       }
@@ -90,6 +90,7 @@ function isSubTopicDisabled(subTopic) {
     subTopic.heading == null ||
     subTopic.icon == null ||
     subTopic.category == null ||
-    subTopic.model == null
+    subTopic.model == null ||
+    subTopic.component == null
   );
 }

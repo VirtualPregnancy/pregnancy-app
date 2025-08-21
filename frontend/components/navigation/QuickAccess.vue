@@ -3,7 +3,7 @@
     <div class="quick-access-header">
       <h3 class="section-title">
         <v-icon left color="accent">mdi-compass-outline</v-icon>
-        {{ topicTitle || 'Quick Access' }}
+        {{ topicTitle + ' Menu' || 'Quick Access' }}
       </h3>
     </div>
 
@@ -12,7 +12,7 @@
         v-for="(subtopic, key) in subtopics" 
         :key="key"
         class="access-btn" 
-        :color="getSubtopicColor(subtopic.category)"
+        :class="{ 'active-btn': isCurrentPage(key) }"
         large 
         block
         :to="{ name: 'slug', params: { slug: `${parentSlug}-${key}` }}"
@@ -43,6 +43,12 @@ export default {
     }
   },
 
+  computed: {
+    currentSlug() {
+      return this.$route.params.slug;
+    }
+  },
+
   methods: {
     getSubtopicColor(category) {
       const colorMap = {
@@ -52,6 +58,11 @@ export default {
         primary: 'primary'
       };
       return colorMap[category] || 'primary';
+    },
+    
+    isCurrentPage(key) {
+      const expectedSlug = `${this.parentSlug}-${key}`;
+      return this.currentSlug === expectedSlug;
     }
   }
 };
@@ -60,9 +71,9 @@ export default {
 <style scoped lang="scss">
 .quick-access-container {
   padding: 15px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--v-subSuccess-base);
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--v-secondary-base);
   margin-bottom: 10px;
 }
 
@@ -71,7 +82,7 @@ export default {
 }
 
 .section-title {
-  color: rgba(255, 255, 255, 0.95);
+  color: black;
   font-size: 1.3rem;
   font-weight: 600;
   margin: 0;
@@ -91,6 +102,8 @@ export default {
     min-height: 50px;
     height: auto !important;
     font-weight: 500;
+    background-color: var(--v-buttonMain-base);
+    color: var(--v-buttonText-base);
     text-transform: none;
     justify-content: flex-start;
     text-align: left;
@@ -138,8 +151,19 @@ export default {
     }
     
     &:hover {
-      transform: translateX(4px);
-      transition: transform 0.2s ease;
+        transform: translateX(4px);
+        transition: transform 0.2s ease;
+        background-color: var(--v-buttonMainHover-base);
+        color: var(--v-buttonTextHover-base);
+    }
+    
+    &.active-btn {
+        background-color: var(--v-buttonMainActive-base);
+        color: var(--v-buttonTextActive-base);
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        scale: 1.02;
+
     }
   }
 }

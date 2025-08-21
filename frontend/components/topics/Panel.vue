@@ -16,7 +16,7 @@
         >
         {{ $parentTopic().content }}
       </div>
-      <div v-if="$showConditionSelector()">
+      <div v-if="$component() == 'ConditionSelector'">
         <div class="conditions-panel">
           <ConditionSelector
             @conditions-changed="handleConditionsChanged"

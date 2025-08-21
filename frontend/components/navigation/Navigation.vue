@@ -1,37 +1,12 @@
 <template>
   <div class="navi">
-    <!-- <div
-      v-if="subMenuActive"
-      :class="$vuetify.breakpoint.smAndDown ? 'sub-menu' : ''"
-    >
-      <v-bottom-navigation
-        grow
-        :input-value="subMenuActive"
-        :color="activeColor"
-        background-color="var(--v-background-base)"
-      >
-        <v-btn
-          class="button-default button-sub-topic"
-          v-for="(subTopic, index) in selectedTopic.subTopics"
-          :key="index"
-          :disabled="$isSubTopicDisabled(subTopic)"
-          :to="{ name: 'slug', params: { slug: menuCaption + '-' + index } }"
-        >
-          <span>{{ subTopic.title }}</span>
-          <SvgIcon 
-            v-if="subTopic.icon && subTopic.icon.startsWith('/')" 
-            :icon="subTopic.icon" 
-          />
-          <v-icon v-else>{{ subTopic.icon }}</v-icon>
-        </v-btn>
-      </v-bottom-navigation>
-    </div> -->
+    
     <v-bottom-navigation
       grow
       :fixed="$vuetify.breakpoint.smAndDown ? true : false"
       :color="activeColor"
       v-model="currentMenuCaption"
-      background-color="var(--v-background-base)"
+      :background-color="$vuetify.theme.themes.light.background"
     >
       <v-btn
         v-for="(topic, index) in topics"
@@ -44,6 +19,7 @@
           params: { slug: index + '-' + getDefaultSlug(topic) },
         }"
         @click="handTopicClick(topic)"
+        :style="buttonStyles"
       >
         <span>{{ topic.title }}</span>
         <SvgIcon 
@@ -51,15 +27,6 @@
           :icon="topic.icon" 
         />
         <v-icon v-else>{{ topic.icon }}</v-icon>
-      </v-btn>
-      <v-btn
-        class="button-default button-main-topic"
-        :to="{ name: 'support' }"
-        @click="updateSupport()"
-        :value="'support'"
-      >
-        <span>Pregnancy Support</span>
-        <v-icon>mdi-account-group</v-icon>
       </v-btn>
     </v-bottom-navigation>
   </div>
@@ -101,11 +68,21 @@ export default {
   computed: {
     activeColor() {
       return this.$route.name === "support"
-        ? this.$vuetify.theme.themes.dark.secondary
+        ? this.$vuetify.theme.themes.light.secondary
         : this.$subTitle();
     },
     menuCaption() {
       return this.$route.name === "slug" ? this.$parentTopic().slug : "support";
+    },
+    buttonStyles() {
+      return {
+        '--button-main-color': this.$vuetify.theme.themes.light.buttonMain,
+        '--button-text-color': this.$vuetify.theme.themes.light.buttonText,
+        '--button-main-hover-color': this.$vuetify.theme.themes.light.buttonMainHover,
+        '--button-main-active-color': this.$vuetify.theme.themes.light.buttonMainActive,
+        '--button-text-active-color': this.$vuetify.theme.themes.light.buttonTextActive,
+        '--secondary-color': this.$vuetify.theme.themes.light.secondary,
+      };
     },
   },
 
@@ -156,10 +133,7 @@ export default {
   position: fixed;
   bottom: 8dvh;
   width: 100%;
-  
 }
-
-
 
 .v-btn.button-default {
   -webkit-user-select: none;
@@ -173,67 +147,40 @@ export default {
   overflow: hidden;
   white-space: normal;
   word-wrap: wrap;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  
   &.button-main-topic {
     height: auto !important;
     min-height: 56px !important;
     font-size: 0.8rem !important;
     display: flex !important;
     flex-direction: column !important;
-    border-left: 2px solid var(--v-secondary-darken1);
+    border-left: 2px solid var(--secondary-color);
     justify-content: center !important;
     align-items: center !important;
     text-align: center !important;
-    background: var(--v-buttonMain-base);
-    color: #fff;  
+    background: var(--button-main-color);
+    color: var(--button-text-color);
+    
     &:hover {
-      background: var(--v-buttonMainActive-base) !important;
+      background: var(--button-main-hover-color) !important;
       transform: translateY(-2px);  
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      color: var(--button-text-color);
     }
+    
     &.v-btn--active {
-      background: var(--v-buttonMainActive-base) !important;
+      background: var(--button-main-active-color) !important;
       font-weight: 700 !important;
+      color: var(--button-text-active-color) !important;
     }
   }
-
-  &.button-sub-topic {
-    font-size: 0.6rem !important;
-    background: var(--v-buttonSubmenu-base);
-    border-left: 2px solid var(--v-secondary-darken1);
-    color: #fff;  
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: normal;
-    word-wrap: wrap;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: 10px;
-    border-left: 2px solid #fff;
-    &:hover {
-      background: var(--v-buttonSubmenuActive-base) !important;
-      transform: translateY(-2px);  
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-    &.v-btn--active {
-      background: var(--v-buttonSubmenuActive-base) !important;
-      font-weight: 700 !important;
-    }
-  }
-  
- 
   
   .v-icon {
-    color: white !important;
+    color: var(--button-text-color) !important;
   }
   
   span {
-    color: white !important;
+    color: var(--button-text-color) !important;
     font-weight: inherit;
   }
 }

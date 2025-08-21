@@ -1,7 +1,7 @@
 @import "@/assets/sass/_mixins.scss";
 
 .bg-success {
-  @include gradient-bg(var(--v-success-base), $success-light);
+  background-color: var(--v-background-base);  
 }
 
 .bg-warning {
@@ -18,7 +18,7 @@
 
 .left-pane {
   position: relative;
-  color:aliceblue;
+  color:black;
   .home-btn {
     position: absolute;
     top: 16px;

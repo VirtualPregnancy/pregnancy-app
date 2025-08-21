@@ -23,8 +23,7 @@
             src="~/assets/images/gestures-icons.png"
             class="h-full w-full md:object-contain"
             @click="handleGestureIconClick"
-            v-show="mdAndUp" 
-            style="background-color: #6C90B9; border-radius: 10px; padding: 10px;"
+            style="background-color: var(--v-info-base); border-radius: 10px; padding: 10px;"
           />
         </div>
       </div>
@@ -627,19 +626,20 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   font-size: 1.2em;
-  color: black;
+  color: white;
   z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: var(--v-info-base);
   padding: 8px 16px;
   border-radius: 4px;
 }
 .model-container {
   position: relative;
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--v-background-base);
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: var(--v-backgroundAlt-base);
 }
 
 .model-viewport {
@@ -652,17 +652,15 @@ export default {
 }
 
 .baseDom-md {
-  width: 80vw;
-  height: 80vh;
-  max-width: 800px;
-  max-height: 600px;
-  background-color: var(--v-background-base);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .baseDom-sm {
-  width: 90vw;
-  height: 70vh;
-  background-color: var(--v-background-base);
+  width: 100%;
+  height: 100%;
 }
 
 // Responsive adjustments for mobile

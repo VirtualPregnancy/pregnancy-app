@@ -1,5 +1,5 @@
 <template>
-  <v-app class="landing-page">
+  <v-app :class="mdAndUp ? 'landing-page' : 'landing-page-md'">
     <!-- Hamburger Menu Icon -->
     <div class="hamburger-menu fixed top-5 left-5 z-50">
       <Menu />
@@ -13,8 +13,7 @@
         <div class="column left-column">
           <div class="column-content">
             <h1 class="main-title">
-              <span class="title-gradient">Pregnancy is an</span>
-              <span class="title-highlight">exciting time!</span>
+              Pregnancy is an exciting time!
             </h1>
             <p class="intro-text">
               Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, 
@@ -77,7 +76,7 @@
               </div>
              
             </div>
-            <Logo />
+            
           </div>
         </div>
         
@@ -90,12 +89,10 @@
 <script>
 import landingPageData from '@/assets/data/landingPageData';
 import Menu from '@/components/landing/Menu.vue';
-import Logo from '@/components/support/Logo.vue';
 export default {
   layout: 'empty',
   components: {
-    Menu,
-    Logo
+    Menu
   },
   
   computed: {
@@ -110,7 +107,11 @@ export default {
         ...item,
         image: this.getImagePath(item.image)
       }));
-    }
+    },
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp;
+    },
+    
   },
   
   methods: {
@@ -157,14 +158,18 @@ export default {
 
 <style scoped lang="scss">
 .landing-page {
-  background: var(--v-background-base);
+  background: var(--v-backgroundAlt-base);
   min-height: 100vh;
+}
+.landing-page-md {
+  margin-top: 30px;
+  box-sizing: border-box;
 }
 
 .hamburger-menu {
-  background: rgba(49, 54, 87, 0.1);
+  background: var(--v-background-base);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(49, 54, 87, 0.2);
+  border: 1px solid var(--v-background-base);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   padding: 8px;
@@ -179,6 +184,7 @@ export default {
 .landing-container {
   min-height: 100vh;
   width: 100vw;
+  background: var(--v-backgroundAlt-base);
   display: flex;
   position: relative;
   
@@ -243,12 +249,13 @@ export default {
 .main-title {
   font-size: 2.5rem;
   font-weight: bold;
+  color: var(--v-primary-base);
   margin-bottom: 1em;
   line-height: 1.2;
   
   .title-gradient {
     display: block;
-    background: linear-gradient(135deg, var(--v-secondary-base) 0%, var(--v-info-base) 100%);
+    background:  var(--v-info-base);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -257,7 +264,7 @@ export default {
   
   .title-highlight {
     display: block;
-    background: linear-gradient(135deg, var(--v-primary-base) 0%, var(--v-accent-base) 100%);
+    background: var(--v-accent-base);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -268,17 +275,9 @@ export default {
 .intro-text {
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--v-success-base);
+  color: var(--v-info-base);
 }
 
-@keyframes glow {
-  from {
-    filter: drop-shadow(0 0 5px var(--v-primary-lighten1));
-  }
-  to {
-    filter: drop-shadow(0 0 15px var(--v-primary-base));
-  }
-}
 
 /* Cards Styles */
 .cards-container {

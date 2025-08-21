@@ -104,11 +104,11 @@ export default {
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: {
     dirs: [
-      "~/components/support",
       "~/components/model",
       "~/components/navigation",
       "~/components/topics",
       "~/components/loading",
+      "~/components/content",
     ],
   },
 
@@ -132,24 +132,34 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: "#DD3C51",     // red from palette
-          accent: "#6C90B9",      // blue from palette
-          accentLight: "#1F6683",     // teal from palette
-          secondary: "#B8BCC8",   // light grey for buttons
-          info: "#1F6683",        // teal from palette
-          warning: "#DD3C51",     // red from palette
-          subWarning: "#6C90B9",  // blue from palette
-          error: "#DD3C51",       // red from palette
-          subError: "#6C90B9",    // blue from palette
-          success: "#1F6683",     // teal from palette
-          subSuccess: "#6C90B9",  // blue from palette
-          background: "#dbd9d5",  // light grey background
-          // for menu buttons
-          buttonMain: "#3E7C93",           
-          buttonMainActive: "#2b6378",   
-          buttonSubmenu: "#6C90B9",        
-          buttonSubmenuActive: "#4d6c8f",    
+          primary: "#DD3C51",        
+          accent: "#313657",         
+          accentLight: "#1F6683",    
+          secondary: "#B8BCC8",      
+        
+          info: "#1F6683",          
+          warning: "#DD3C51",        
+          subWarning: "#FAF6F7",     
+          error: "#DD3C51",          
+          subError: "#FAF6F7",       
+          success: "#1F6683",       
+          subSuccess: "#E0EBF5",     
+        
+          background: "#F5F9FC",     
+          backgroundAlt: "#FAF6F7",  
+        
+          
+            buttonMain: "#4d74a8",        
+            buttonMainHover: "#486FA3",   
+            buttonMainActive: "#313657",  
+            
+            buttonText: "#FFFFFF",        
+            buttonTextHover: "#FFFFFF",  
+            buttonTextActive: "#FFFFFF"  
+          
+             
         },
+        
         dark: {
           primary: "#DD3C51",     // red from palette
           accent: "#6C90B9",      // blue from palette
@@ -163,7 +173,7 @@ export default {
           success: "#1F6683",     // teal from palette
           subSuccess: "#6C90B9",  // blue from palette
           background: "#313657",  // dark navy from palette
-        },
+        }
       },
     },
   },
