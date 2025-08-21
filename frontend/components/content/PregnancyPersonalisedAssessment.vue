@@ -40,7 +40,7 @@
     <div v-if="userPoint" class="conclusion-section">
       <h3>Analysis Result</h3>
       <div class="conclusion-content">
-        <p><strong>Your measurement:</strong> {{ userPoint.bpd }}mm at {{ userPoint.week }} weeks</p>
+        <p><strong>Your measurement:</strong> {{ userPoint.bpd }}mm at {{ userPoint.week + 11 }} weeks</p>
         <p><strong>Percentile position:</strong> {{ userPoint.percentile }}%</p>
         <p><strong>Conclusion:</strong> {{ userPoint.conclusion }}</p>
         <p><strong>Reference values:</strong></p>
@@ -196,7 +196,7 @@ export default {
       }
       
       this.userPoint = {
-        week: this.userInput.week,
+        week: this.userInput.week - 11,
         bpd: userBPD,
         p5: p5,
         p50: p50,

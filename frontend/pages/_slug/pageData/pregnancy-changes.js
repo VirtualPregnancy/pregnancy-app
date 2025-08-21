@@ -10,9 +10,9 @@ export default {
       iconColor: "var(--v-primary-base)",
       content: "  Over the course of pregnancy your uterus increases in size and weight by about 10 times as the baby grows within it.  The blood vessels within the uterus also get remodelled in the first half of pregnancy, becoming at least twice as wide by 20 weeks so that they can deliver increasing amounts of nutrient and oxygen rich blood to the placenta as the baby starts to grow more rapidly in the second half of gestation. "+
 "The pregnant uterus taking up so much space in the body also brings about other anatomical changes. As the other internal organs get pushed upwards, the space the lungs have to expand is reduced, although they become more efficient to help combat this. "+
-"Compression of the bladder means that you may need to visit the bathroom more often. Pregnancy also puts additional load onto the kidneys, which increase their activity and sometimes increase slightly in size to accommodate this. "+
-"Your breasts will enlarge in preparation to make milk, and the nipples may darken and become larger.  "+
-"Changes to the skin can also be seen, with increases in pigmentation, stretch marks appearing, and a dark line called the ‘linea nigra’ appearing down the centre of the belly. "
+"<br /> <br /> Compression of the bladder means that you may need to visit the bathroom more often. Pregnancy also puts additional load onto the kidneys, which increase their activity and sometimes increase slightly in size to accommodate this. "+
+"<br /> <br /> Your breasts will enlarge in preparation to make milk, and the nipples may darken and become larger.  "+
+"<br /> <br /> Changes to the skin can also be seen, with increases in pigmentation, stretch marks appearing, and a dark line called the ‘linea nigra’ appearing down the centre of the belly. "
     },
     {
       id: "2",
@@ -20,10 +20,10 @@ export default {
       icon: "mdi-heart-pulse",
       iconColor: "var(--v-primary-base)",
       content: " From early in pregnancy, your body starts to change how its cardiovascular system works in order to be able to pump more blood to the uterus, and in turn deliver the oxygen and nutrients your baby needs.  "+
-"By the end of the first trimester, your heart rate will have increased by about 10%, and your blood pressure will have decreased slightly. "+
-"Over the rest of pregnancy your body also increases the total amount of blood you have by around a third, which is important to allow enough blood to circulate to the placenta, and provides protection against blood loss during childbirth.  As so much new blood is being made, it is important to make sure that you are getting enough iron in your diet when pregnant, as this helps your blood cells carry oxygen to the placenta. "+
-"Your immune system also adapts to pregnancy.  This is important to ‘tolerate’ the placenta which could otherwise be recognised as foreign to your immune system and attacked.  The immune system is not ‘turned down’ though – it still operates well – but rather cells and factors released from your placenta teach it to accept your growing baby.  "+
-"All these adaptations help to support a healthy pregnancy. "
+"<br /> <br /> By the end of the first trimester, your heart rate will have increased by about 10%, and your blood pressure will have decreased slightly. "+
+"<br /> <br /> Over the rest of pregnancy your body also increases the total amount of blood you have by around a third, which is important to allow enough blood to circulate to the placenta, and provides protection against blood loss during childbirth.  As so much new blood is being made, it is important to make sure that you are getting enough iron in your diet when pregnant, as this helps your blood cells carry oxygen to the placenta. "+
+"<br /> <br /> Your immune system also adapts to pregnancy.  This is important to ‘tolerate’ the placenta which could otherwise be recognised as foreign to your immune system and attacked.  The immune system is not ‘turned down’ though – it still operates well – but rather cells and factors released from your placenta teach it to accept your growing baby.  "+
+"<br /> <br /> All these adaptations help to support a healthy pregnancy. "
  
     },
     {
