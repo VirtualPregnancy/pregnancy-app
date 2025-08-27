@@ -38,7 +38,7 @@
               :class="{ 'topic-expanded': expandedTopic === topicKey }"
               @click="toggleTopic(topicKey, topic)"
             >
-              <span class="flex-1 text-left">{{ topic.title }}</span>
+              <span class="w-48 text-left break-words whitespace-normal border-b border-gray-200 mt-3 mb-3">{{ topic.heading }}</span>
               <v-icon class="chevron-icon" :class="{ 'rotated': expandedTopic === topicKey }" size="16">
                 mdi-chevron-down
               </v-icon>
@@ -202,7 +202,7 @@ export default {
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   min-width: 250px;
-  max-width: 300px;
+  max-width: 400px;
   animation: slideDown 0.2s ease;
   overflow: hidden;
 }

@@ -34,7 +34,7 @@ export default {
       {
         rel: "icon",
         type: "image/x-icon",
-        href: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app/favicon2.ico" : "/favicon2.ico",
+        href: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app/favicon.ico" : "/favicon.ico",
       },
       {
         rel: "stylesheet",

@@ -16,10 +16,8 @@
               Pregnancy is an exciting time!
             </h1>
             <p class="intro-text">
-              Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, 
-              this app is here to support you and your whānau every step of the way. Designed especially for people 
-              in Aotearoa New Zealand, we offer trusted information, helpful tools, and culturally respectful guidance 
-              to help you understand your health and make confident decisions.
+              Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, this app is here to support you and your whānau every step of the way. Designed especially for people in Aotearoa New Zealand, we offer trusted information, helpful tools, and guidance to help you understand your health and make confident decisions.
+
             </p>
           </div>
         </div>
@@ -276,6 +274,31 @@ export default {
   font-size: 1rem;
   line-height: 1.6;
   color: var(--v-info-base);
+  
+  /* Responsive font sizes using Tailwind-like approach */
+  @media (min-width: 1536px) {
+    font-size: 1.4rem; /* 2xl screens */
+  }
+  
+  @media (min-width: 1280px) and (max-width: 1535px) {
+    font-size: 1.0625rem; /* xl screens */
+  }
+  
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    font-size: 1rem; /* lg screens */
+  }
+  
+  @media (min-width: 768px) and (max-width: 1023px) {
+    font-size: 0.9375rem; /* md screens */
+  }
+  
+  @media (min-width: 640px) and (max-width: 767px) {
+    font-size: 0.875rem; /* sm screens */
+  }
+  
+  @media (max-width: 639px) {
+    font-size: 0.8125rem; /* xs screens */
+  }
 }
 
 
@@ -347,10 +370,6 @@ export default {
     font-size: 2rem;
   }
   
-  .intro-text {
-    font-size: 0.9rem;
-  }
-  
   .card-title {
     font-size: 1.2rem;
   }
@@ -408,9 +427,7 @@ export default {
     font-size: 1.8rem;
   }
   
-  .intro-text {
-    font-size: 0.85rem;
-  }
+
   
   .cards-container {
     gap: 15px;
