@@ -12,7 +12,7 @@
       <client-only>
         <div
           v-if="$parentTopic().content"
-          class="pt-2 pt-xl-4 marked"
+          class="pt-2 pt-xl-4 marked mb-8 mt-4"
         >
         {{ $parentTopic().content }}
       </div>

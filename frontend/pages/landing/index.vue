@@ -12,6 +12,9 @@
         <!-- Left Column - Title and Content -->
         <div class="column left-column">
           <div class="column-content">
+            <div class="mb-4">
+              <Logo />
+            </div>
             <h1 class="main-title">
               Pregnancy is an exciting time!
             </h1>
@@ -87,10 +90,12 @@
 <script>
 import landingPageData from '@/assets/data/landingPageData';
 import Menu from '@/components/landing/Menu.vue';
+import Logo from '@/components/Logo.vue';
 export default {
   layout: 'empty',
   components: {
-    Menu
+    Menu,
+    Logo
   },
   
   computed: {
@@ -215,17 +220,17 @@ export default {
   min-height: 100vh;
   
   &.left-column {
-    flex: 0 0 25%;
+    flex: 0 0 24%;
     background: rgba(255, 255, 255, 0.02);
   }
   
   &.middle-column {
-    flex: 0 0 42%;
+    flex: 0 0 38%;
     background: rgba(255, 255, 255, 0.01);
   }
   
   &.right-column {
-    flex: 0 0 33%;
+    flex: 0 0 38%;
     background: rgba(255, 255, 255, 0.02);
   }
 }
@@ -281,7 +286,7 @@ export default {
   }
   
   @media (min-width: 1280px) and (max-width: 1535px) {
-    font-size: 1.0625rem; /* xl screens */
+    font-size: 1rem; /* xl screens */
   }
   
   @media (min-width: 1024px) and (max-width: 1279px) {

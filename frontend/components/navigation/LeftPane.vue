@@ -18,7 +18,7 @@
     <div v-if="$route.name == 'slug'">
       
       <!-- Show different content based on page type -->
-      <div v-if="isModelPage" class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
+      <div v-if="isModelPage" class="pa-4 mb-4" :class="currentBg" tile :style="panelHeightStyle">
         <lazy-panel 
           @trigger-model-visualization="handleModelVisualization"
           @ultrasound-tool-ready="handleUltrasoundToolReady"
@@ -33,7 +33,8 @@
       
         <!-- <Logo v-if="mdAndUp" :class="mdAndUp ? 'logo' : 'sm-logo'" /> -->
       </div>
-      
+
+   
       <!-- Show quick access for content pages -->
       <div v-else class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
         <lazy-panel 

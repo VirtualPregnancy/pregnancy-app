@@ -56,7 +56,7 @@
                   class="menu-sub-item justify-start mb-1"
                   @click="navigateToPage(topicKey, subKey)"
                 >
-                  <span class="text-left text-caption">{{ subtopic.title }}</span>
+                  <span class="text-left text-caption  break-words whitespace-normal">{{ subtopic.heading }}</span>
                 </v-btn>
               </div>
             </v-expand-transition>
