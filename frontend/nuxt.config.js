@@ -219,7 +219,7 @@ export default {
       "/ultrasound-how",
       "/clinical-mid-wife",
       "/clinical-when-care-changes",
-      "/support",
+      "support-services",
       "/about",
     ],
   },
