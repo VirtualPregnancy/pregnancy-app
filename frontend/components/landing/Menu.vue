@@ -38,7 +38,7 @@
               :class="{ 'topic-expanded': expandedTopic === topicKey }"
               @click="toggleTopic(topicKey, topic)"
             >
-              <span class="w-48 text-left break-words whitespace-normal border-b border-gray-200 mt-3 mb-3">{{ topic.heading }}</span>
+              <span class="text-left break-words whitespace-normal leading-tight pr-2" style="width: 320px; max-width: 320px;">{{ topic.heading }}</span>
               <v-icon class="chevron-icon" :class="{ 'rotated': expandedTopic === topicKey }" size="16">
                 mdi-chevron-down
               </v-icon>
@@ -56,7 +56,7 @@
                   class="menu-sub-item justify-start mb-1"
                   @click="navigateToPage(topicKey, subKey)"
                 >
-                  <span class="text-left text-caption  break-words whitespace-normal">{{ subtopic.heading }}</span>
+                  <span class="text-left text-caption break-words whitespace-normal leading-tight" style="width: 280px; max-width: 280px; display: block;">{{ subtopic.heading }}</span>
                 </v-btn>
               </div>
             </v-expand-transition>
@@ -230,9 +230,16 @@ export default {
 .menu-main-item {
   border-radius: 6px;
   margin-bottom: 2px;
+  min-width: 250px;
+  max-width: 400px;
   transition: all 0.2s ease;
   color: #333 !important;
   min-height: 36px;
+  height: auto !important;
+  white-space: normal !important;
+  word-wrap: break-word;
+  padding: 8px 12px;
+  align-items: flex-start !important;
 }
 
 .menu-main-item:hover {
@@ -250,6 +257,11 @@ export default {
   transition: all 0.2s ease;
   color: #666 !important;
   min-height: 28px;
+  height: auto !important;
+  white-space: normal !important;
+  word-wrap: break-word;
+  padding: 6px 12px;
+  width: 100%;
 }
 
 .menu-sub-item:hover {
@@ -284,6 +296,65 @@ export default {
   .menu-content {
     min-width: 200px;
     max-width: 250px;
+  }
+  
+  .menu-main-item {
+    min-width: 200px;
+    max-width: 250px;
+  }
+  
+  .menu-main-item span {
+    width: 180px !important;
+    max-width: 180px !important;
+  }
+  
+  .menu-sub-item span {
+    width: 160px !important;
+    max-width: 160px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-content {
+    min-width: 250px;
+    max-width: 300px;
+  }
+  
+  .menu-main-item {
+    min-width: 200px;
+    max-width: 250px;
+  }
+  
+  .menu-main-item span {
+    width: 180px !important;
+    max-width: 180px !important;
+  }
+  
+  .menu-sub-item span {
+    width: 160px !important;
+    max-width: 160px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .menu-content {
+    min-width: 120px;
+    max-width: 160px;
+  }
+  
+  .menu-main-item {
+    min-width: 120px;
+    max-width: 160px;
+  }
+  
+  .menu-main-item span {
+    width: 100px !important;
+    max-width: 100px !important;
+  }
+  
+  .menu-sub-item span {
+    width: 80px !important;
+    max-width: 80px !important;
   }
 }
 </style>

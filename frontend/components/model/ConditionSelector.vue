@@ -5,7 +5,7 @@
       class="pb-3 pt-3 cursor-pointer hover-bg-grey header-title"
       @click="toggleExpanded"
     >
-      <v-icon left color="white" size="24">mdi-medical-bag</v-icon>
+      <v-icon left color="white" size="20">mdi-medical-bag</v-icon>
       <span class="font-weight-bold header-text">Pregnancy Conditions</span>
       <v-spacer></v-spacer>
       <v-chip
@@ -13,7 +13,7 @@
         :color="getSelectedCondition().color"
         dark
         small
-        class="mr-3 header-chip"
+        class="ml-2 header-chip"
         label
       >
         {{ selectedCondition }}
@@ -22,7 +22,7 @@
         icon
         small
         @click.stop="toggleExpanded"
-        class="ml-1 expand-btn"
+        class="ml-2 expand-btn"
       >
         <v-icon 
           :class="{ 'rotate-180': expanded }"

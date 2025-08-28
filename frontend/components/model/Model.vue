@@ -72,7 +72,7 @@ export default {
       currentColorMappingType: 'pressure', // Track current color mapping type
       renderingComplete: false, // Track if model is fully rendered and ready
       
-      // Model configuration for different tree types
+      // Model configuration for arterial tree
       modelConfig: {
         arterial: {
           path: '/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk',
@@ -82,19 +82,6 @@ export default {
           modelSize: 420,
           useCylinderGeometry: true,
           cylinderSegments: 10
-        },
-        venous: {
-          path: '/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk',
-          displayName: 'Placental Venous Tree',
-          color: 0x2222ff,
-          opacity: 1.0,
-          modelSize: 420,
-          useCylinderGeometry: true,
-          cylinderSegments: 10
-        },
-        combined: {
-          displayName: 'Placental Vascular Network',
-          models: ['arterial', 'venous']
         }
       }
     };
@@ -369,32 +356,32 @@ export default {
     },
 
     /**
-     * Universal tree loading function - replaces all duplicated load methods
-     * @param {string} modelType - 'arterial', 'venous', or 'combined'
+     * Load arterial tree model with enhanced configuration
+     * @param {string} modelType - Currently only supports 'arterial'
      * @param {Object} options - Override default options
      */
     async loadTree(modelType, options = {}) {
       console.log(`[Model] Loading ${modelType} model...`);
       
+      // Only support arterial model now
+      if (modelType !== 'arterial') {
+        console.warn(`[Model] Only arterial model is supported. Requested: ${modelType}`);
+        modelType = 'arterial';
+      }
+      
       // Set rendering state to false when starting to load
       this.renderingComplete = false;
       this.$emit('model-state-updated', { 
-        modelName: `Loading ${modelType} model...`,
+        modelName: `Loading arterial model...`,
         renderingComplete: false 
       });
       
-      // Get base configuration for this model type
+      // Get base configuration for arterial model
       const baseConfig = this.modelConfig[modelType];
       if (!baseConfig) {
-        console.error(`[Model] Unknown model type: ${modelType}`);
-        this.$emit('model-state-updated', { modelName: `Error: Unknown model type ${modelType}` });
+        console.error(`[Model] Arterial model configuration not found`);
+        this.$emit('model-state-updated', { modelName: `Error: Arterial model configuration not found` });
         return;
-      }
-
-      // Handle combined models (load multiple models)
-      if (modelType === 'combined') {
-        this.currentModelType = modelType;
-        return await this.loadCombinedModels(baseConfig, options);
       }
       
       // Track the current model type
@@ -452,38 +439,7 @@ export default {
       return result;
     },
 
-    /**
-     * Load combined models (multiple trees)
-     * @param {Object} baseConfig - Base configuration for combined model
-     * @param {Object} options - Override options
-     */
-    async loadCombinedModels(baseConfig, options = {}) {
-      const modelTypes = options.models || baseConfig.models;
-      
-      try {
-        // Load each model in sequence, don't clear scene for subsequent models
-        for (let i = 0; i < modelTypes.length; i++) {
-          const modelType = modelTypes[i];
-          
-          await this.loadTree(modelType, {
-            ...options,
-            clearScene: i === 0, // Only clear scene for first model
-            colorMappingType: options.colorMappingType // Pass through the color mapping type
-          });
-        }
-        
-        // Update final name and ensure rendering is complete
-        this.renderingComplete = true;
-        this.$emit('model-state-updated', { 
-          modelName: baseConfig.displayName,
-          renderingComplete: true 
-        });
-        
-      } catch (error) {
-        console.error('[Model] Error loading combined models:', error);
-        this.$emit('model-state-updated', { modelName: 'Loading Error' });
-      }
-    },
+
 
     /**
      * Manual reload function - triggered by user button click
@@ -498,21 +454,7 @@ export default {
       });
     },
 
-    /**
-     * Load venous tree 
-     */
-    async loadVenousTree() {
-      console.log("Loading venous tree...");
-      await this.loadTree('venous');
-    },
 
-    /**
-     * Load combined arterial and venous trees
-     */
-    async loadCombinedTrees() {
-      console.log("Loading combined vascular network...");
-      await this.loadTree('combined');
-    },
 
 
     // Handle click on gesture icons area

@@ -25,12 +25,16 @@
           </div>
         </div>
 
-        <!-- Middle Column - Three Cards -->
-        <div class="column middle-column">
+        <!-- Cards Columns -->
+        <div 
+          v-for="(columnItems, columnIndex) in cardColumns" 
+          :key="columnIndex"
+          class="column cards-column"
+        >
           <div class="column-content">
             <div class="cards-container">
               <div 
-                v-for="item in middleItems" 
+                v-for="item in columnItems" 
                 :key="item.title"
                 class="card-item"
                 :style="{ backgroundColor: item.backgroundColor }"
@@ -49,35 +53,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Right Column - Two Cards -->
-        <div class="column right-column">
-          <div class="column-content">
-            <div class="cards-container">
-              <div 
-                v-for="item in rightItems" 
-                :key="item.title"
-                class="card-item"
-                :style="{ backgroundColor: item.backgroundColor }"
-                @click="navigateToPage(item.link)"
-              >
-                <div class="card-icon">
-                  <img 
-                    :src="item.image" 
-                    :alt="item.title"
-                    @error="onImageError"
-                  />
-                </div>
-                <div class="card-content">
-                  <h3 class="card-title">{{ item.title }}</h3>
-                  <p class="card-description">{{ item.description }}</p>
-                </div>
-              </div>
-             
-            </div>
-            
           </div>
         </div>
         
@@ -99,17 +74,17 @@ export default {
   },
   
   computed: {
-    middleItems() {
-      return landingPageData.items.filter(item => item.index <= 2).map(item => ({
+    cardColumns() {
+      const processedItems = landingPageData.items.map(item => ({
         ...item,
         image: this.getImagePath(item.image)
       }));
-    },
-    rightItems() {
-      return landingPageData.items.filter(item => item.index > 2).map(item => ({
-        ...item,
-        image: this.getImagePath(item.image)
-      }));
+      
+      // Split into two columns: [0,1,2] and [3,4,5]
+      const middleColumn = processedItems.filter(item => item.index <= 2);
+      const rightColumn = processedItems.filter(item => item.index > 2);
+      
+      return [middleColumn, rightColumn];
     },
     mdAndUp() {
       return this.$vuetify.breakpoint.mdAndUp;
@@ -224,14 +199,13 @@ export default {
     background: rgba(255, 255, 255, 0.02);
   }
   
-  &.middle-column {
+  &.cards-column {
     flex: 0 0 38%;
     background: rgba(255, 255, 255, 0.01);
-  }
-  
-  &.right-column {
-    flex: 0 0 38%;
-    background: rgba(255, 255, 255, 0.02);
+    
+    &:last-child {
+      background: rgba(255, 255, 255, 0.02);
+    }
   }
 }
 
@@ -411,14 +385,12 @@ export default {
       align-items: center;
     }
     
-    &.middle-column {
+    &.cards-column {
       min-height: auto;
-      margin-bottom: 30px;
-    }
-    
-    &.right-column {
-      min-height: auto;
-      margin-top: -10%;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
   
