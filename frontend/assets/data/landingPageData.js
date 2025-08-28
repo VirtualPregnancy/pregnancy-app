@@ -9,7 +9,7 @@ export default {
       link: '/pregnancy-changes'
     },
     {
-      index: 1,
+      index: 3,
       title: 'Navigating pregnancy complications',
       description: 'What you need to know about why complications occur, how they are detected, and what this may mean for your pregnancy journey and beyond.',
       image: '/img/landing/embryo_icon.svg',
@@ -17,7 +17,7 @@ export default {
       link: '/conditions-fetal'
     },
     {
-      index: 2,
+      index: 4,
       title: 'What does my ultrasound scan mean?',
       description: 'Ultrasound scans let doctors check on the health of your baby (and its placenta). Use our interactive tool to better understand what ultrasound is measuring, how it can tell us about baby\'s health, and what your scan may mean.',
       image: '/img/landing/medical_record.svg',
@@ -25,7 +25,7 @@ export default {
       link: '/ultrasound-what-is-ultrasound'
     },
     {
-      index: 3,
+      index: 1,
       title: 'Pregnancy care in Aotearoa NZ',
       description: 'Information on care pathways you can choose in NZ for your pregnancy, how to find a midwife, and how care may change if there are any concerns about the pregnancy.',
       image: '/img/landing/clinic.svg',
@@ -33,12 +33,20 @@ export default {
       link: '/clinical-mid-wife'
     },
     {
-      index: 4,
+      index: 2,
       title: 'Support services',
       description: 'The pregnancy experience is different for everyone. Here you can find information on support services available for you and your whanau to help navigate your journey, whatever it may look like.',
       image: '/img/landing/heart.svg',
       backgroundColor: '#212D3B',
       link: '/support-services'
+    },
+    {
+      index: 5,
+      title: 'About Us',
+      description: 'Learn more about the team behind this app, and how we are working to support you and your whanau.',
+      image: '/img/landing/about-us.svg',
+      backgroundColor: '#7A3E06',
+      link: '/about'
     }
   ]
 }

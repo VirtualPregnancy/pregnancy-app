@@ -1,38 +1,135 @@
 Pages
 =====
 
+This document describes the different pages and their structure in the pregnancy application.
+
 Landing Page
-------------
-The landing page is the first page that users see when they access the app, where there are 3 sections:
+-----------
 
-- Five Cards: By Clicking the card, user can be navigated to the corresponding page, the title/background/icon/content is stored in the ``landingPageData.js``, by adding/updating this file, the card will be updated to the landing page.
-- Menu: on the left up corner, there is a menu button, including all the main topics and the sub-topics of each main topic, the item in menu is rendered based on the ``topics.json`` file, which also used in the Navigation.vue file.
-- Left part: The title and description of the app.
+The landing page is the first page that users see when they access the app. It consists of three main sections:
 
-Main App
---------
-The core features of the app are:
+**Five Cards**
+    By clicking a card, users can navigate to the corresponding page. The title, background, icon, and content are stored in ``landingPageData.js``. Adding or updating this file will automatically update the cards on the landing page.
 
-- Pregnancy Journey: The main topic of the app, including the body changes, fetal growth, placenta roles, and baby health.
-- Pregnancy Complications: The sub-topics of the pregnancy journey, including the fetal growth, birth, and cares.
-- Ultrasound: The ultrasound related information, including the what is an ultrasound, ultrasound waveforms, detecting pregnancy concerns, and an interactive tool for ultrasound waveform.
-- Care Pathways: The care pathways of the pregnancy, including the midwife lead care pathways, when care changes, and support.
+**Menu**
+    Located in the upper left corner, there is a menu button that includes all main topics and their sub-topics. Menu items are rendered based on the ``topics.json`` file, which is also used in the Navigation.vue file.
 
-The data of above topics are stored in the ``topics.json`` file, including the tab's name and icon.
+**Left Section**
+    Contains the title and description of the app.
 
-There are 2 types of pages, which defined in the ``pages/_slug_/pageData/`` folder, each page has its own data file, including the title, description, contentSections, Cards and showModel. the content of the left side is defined in `frontend/assets/data/markdown` folder, the model is defined in the ``pages/_slug_/pageData/model.js`` file
-- Page with model: the model will be displayed on the right side of the page, the model is a Vue component.
-- Page without model: the content of the left side is defined in `pages/_slug_/pageData/` folder, where the `ContentSections` in the js file defined the items on the right side, if the content need fancy style, replace the "content" with "component" in the js file, and create a new component in the ``frontend/components/content`` folder, then import the component in the ``ContentPane.vue`` file, and add the component name in this page's js file. Note the id of each section should be unique. The icon, title, color and IconColor can also be defined in the js file.
+Main Application
+----------------
 
-Both content field and the markdown file can use HTML to do some simple styling.
+The main application is divided into three parts:
 
+**Left Side**
+    The left side of the page contains the menu and introduction, rendered based on the ``topics.json`` file.
 
-Support
--------
+**Right Side**
+    The right side displays the main content of the page, rendered based on the ``pageData`` folder.
 
-The support page is the page that users can find the support resources, the tab of support page is sepreately from the main app, the data of support page is stored in the ``supportData.js`` file. The component of support page is stored in the ``Support.vue`` file, which showcase the left side of the support page.
+**Bottom**
+    The bottom of the page contains the main navigation, rendered based on the ``topics.json`` file.
 
-About
------
+Core Features
+~~~~~~~~~~~~
 
-The about page is the page that users can find the about information of the app, now this page can only been find at Menu.
+The application includes the following core features:
+
+- Pregnancy Journey
+- Ultrasound
+- Care Pathways
+- Pregnancy Complications
+- Support
+
+Data Configuration
+~~~~~~~~~~~~~~~~~~
+
+The data for the above topics is stored and configured in the ``topics.json`` file with the following structure:
+
+.. code-block:: javascript
+
+    "pregnancy": { // the key of the main topic
+        "title": "Pregnancy Journey", // the title of the main topic, shows in the menu
+        "component": "none", // the component of the main topic, if want the left side show a component, set the name of the component here
+        "heading": "What is Happening in Pregnancy?", // the heading of the main topic, shows in the left side of the page
+        "content": "xxx.", // the content of the main topic, shows in the left side of the page
+        "icon": "/img/landing/pregnancy.svg", // the icon of the main topic, shows in the menu
+        "subTopics": { // the sub-topics of the main topic
+          "changes": { // the key of the sub-topic
+            "title": "Your Body", // the title of the sub-topic, shows in the menu
+            "component": "none", // the component of the sub-topic, if want the left side show a component, set the name of the component here
+            "heading": "Changes To Your Body", // the heading of the sub-topic, shows in the left side of the page
+            "icon": "mdi-radar", // the icon of the sub-topic, shows in the menu
+            "category": "success", // the category of the sub-topic, shows in the menu
+            "subTitle": "subSuccess", // the sub-title of the sub-topic, shows in the left side of the page
+            "model": {
+              "name": "NoInfarct" // the name of the model
+            }
+          },
+          ...
+        }
+      }
+
+Content Rendering
+~~~~~~~~~~~~~~~~
+
+The right side of the page is rendered based on the ``pageData`` folder. Each page (at the sub-topic level) has its own data file and is rendered using the ``ContentPane.vue`` file.
+
+Basic Data Structure
+^^^^^^^^^^^^^^^^^^^
+
+A typical data file looks like this:
+
+.. code-block:: javascript
+
+    export default {
+        title: 'Sample',
+        description: 'Sample',
+        showModel: false, // if true, the model will be shown in the content pane
+        contentSections: [
+            {
+                id: "1", //id must be unique
+                title: "Sample",
+                icon: "mdi-heart-plus", //icon must be a valid mdi icon
+                iconColor: "var(--v-primary-base)", //iconColor must be a valid css color or a variable
+                content: "Sample"
+            },
+            {
+                id: "2",
+                title: "Sample",
+                icon: "mdi-heart-plus",
+                iconColor: "var(--v-primary-base)",
+                content: "Sample"
+            }
+        ]
+    };
+
+Component-Based Content
+^^^^^^^^^^^^^^^^^^^^^^^
+
+If HTML text alone is insufficient, you can also use components to render content:
+
+.. code-block:: javascript
+
+    export default {
+        title: 'Sample',
+        description: 'Sample',
+        showModel: false, // if true, the model will be shown in the content pane
+        contentSections: [
+            {
+                id: "1", //id must be unique
+                title: "Sample",
+                icon: "mdi-heart-plus", //icon must be a valid mdi icon
+                iconColor: "var(--v-primary-base)", //iconColor must be a valid css color or a variable
+                component: "PregnancyPersonalisedAssessment" // the name of the component, stored in the ``frontend/components/content`` folder
+            },
+        ]
+    };
+
+**Note:** If contentSections contains only one item, it will display as an article. Otherwise, it will display as expandable sections.
+
+About Page
+----------
+
+The about page provides users with information about the application. Currently, this page can only be accessed through the Menu.

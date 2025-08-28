@@ -25,8 +25,6 @@
           :loading-complete="modelStates.loadingComplete"
           :rendering-complete="modelStates.renderingComplete"
           @reload-arterial="handleReloadArterial"
-          @load-venous="handleLoadVenous"
-          @load-combined="handleLoadCombinedTrees"
           @colored-models-by-changed="handleColoredModelsByChanged"
         />
       </div>
@@ -140,17 +138,7 @@ export default {
       }
     },
 
-    handleLoadVenous() {
-      console.log('[RightPane] Loading venous tree model...');
-      if (this.$refs.modelComponent && this.$refs.modelComponent.loadTree) {
-        this.$refs.modelComponent.loadTree('venous', {
-          color: 0x2222ff,
-          displayName: 'Placental Venous Tree',
-          colorMappingType: this.modelStates.colorMappingType,
-          pressureMapping: this.modelStates.pressureMapping
-        });
-      }
-    },
+
 
     handleColoredModelsByChanged(coloredModelsBy) {
       console.log('[RightPane] Color mapping changed to:', coloredModelsBy);
@@ -161,15 +149,6 @@ export default {
       
       // Apply the color change to the current model
       this.$refs.modelComponent.reciveColoringType(coloredModelsBy);
-    },
-
-    // Handle combined model loading
-    handleLoadCombinedTrees() {
-      if (this.$refs.modelComponent && this.$refs.modelComponent.loadTree) {
-        this.$refs.modelComponent.loadTree('combined', {
-          colorMappingType: this.modelStates.colorMappingType
-        });
-      }
     },
 
     // Handle state updates from Model component

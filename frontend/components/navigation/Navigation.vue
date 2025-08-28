@@ -8,6 +8,7 @@
       v-model="currentMenuCaption"
       :background-color="$vuetify.theme.themes.light.background"
     >
+    <!-- :class="mdAndUp? 'button-default button-main-topic' : 'button-default button-main-topic-mobile'" -->
       <v-btn
         v-for="(topic, index) in topics"
         class="button-default button-main-topic"
@@ -43,6 +44,7 @@ export default {
       topics: {},
       subMenuActive: false,
       currentMenuCaption: "",
+      mdAndUp: false,
     };
   },
   methods: {
@@ -102,6 +104,7 @@ export default {
   },
 
   created() {
+    this.mdAndUp = this.$vuetify.breakpoint.mdAndUp;
     this.topics = this.$getTopics();
     if (this.$route.name === "slug") {
       const parentSlug = this.$parentTopic().slug.toLowerCase();
@@ -152,6 +155,32 @@ export default {
     height: auto !important;
     min-height: 56px !important;
     font-size: 0.8rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-left: 2px solid var(--secondary-color);
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    background: var(--button-main-color);
+    color: var(--button-text-color);
+    
+    &:hover {
+      background: var(--button-main-hover-color) !important;
+      transform: translateY(-2px);  
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      color: var(--button-text-color);
+    }
+    
+    &.v-btn--active {
+      background: var(--button-main-active-color) !important;
+      font-weight: 700 !important;
+      color: var(--button-text-active-color) !important;
+    }
+  }
+  &.button-main-topic-mobile{
+    height: auto !important;
+    min-height: 56px !important;
+    font-size: 0.6rem !important;
     display: flex !important;
     flex-direction: column !important;
     border-left: 2px solid var(--secondary-color);

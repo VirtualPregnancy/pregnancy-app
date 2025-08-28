@@ -1,117 +1,105 @@
 <template>
-  <div class="condition-control">
-    <!-- Collapse Toggle Button -->
-    <div class="collapse-header" @click="toggleCollapse">
-      <h3 class="panel-title" style="color: white;">
-        <v-icon left color="white">mdi-medical-bag</v-icon>
-        {{ textContent.panelTitle }}
-      </h3>
-      <v-btn icon small class="collapse-btn" color="white">
-        <v-icon>{{ isCollapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' }}</v-icon>
+  <v-card class="elevation-6 rounded-lg condition-selector">
+    <!-- Collapsible Header -->
+    <v-card-title 
+      class="pb-3 pt-3 cursor-pointer hover-bg-grey header-title"
+      @click="toggleExpanded"
+    >
+      <v-icon left color="white" size="20">mdi-medical-bag</v-icon>
+      <span class="font-weight-bold header-text">Pregnancy Conditions</span>
+      <v-spacer></v-spacer>
+      <v-chip
+        v-if="selectedCondition"
+        :color="getSelectedCondition().color"
+        dark
+        small
+        class="ml-2 header-chip"
+        label
+      >
+        {{ selectedCondition }}
+      </v-chip>
+      <v-btn
+        icon
+        small
+        @click.stop="toggleExpanded"
+        class="ml-2 expand-btn"
+      >
+        <v-icon 
+          :class="{ 'rotate-180': expanded }"
+          class="transition-transform expand-icon"
+          color="white"
+          size="20"
+        >
+          mdi-chevron-down
+        </v-icon>
       </v-btn>
-    </div>
+    </v-card-title>
 
-    <!-- Collapsible Content -->
-    <div v-show="!isCollapsed" class="panel-content">
-      <!-- Condition Selector -->
-      <div class="control-section">
-        <h4 class="control-title">{{ textContent.controlTitles.selectConditions }}</h4>
-        <div class="control-group">
-          <v-select
-            v-model="selectedConditions"
-            :items="pregnancyConditions"
-            item-text="label"
-            item-value="key"
-            label="Current Conditions"
-            multiple
+    <!-- Expandable Content -->
+    <v-expand-transition>
+      <div v-show="expanded">
+        <v-divider></v-divider>
+        
+        <v-card-text class="pt-4">
+          <v-radio-group 
+            v-model="selectedCondition" 
+            @change="onConditionChange"
+            class="mt-0"
+          >
+            <v-radio
+              v-for="condition in conditions"
+              :key="condition.key"
+              :value="condition.key"
+              class="mb-3"
+            >
+              <template v-slot:label>
+                <v-card 
+                  class="ml-2 pa-4 condition-card"
+                  :class="{ 'selected-condition': selectedCondition === condition.key }"
+                  flat
+                  outlined
+                >
+                  <div class="d-flex align-center justify-space-between">
+                    <div class="flex-grow-1 mr-4">
+                      <div class="condition-title mb-2">
+                        {{ condition.label }}
+                      </div>
+                      <div class="condition-description">
+                        {{ condition.description }}
+                      </div>
+                    </div>
+                    <v-chip
+                      :color="condition.color"
+                      dark
+                      class="condition-chip"
+                      label
+                    >
+                      {{ condition.abbreviation }}
+                    </v-chip>
+                  </div>
+                </v-card>
+              </template>
+            </v-radio>
+          </v-radio-group>
+        </v-card-text>
+
+        <v-card-actions class="px-4 pb-4">
+          <v-btn
+            v-if="selectedCondition"
+            color="warning"
             outlined
-            dense
-            dark
-            clearable
-            @change="updateVisualization"
+            block
+            @click="resetSelection"
+            class="text-transform-none reset-btn"
           >
-            <template v-slot:selection="{ item, index }">
-              <v-chip
-                v-if="index < 2"
-                :key="item.key"
-                :color="item.severity"
-                dark
-                small
-                close
-                @click:close="removeCondition(item.key)"
-              >
-                {{ item.abbreviation }}
-              </v-chip>
-              <span
-                v-if="index === 2"
-                class="grey--text caption"
-              >
-                (+{{ selectedConditions.length - 2 }} others)
-              </span>
-            </template>
-          </v-select>
-        </div>
-      </div>
-
-      <!-- Selected Conditions Display (Simple) -->
-      <div v-if="selectedConditions.length > 0" class="control-section">
-        <h4 class="control-title">Selected Conditions</h4>
-        <div class="selected-conditions">
-          <v-chip 
-            v-for="condition in getSelectedConditionDetails()" 
-            :key="condition.key"
-            :color="condition.severity" 
-            dark 
-            small 
-            class="mr-2 mb-1"
-          >
-            {{ condition.abbreviation }}
-          </v-chip>
-        </div>
-      </div>
-
-      <!-- Visualization Controls -->
-      <div class="control-section">
-        <h4 class="control-title">Model Visualization</h4>
-        <div class="control-group">
-          <v-btn 
-            @click="triggerVisualization" 
-            block 
-            class="mb-2"
-            color="var(--v-buttonMain-base)"
-            style="background-color: var(--v-buttonMain-base); color: white;"
-          >
-            <v-icon left>mdi-eye</v-icon>
-            Visualize Changes
+            <v-icon left>mdi-refresh</v-icon>
+            Reset to Normal
           </v-btn>
-          <v-btn 
-            @click="resetToNormal" 
-            color="success" 
-            block 
-            class="mb-2"
-          >
-            <v-icon left>mdi-restore</v-icon>
-            Normal Placenta
-          </v-btn>
-        </div>
+         
+        </v-card-actions>
       </div>
-
-      <!-- Status Information -->
-      <div class="control-section">
-        <h4 class="control-title">Status</h4>
-        <div class="status-info">
-          <div class="status-row">
-            <span class="status-label" style="color: white;">Active Conditions:</span>
-            <span class="status-value">{{ selectedConditions.length }}</span>
-          </div>
-          <div class="status-row">
-            <span class="status-label" style="color: white;">Model State:</span>
-            <span class="status-value">{{ visualizationStatus }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    </v-expand-transition>
+  </v-card>
 </template>
 
 <script>
@@ -120,333 +108,245 @@ export default {
   
   data() {
     return {
-      isCollapsed: true,
-      selectedConditions: [],
-      visualizationStatus: 'Normal',
+      selectedCondition: null,
+      expanded: false,
       
-      // Text content data
-      textContent: {
-        panelTitle: 'Pregnancy Conditions',
-        controlTitles: {
-          selectConditions: 'Select Conditions',
-          selectedConditions: 'Selected Conditions',
-          modelVisualization: 'Model Visualization',
-          status: 'Status'
-        },
-        labels: {
-          currentConditions: 'Current Conditions',
-          visualizeChanges: 'Visualize Changes',
-          normalPlacenta: 'Normal Placenta'
-        },
-        statusLabels: {
-          activeConditions: 'Active Conditions:',
-          modelState: 'Model State:'
-        }
-      },
-      
-      pregnancyConditions: [
+      conditions: [
         {
-          key: 'sga',
-          label: 'Small for Gestational Age (SGA)',
-          abbreviation: 'SGA',
-          severity: 'warning',
-          placentalEffect: 'Smaller placental size with increased resistance patterns',
-        },
-        {
-          key: 'fgr',
-          label: 'Fetal Growth Restriction (FGR)',
+          key: 'FGR',
+          label: 'Fetal Growth Restriction',
           abbreviation: 'FGR',
-          severity: 'error',
-          placentalEffect: 'Reduced placental perfusion and increased resistance indices',
+          description: 'Reduced placental perfusion and increased resistance',
+          color: 'error'
         },
         {
-          key: 'pe',
-          label: 'Preeclampsia (PE)',
-          abbreviation: 'PE',
-          severity: 'error',
-          placentalEffect: 'Increased uterine artery resistance and notching',
-        },
-        {
-          key: 'sga_pe',
-          label: 'Small Baby with Preeclampsia',
-          abbreviation: 'SGA+PE',
-          severity: 'error',
-          placentalEffect: 'Combined effects: smaller placenta with severely compromised blood flow',
-        },
-        {
-          key: 'gdm',
-          label: 'Gestational Diabetes Mellitus (GDM)',
+          key: 'GDM',
+          label: 'Gestational Diabetes Mellitus',
           abbreviation: 'GDM',
-          severity: 'info',
-          placentalEffect: 'Larger placental size but typically normal vascular patterns',
-        },
-        {
-          key: 'iugr',
-          label: 'Intrauterine Growth Restriction (IUGR)',
-          abbreviation: 'IUGR',
-          severity: 'error',
-          placentalEffect: 'Compromised placental function with abnormal Doppler patterns',
-        },
-        {
-          key: 'normal',
-          label: 'Normal Pregnancy',
-          abbreviation: 'Normal',
-          severity: 'success',
-          placentalEffect: 'Normal placental size and vascular patterns expected',
+          description: 'Larger placental size with normal vascular patterns',
+          color: 'info'
         }
       ]
     }
   },
 
   methods: {
-    toggleCollapse() {
-      this.isCollapsed = !this.isCollapsed;
-      
-      // Emit panel state events for parent component to handle layout adjustments
-      if (this.isCollapsed) {
-        this.$emit('panel-collapsed');
-      } else {
-        this.$emit('panel-expanded');
-      }
+    toggleExpanded() {
+      this.expanded = !this.expanded;
     },
 
-    updateVisualization() {
-      if (this.selectedConditions.length > 0) {
-        const conditionNames = this.getSelectedConditionDetails()
-          .map(c => c.abbreviation)
-          .join(', ');
-        this.visualizationStatus = conditionNames;
-      } else {
-        this.visualizationStatus = 'Normal';
-      }
-
-      // Emit event for parent components
-      this.$emit('conditions-changed', {
-        selectedConditions: this.selectedConditions,
-        conditionDetails: this.getSelectedConditionDetails(),
-        combinedEffect: this.getCombinedEffectDescription()
-      });
+    onConditionChange() {
+      this.emitChange();
     },
 
-    removeCondition(conditionKey) {
-      this.selectedConditions = this.selectedConditions.filter(key => key !== conditionKey);
-      this.updateVisualization();
-    },
-
-    getSelectedConditionDetails() {
-      return this.selectedConditions.map(key => 
-        this.pregnancyConditions.find(condition => condition.key === key)
-      ).filter(Boolean);
-    },
-
-    getCombinedEffectSeverity() {
-      const selectedDetails = this.getSelectedConditionDetails();
-      const hasError = selectedDetails.some(c => c.severity === 'error');
-      const hasWarning = selectedDetails.some(c => c.severity === 'warning');
-      
-      if (hasError) return 'error';
-      if (hasWarning) return 'warning';
-      return 'info';
-    },
-
-    getCombinedEffectDescription() {
-      const selectedDetails = this.getSelectedConditionDetails();
-      
-      if (selectedDetails.length === 0) return '';
-      
-      if (selectedDetails.length === 1) {
-        return selectedDetails[0].placentalEffect;
-      }
-      
-      // Analyze combined effects
-      const hasGrowthRestriction = selectedDetails.some(c => 
-        ['sga', 'fgr', 'iugr'].includes(c.key)
-      );
-      const hasPreeclampsia = selectedDetails.some(c => 
-        ['pe', 'sga_pe'].includes(c.key)
-      );
-      const hasDiabetes = selectedDetails.some(c => c.key === 'gdm');
-      
-      if (hasGrowthRestriction && hasPreeclampsia) {
-        return 'Severe placental compromise with markedly increased resistance and reduced size';
-      } else if (hasGrowthRestriction && hasDiabetes) {
-        return 'Conflicting effects: diabetes may increase size while growth restriction reduces it';
-      } else if (hasPreeclampsia) {
-        return 'Significant vascular compromise with increased resistance patterns';
-      } else if (hasGrowthRestriction) {
-        return 'Reduced placental function with compromised blood flow patterns';
-      } else {
-        return 'Multiple conditions present - effects may vary based on severity and timing';
-      }
-    },
-
-    triggerVisualization() {
-      const conditionData = {
-        selectedConditions: this.selectedConditions,
-        conditionDetails: this.getSelectedConditionDetails(),
-        combinedEffect: this.getCombinedEffectDescription(),
-      };
-      
-      this.$emit('trigger-visualization', conditionData);
-      console.log('[ConditionSelector] Visualization triggered:', conditionData);
-    },
-
-    resetToNormal() {
-      this.selectedConditions = [];
-      this.visualizationStatus = 'Normal';
-      this.updateVisualization();
+    resetSelection() {
+      this.selectedCondition = null;
+      this.emitChange();
       this.$emit('reset-to-normal');
+    },
+
+    getSelectedCondition() {
+      return this.conditions.find(c => c.key === this.selectedCondition) || {};
+    },
+
+    emitChange() {
+      this.$emit('condition-changed', {
+        selectedCondition: this.selectedCondition,
+        conditionData: this.getSelectedCondition()
+      });
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
-.condition-control {
-  position: relative;
-  width: 100%;
-  background: var(--v-accent-base);
-  border-radius: 12px;
-  color: white;
-  overflow: hidden;
-  margin-bottom: 16px;
+<style scoped>
+
+.condition-selector {
+  margin-bottom: 10px;
+  background-color: #34495e !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.collapse-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  cursor: pointer;
+/* Header Styles */
+.header-title {
+  background-color: rgba(108, 144, 185, 0.15);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
 }
 
-.panel-title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #D1C7B5;
+.header-text {
+  color: #ffffff !important;
+  font-size: 1.1rem !important;
+  letter-spacing: 0.5px;
+}
+
+.header-chip {
+  font-weight: bold !important;
+  letter-spacing: 0.5px;
+}
+
+.expand-btn {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 50% !important;
+}
+
+.expand-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.expand-icon {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+.hover-bg-grey:hover {
+  background-color: rgba(108, 144, 185, 0.2) !important;
+}
+
+/* Radio Group Styles */
+.v-radio >>> .v-label {
+  width: 100%;
+  flex: 1;
+}
+
+.v-radio >>> .v-input--selection-controls__input {
+  margin-right: 16px !important;
+  flex-shrink: 0;
+}
+
+.v-radio >>> .v-input--radio-group--row .v-radio {
+  margin-right: 0 !important;
+  width: 100% !important;
+  display: flex !important;
+}
+
+.v-radio {
+  width: 100% !important;
+  margin-bottom: 8px !important;
+}
+
+/* White radio button circles */
+.v-radio >>> .v-input--selection-controls__input .v-input--selection-controls__ripple {
+  color: white !important;
+}
+
+.v-radio >>> .v-input--selection-controls__input .v-icon {
+  color: white !important;
+}
+
+.v-radio >>> .v-input--selection-controls__input input:checked + .v-input--selection-controls__ripple:before {
+  background-color: white !important;
+}
+
+/* Condition Card Styles */
+.condition-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(184, 188, 200, 0.3) !important;
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border-radius: 8px !important;
+  min-height: 80px;
+  width: 100% !important;
+  max-width: 100% !important;
   display: flex;
   align-items: center;
 }
 
-.collapse-btn {
-  transition: transform 0.2s ease;
-  color: white;
+.condition-card:hover {
+  border-color: rgba(108, 144, 185, 0.6) !important;
+  background-color: rgba(108, 144, 185, 0.08) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.panel-content {
-  padding: 20px;
-  animation: slideDown 0.3s ease-out;
-  color: white;
+.selected-condition {
+  border-color: rgba(221, 60, 81, 0.8) !important;
+  background-color: rgba(221, 60, 81, 0.12) !important;
+  box-shadow: 0 0 0 1px rgba(221, 60, 81, 0.3), 0 4px 12px rgba(221, 60, 81, 0.2) !important;
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Text Styles */
+.condition-title {
+  color: #ffffff !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  line-height: 1.3;
+  letter-spacing: 0.3px;
 }
 
-.control-section {
-  margin-bottom: 20px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
+.condition-description {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4;
+  font-weight: 400;
 }
 
-.control-title {
-  color: white;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  text-transform: uppercase;
+.condition-chip {
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
   letter-spacing: 0.5px;
+  min-width: 50px;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.control-group {
-  margin-bottom: 8px;
-}
-
-.selected-conditions {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.status-info {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
-  color: white;
-  padding: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.status-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.status-label {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.status-value {
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 12px;
-  font-weight: 600;
-  text-align: right;
-  max-width: 60%;
-  word-break: break-word;
-}
-
-// Custom button styles
-.v-btn {
+/* Button Styles */
+.text-transform-none {
   text-transform: none !important;
+}
+
+.v-btn--outlined {
+  border-width: 1px !important;
   font-weight: 500 !important;
+  letter-spacing: 0.3px;
 }
 
-// Custom select styles for dark theme
-::v-deep .v-select {
-  .v-input__control .v-input__slot {
-    background: rgba(255, 255, 255, 0.1) !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
-  }
-  
-  .v-label {
-    color: rgba(255, 255, 255, 0.7) !important;
-  }
-  
-  .v-input__icon {
-    color: rgba(255, 255, 255, 0.7) !important;
-  }
+.v-btn--outlined:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-::v-deep .v-chip {
-  margin: 2px !important;
+.reset-btn {
+  background-color: rgba(255, 193, 7, 0.1) !important;
+  border-color: rgba(255, 193, 7, 0.6) !important;
+  color: #ffc107 !important;
+}
+
+.reset-btn:hover {
+  background-color: rgba(255, 193, 7, 0.2) !important;
+  border-color: #ffc107 !important;
+}
+
+/* Animation Styles */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.transition-transform {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.v-expand-transition-enter-active,
+.v-expand-transition-leave-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.v-expand-transition-enter,
+.v-expand-transition-leave-to {
+  opacity: 0;
+}
+
+/* Divider */
+.v-divider {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Card content padding adjustment */
+.v-card__text {
+  padding-bottom: 8px !important;
+}
+
+.v-card__actions {
+  padding-top: 8px !important;
 }
 </style>

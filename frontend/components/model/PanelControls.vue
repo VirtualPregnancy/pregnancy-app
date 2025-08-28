@@ -16,40 +16,12 @@
       <!-- Main Model Controls -->
       <div class="control-section">
         <div class="control-group">
-          <v-btn 
-            @click="$emit('reload-arterial')" 
-            color="#DD3C51" 
-            block 
-            class="mb-2 arterial-btn"
-            :disabled="isLoading || !renderingComplete"
-            :loading="isLoading"
-            dark
-          >
-            <v-icon left>mdi-arterial</v-icon>
-            Arterial Tree
-          </v-btn>
-          <v-btn 
-            @click="$emit('load-venous')" 
-            color="#1F6683" 
-            block 
-            class="mb-2 venous-btn"
-            :disabled="isLoading || !renderingComplete"
-            :loading="isLoading"
-            dark
-          >
-            <v-icon left>mdi-heart-pulse</v-icon>
-            Venous Tree
-          </v-btn>
-          <v-btn @click="$emit('load-combined')" color="#6C90B9" block class="mb-2 combined-btn" :disabled="isLoading || !renderingComplete" :loading="isLoading" dark>
-            <v-icon left>mdi-network</v-icon>
-            Combined Trees
-          </v-btn>
           <div class="colored-models" style="color: white;">
-            Colored Models by: {{ coloredModelsBy }}
+            Colored Models by: 
             <v-radio-group v-model="coloredModelsBy" @change="$emit('colored-models-by-changed', coloredModelsBy)" :disabled="isLoading || !renderingComplete" class="custom-radio-group">
-              <v-radio label="Pressure" value="pressure"></v-radio>
-              <v-radio label="Flux" value="flux"></v-radio>
-              <v-radio label="Default" value="default"></v-radio>
+              <v-radio label="Blood pressure" value="pressure"></v-radio>
+              <v-radio label="Blood flow" value="flux"></v-radio>
+              <v-radio label="No flow/pressure" value="default"></v-radio>
             </v-radio-group>
             <div v-if="!renderingComplete && !isLoading" class="rendering-status">
               <small style="color: white; font-style: italic;">Waiting for model to fully render...</small>
@@ -95,16 +67,12 @@
 
       <!-- Default Color Legend -->
       <div class="control-section" v-if="coloredModelsBy === 'default'">
-        <h4 class="control-title">Vessel Types</h4>
+        <h4 class="control-title">Arterial Model</h4>
         <div class="color-bar-container">
           <div class="vessel-legend">
             <div class="legend-item">
               <div class="legend-color arterial-color"></div>
-              <span class="legend-text">Arterial (Red)</span>
-            </div>
-            <div class="legend-item">
-              <div class="legend-color venous-color"></div>
-              <span class="legend-text">Venous (Blue)</span>
+              <span class="legend-text">Placental Arterial Tree (Red)</span>
             </div>
           </div>
         </div>
@@ -121,15 +89,7 @@
 
 export default {
   props: {
-    // Model states passed from parent component
-    useTubeRendering: {
-      type: Boolean,
-      default: true
-    },
-    currentPerformanceMode: {
-      type: String,
-      default: 'high'
-    },
+    
     
     isLoading: {
       type: Boolean,
@@ -427,7 +387,7 @@ export default {
   word-break: break-word;
 }
 
-// Pressure Color Bar Styles
+// Blood pressure Color Bar Styles
 .color-bar-container {
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.05);
@@ -458,7 +418,7 @@ export default {
   }
 }
 
-// Pressure Color Segments using specified colors (solid colors)
+
 .pressure-low-segment {
   background: rgb(173, 204, 83); 
 }
@@ -479,7 +439,7 @@ export default {
   background: rgb(140, 41, 38); 
 }
 
-// Flux Color Segments (Blue → Cyan → Green → Yellow → Red) - solid colors
+// Blood flow Color Segments (Blue → Cyan → Green → Yellow → Red) - solid colors
 .flux-reverse-segment {
   background: rgb(0, 0, 204); // Blue
 }
@@ -500,7 +460,7 @@ export default {
   background: rgb(204, 0, 0); // Red
 }
 
-// Default Color Legend
+// No flow/pressure Color Legend
 .vessel-legend {
   display: flex;
   justify-content: space-around;
@@ -579,37 +539,7 @@ export default {
     }
   }
   
-  &.venous-btn {
-    background-color: #1F6683 !important;
-    border-color: #1F6683 !important;
-    
-    &:hover:not(:disabled) {
-      background-color: #1A5A75 !important;
-      box-shadow: 0 6px 20px rgba(31, 102, 131, 0.4) !important;
-      transform: translateY(-2px);
-    }
-    
-    &:disabled {
-      opacity: 0.5 !important;
-      cursor: not-allowed !important;
-    }
-  }
-  
-  &.combined-btn {
-    background-color: #6C90B9 !important;
-    border-color: #6C90B9 !important;
-    
-    &:hover:not(:disabled) {
-      background-color: #5F7FA5 !important;
-      box-shadow: 0 6px 20px rgba(108, 144, 185, 0.4) !important;
-      transform: translateY(-2px);
-    }
-    
-    &:disabled {
-      opacity: 0.5 !important;
-      cursor: not-allowed !important;
-    }
-  }
+
 }
 
 .rendering-status {
@@ -635,25 +565,8 @@ export default {
               color: white !important;
             }
             
-            .v-radio__radio--outer {
-              border-color: rgba(255, 255, 255, 0.7) !important;
-            }
-            
-            .v-radio__radio--inner {
-              border-color: rgba(255, 255, 255, 0.7) !important;
-            }
           }
           
-          .v-radio__radio--checked {
-            .v-radio__radio--outer {
-              border-color: white !important;
-            }
-            
-            .v-radio__radio--inner {
-              background-color: white !important;
-              border-color: white !important;
-            }
-          }
         }
       }
     }

@@ -12,24 +12,29 @@
         <!-- Left Column - Title and Content -->
         <div class="column left-column">
           <div class="column-content">
+            <div class="mb-4">
+              <Logo />
+            </div>
             <h1 class="main-title">
               Pregnancy is an exciting time!
             </h1>
             <p class="intro-text">
-              Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, 
-              this app is here to support you and your whānau every step of the way. Designed especially for people 
-              in Aotearoa New Zealand, we offer trusted information, helpful tools, and culturally respectful guidance 
-              to help you understand your health and make confident decisions.
+              Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, this app is here to support you and your whānau every step of the way. Designed especially for people in Aotearoa New Zealand, we offer trusted information, helpful tools, and guidance to help you understand your health and make confident decisions.
+
             </p>
           </div>
         </div>
 
-        <!-- Middle Column - Three Cards -->
-        <div class="column middle-column">
+        <!-- Cards Columns -->
+        <div 
+          v-for="(columnItems, columnIndex) in cardColumns" 
+          :key="columnIndex"
+          class="column cards-column"
+        >
           <div class="column-content">
             <div class="cards-container">
               <div 
-                v-for="item in middleItems" 
+                v-for="item in columnItems" 
                 :key="item.title"
                 class="card-item"
                 :style="{ backgroundColor: item.backgroundColor }"
@@ -48,35 +53,6 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Right Column - Two Cards -->
-        <div class="column right-column">
-          <div class="column-content">
-            <div class="cards-container">
-              <div 
-                v-for="item in rightItems" 
-                :key="item.title"
-                class="card-item"
-                :style="{ backgroundColor: item.backgroundColor }"
-                @click="navigateToPage(item.link)"
-              >
-                <div class="card-icon">
-                  <img 
-                    :src="item.image" 
-                    :alt="item.title"
-                    @error="onImageError"
-                  />
-                </div>
-                <div class="card-content">
-                  <h3 class="card-title">{{ item.title }}</h3>
-                  <p class="card-description">{{ item.description }}</p>
-                </div>
-              </div>
-             
-            </div>
-            
           </div>
         </div>
         
@@ -89,24 +65,26 @@
 <script>
 import landingPageData from '@/assets/data/landingPageData';
 import Menu from '@/components/landing/Menu.vue';
+import Logo from '@/components/Logo.vue';
 export default {
   layout: 'empty',
   components: {
-    Menu
+    Menu,
+    Logo
   },
   
   computed: {
-    middleItems() {
-      return landingPageData.items.filter(item => item.index <= 2).map(item => ({
+    cardColumns() {
+      const processedItems = landingPageData.items.map(item => ({
         ...item,
         image: this.getImagePath(item.image)
       }));
-    },
-    rightItems() {
-      return landingPageData.items.filter(item => item.index > 2).map(item => ({
-        ...item,
-        image: this.getImagePath(item.image)
-      }));
+      
+      // Split into two columns: [0,1,2] and [3,4,5]
+      const middleColumn = processedItems.filter(item => item.index <= 2);
+      const rightColumn = processedItems.filter(item => item.index > 2);
+      
+      return [middleColumn, rightColumn];
     },
     mdAndUp() {
       return this.$vuetify.breakpoint.mdAndUp;
@@ -217,18 +195,17 @@ export default {
   min-height: 100vh;
   
   &.left-column {
-    flex: 0 0 25%;
+    flex: 0 0 24%;
     background: rgba(255, 255, 255, 0.02);
   }
   
-  &.middle-column {
-    flex: 0 0 42%;
+  &.cards-column {
+    flex: 0 0 38%;
     background: rgba(255, 255, 255, 0.01);
-  }
-  
-  &.right-column {
-    flex: 0 0 33%;
-    background: rgba(255, 255, 255, 0.02);
+    
+    &:last-child {
+      background: rgba(255, 255, 255, 0.02);
+    }
   }
 }
 
@@ -276,6 +253,31 @@ export default {
   font-size: 1rem;
   line-height: 1.6;
   color: var(--v-info-base);
+  
+  /* Responsive font sizes using Tailwind-like approach */
+  @media (min-width: 1536px) {
+    font-size: 1.4rem; /* 2xl screens */
+  }
+  
+  @media (min-width: 1280px) and (max-width: 1535px) {
+    font-size: 1rem; /* xl screens */
+  }
+  
+  @media (min-width: 1024px) and (max-width: 1279px) {
+    font-size: 1rem; /* lg screens */
+  }
+  
+  @media (min-width: 768px) and (max-width: 1023px) {
+    font-size: 0.9375rem; /* md screens */
+  }
+  
+  @media (min-width: 640px) and (max-width: 767px) {
+    font-size: 0.875rem; /* sm screens */
+  }
+  
+  @media (max-width: 639px) {
+    font-size: 0.8125rem; /* xs screens */
+  }
 }
 
 
@@ -347,10 +349,6 @@ export default {
     font-size: 2rem;
   }
   
-  .intro-text {
-    font-size: 0.9rem;
-  }
-  
   .card-title {
     font-size: 1.2rem;
   }
@@ -387,14 +385,12 @@ export default {
       align-items: center;
     }
     
-    &.middle-column {
+    &.cards-column {
       min-height: auto;
-      margin-bottom: 30px;
-    }
-    
-    &.right-column {
-      min-height: auto;
-      margin-top: -10%;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
   
@@ -408,9 +404,7 @@ export default {
     font-size: 1.8rem;
   }
   
-  .intro-text {
-    font-size: 0.85rem;
-  }
+
   
   .cards-container {
     gap: 15px;
