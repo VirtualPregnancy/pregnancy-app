@@ -13,7 +13,7 @@
         :color="getSelectedCondition().color"
         dark
         small
-        class="ml-2 header-chip"
+        class="ml-1 header-chip"
         label
       >
         {{ selectedCondition }}
@@ -22,7 +22,7 @@
         icon
         small
         @click.stop="toggleExpanded"
-        class="ml-2 expand-btn"
+        class="ml-1 expand-btn"
       >
         <v-icon 
           :class="{ 'rotate-180': expanded }"
@@ -59,8 +59,8 @@
                   flat
                   outlined
                 >
-                  <div class="d-flex align-center justify-space-between">
-                    <div class="flex-grow-1 mr-4">
+                  <div class="flex align-center justify-space-between">
+                    <div class="flex-grow-1 mr-2">
                       <div class="condition-title mb-2">
                         {{ condition.label }}
                       </div>
