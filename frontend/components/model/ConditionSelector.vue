@@ -9,7 +9,7 @@
       <span class="font-weight-bold header-text">Pregnancy Conditions</span>
       <v-spacer></v-spacer>
       <v-chip
-        v-if="selectedCondition !== 'healthy'"
+        v-if="selectedCondition !== 'normal'"
         :color="getSelectedCondition().color"
         dark
         small
@@ -52,7 +52,7 @@
               :key="condition.key"
               :value="condition.key"
               class="mb-3"
-              v-show="condition.key !== 'healthy'"
+              v-show="condition.key !== 'normal'"
               
             >
               <template v-slot:label >
@@ -88,7 +88,7 @@
 
         <v-card-actions class="px-4 pb-4">
           <v-btn
-            v-if="selectedCondition !== 'healthy'"
+            v-if="selectedCondition !== 'normal'"
             color="warning"
             outlined
             block
@@ -96,7 +96,7 @@
             class="text-transform-none reset-btn"
           >
             <v-icon left>mdi-refresh</v-icon>
-            Reset to Healthy Placenta
+            Reset to Normal Placenta
           </v-btn>
          
         </v-card-actions>
@@ -113,7 +113,7 @@ export default {
   
   data() {
     return {
-      selectedCondition: 'healthy',
+      selectedCondition: 'normal',
       expanded: false
     }
   },
@@ -140,7 +140,7 @@ export default {
     },
 
     resetSelection() {
-      this.selectedCondition = 'healthy';
+      this.selectedCondition = 'normal';
       this.emitChange();
     },
 

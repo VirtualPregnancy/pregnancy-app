@@ -9,19 +9,13 @@ const COLOR_CONSTANTS = {
   DEFAULT_RADIUS_FALLBACK: 0.1,
   ARTERIAL_COLOR: 0xff2222,
   VENOUS_COLOR: 0x2222ff,
-  COLOR_MAPPING: {
-    NONLINEAR_EXPONENT: 0.4,
-    NEUTRAL_VALUE: 0.5,
-    LOW_TO_MID: {
-      RED_START: 0.23, RED_RANGE: 0.75,
-      GREEN_START: 0.70, GREEN_RANGE: 0.23,
-      BLUE_START: 0.27, BLUE_RANGE: -0.27
-    },
-    MID_TO_HIGH: {
-      RED_START: 0.98, RED_RANGE: -0.42,
-      GREEN_START: 0.93, GREEN_RANGE: -0.81,
-      BLUE_START: 0.00
-    }
+  // 5-segment pressure color mapping based on PanelControls.vue
+  PRESSURE_COLORS: {
+    LOW: { r: 173/255, g: 204/255, b: 83/255 },      // Light Green
+    MID: { r: 250/255, g: 236/255, b: 79/255 },      // Yellow
+    HIGH: { r: 242/255, g: 183/255, b: 68/255 },     // Orange
+    MAX: { r: 170/255, g: 68/255, b: 47/255 },       // Red-Orange
+    ULTRA: { r: 140/255, g: 41/255, b: 38/255 }      // Dark Red
   }
 };
 
@@ -445,33 +439,30 @@ export default class VTKLoader {
   }
 
   /**
-   * Map pressure value to color using simplified blood pressure color scheme
+   * Map pressure value 
    */
   pressureToColor(pressure, minPressure, maxPressure) {
     const linear = maxPressure > minPressure ? 
-      (pressure - minPressure) / (maxPressure - minPressure) : COLOR_CONSTANTS.COLOR_MAPPING.NEUTRAL_VALUE;
-    const t = Math.pow(linear, COLOR_CONSTANTS.COLOR_MAPPING.NONLINEAR_EXPONENT);
+      (pressure - minPressure) / (maxPressure - minPressure) : 0.5;
     
     const color = new this.THREE.Color();
     
-    if (t < COLOR_CONSTANTS.COLOR_MAPPING.NEUTRAL_VALUE) {
-      // Green to Orange (low to medium pressure)
-      const factor = t * 2;
-      const lowToMid = COLOR_CONSTANTS.COLOR_MAPPING.LOW_TO_MID;
-      color.setRGB(
-        lowToMid.RED_START + factor * lowToMid.RED_RANGE,
-        lowToMid.GREEN_START + factor * lowToMid.GREEN_RANGE,
-        lowToMid.BLUE_START + factor * lowToMid.BLUE_RANGE
-      );
+    // 5-segment color mapping using constants from file top
+    if (linear < 0.2) {
+      // Pressure Low: Light Green
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.LOW.r, COLOR_CONSTANTS.PRESSURE_COLORS.LOW.g, COLOR_CONSTANTS.PRESSURE_COLORS.LOW.b);
+    } else if (linear < 0.4) {
+      // Pressure Mid: Yellow
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.MID.r, COLOR_CONSTANTS.PRESSURE_COLORS.MID.g, COLOR_CONSTANTS.PRESSURE_COLORS.MID.b);
+    } else if (linear < 0.6) {
+      // Pressure High: Orange
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.HIGH.r, COLOR_CONSTANTS.PRESSURE_COLORS.HIGH.g, COLOR_CONSTANTS.PRESSURE_COLORS.HIGH.b);
+    } else if (linear < 0.8) {
+      // Pressure Max: Red-Orange
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.MAX.r, COLOR_CONSTANTS.PRESSURE_COLORS.MAX.g, COLOR_CONSTANTS.PRESSURE_COLORS.MAX.b);
     } else {
-      // Orange to Dark Red (medium to high pressure)
-      const factor = (t - COLOR_CONSTANTS.COLOR_MAPPING.NEUTRAL_VALUE) * 2;
-      const midToHigh = COLOR_CONSTANTS.COLOR_MAPPING.MID_TO_HIGH;
-      color.setRGB(
-        midToHigh.RED_START + factor * midToHigh.RED_RANGE,
-        midToHigh.GREEN_START + factor * midToHigh.GREEN_RANGE,
-        midToHigh.BLUE_START
-      );
+      // Pressure Ultra: Dark Red
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.ULTRA.r, COLOR_CONSTANTS.PRESSURE_COLORS.ULTRA.g, COLOR_CONSTANTS.PRESSURE_COLORS.ULTRA.b);
     }
     
     return color;

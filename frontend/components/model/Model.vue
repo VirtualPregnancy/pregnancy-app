@@ -62,7 +62,7 @@ export default {
   // Component data - stores all reactive properties
   data() {
     return {
-      defaultModel: 'healthy',
+      defaultModel: 'normal',
       Copper: null,        // Copper3D library instance for 3D rendering
       THREE: null,         // Three.js library instance for 3D geometry
       baseRenderer: null,  // Main renderer for managing 3D scenes

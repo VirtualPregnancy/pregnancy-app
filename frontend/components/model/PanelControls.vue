@@ -482,9 +482,6 @@ export default {
     background: #ff2222; // Arterial red
   }
   
-  &.venous-color {
-    background: #2222ff; // Venous blue
-  }
 }
 
 .legend-text {
