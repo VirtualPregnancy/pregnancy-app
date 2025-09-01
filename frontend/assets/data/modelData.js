@@ -8,7 +8,7 @@ export default {
             config: {
                 path: '/model/healthy.vtk',
                 displayName: 'Healthy Placenta',
-                color: 0xff2222,
+                color: 0x22ff22,
                 opacity: 1.0,
                 modelSize: 420,
                 useCylinderGeometry: true,
@@ -16,15 +16,14 @@ export default {
             }
         }, {    
             model: 'fgr',
-            path: '/model/fgr.vtk',
             modelName: 'Fetal Growth Restriction',
             Description: 'Fetal Growth Restriction',
             color: 'success',
             config: {
                 path: '/model/fgr.vtk',
                 displayName: 'Fetal Growth Restriction',
-                color: 0xff2222,
-                opacity: 1.0,
+                color: 0xff8822,
+                opacity: 1,
                 modelSize: 420,
                 useCylinderGeometry: true,
                 cylinderSegments: 10,
@@ -38,18 +37,32 @@ export default {
             }
         }, {
             model: 'normal',
-            path: '/model/normal.vtk',
             modelName: 'Normal',
-            Description: 'Healthy',
+            Description: 'Normal Placenta',
             color: 'error',
             config: {
                 path: '/model/normal.vtk',
                 displayName: 'Normal',
+                opacity: 1.0,
+                modelSize: 420,
+                useCylinderGeometry: true,
+                cylinderSegments: 10,
+            }
+        },
+        {
+            model: 'diabetes',
+            modelName: 'Diabetes',
+            Description: 'Diabetes Placenta',
+            color: 'error',
+            config: {
+                path: '/model/diabetes.vtk',
+                displayName: 'Diabetes',
                 color: 0xff2222,
                 opacity: 1.0,
                 modelSize: 420,
                 useCylinderGeometry: true,
                 cylinderSegments: 10,
+                defaultRotationY: Math.PI/2 
             }
         }
     ]

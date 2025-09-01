@@ -40,6 +40,7 @@
 
 <script>
 import VTKLoader from '@/utils/vtkLoader'
+import modelData from '@/assets/data/modelData.js';
 
 export default {
   props: {
@@ -61,6 +62,7 @@ export default {
   // Component data - stores all reactive properties
   data() {
     return {
+      defaultModel: 'healthy',
       Copper: null,        // Copper3D library instance for 3D rendering
       THREE: null,         // Three.js library instance for 3D geometry
       baseRenderer: null,  // Main renderer for managing 3D scenes
@@ -70,21 +72,13 @@ export default {
       clientMounted: false, // Track if component is mounted on client
       currentColorMappingType: 'pressure', // Track current color mapping type
       renderingComplete: false, // Track if model is fully rendered and ready
-      
       // Model configuration
-      modelConfig: {
-        path: '/model/healthy.vtk',
-        displayName: 'Placental Arterial Tree',
-        color: 0xff2222,
-        opacity: 1.0,
-        modelSize: 420,
-        useCylinderGeometry: true,
-        cylinderSegments: 10
-      }
+      modelConfig: null
     };
   },
 
   computed: {
+   
     mdAndUp() {
       // Ensure consistent behavior between SSR and client
       if (!this.clientMounted) {
@@ -104,6 +98,7 @@ export default {
 
   // Component mounted lifecycle - initializes 3D environment
   mounted() {
+    this.modelConfig = modelData.models.find(model => model.model === this.defaultModel).config;
     // Mark component as client-side mounted
     this.clientMounted = true;
     

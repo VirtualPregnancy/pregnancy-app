@@ -124,7 +124,7 @@
     "subTopics": {
       "what-is-ultrasound": {
         "title": "What Ultrasound Means",
-        "component": "ConditionSelector",
+        "component": "none",
         "heading": "Ultrasound",
         "icon": "mdi-stethoscope",
         "category": "success",
@@ -146,7 +146,7 @@
       },
       "how": {
         "title": "How ",
-        "component": "ConditionSelector",
+        "component": "none",
         "heading": "How ultrasound can be used to detect pregnancy issues",
         "icon": "mdi-alert-circle",
         "category": "success",

@@ -344,14 +344,16 @@ export default class VTKLoader {
     let maxPressure = -Infinity;
     let minFlux = Infinity;
     let maxFlux = -Infinity;
-    
     if (config.colorMappingType === 'pressure' && pressureData.length > 0) {
-      minPressure = Math.min(...pressureData);
-      maxPressure = Math.max(...pressureData);
+      const { min, max } = this.getOverStackMinMax(pressureData);
+      minPressure = min;
+      maxPressure = max;
     } else if (config.colorMappingType === 'flux' && fluxData.length > 0) {
-      minFlux = Math.min(...fluxData);
-      maxFlux = Math.max(...fluxData);
+      const { min, max } = this.getOverStackMinMax(fluxData);
+      minFlux = min;
+      maxFlux = max;
     }
+    
     
     // Detect branching points for spherical junctions
     const branchingPoints = this.detectBranchingPoints(cellConnections, points.length / 3);
@@ -424,6 +426,22 @@ export default class VTKLoader {
     }
     
     return combinedGeometry;
+  }
+
+  getOverStackMinMax(arr) {
+    if (!arr || arr.length === 0) {
+      return { min: undefined, max: undefined };
+    }
+  
+    let min = Infinity;
+    let max = -Infinity;
+  
+    for (let val of arr) {
+      if (val < min) min = val;
+      if (val > max) max = val;
+    }
+  
+    return { min, max };
   }
 
   /**
