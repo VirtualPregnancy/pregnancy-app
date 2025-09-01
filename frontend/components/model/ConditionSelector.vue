@@ -9,11 +9,11 @@
       <span class="font-weight-bold header-text">Pregnancy Conditions</span>
       <v-spacer></v-spacer>
       <v-chip
-        v-if="selectedCondition"
+        v-if="selectedCondition !== 'healthy'"
         :color="getSelectedCondition().color"
         dark
         small
-        class="ml-1 header-chip"
+        class="header-chip"
         label
       >
         {{ selectedCondition }}
@@ -46,13 +46,16 @@
             @change="onConditionChange"
             class="mt-0"
           >
+            <!-- normal is not shown, auto render the data defined in modelData.js -->
             <v-radio
               v-for="condition in conditions"
               :key="condition.key"
               :value="condition.key"
               class="mb-3"
+              v-show="condition.key !== 'healthy'"
+              
             >
-              <template v-slot:label>
+              <template v-slot:label >
                 <v-card 
                   class="ml-2 pa-4 condition-card"
                   :class="{ 'selected-condition': selectedCondition === condition.key }"
@@ -85,7 +88,7 @@
 
         <v-card-actions class="px-4 pb-4">
           <v-btn
-            v-if="selectedCondition"
+            v-if="selectedCondition !== 'healthy'"
             color="warning"
             outlined
             block
@@ -93,7 +96,7 @@
             class="text-transform-none reset-btn"
           >
             <v-icon left>mdi-refresh</v-icon>
-            Reset to Normal
+            Reset to Healthy Placenta
           </v-btn>
          
         </v-card-actions>
@@ -103,30 +106,27 @@
 </template>
 
 <script>
+import modelData from '~/assets/data/modelData.js'
+
 export default {
   name: 'ConditionSelector',
   
   data() {
     return {
-      selectedCondition: null,
-      expanded: false,
-      
-      conditions: [
-        {
-          key: 'FGR',
-          label: 'Fetal Growth Restriction',
-          abbreviation: 'FGR',
-          description: 'Reduced placental perfusion and increased resistance',
-          color: 'error'
-        },
-        {
-          key: 'GDM',
-          label: 'Gestational Diabetes Mellitus',
-          abbreviation: 'GDM',
-          description: 'Larger placental size with normal vascular patterns',
-          color: 'info'
-        }
-      ]
+      selectedCondition: 'healthy',
+      expanded: false
+    }
+  },
+  computed: {
+    conditions() {
+      return modelData.models.map(model => ({
+        key: model.model,
+        label: model.modelName,
+        abbreviation: model.model,
+        description: model.Description,
+        color: model.color,
+        config: model.config
+      }));
     }
   },
 
@@ -140,18 +140,17 @@ export default {
     },
 
     resetSelection() {
-      this.selectedCondition = null;
+      this.selectedCondition = 'healthy';
       this.emitChange();
-      this.$emit('reset-to-normal');
     },
 
     getSelectedCondition() {
       return this.conditions.find(c => c.key === this.selectedCondition) || {};
     },
 
+    // update the condition data (including the condition data)
     emitChange() {
-      this.$emit('condition-changed', {
-        selectedCondition: this.selectedCondition,
+      this.$emit('conditions-changed', {
         conditionData: this.getSelectedCondition()
       });
     }

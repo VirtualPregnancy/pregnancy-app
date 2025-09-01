@@ -112,8 +112,6 @@ export default {
   data() {
     return {
       isCollapsed: true,
-      currentVesselType: 'arterial', // 'arterial' or 'venous'
-      currentQuality: 'standard',     // 'standard' or 'high'
       chart: null,
       playheadTimer: null,
       coloredModelsBy: 'pressure'
