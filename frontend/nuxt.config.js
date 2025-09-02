@@ -140,7 +140,7 @@ export default {
           info: "#1F6683",          
           warning: "#DD3C51",        
           subWarning: "#FAF6F7",     
-          error: "#DD3C51",          
+          error: "#976533",          
           subError: "#FAF6F7",       
           success: "#1F6683",       
           subSuccess: "#E0EBF5",     
@@ -168,7 +168,7 @@ export default {
           info: "#1F6683",        // teal from palette
           warning: "#DD3C51",     // red from palette
           subWarning: "#6C90B9",  // blue from palette
-          error: "#DD3C51",       // red from palette
+          error: "#313657",       // red from palette
           subError: "#6C90B9",    // blue from palette
           success: "#1F6683",     // teal from palette
           subSuccess: "#6C90B9",  // blue from palette

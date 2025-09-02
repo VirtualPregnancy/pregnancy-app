@@ -1,5 +1,5 @@
 /**
- * VTK File Loader Utility - Three.js VTK processing with color mapping
+ * VTK File Loader Utility
  */
 
 // Configuration Constants
@@ -9,27 +9,13 @@ const COLOR_CONSTANTS = {
   DEFAULT_RADIUS_FALLBACK: 0.1,
   ARTERIAL_COLOR: 0xff2222,
   VENOUS_COLOR: 0x2222ff,
-  COLOR_MAPPING: {
-    NONLINEAR_EXPONENT: 0.4,
-    NEUTRAL_VALUE: 0.5,
-    LOW_TO_MID: {
-      RED_START: 0.23, RED_RANGE: 0.75,
-      GREEN_START: 0.70, GREEN_RANGE: 0.23,
-      BLUE_START: 0.27, BLUE_RANGE: -0.27
-    },
-    MID_TO_HIGH: {
-      RED_START: 0.98, RED_RANGE: -0.42,
-      GREEN_START: 0.93, GREEN_RANGE: -0.81,
-      BLUE_START: 0.00
-    }
-  },
-  LIGHTING: {
-    AMBIENT_COLOR: 0x664444, AMBIENT_INTENSITY: 0.6,
-    MAIN_LIGHT_COLOR: 0xffffff, MAIN_LIGHT_INTENSITY: 0.8,
-    FILL_LIGHT_COLOR: 0xffeedd, FILL_LIGHT_INTENSITY: 0.4,
-    RIM_LIGHT_COLOR: 0xaaffff, RIM_LIGHT_INTENSITY: 0.3,
-    INTERNAL_LIGHT1_COLOR: 0xff6666, INTERNAL_LIGHT1_INTENSITY: 0.5, INTERNAL_LIGHT1_DISTANCE: 100,
-    INTERNAL_LIGHT2_COLOR: 0x6666ff, INTERNAL_LIGHT2_INTENSITY: 0.3, INTERNAL_LIGHT2_DISTANCE: 80
+  // 5-segment pressure color mapping based on PanelControls.vue
+  PRESSURE_COLORS: {
+    LOW: { r: 173/255, g: 204/255, b: 83/255 },      // Light Green
+    MID: { r: 250/255, g: 236/255, b: 79/255 },      // Yellow
+    HIGH: { r: 242/255, g: 183/255, b: 68/255 },     // Orange
+    MAX: { r: 170/255, g: 68/255, b: 47/255 },       // Red-Orange
+    ULTRA: { r: 140/255, g: 41/255, b: 38/255 }      // Dark Red
   }
 };
 
@@ -51,18 +37,13 @@ export default class VTKLoader {
     }
     
     this.currentVTKMesh = null;
-    this.wireframeMesh = null;
-    this.lightingInitialized = false;
-    this.performanceMode = 'high';
     this.allVTKMeshes = [];
-    this.enableLoD = true;
-    this.lodCache = new Map();
     this.geometryCache = new Map();  // Cache for processed geometries
     this.materialCache = new Map();  // Cache for materials
   }
 
   /**
-   * Get or create Copper3D scene with automatic lighting setup
+   * Get or create Copper3D scene
    */
   getOrCreateScene(name) {
     if (!this.copperRenderer) {
@@ -94,25 +75,22 @@ export default class VTKLoader {
       color: COLOR_CONSTANTS.DEFAULT_COLOR,
       opacity: COLOR_CONSTANTS.DEFAULT_OPACITY,
       modelSize: modelSize,
-      lineWidth: options.lineWidth || Math.max(2, Math.round(modelSize / 70)),
-      pointSize: options.pointSize || Math.max(8, Math.round(modelSize / 17)),
-      enableWireframe: false,  // Disable wireframe for better performance
       useCylinderGeometry: true,
-      cylinderSegments: Math.max(6, Math.min(8, Math.round(modelSize / 60))), // Dynamic segments for performance
+      cylinderSegments: Math.max(6, Math.min(8, Math.round(modelSize / 60))),
       colorMappingType: 'pressure',
+      defaultRotationY: 0, // Default horizontal rotation angle in radians
       clearScene: true,
-      useLoD: true,
       onProgress: null,
       onComplete: null,
+      // Performance options
+      performanceMode: options.performanceMode || 'balanced', // 'fast', 'balanced', 'quality'
       ...options 
     };
 
     if (config.onProgress) config.onProgress(`Initializing ${config.displayName}`, 0);
 
     try {
-      return config.useLoD && this.enableLoD
-        ? await this.loadWithLoD(vtkFilePath, config)
-        : await this.loadStandard(vtkFilePath, config);
+      return await this.loadStandard(vtkFilePath, config);
     } catch (error) {
       console.error(`[VTKLoader] Failed to load VTK file ${vtkFilePath}:`, error);
       return { success: false, error };
@@ -133,12 +111,6 @@ export default class VTKLoader {
 
   /**
    * Parse VTK file format and convert to Three.js geometry
-   * @param {string} vtkData - VTK file content
-   * @param {Function} onProgress - Progress callback
-   * @param {number} modelSize - Target model size in units (default: 420)
-   * @param {boolean} useCylinderGeometry - Whether to create cylinder geometry
-   * @param {Object} config - Configuration options
-   * @returns {Object} - {geometry: THREE.BufferGeometry, isPointCloud: boolean, radiusData: Array, pressureData: Array}
    */
   parseVTKData(vtkData, onProgress = null, modelSize, useCylinderGeometry = true, config = {}) {
     if (onProgress) {
@@ -147,18 +119,18 @@ export default class VTKLoader {
     
     // Split file content into lines for processing
     const lines = vtkData.split('\n');
-    const vertices = [];        // Final array of vertex coordinates for Three.js
-    let isReadingPoints = false; // Flag: currently reading point coordinates
-    let isReadingCells = false;  // Flag: currently reading cell connectivity
-    let isReadingRadius = false;  // Flag: currently reading radius scalar data
-    let isReadingPressure = false; // Flag: currently reading pressure scalar data
-    let isReadingFlux = false;  // Flag: currently reading flux scalar data
-    let points = [];            // Temporary storage for all point coordinates
-    let radiusData = [];        // Array to store radius values for each point
-    let pressureData = [];      // Array to store pressure values for each point
-    let fluxData = [];          // Array to store flux values for each point
-    let pointCount = 0;         // Total number of points in file
-    let cellConnections = [];   // Store cell connectivity information
+    const vertices = [];
+    let isReadingPoints = false;
+    let isReadingCells = false;
+    let isReadingRadius = false;
+    let isReadingPressure = false;
+    let isReadingFlux = false;
+    let points = [];
+    let radiusData = [];
+    let pressureData = [];
+    let fluxData = [];
+    let pointCount = 0;
+    let cellConnections = [];
 
     // Process each line of the VTK file
     for (let i = 0; i < lines.length; i++) {
@@ -166,14 +138,14 @@ export default class VTKLoader {
       
       // Update progress less frequently for better performance
       if (onProgress && i % 2000 === 0) {
-        const progress = 60 + (i / lines.length) * 20; // 60-80% progress
+        const progress = 60 + (i / lines.length) * 20;
         onProgress("Building model geometry", progress);
       }
       
-      // Detect POINTS section - contains 3D coordinates
+      // Detect POINTS section
       if (line.startsWith('POINTS')) {
         const parts = line.split(' ');
-        pointCount = parseInt(parts[1]); // Extract number of points
+        pointCount = parseInt(parts[1]);
         isReadingPoints = true;
         isReadingCells = false;
         isReadingRadius = false;
@@ -181,7 +153,7 @@ export default class VTKLoader {
         continue;
       }
       
-      // Detect CELLS/POLYGONS/LINES section - contains connectivity information
+      // Detect CELLS/POLYGONS/LINES section
       if (line.startsWith('CELLS') || line.startsWith('POLYGONS') || line.startsWith('LINES')) {
         isReadingPoints = false;
         isReadingCells = true;
@@ -191,7 +163,7 @@ export default class VTKLoader {
         continue;
       }
       
-      // Detect POINT_DATA section - contains scalar data
+      // Detect POINT_DATA section
       if (line.startsWith('POINT_DATA')) {
         isReadingPoints = false;
         isReadingCells = false;
@@ -201,7 +173,7 @@ export default class VTKLoader {
         continue;
       }
       
-      // Detect SCALARS section - check if it's radius, pressure, or flux data
+      // Detect SCALARS section
       if (line.startsWith('SCALARS')) {
         const parts = line.split(' ');
         if (parts.length > 1) {
@@ -234,11 +206,10 @@ export default class VTKLoader {
         continue;
       }
       
-      // Read point coordinates (x, y, z values)
+      // Read point coordinates
       if (isReadingPoints && points.length < pointCount * 3) {
-        // Split line into numbers, filter empty strings, convert to float
         const coords = line.split(' ').filter(x => x !== '').map(parseFloat);
-        points.push(...coords); // Add all coordinates to points array
+        points.push(...coords);
       }
       
       // Read radius scalar data
@@ -266,37 +237,14 @@ export default class VTKLoader {
           !line.startsWith('SCALARS') &&
           !line.startsWith('LOOKUP_TABLE')) {
         
-        // Parse indices that define how points connect to form lines/polygons
         const parts = line.split(' ').filter(x => x !== '');
-        const indices = parts.map(x => parseInt(x)).filter(x => !isNaN(x)); // Filter out NaN values
+        const indices = parts.map(x => parseInt(x)).filter(x => !isNaN(x));
         
         if (indices.length > 1) {
-          const cellSize = indices[0]; // First number = how many points in this cell
+          const cellSize = indices[0];
           
-          // Store cell connection for later processing
           if (indices.length === cellSize + 1) {
             cellConnections.push(indices);
-            
-            // For non-cylinder geometry, create line segments immediately
-            if (!useCylinderGeometry) {
-            // For VTK lines/polylines, connect consecutive points in sequence
-            for (let j = 1; j < cellSize; j++) {
-              const idx1 = indices[j];     // Current point index
-              const idx2 = indices[j + 1]; // Next point index
-              
-              // Check if we have a valid next point (not the last point in cell)
-              if (idx2 !== undefined && !isNaN(idx1) && !isNaN(idx2)) {
-                // Ensure indices are valid (within bounds of points array)
-                if (idx1 * 3 + 2 < points.length && idx2 * 3 + 2 < points.length) {
-                  // Add line segment: 6 coordinates (x1,y1,z1,x2,y2,z2)
-                  vertices.push(
-                    points[idx1 * 3], points[idx1 * 3 + 1], points[idx1 * 3 + 2], // First point
-                    points[idx2 * 3], points[idx2 * 3 + 1], points[idx2 * 3 + 2]  // Second point
-                  );
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -304,11 +252,9 @@ export default class VTKLoader {
       // Stop reading cells if we encounter other sections
       if (line.startsWith('CELL_TYPES') || line.startsWith('POINT_DATA')) {
         isReadingCells = false;
-        
       }
     }
 
-    
     // Create Three.js BufferGeometry from parsed data
     const geometry = new this.THREE.BufferGeometry();
     
@@ -318,17 +264,10 @@ export default class VTKLoader {
       return { geometry: cylinderGeometry, isPointCloud: false, radiusData, pressureData, fluxData };
     }
     
-    // Debug: if no vertices created, there might be an issue with cell parsing
-    if (vertices.length === 0) {
-      console.warn("[VTKLoader] No line segments created! Using point cloud fallback.");
-    }
-    
-    // If no line segments were created, create a point cloud as fallback
+    // Fallback to point cloud if no line segments were created
     if (vertices.length === 0 && points.length > 0) {
-      // Use original points for point cloud
       geometry.setAttribute('position', new this.THREE.Float32BufferAttribute(points, 3));
       
-      // Add radius, pressure, and flux data as attributes if available
       if (radiusData.length > 0) {
         geometry.setAttribute('radius', new this.THREE.Float32BufferAttribute(radiusData, 1));
       }
@@ -341,151 +280,117 @@ export default class VTKLoader {
       
       return { geometry, isPointCloud: true, radiusData, pressureData, fluxData }; 
     } else {
-      // Set vertex positions for line segments (each vertex has 3 coordinates: x, y, z)
       geometry.setAttribute('position', new this.THREE.Float32BufferAttribute(vertices, 3));
     }
     
     // Calculate bounding box for centering and scaling
     geometry.computeBoundingBox();
-    const center = geometry.boundingBox.getCenter(new this.THREE.Vector3()); // Center point
-    const size = geometry.boundingBox.getSize(new this.THREE.Vector3());     // Dimensions
-    const maxDim = Math.max(size.x, size.y, size.z);                        // Largest dimension
-    const scale = modelSize / maxDim; // Use configurable model size 
+    const center = geometry.boundingBox.getCenter(new this.THREE.Vector3());
+    const size = geometry.boundingBox.getSize(new this.THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scale = modelSize / maxDim;
     
     // Transform geometry: center at origin and scale to appropriate size
-    geometry.translate(-center.x, -center.y, -center.z); // Move to center
-    geometry.scale(scale, scale, scale);                  // Scale uniformly
+    geometry.translate(-center.x, -center.y, -center.z);
+    geometry.scale(scale, scale, scale);
     
     return { geometry, isPointCloud: false, radiusData, pressureData, fluxData };
   }
 
   /**
-   * Create cylinder geometry with caching for better performance
+   * Create smooth continuous tube geometry from LINES data
+   * Creates seamless tubes by generating continuous rings along each line
+   * This eliminates the "bamboo joint" effect and creates realistic tissue-like appearance
+   * LINES format: [numPoints, point1, point2, point3, ...] where points are connected sequentially
    */
   createCylinderGeometry(points, radiusData, pressureData, fluxData, cellConnections, modelSize, config) {
     // Create cache key based on data
-    const cacheKey = `${points.length}_${radiusData.length}_${config.colorMappingType}_${this.performanceMode}`;
+    const cacheKey = `${points.length}_${radiusData.length}_${config.colorMappingType}`;
     
     // Check geometry cache first
     if (this.geometryCache.has(cacheKey)) {
       console.log('[VTKLoader] Using cached geometry for performance');
       return this.geometryCache.get(cacheKey).clone();
     }
+
     const combinedGeometry = new this.THREE.BufferGeometry();
     const vertices = [];
     const normals = [];
-    const colors = [];  // Add color array for pressure mapping
+    const colors = [];
     const indices = [];
     let indexOffset = 0;
     
-    // Optimized radial segments based on performance mode
-    const radialSegments = this.performanceMode === 'high' ? 6 : 
-                          this.performanceMode === 'medium' ? 4 : 3;
+    // Adaptive radial segments based on performance mode
+    let radialSegments;
+    switch (config.performanceMode) {
+      case 'fast':
+        radialSegments = 4;
+        break;
+      case 'quality':
+        radialSegments = 8;
+        break;
+      default: // balanced
+        radialSegments = Math.max(4, Math.min(6, Math.round(modelSize / 100)));
+    }
     
-    // Calculate data ranges for color mapping based on colorMappingType
+    // Calculate data ranges for color mapping
     let minPressure = Infinity;
     let maxPressure = -Infinity;
     let minFlux = Infinity;
     let maxFlux = -Infinity;
-    
     if (config.colorMappingType === 'pressure' && pressureData.length > 0) {
-      minPressure = Math.min(...pressureData);
-      maxPressure = Math.max(...pressureData);
+      const { min, max } = this.getOverStackMinMax(pressureData);
+      minPressure = min;
+      maxPressure = max;
     } else if (config.colorMappingType === 'flux' && fluxData.length > 0) {
-      minFlux = Math.min(...fluxData);
-      maxFlux = Math.max(...fluxData);
+      const { min, max } = this.getOverStackMinMax(fluxData);
+      minFlux = min;
+      maxFlux = max;
     }
     
-    // First, detect branching points for smooth junction creation
+    
+    // Detect branching points for spherical junctions
     const branchingPoints = this.detectBranchingPoints(cellConnections, points.length / 3);
     
-    // Process each cell connection
+    console.log(`[VTKLoader] Processing ${cellConnections.length} lines with ${points.length / 3} total points`);
+    console.log(`[VTKLoader] Found ${branchingPoints.size} branching points`);
+    console.log(`[VTKLoader] Performance mode: ${config.performanceMode}, Radial segments: ${radialSegments}`);
+    
+    // Process each line to create smooth continuous tubes
     for (const connection of cellConnections) {
       const cellSize = connection[0];
       
-      // Create cylinders for each segment in the cell
-      for (let i = 1; i < cellSize; i++) {
-        const idx1 = connection[i];
-        const idx2 = connection[i + 1];
+      if (cellSize < 2) continue; // Skip lines with less than 2 points
+      
+      // Create smooth tube for this entire line
+      const tubeGeometry = this.createSmoothTube(
+        connection, points, radiusData, pressureData, fluxData, 
+        radialSegments, branchingPoints, minPressure, maxPressure, minFlux, maxFlux, config
+      );
+      
+      // Validate tube geometry
+      if (tubeGeometry.vertices.length > 0 && tubeGeometry.indices.length > 0) {
+        // Add tube geometry to combined mesh
+        vertices.push(...tubeGeometry.vertices);
+        normals.push(...tubeGeometry.normals);
+        colors.push(...tubeGeometry.colors);
         
-        if (idx2 !== undefined && idx1 < points.length / 3 && idx2 < points.length / 3) {
-          // Get point coordinates
-          const p1 = new this.THREE.Vector3(
-            points[idx1 * 3], 
-            points[idx1 * 3 + 1], 
-            points[idx1 * 3 + 2]
-          );
-          const p2 = new this.THREE.Vector3(
-            points[idx2 * 3], 
-            points[idx2 * 3 + 1], 
-            points[idx2 * 3 + 2]
-          );
-          
-          // Get radius values
-          let radius1 = radiusData[idx1] || COLOR_CONSTANTS.DEFAULT_RADIUS_FALLBACK;
-          let radius2 = radiusData[idx2] || COLOR_CONSTANTS.DEFAULT_RADIUS_FALLBACK;
-          
-          // Get data values and map to colors based on colorMappingType
-          let color1, color2;
-          
-          if (config.colorMappingType === 'pressure' && pressureData.length > 0) {
-            // Use pressure-based color mapping
-            let pressure1 = pressureData[idx1] || 0;
-            let pressure2 = pressureData[idx2] || 0;
-            color1 = this.pressureToColor(pressure1, minPressure, maxPressure);
-            color2 = this.pressureToColor(pressure2, minPressure, maxPressure);
-          } else if (config.colorMappingType === 'flux' && fluxData.length > 0) {
-            // Use flux-based color mapping
-            let flux1 = fluxData[idx1] || 0;
-            let flux2 = fluxData[idx2] || 0;
-            color1 = this.fluxToColor(flux1, minFlux, maxFlux);
-            color2 = this.fluxToColor(flux2, minFlux, maxFlux);
-          } else if (config.colorMappingType === 'default') {
-            // Use simple default arterial (red) and venous (blue) colors
-            // For simplicity, use the model's base color which should be set correctly
-            // when loading arterial (red) or venous (blue) models
-            color1 = new this.THREE.Color(1, 1, 1); // White - let material color show through
-            color2 = new this.THREE.Color(1, 1, 1); // White - let material color show through
-          } else {
-            // Use white for vertex colors (will use material color)
-            color1 = new this.THREE.Color(1, 1, 1);
-            color2 = new this.THREE.Color(1, 1, 1);
-          }
-          
-          // Check if endpoints are branching points for seamless connection
-          const isBranchPoint1 = branchingPoints.has(idx1);
-          const isBranchPoint2 = branchingPoints.has(idx2);
-          
-          // Create tapered cylinder segment with extended ends for seamless blending
-          const cylinderSegment = this.createTaperedCylinder(
-            p1, p2, radius1, radius2, radialSegments, color1, color2,
-            isBranchPoint1, isBranchPoint2
-          );
-          
-          // Add vertices, normals, colors, and indices to combined geometry
-          const segmentVertices = cylinderSegment.vertices;
-          const segmentNormals = cylinderSegment.normals;
-          const segmentColors = cylinderSegment.colors;
-          const segmentIndices = cylinderSegment.indices;
-          
-          // Add vertices, normals, and colors
-          vertices.push(...segmentVertices);
-          normals.push(...segmentNormals);
-          colors.push(...segmentColors);
-          
-          // Add indices with offset
-          for (const index of segmentIndices) {
-            indices.push(index + indexOffset);
-          }
-          
-          // Update index offset
-          indexOffset += segmentVertices.length / 3;
+        // Add indices with offset
+        for (const index of tubeGeometry.indices) {
+          indices.push(index + indexOffset);
         }
+        
+        // Update index offset
+        indexOffset += tubeGeometry.vertices.length / 3;
+      } else {
+        console.warn(`[VTKLoader] Skipping invalid tube geometry for line ${lineIndex}`);
       }
     }
     
-    // Create smooth junction geometry at branching points
-    this.createBranchingJunctions(branchingPoints, points, radiusData, pressureData, fluxData, minPressure, maxPressure, minFlux, maxFlux, vertices, normals, colors, indices, indexOffset, config);
+    // Create spherical junctions at branching points (only in quality mode)
+    if (config.performanceMode !== 'fast') {
+      this.createSmoothSphericalJunctions(branchingPoints, points, radiusData, pressureData, fluxData, minPressure, maxPressure, minFlux, maxFlux, vertices, normals, colors, indices, indexOffset, config);
+    }
     
     // Set geometry attributes
     combinedGeometry.setAttribute('position', new this.THREE.Float32BufferAttribute(vertices, 3));
@@ -500,279 +405,257 @@ export default class VTKLoader {
     const maxDim = Math.max(size.x, size.y, size.z);
     const scale = modelSize / maxDim;
     
-    // Transform geometry: center at origin and scale to appropriate size
+    // Transform geometry: center at origin, scale to appropriate size, and apply rotation
     combinedGeometry.translate(-center.x, -center.y, -center.z);
     combinedGeometry.scale(scale, scale, scale);
     
+    // Apply default horizontal rotation if specified
+    if (config.defaultRotationY !== 0) {
+      combinedGeometry.rotateY(config.defaultRotationY);
+    }
+    
     // Cache the geometry for future use
-    if (this.geometryCache.size < 10) {  // Limit cache size
+    if (this.geometryCache.size < 10) {
       this.geometryCache.set(cacheKey, combinedGeometry.clone());
     }
     
     return combinedGeometry;
   }
 
+  getOverStackMinMax(arr) {
+    if (!arr || arr.length === 0) {
+      return { min: undefined, max: undefined };
+    }
+  
+    let min = Infinity;
+    let max = -Infinity;
+  
+    for (let val of arr) {
+      if (val < min) min = val;
+      if (val > max) max = val;
+    }
+  
+    return { min, max };
+  }
+
   /**
-   * Map pressure value to color using simplified blood pressure color scheme
-   * 3-color gradient: Green (low) → Orange (medium) → Red (high)
-   * @param {number} pressure - Pressure value
-   * @param {number} minPressure - Minimum pressure in dataset
-   * @param {number} maxPressure - Maximum pressure in dataset
-   * @returns {THREE.Color} - Color object
+   * Map pressure value 
    */
   pressureToColor(pressure, minPressure, maxPressure) {
-    // Normalize and apply non-linear mapping
     const linear = maxPressure > minPressure ? 
-      (pressure - minPressure) / (maxPressure - minPressure) : COLOR_CONSTANTS.COLOR_MAPPING.NEUTRAL_VALUE;
-    const t = Math.pow(linear, COLOR_CONSTANTS.COLOR_MAPPING.NONLINEAR_EXPONENT);
+      (pressure - minPressure) / (maxPressure - minPressure) : 0.5;
     
     const color = new this.THREE.Color();
     
-    if (t < COLOR_CONSTANTS.COLOR_MAPPING.NEUTRAL_VALUE) {
-      // Green to Orange (low to medium pressure)
-      const factor = t * 2; // 0 to 1
-      const lowToMid = COLOR_CONSTANTS.COLOR_MAPPING.LOW_TO_MID;
-      color.setRGB(
-        lowToMid.RED_START + factor * lowToMid.RED_RANGE,
-        lowToMid.GREEN_START + factor * lowToMid.GREEN_RANGE,
-        lowToMid.BLUE_START + factor * lowToMid.BLUE_RANGE
-      );
+    // 5-segment color mapping using constants from file top
+    if (linear < 0.2) {
+      // Pressure Low: Light Green
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.LOW.r, COLOR_CONSTANTS.PRESSURE_COLORS.LOW.g, COLOR_CONSTANTS.PRESSURE_COLORS.LOW.b);
+    } else if (linear < 0.4) {
+      // Pressure Mid: Yellow
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.MID.r, COLOR_CONSTANTS.PRESSURE_COLORS.MID.g, COLOR_CONSTANTS.PRESSURE_COLORS.MID.b);
+    } else if (linear < 0.6) {
+      // Pressure High: Orange
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.HIGH.r, COLOR_CONSTANTS.PRESSURE_COLORS.HIGH.g, COLOR_CONSTANTS.PRESSURE_COLORS.HIGH.b);
+    } else if (linear < 0.8) {
+      // Pressure Max: Red-Orange
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.MAX.r, COLOR_CONSTANTS.PRESSURE_COLORS.MAX.g, COLOR_CONSTANTS.PRESSURE_COLORS.MAX.b);
     } else {
-      // Orange to Dark Red (medium to high pressure)
-      const factor = (t - COLOR_CONSTANTS.COLOR_MAPPING.NEUTRAL_VALUE) * 2; // 0 to 1
-      const midToHigh = COLOR_CONSTANTS.COLOR_MAPPING.MID_TO_HIGH;
-      color.setRGB(
-        midToHigh.RED_START + factor * midToHigh.RED_RANGE,
-        midToHigh.GREEN_START + factor * midToHigh.GREEN_RANGE,
-midToHigh.BLUE_START
-      );
+      // Pressure Ultra: Dark Red
+      color.setRGB(COLOR_CONSTANTS.PRESSURE_COLORS.ULTRA.r, COLOR_CONSTANTS.PRESSURE_COLORS.ULTRA.g, COLOR_CONSTANTS.PRESSURE_COLORS.ULTRA.b);
     }
     
     return color;
   }
 
   /**
-   * Determine vessel type for default color mapping
-   * This is a simple heuristic - in practice, vessel type should be provided in the data
-   * @param {number} pointIndex - Index of the point
-   * @param {Array} radiusData - Array of radius values
-   * @param {Array} pressureData - Array of pressure values (if available)
-   * @param {Array} fluxData - Array of flux values (if available)
-   * @returns {string} - 'arterial' or 'venous'
-   */
-  determineVesselType(pointIndex, radiusData, pressureData = null, fluxData = null) {
-    // Simple heuristic: larger vessels with higher pressure/flux are typically arterial
-    const radius = radiusData[pointIndex] || COLOR_CONSTANTS.DEFAULT_RADIUS_FALLBACK;
-    
-    // If we have pressure data, use it
-    if (pressureData && pressureData.length > 0) {
-      const pressure = pressureData[pointIndex] || 0;
-      const avgPressure = pressureData.reduce((a, b) => a + b, 0) / pressureData.length;
-      return pressure > avgPressure ? 'arterial' : 'venous';
-    }
-    
-    // If we have flux data, use it (positive flux typically arterial)
-    if (fluxData && fluxData.length > 0) {
-      const flux = fluxData[pointIndex] || 0;
-      return flux > 0 ? 'arterial' : 'venous';
-    }
-    
-    // Fallback: larger vessels are typically arterial
-    const avgRadius = radiusData.reduce((a, b) => a + b, 0) / radiusData.length;
-    return radius > avgRadius ? 'arterial' : 'venous';
-  }
-
-  /**
-   * Map flux value to color using flow-based color scheme with enhanced sensitivity for low flux
-   * Blue-to-Red gradient: Blue (low/reverse flow) → Cyan → Green → Yellow → Red (high flow)
-   * @param {number} flux - Flux value (can be negative for reverse flow)
-   * @param {number} minFlux - Minimum flux in dataset
-   * @param {number} maxFlux - Maximum flux in dataset
-   * @returns {THREE.Color} - Color object
+   * Map flux value to color using flow-based color scheme
    */
   fluxToColor(flux, minFlux, maxFlux) {
     const color = new this.THREE.Color();
     
     // Handle edge case where all flux values are the same
     if (maxFlux === minFlux) {
-      color.setRGB(0.5, 0.5, 0.5); // Gray for uniform flux
+      color.setRGB(0.5, 0.5, 0.5);
       return color;
     }
     
-    // Calculate dynamic range and apply logarithmic scaling for better sensitivity
+    // Calculate dynamic range and apply logarithmic scaling
     const absMinFlux = Math.abs(minFlux);
     const absMaxFlux = Math.abs(maxFlux);
     const maxAbsValue = Math.max(absMinFlux, absMaxFlux);
     
-    // Use logarithmic scaling to enhance sensitivity for low values
-    // Add small offset to avoid log(0)
     const offset = maxAbsValue * 0.01;
     const logFlux = Math.sign(flux) * Math.log(Math.abs(flux) + offset);
     const logMin = Math.sign(minFlux) * Math.log(Math.abs(minFlux) + offset);
     const logMax = Math.sign(maxFlux) * Math.log(Math.abs(maxFlux) + offset);
     const logRange = logMax - logMin;
     
-    // Normalize using logarithmic values for better low-value sensitivity
     let normalized;
     if (logRange !== 0) {
-      normalized = (logFlux - logMin) / logRange; // 0 to 1
+      normalized = (logFlux - logMin) / logRange;
     } else {
-      normalized = 0.5; // Fallback for edge case
+      normalized = 0.5;
     }
     
-    // Apply additional sensitivity curve for very low flux values
-    // Use a power function to expand the low-value range
-    const sensitivityFactor = 0.3; // Lower values = more sensitivity to low flux
+    const sensitivityFactor = 0.3;
     const enhancedNormalized = Math.pow(normalized, sensitivityFactor);
-    
-    // Convert to -1 to 1 range with enhanced sensitivity
     const t = enhancedNormalized * 2 - 1;
     
-    // More granular color mapping with smoother transitions
-    if (t < -0.8) {
-      // Deep blue for strong reverse flow
-      color.setRGB(0.0, 0.1, 0.9);
-    } else if (t < -0.5) {
-      // Blue to light blue for moderate reverse flow
-      const factor = (t + 0.8) / 0.3; // 0 to 1
-      color.setRGB(
-        0.0 + factor * 0.1,
-        0.1 + factor * 0.4,
-        0.9 + factor * 0.1
-      );
-    } else if (t < -0.2) {
-      // Light blue to cyan for low reverse flow
-      const factor = (t + 0.5) / 0.3; // 0 to 1
-      color.setRGB(
-        0.1 + factor * 0.1,
-        0.5 + factor * 0.3,
-        1.0 - factor * 0.2
-      );
-    } else if (t < 0.1) {
-      // Cyan to light green for very low forward flow (enhanced sensitivity here)
-      const factor = (t + 0.2) / 0.3; // 0 to 1
-      color.setRGB(
-        0.2 - factor * 0.2,
-        0.8 + factor * 0.2,
-        0.8 - factor * 0.3
-      );
-    } else if (t < 0.4) {
-      // Light green to green for low-moderate flow
-      const factor = (t - 0.1) / 0.3; // 0 to 1
-      color.setRGB(
-        0.0 + factor * 0.3,
-        1.0,
-        0.5 - factor * 0.5
-      );
-    } else if (t < 0.7) {
-      // Green to yellow for moderate flow
-      const factor = (t - 0.4) / 0.3; // 0 to 1
-      color.setRGB(
-        0.3 + factor * 0.7,
-        1.0,
-        0.0
-      );
+    // Simplified color mapping
+    if (t < -0.5) {
+      color.setRGB(0.0, 0.2, 0.8); // Blue
+    } else if (t < 0) {
+      color.setRGB(0.2, 0.6, 1.0); // Light blue
+    } else if (t < 0.5) {
+      color.setRGB(0.0, 1.0, 0.5); // Green
     } else {
-      // Yellow to red for high flow
-      const factor = (t - 0.7) / 0.3; // 0 to 1
-      color.setRGB(
-        1.0,
-        1.0 - factor * 1.0,
-        0.0
-      );
+      color.setRGB(1.0, 0.5, 0.0); // Orange to red
     }
     
     return color;
   }
 
- 
   /**
-   * Create a tapered cylinder between two points with different radii and colors
-   * Enhanced for seamless junction blending
-   * @param {THREE.Vector3} p1 - Start point
-   * @param {THREE.Vector3} p2 - End point
-   * @param {number} radius1 - Radius at start point
-   * @param {number} radius2 - Radius at end point
-   * @param {number} radialSegments - Number of radial segments
-   * @param {THREE.Color} color1 - Color at start point
-   * @param {THREE.Color} color2 - Color at end point
-   * @param {boolean} isBranchPoint1 - Whether start point is a branch point
-   * @param {boolean} isBranchPoint2 - Whether end point is a branch point
-   * @returns {Object} - {vertices: Array, normals: Array, colors: Array, indices: Array}
+   * Create a smooth continuous tube along a line of points
+   * This eliminates the "bamboo joint" effect by creating seamless rings
    */
-  createTaperedCylinder(p1, p2, radius1, radius2, radialSegments, color1, color2, isBranchPoint1 = false, isBranchPoint2 = false) {
+  createSmoothTube(connection, points, radiusData, pressureData, fluxData, radialSegments, branchingPoints, minPressure, maxPressure, minFlux, maxFlux, config) {
     const vertices = [];
     const normals = [];
     const colors = [];
     const indices = [];
     
-    // Calculate cylinder direction and perpendicular vectors
-    const direction = new this.THREE.Vector3().subVectors(p2, p1).normalize();
+    const cellSize = connection[0];
+    const pointIndices = connection.slice(1, cellSize + 1);
     
-    // Extend cylinder ends slightly into branch points to eliminate gaps
-    let adjustedP1 = p1.clone();
-    let adjustedP2 = p2.clone();
-    let adjustedRadius1 = radius1;
-    let adjustedRadius2 = radius2;
+    // Apply conservative point sampling only if needed for performance
+    let processedIndices = pointIndices;
     
-    if (isBranchPoint1) {
-      // Minimal extension for natural connection
-      const extension = Math.max(radius1 * 0.08, 0.005);
-      adjustedP1.add(direction.clone().multiplyScalar(-extension));
-      adjustedRadius1 = radius1 * 1.02; // Very slight radius increase
+    if (config.performanceMode === 'fast' && pointIndices.length > 30) {
+      // Only sample if we have too many points and are in fast mode
+      const step = Math.ceil(pointIndices.length / 20); // Keep max 20 points
+      processedIndices = [];
+      for (let i = 0; i < pointIndices.length; i += step) {
+        processedIndices.push(pointIndices[i]);
+      }
+      // Always include the last point
+      if (processedIndices[processedIndices.length - 1] !== pointIndices[pointIndices.length - 1]) {
+        processedIndices.push(pointIndices[pointIndices.length - 1]);
+      }
     }
     
-    if (isBranchPoint2) {
-      // Minimal extension for natural connection
-      const extension = Math.max(radius2 * 0.08, 0.005);
-      adjustedP2.add(direction.clone().multiplyScalar(extension));
-      adjustedRadius2 = radius2 * 1.02; // Very slight radius increase
-    }
-    
-    // Create perpendicular vectors for cylinder cross-section
-    const up = new this.THREE.Vector3(0, 1, 0);
-    const right = new this.THREE.Vector3().crossVectors(direction, up).normalize();
-    if (right.lengthSq() < 0.1) {
-      // Direction is parallel to up vector, use different reference
-      right.crossVectors(direction, new this.THREE.Vector3(1, 0, 0)).normalize();
-    }
-    const forward = new this.THREE.Vector3().crossVectors(right, direction).normalize();
-    
-    // Generate vertices for cylinder caps
-    for (let ring = 0; ring <= 1; ring++) {
-      const t = ring; // 0 for start, 1 for end
-      const currentPos = new this.THREE.Vector3().lerpVectors(adjustedP1, adjustedP2, t);
-      const currentRadius = adjustedRadius1 + (adjustedRadius2 - adjustedRadius1) * t;
-      const currentColor = new this.THREE.Color().lerpColors(color1, color2, t);
+    // Generate rings for all processed points
+    for (let i = 0; i < processedIndices.length; i++) {
+      const pointIdx = processedIndices[i];
       
+      // Get point data
+      const point = new this.THREE.Vector3(
+        points[pointIdx * 3],
+        points[pointIdx * 3 + 1],
+        points[pointIdx * 3 + 2]
+      );
+      
+      // Apply smooth radius interpolation to reduce sharp transitions
+      let radius = radiusData[pointIdx] || COLOR_CONSTANTS.DEFAULT_RADIUS_FALLBACK;
+      
+      // Smooth radius transitions between points
+      if (i > 0 && i < processedIndices.length - 1) {
+        const prevRadius = radiusData[processedIndices[i - 1]] || COLOR_CONSTANTS.DEFAULT_RADIUS_FALLBACK;
+        const nextRadius = radiusData[processedIndices[i + 1]] || COLOR_CONSTANTS.DEFAULT_RADIUS_FALLBACK;
+        
+        // Weighted average for smoother transitions
+        radius = radius * 0.6 + prevRadius * 0.2 + nextRadius * 0.2;
+      }
+      
+      // Get color based on mapping type
+      let color;
+      if (config.colorMappingType === 'pressure' && pressureData.length > 0) {
+        const pressure = pressureData[pointIdx] || 0;
+        color = this.pressureToColor(pressure, minPressure, maxPressure);
+      } else if (config.colorMappingType === 'flux' && fluxData.length > 0) {
+        const flux = fluxData[pointIdx] || 0;
+        color = this.fluxToColor(flux, minFlux, maxFlux);
+      } else {
+        color = new this.THREE.Color(1, 1, 1);
+      }
+      
+      // Calculate smooth direction for this ring
+      let direction;
+      if (i === 0) {
+        // First point: use direction to next point
+        const nextPoint = new this.THREE.Vector3(
+          points[processedIndices[i + 1] * 3],
+          points[processedIndices[i + 1] * 3 + 1],
+          points[processedIndices[i + 1] * 3 + 2]
+        );
+        direction = new this.THREE.Vector3().subVectors(nextPoint, point).normalize();
+      } else if (i === processedIndices.length - 1) {
+        // Last point: use direction from previous point
+        const prevPoint = new this.THREE.Vector3(
+          points[processedIndices[i - 1] * 3],
+          points[processedIndices[i - 1] * 3 + 1],
+          points[processedIndices[i - 1] * 3 + 2]
+        );
+        direction = new this.THREE.Vector3().subVectors(point, prevPoint).normalize();
+      } else {
+        // Middle point: use smooth average direction with weighted interpolation
+        const prevPoint = new this.THREE.Vector3(
+          points[processedIndices[i - 1] * 3],
+          points[processedIndices[i - 1] * 3 + 1],
+          points[processedIndices[i - 1] * 3 + 2]
+        );
+        const nextPoint = new this.THREE.Vector3(
+          points[processedIndices[i + 1] * 3],
+          points[processedIndices[i + 1] * 3 + 1],
+          points[processedIndices[i + 1] * 3 + 2]
+        );
+        const dir1 = new this.THREE.Vector3().subVectors(point, prevPoint).normalize();
+        const dir2 = new this.THREE.Vector3().subVectors(nextPoint, point).normalize();
+        
+        // Smooth interpolation between directions
+        direction = new this.THREE.Vector3().addVectors(dir1, dir2).normalize();
+        
+        // Apply smoothing to reduce sharp turns
+        const smoothingFactor = 0.3;
+        direction.lerp(new this.THREE.Vector3().addVectors(dir1, dir2).normalize(), smoothingFactor);
+      }
+      
+      // Create perpendicular vectors for ring orientation
+      const up = new this.THREE.Vector3(0, 1, 0);
+      const right = new this.THREE.Vector3().crossVectors(direction, up).normalize();
+      if (right.lengthSq() < 0.1) {
+        right.crossVectors(direction, new this.THREE.Vector3(1, 0, 0)).normalize();
+      }
+      const forward = new this.THREE.Vector3().crossVectors(right, direction).normalize();
+      
+      // Generate ring vertices
       for (let segment = 0; segment < radialSegments; segment++) {
         const angle = (segment / radialSegments) * Math.PI * 2;
-        const x = Math.cos(angle) * currentRadius;
-        const y = Math.sin(angle) * currentRadius;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
         
         // Calculate vertex position
         const vertexPos = new this.THREE.Vector3()
-          .copy(currentPos)
+          .copy(point)
           .add(right.clone().multiplyScalar(x))
           .add(forward.clone().multiplyScalar(y));
         
         vertices.push(vertexPos.x, vertexPos.y, vertexPos.z);
         
-        // Calculate normal (pointing outward from cylinder axis)
+        // Calculate normal (pointing outward from center)
         const normal = new this.THREE.Vector3()
           .copy(right.clone().multiplyScalar(x))
           .add(forward.clone().multiplyScalar(y))
           .normalize();
         
         normals.push(normal.x, normal.y, normal.z);
-        
-        // Add color
-        colors.push(currentColor.r, currentColor.g, currentColor.b);
+        colors.push(color.r, color.g, color.b);
       }
     }
     
-    // Generate indices for cylinder walls
-    for (let ring = 0; ring < 1; ring++) {
+    // Generate indices for tube walls (connect rings)
+    for (let ring = 0; ring < processedIndices.length - 1; ring++) {
       for (let segment = 0; segment < radialSegments; segment++) {
         const current = ring * radialSegments + segment;
         const next = ring * radialSegments + ((segment + 1) % radialSegments);
@@ -789,43 +672,147 @@ midToHigh.BLUE_START
   }
 
   /**
-   * Create appropriate mesh from geometry based on type
-   * @param {THREE.BufferGeometry} geometry - Parsed geometry
-   * @param {boolean} isPointCloud - Whether to create point cloud or line segments
-   * @param {Object} config - Configuration options
-   * @param {Array} radiusData - Radius data for points (optional)
-   * @param {Array} pressureData - Pressure data for points (optional)
-   * @param {Array} fluxData - Flux data for points (optional)
-   * @returns {THREE.Object3D} - Created mesh
+   * Create a tapered cylinder between two points (legacy method for junctions)
+   */
+  createTaperedCylinder(p1, p2, radius1, radius2, radialSegments, color1, color2, isBranchPoint1 = false, isBranchPoint2 = false) {
+    const vertices = [];
+    const normals = [];
+    const colors = [];
+    const indices = [];
+    
+    // Calculate cylinder direction and perpendicular vectors
+    const direction = new this.THREE.Vector3().subVectors(p2, p1).normalize();
+    
+    // Create perpendicular vectors for cylinder cross-section
+    const up = new this.THREE.Vector3(0, 1, 0);
+    const right = new this.THREE.Vector3().crossVectors(direction, up).normalize();
+    if (right.lengthSq() < 0.1) {
+      right.crossVectors(direction, new this.THREE.Vector3(1, 0, 0)).normalize();
+    }
+    const forward = new this.THREE.Vector3().crossVectors(right, direction).normalize();
+    
+    let vertexIndex = 0;
+    
+    // 1. Generate center points for end caps (if not branching points)
+    let centerIndex1 = -1, centerIndex2 = -1;
+    
+    if (!isBranchPoint1) {
+      // Center point for first cap
+      vertices.push(p1.x, p1.y, p1.z);
+      normals.push(-direction.x, -direction.y, -direction.z);
+      colors.push(color1.r, color1.g, color1.b);
+      centerIndex1 = vertexIndex++;
+    }
+    
+    if (!isBranchPoint2) {
+      // Center point for second cap
+      vertices.push(p2.x, p2.y, p2.z);
+      normals.push(direction.x, direction.y, direction.z);
+      colors.push(color2.r, color2.g, color2.b);
+      centerIndex2 = vertexIndex++;
+    }
+    
+    // 2. Generate vertices for cylinder rings
+    const ringStartIndex = vertexIndex;
+    
+    for (let ring = 0; ring <= 1; ring++) {
+      const t = ring;
+      const currentPos = new this.THREE.Vector3().lerpVectors(p1, p2, t);
+      const currentRadius = radius1 + (radius2 - radius1) * t;
+      const currentColor = new this.THREE.Color().lerpColors(color1, color2, t);
+      
+      for (let segment = 0; segment < radialSegments; segment++) {
+        const angle = (segment / radialSegments) * Math.PI * 2;
+        const x = Math.cos(angle) * currentRadius;
+        const y = Math.sin(angle) * currentRadius;
+        
+        // Calculate vertex position
+        const vertexPos = new this.THREE.Vector3()
+          .copy(currentPos)
+          .add(right.clone().multiplyScalar(x))
+          .add(forward.clone().multiplyScalar(y));
+        
+        vertices.push(vertexPos.x, vertexPos.y, vertexPos.z);
+        
+        // Calculate normal for side surface
+        const normal = new this.THREE.Vector3()
+          .copy(right.clone().multiplyScalar(x))
+          .add(forward.clone().multiplyScalar(y))
+          .normalize();
+        
+        normals.push(normal.x, normal.y, normal.z);
+        colors.push(currentColor.r, currentColor.g, currentColor.b);
+        vertexIndex++;
+      }
+    }
+    
+    // 3. Generate indices for cylinder side walls
+    for (let ring = 0; ring < 1; ring++) {
+      for (let segment = 0; segment < radialSegments; segment++) {
+        const current = ringStartIndex + ring * radialSegments + segment;
+        const next = ringStartIndex + ring * radialSegments + ((segment + 1) % radialSegments);
+        const currentNext = ringStartIndex + (ring + 1) * radialSegments + segment;
+        const nextNext = ringStartIndex + (ring + 1) * radialSegments + ((segment + 1) % radialSegments);
+        
+        // Two triangles per quad
+        indices.push(current, next, currentNext);
+        indices.push(currentNext, next, nextNext);
+      }
+    }
+    
+    // 4. Generate indices for end caps (only if not branching points)
+    if (!isBranchPoint1 && centerIndex1 >= 0) {
+      // First cap (facing backwards)
+      for (let segment = 0; segment < radialSegments; segment++) {
+        const current = ringStartIndex + segment;
+        const next = ringStartIndex + ((segment + 1) % radialSegments);
+        
+        // Triangle from center to edge (reversed winding for correct normal)
+        indices.push(centerIndex1, next, current);
+      }
+    }
+    
+    if (!isBranchPoint2 && centerIndex2 >= 0) {
+      // Second cap (facing forwards)
+      for (let segment = 0; segment < radialSegments; segment++) {
+        const current = ringStartIndex + radialSegments + segment;
+        const next = ringStartIndex + radialSegments + ((segment + 1) % radialSegments);
+        
+        // Triangle from center to edge
+        indices.push(centerIndex2, current, next);
+      }
+    }
+    
+    return { vertices, normals, colors, indices };
+}
+
+  /**
+   * Create appropriate mesh from geometry
    */
   createVTKMesh(geometry, isPointCloud, config, radiusData = null, pressureData = null, fluxData = null) {
     let vtkMesh;
     
     if (isPointCloud) {
-      // Create enhanced point cloud material
       const material = new this.THREE.PointsMaterial({
         color: config.color,
-        size: config.pointSize,
+        size: config.pointSize || 8,
         transparent: true,
         opacity: config.opacity,
-        sizeAttenuation: true // Points get smaller with distance
+        sizeAttenuation: true
       });
       vtkMesh = new this.THREE.Points(geometry, material);
       
     } else if (config.useCylinderGeometry && radiusData && radiusData.length > 0) {
-      // Create cylinder mesh with proper material for 3D rendering
-      
-      // Determine if we should use vertex colors based on colorMappingType
+      // Determine if we should use vertex colors
       const useVertexColors = (config.colorMappingType === 'pressure' && pressureData && pressureData.length > 0) ||
                               (config.colorMappingType === 'flux' && fluxData && fluxData.length > 0);
       
       // Set base color
       let baseColor = config.color;
       if (config.colorMappingType === 'default') {
-        // Use the model's configured color (red for arterial, blue for venous)
         baseColor = config.color;
       } else if (useVertexColors) {
-        baseColor = 0xffffff; // White to allow vertex colors to show through
+        baseColor = 0xffffff;
       }
       
       // Check material cache
@@ -838,9 +825,9 @@ midToHigh.BLUE_START
           transparent: config.opacity < 1.0,
           opacity: config.opacity,
           vertexColors: useVertexColors,
-          side: this.THREE.FrontSide,  // Only render front faces for performance
-          depthWrite: config.opacity >= 1.0,  // Optimize depth writing
-          alphaTest: config.opacity < 1.0 ? 0.01 : 0  // Skip transparent pixels
+          side: this.THREE.FrontSide,
+          depthWrite: config.opacity >= 1.0,
+          alphaTest: config.opacity < 1.0 ? 0.01 : 0
         });
         
         // Cache material for reuse
@@ -853,45 +840,24 @@ midToHigh.BLUE_START
       
     } else {
       // Create line segment visualization
-      
-      // Main vessel material
       const vesselMaterial = new this.THREE.LineBasicMaterial({
         color: config.color,
-        linewidth: config.lineWidth,
+        linewidth: config.lineWidth || 2,
         transparent: true,
         opacity: config.opacity
       });
       
       vtkMesh = new this.THREE.LineSegments(geometry, vesselMaterial);
-      
-      // Add wireframe overlay for enhanced detail if enabled
-      if (config.enableWireframe) {
-        const wireframeMaterial = new this.THREE.LineBasicMaterial({
-          color: (config.color & 0xffffff) | 0x888888, // Lighter version of main color
-          linewidth: Math.max(1, config.lineWidth - 2),
-          transparent: true,
-          opacity: config.opacity * 0.3
-        });
-        
-        const wireframeMesh = new this.THREE.LineSegments(geometry, wireframeMaterial);
-        wireframeMesh.position.copy(vtkMesh.position);
-        wireframeMesh.scale.copy(vtkMesh.scale);
-        wireframeMesh.scale.multiplyScalar(1.005); // Very slightly larger for wireframe effect (reduced from 1.01)
-        
-        this.wireframeMesh = wireframeMesh;
-      }
     }
     
     return vtkMesh;
   }
 
   /**
-   * Add mesh to scene with enhanced lighting
-   * @param {THREE.Object3D} mesh - Mesh to add
-   * @param {Object} config - Configuration options
+   * Add mesh to scene
    */
   addToScene(mesh, config = {}) {
-    // Clear existing meshes only if clearPrevious is not explicitly set to false
+    // Clear existing meshes
     if (config.clearPrevious !== false) {
       if (this.currentVTKMesh) {
         const targetScene = this.scene?.scene || this.scene;
@@ -899,16 +865,7 @@ midToHigh.BLUE_START
           targetScene.remove(this.currentVTKMesh);
         }
       }
-      if (this.wireframeMesh && this.wireframeMesh !== mesh) {
-        const targetScene = this.scene?.scene || this.scene;
-        if (targetScene && targetScene.remove) {
-          targetScene.remove(this.wireframeMesh);
-        }
-      }
     }
-    
-    // Setup enhanced lighting (only once)
-    this.setupSceneLighting();
     
     // Get the actual Three.js scene object
     const targetScene = this.scene?.scene || this.scene;
@@ -920,15 +877,8 @@ midToHigh.BLUE_START
       return;
     }
     
-    this.allVTKMeshes.push(mesh); // Track this mesh for future cleanup
-    
-    // Store current mesh reference
+    this.allVTKMeshes.push(mesh);
     this.currentVTKMesh = mesh;
-    
-    // Add wireframe overlay if it exists
-    if (this.wireframeMesh) {
-      targetScene.add(this.wireframeMesh);
-    }
     
     // Let Copper3D handle rendering
     if (this.copperRenderer && this.copperRenderer.render) {
@@ -937,142 +887,17 @@ midToHigh.BLUE_START
   }
 
   /**
-   * Setup enhanced lighting for biological visualization
-   */
-  setupSceneLighting() {
-    // Only add lights if they haven't been initialized yet
-    if (this.lightingInitialized) {
-      return;
-    }
-    
-    const lighting = COLOR_CONSTANTS.LIGHTING;
-    
-    // Warm ambient light to simulate biological environment
-    const ambientLight = new this.THREE.AmbientLight(lighting.AMBIENT_COLOR, lighting.AMBIENT_INTENSITY);
-    this.scene.add(ambientLight);
-    
-    // Main directional light (simulating medical examination light)
-    const mainLight = new this.THREE.DirectionalLight(lighting.MAIN_LIGHT_COLOR, lighting.MAIN_LIGHT_INTENSITY);
-    mainLight.position.set(10, 10, 5);
-    mainLight.castShadow = true;
-    this.scene.add(mainLight);
-    
-    // Secondary light from different angle for better depth perception
-    const fillLight = new this.THREE.DirectionalLight(lighting.FILL_LIGHT_COLOR, lighting.FILL_LIGHT_INTENSITY);
-    fillLight.position.set(-5, 3, -1);
-    this.scene.add(fillLight);
-    
-    // Rim light for edge definition
-    const rimLight = new this.THREE.DirectionalLight(lighting.RIM_LIGHT_COLOR, lighting.RIM_LIGHT_INTENSITY);
-    rimLight.position.set(0, -5, 10);
-    this.scene.add(rimLight);
-    
-    // Add subtle point lights for internal illumination effect
-    const internalLight1 = new this.THREE.PointLight(
-      lighting.INTERNAL_LIGHT1_COLOR, 
-      lighting.INTERNAL_LIGHT1_INTENSITY, 
-      lighting.INTERNAL_LIGHT1_DISTANCE
-    );
-    internalLight1.position.set(0, 0, 0);
-    this.scene.add(internalLight1);
-    
-    const internalLight2 = new this.THREE.PointLight(
-      lighting.INTERNAL_LIGHT2_COLOR, 
-      lighting.INTERNAL_LIGHT2_INTENSITY, 
-      lighting.INTERNAL_LIGHT2_DISTANCE
-    );
-    internalLight2.position.set(20, -10, 15);
-    this.scene.add(internalLight2);
-    
-    this.lightingInitialized = true;
-  }
-
-
-
-  /**
-   * Set reference to copper scene for camera control
-   * @param {Object} copperScene - Copper3d scene object
-   */
-  setCopperScene(copperScene) {
-    this.copperScene = copperScene;
-  }
-
-  /**
-   * Set performance mode for rendering optimization
-   * @param {string} mode - Performance mode: 'high', 'medium', 'low', 'auto'
-   */
-  setPerformanceMode(mode) {
-    this.performanceMode = mode;
-    
-    // Clear caches when performance mode changes
-    this.geometryCache.clear();
-    this.materialCache.clear();
-    
-    console.log(`[VTKLoader] Performance mode set to: ${mode}`);
-  }
-
-  /**
-   * Enable fast rendering mode with reduced quality for better performance
-   */
-  enableFastMode() {
-    this.performanceMode = 'low';
-    this.enableLoD = false;  // Disable LoD for faster loading
-    
-    // Clear existing caches
-    this.geometryCache.clear();
-    this.materialCache.clear();
-    this.lodCache.clear();
-    
-    console.log('[VTKLoader] Fast mode enabled - reduced quality for better performance');
-  }
-
-  /**
-   * Get optimal configuration based on model complexity
-   */
-  getOptimalConfig(vertexCount) {
-    const isLargeModel = vertexCount > 50000;
-    const isMediumModel = vertexCount > 10000;
-    
-    if (isLargeModel) {
-      return {
-        cylinderSegments: 4,
-        enableWireframe: false,
-        useLoD: true,
-        colorMappingType: 'default'  // Skip complex color calculations
-      };
-    } else if (isMediumModel) {
-      return {
-        cylinderSegments: 6,
-        enableWireframe: false,
-        useLoD: false,
-        colorMappingType: 'pressure'
-      };
-    } else {
-      return {
-        cylinderSegments: 8,
-        enableWireframe: false,
-        useLoD: false,
-        colorMappingType: 'pressure'
-      };
-    }
-  }
-
-
-
-
-  /**
    * Detect branching points where multiple tubes connect
-   * @param {Array} cellConnections - Array of cell connectivity data
-   * @param {number} totalPoints - Total number of points
-   * @returns {Map} - Map of point indices to their connected points
    */
   detectBranchingPoints(cellConnections, totalPoints) {
     const pointConnections = new Map();
     
-    // Build connectivity graph
+    // Build connectivity graph from LINES data
     for (const connection of cellConnections) {
       const cellSize = connection[0];
       
+      // For LINES data, each line represents a continuous path
+      // Connect all consecutive points in the line
       for (let i = 1; i < cellSize; i++) {
         const idx1 = connection[i];
         const idx2 = connection[i + 1];
@@ -1093,6 +918,7 @@ midToHigh.BLUE_START
     }
     
     // Filter to only branching points (more than 2 connections)
+    // These are points where multiple lines intersect
     const branchingPoints = new Map();
     for (const [pointIdx, connections] of pointConnections) {
       if (connections.size > 2) {
@@ -1104,24 +930,9 @@ midToHigh.BLUE_START
   }
 
   /**
-   * Create smooth junction geometry at branching points
-   * @param {Map} branchingPoints - Map of branching points and their connections
-   * @param {Array} points - Array of point coordinates
-   * @param {Array} radiusData - Array of radius values
-   * @param {Array} pressureData - Array of pressure values
-   * @param {Array} fluxData - Array of flux values
-   * @param {number} minPressure - Minimum pressure for color mapping
-   * @param {number} maxPressure - Maximum pressure for color mapping
-   * @param {number} minFlux - Minimum flux for color mapping
-   * @param {number} maxFlux - Maximum flux for color mapping
-   * @param {Array} vertices - Vertices array to append to
-   * @param {Array} normals - Normals array to append to
-   * @param {Array} colors - Colors array to append to
-   * @param {Array} indices - Indices array to append to
-   * @param {number} indexOffset - Current index offset
-   * @param {Object} config - Configuration options including colorMappingType
+   * Create smooth spherical junctions at branching points
    */
-  createBranchingJunctions(branchingPoints, points, radiusData, pressureData, fluxData, minPressure, maxPressure, minFlux, maxFlux, vertices, normals, colors, indices, indexOffset, config) {
+  createSmoothSphericalJunctions(branchingPoints, points, radiusData, pressureData, fluxData, minPressure, maxPressure, minFlux, maxFlux, vertices, normals, colors, indices, indexOffset, config) {
     for (const [branchPointIdx, connectedPoints] of branchingPoints) {
       // Get branch point data
       const branchPos = new this.THREE.Vector3(
@@ -1131,7 +942,7 @@ midToHigh.BLUE_START
       );
       const branchRadius = radiusData[branchPointIdx] || COLOR_CONSTANTS.DEFAULT_RADIUS_FALLBACK;
       
-      // Get branch point color based on colorMappingType
+      // Get branch point color
       let branchColor;
       if (config.colorMappingType === 'pressure' && pressureData.length > 0) {
         const branchPressure = pressureData[branchPointIdx] || 0;
@@ -1139,163 +950,67 @@ midToHigh.BLUE_START
       } else if (config.colorMappingType === 'flux' && fluxData.length > 0) {
         const branchFlux = fluxData[branchPointIdx] || 0;
         branchColor = this.fluxToColor(branchFlux, minFlux, maxFlux);
-      } else if (config.colorMappingType === 'default') {
-        // Use simple white for branching points - let material color show through
-        branchColor = new this.THREE.Color(1, 1, 1);
       } else {
         branchColor = new this.THREE.Color(1, 1, 1);
       }
       
-      // Create seamless junction geometry
-      const junctionGeometry = this.createSeamlessJunction(
-        branchPos, 
-        branchRadius, 
-        branchColor, 
-        connectedPoints, 
-        points, 
-        radiusData
-      );
+      // Create smooth sphere geometry for junction
+      const sphereGeometry = this.createSmoothSphere(branchPos, branchRadius * 1.3, branchColor);
       
-      // Add junction geometry to combined mesh
-      vertices.push(...junctionGeometry.vertices);
-      normals.push(...junctionGeometry.normals);
-      colors.push(...junctionGeometry.colors);
+      // Add sphere geometry to combined mesh
+      vertices.push(...sphereGeometry.vertices);
+      normals.push(...sphereGeometry.normals);
+      colors.push(...sphereGeometry.colors);
       
       // Add indices with offset
-      for (const index of junctionGeometry.indices) {
+      for (const index of sphereGeometry.indices) {
         indices.push(index + indexOffset);
       }
       
-      indexOffset += junctionGeometry.vertices.length / 3;
+      indexOffset += sphereGeometry.vertices.length / 3;
     }
   }
 
   /**
-   * Create seamless junction geometry that blends naturally with tubes
-   * Uses smooth interpolation surfaces instead of spherical geometry
-   * @param {THREE.Vector3} centerPos - Center position of junction
-   * @param {number} radius - Base radius of junction
-   * @param {THREE.Color} color - Color of junction
-   * @param {Array} connectedPoints - Array of connected point indices
-   * @param {Array} points - All point coordinates
-   * @param {Array} radiusData - Radius data for all points
-   * @returns {Object} - {vertices: Array, normals: Array, colors: Array, indices: Array}
+   * Create smooth sphere geometry for junctions
    */
-  createSeamlessJunction(centerPos, radius, color, connectedPoints, points, radiusData) {
+  createSmoothSphere(center, radius, color) {
     const vertices = [];
     const normals = [];
     const colors = [];
     const indices = [];
     
-    // Calculate connection directions and properties
-    const connections = [];
-    let maxConnectedRadius = radius;
+    // Reduced resolution for better performance
+    const segments = 6;
+    const rings = 4;
     
-    if (connectedPoints && points && radiusData) {
-      for (const pointIdx of connectedPoints) {
-        if (pointIdx * 3 + 2 < points.length) {
-          const connectedPos = new this.THREE.Vector3(
-            points[pointIdx * 3],
-            points[pointIdx * 3 + 1],
-            points[pointIdx * 3 + 2]
-          );
-          const direction = new this.THREE.Vector3().subVectors(connectedPos, centerPos).normalize();
-          const connectedRadius = radiusData[pointIdx] || radius;
-          
-          // Track the largest connected radius to ensure no gaps
-          maxConnectedRadius = Math.max(maxConnectedRadius, connectedRadius);
-          
-          connections.push({ 
-            direction, 
-            radius: connectedRadius,
-            distance: centerPos.distanceTo(connectedPos)
-          });
-        }
-      }
-    }
-    
-    // If less than 3 connections, create minimal geometry
-    if (connections.length < 3) {
-      return { vertices: [], normals: [], colors: [], indices: [] };
-    }
-    
-    // Create smooth interpolation surface with natural size
-    const resolution = 6; // Lower resolution for more natural appearance
-    // Use a smaller base radius for more natural connections
-    const baseRadius = maxConnectedRadius * 0.95; // Slightly smaller for natural look
-    
-    // Generate vertices using smooth field interpolation
-    for (let i = 0; i <= resolution; i++) {
-      const theta = (i / resolution) * Math.PI;
-      const sinTheta = Math.sin(theta);
-      const cosTheta = Math.cos(theta);
+    // Generate sphere vertices
+    for (let ring = 0; ring <= rings; ring++) {
+      const phi = (ring / rings) * Math.PI;
+      const sinPhi = Math.sin(phi);
+      const cosPhi = Math.cos(phi);
       
-      for (let j = 0; j <= resolution; j++) {
-        const phi = (j / resolution) * Math.PI * 2;
-        const sinPhi = Math.sin(phi);
-        const cosPhi = Math.cos(phi);
+      for (let segment = 0; segment <= segments; segment++) {
+        const theta = (segment / segments) * Math.PI * 2;
+        const sinTheta = Math.sin(theta);
+        const cosTheta = Math.cos(theta);
         
-        // Base spherical direction
-        const sphereDirection = new this.THREE.Vector3(
-          sinTheta * cosPhi,
-          cosTheta,
-          sinTheta * sinPhi
-        );
+        const x = sinPhi * cosTheta * radius;
+        const y = cosPhi * radius;
+        const z = sinPhi * sinTheta * radius;
         
-        // Calculate smooth radius with directional influence
-        let smoothRadius = baseRadius;
-        let totalInfluence = 0;
-        let maxDirectionalRadius = baseRadius;
-        
-        for (const conn of connections) {
-          // Calculate influence of each connection
-          const dot = Math.max(0, sphereDirection.dot(conn.direction));
-          const influence = Math.pow(dot, 3.0); // Smooth falloff, not too sharp
-          
-          // Calculate radius in this direction ensuring coverage
-          const directionalRadius = Math.max(baseRadius, conn.radius * 1.2);
-          const radiusContribution = directionalRadius * influence * 0.3;
-          
-          smoothRadius += radiusContribution;
-          totalInfluence += influence;
-          
-          // Ensure we always cover the connected tube radius
-          if (influence > 0.1) {
-            maxDirectionalRadius = Math.max(maxDirectionalRadius, conn.radius * 1.25);
-          }
-        }
-        
-        // Apply smooth scaling with minimum radius guarantee
-        const scaleFactor = 1.0 + totalInfluence * 0.2;
-        smoothRadius = Math.max(smoothRadius * scaleFactor, maxDirectionalRadius);
-        
-        // Ensure minimum radius to prevent gaps
-        smoothRadius = Math.max(smoothRadius, baseRadius * 0.9);
-        
-        // Calculate final vertex position
-        const vertexPos = new this.THREE.Vector3()
-          .copy(sphereDirection)
-          .multiplyScalar(smoothRadius)
-          .add(centerPos);
-        
-        vertices.push(vertexPos.x, vertexPos.y, vertexPos.z);
-        
-        // Calculate smooth normal
-        const normal = this.calculateSmoothNormal(vertexPos, centerPos, connections);
-        normals.push(normal.x, normal.y, normal.z);
-        
-        // Use junction color
+        vertices.push(center.x + x, center.y + y, center.z + z);
+        normals.push(x / radius, y / radius, z / radius);
         colors.push(color.r, color.g, color.b);
       }
     }
     
-    // Generate indices for smooth triangulation
-    for (let i = 0; i < resolution; i++) {
-      for (let j = 0; j < resolution; j++) {
-        const first = i * (resolution + 1) + j;
-        const second = first + resolution + 1;
+    // Generate sphere indices
+    for (let ring = 0; ring < rings; ring++) {
+      for (let segment = 0; segment < segments; segment++) {
+        const first = ring * (segments + 1) + segment;
+        const second = first + segments + 1;
         
-        // Create triangles with consistent winding
         indices.push(first, second, first + 1);
         indices.push(second, second + 1, first + 1);
       }
@@ -1303,121 +1018,23 @@ midToHigh.BLUE_START
     
     return { vertices, normals, colors, indices };
   }
-  
+
   /**
-   * Calculate smooth normal for seamless junction surface
-   * Enhanced for ultra-smooth transitions
-   * @param {THREE.Vector3} position - Current vertex position
-   * @param {THREE.Vector3} center - Junction center
-   * @param {Array} connections - Connection data
-   * @returns {THREE.Vector3} - Smooth normal vector
+   * Set reference to copper scene for camera control
    */
-  calculateSmoothNormal(position, center, connections) {
-    const direction = new this.THREE.Vector3().subVectors(position, center).normalize();
-    
-    // Start with radial direction
-    let normal = direction.clone();
-    
-    // Calculate weighted influence from all connections
-    let totalWeight = 0;
-    const influences = [];
-    
-    for (const conn of connections) {
-      const dot = Math.max(0, direction.dot(conn.direction));
-      const influence = Math.pow(dot, 2.5); // Moderate smoothness
-      const weight = influence * conn.radius; // Weight by tube size
-      
-      influences.push({ direction: conn.direction, weight });
-      totalWeight += weight;
-    }
-    
-    // Apply weighted blending for smoother surface
-    if (totalWeight > 0) {
-      let blendedDirection = new this.THREE.Vector3();
-      
-      for (const inf of influences) {
-        const normalizedWeight = inf.weight / totalWeight;
-        blendedDirection.add(
-          inf.direction.clone().multiplyScalar(normalizedWeight * 0.12) // Gentle blending
-        );
-      }
-      
-      // Lerp between radial normal and blended direction
-      normal.add(blendedDirection);
-    }
-    
-    return normal.normalize();
+  setCopperScene(copperScene) {
+    this.copperScene = copperScene;
   }
 
   /**
-   * Clear temporary data and overlays
+   * Clear temporary data
    */
   clearTemporaryData() {
-    // This method can be extended to clear any temporary visualizations
-    // For now, it's a placeholder for future functionality
-    
-  }
-
-  /**
-   * Load with Level of Detail optimization
-   * First loads a low-detail version quickly, then progressively enhances
-   * @param {string} vtkFilePath - Path to VTK file
-   * @param {Object} config - Configuration options
-   * @returns {Promise<Object>} - Loading result
-   */
-  async loadWithLoD(vtkFilePath, config) {
-    const cacheKey = `${vtkFilePath}_${config.colorMappingType}`;
-    
-    // Check if we have cached data
-    if (this.lodCache.has(cacheKey)) {
-      const cachedData = this.lodCache.get(cacheKey);
-      const mesh = this.createVTKMesh(cachedData.geometry, cachedData.isPointCloud, config, cachedData.radiusData, cachedData.pressureData, cachedData.fluxData);
-      this.addToScene(mesh, config);
-      
-      if (config.onComplete) {
-        config.onComplete(mesh, cachedData.isPointCloud, cachedData.radiusData, cachedData.pressureData, cachedData.fluxData);
-      }
-      
-      
-      return { success: true, mesh, isPointCloud: cachedData.isPointCloud, radiusData: cachedData.radiusData, pressureData: cachedData.pressureData, fluxData: cachedData.fluxData };
-    }
-
-    // Load directly with cylinder geometry instead of showing lines first
-    if (config.onProgress) {
-      config.onProgress(`Loading ${config.displayName}`, 5);
-    }
-
-    const vtkData = await this.fetchVTKFile(vtkFilePath, config.onProgress);
-    
-    // Create cylinder geometry directly (no lines first)
-    const cylinderResult = this.parseVTKData(vtkData, config.onProgress, config.modelSize, true, config);
-    const cylinderMesh = this.createVTKMesh(cylinderResult.geometry, cylinderResult.isPointCloud, config, cylinderResult.radiusData, cylinderResult.pressureData, cylinderResult.fluxData);
-    
-    // Add cylinder mesh directly
-    this.addToScene(cylinderMesh, config);
-    
-    // Cache the cylinder version
-    this.lodCache.set(cacheKey, {
-      geometry: cylinderResult.geometry,
-      isPointCloud: cylinderResult.isPointCloud,
-      radiusData: cylinderResult.radiusData,
-      pressureData: cylinderResult.pressureData,
-      fluxData: cylinderResult.fluxData
-    });
-
-    // Call completion callback
-    if (config.onComplete) {
-      config.onComplete(cylinderMesh, cylinderResult.isPointCloud, cylinderResult.radiusData, cylinderResult.pressureData, cylinderResult.fluxData);
-    }
-
-    return { success: true, mesh: cylinderMesh, isPointCloud: cylinderResult.isPointCloud, radiusData: cylinderResult.radiusData, pressureData: cylinderResult.pressureData, fluxData: cylinderResult.fluxData };
+    // Placeholder for future functionality
   }
 
   /**
    * Standard loading without LoD optimization
-   * @param {string} vtkFilePath - Path to VTK file
-   * @param {Object} config - Configuration options
-   * @returns {Promise<Object>} - Loading result
    */
   async loadStandard(vtkFilePath, config) {
     // Fetch and parse VTK file
@@ -1425,10 +1042,10 @@ midToHigh.BLUE_START
     const parseResult = this.parseVTKData(vtkData, config.onProgress, config.modelSize, config.useCylinderGeometry, config);
     const { geometry, isPointCloud, radiusData, pressureData, fluxData } = parseResult;
     
-    // Create appropriate mesh with custom settings
+    // Create appropriate mesh
     const mesh = this.createVTKMesh(geometry, isPointCloud, config, radiusData, pressureData, fluxData);
     
-    // Add to scene with enhanced lighting
+    // Add to scene
     this.addToScene(mesh, config);
     
     // Call completion callback
@@ -1443,22 +1060,9 @@ midToHigh.BLUE_START
    * Clear all caches
    */
   clearCache() {
-    this.lodCache.clear();
     this.geometryCache.clear();
     this.materialCache.clear();
     console.log('[VTKLoader] All caches cleared');
-  }
-
-  /**
-   * Get cache statistics for debugging
-   */
-  getCacheStats() {
-    return {
-      lodCache: this.lodCache.size,
-      geometryCache: this.geometryCache.size,
-      materialCache: this.materialCache.size,
-      performanceMode: this.performanceMode
-    };
   }
 
   /**
@@ -1476,13 +1080,9 @@ midToHigh.BLUE_START
       this.currentVTKMesh = null;
     }
     
-    if (this.wireframeMesh) {
-      this.scene.remove(this.wireframeMesh);
-      this.wireframeMesh = null;
-    }
-    
     // Clear cache
-    this.lodCache.clear();
+    this.geometryCache.clear();
+    this.materialCache.clear();
     
     this.copperScene = null;
   }

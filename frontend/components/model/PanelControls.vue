@@ -112,8 +112,6 @@ export default {
   data() {
     return {
       isCollapsed: true,
-      currentVesselType: 'arterial', // 'arterial' or 'venous'
-      currentQuality: 'standard',     // 'standard' or 'high'
       chart: null,
       playheadTimer: null,
       coloredModelsBy: 'pressure'
@@ -484,9 +482,6 @@ export default {
     background: #ff2222; // Arterial red
   }
   
-  &.venous-color {
-    background: #2222ff; // Venous blue
-  }
 }
 
 .legend-text {

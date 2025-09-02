@@ -7,7 +7,9 @@
         :use-tube-rendering="modelStates.useTubeRendering"
         :current-performance-mode="modelStates.currentPerformanceMode"
         :model-name="modelStates.modelName"
+        :model-config="modelStates.modelConfig"
         @model-state-updated="handleModelStateUpdate"
+
       />
     </div>
 
@@ -55,6 +57,7 @@
 import PanelControls from "../model/PanelControls.vue";
 import Waveform from "../model/Waveform.vue";
 import Logo from '@/components/Logo.vue';
+import modelData from '@/assets/data/modelData.js';
 export default {
   data() {
     return {
@@ -64,6 +67,7 @@ export default {
         useTubeRendering: true,
         currentPerformanceMode: "high",
         modelName: "Loading...",
+        modelConfig: modelData.models[0].config, // Initialize with healthy model config
         pressureColorMapping: null, // Pressure color mapping for display
         pressureMapping: true, // Track pressure mapping state
         isLoading: false, // Track if model is currently loading - initialize to false
@@ -129,9 +133,9 @@ export default {
     // Handle events from PanelControls and forward to Model component
     handleReloadArterial() {
       if (this.$refs.modelComponent && this.$refs.modelComponent.loadTree) {
-        this.$refs.modelComponent.loadTree('arterial', {
+        this.$refs.modelComponent.loadTree({
           color: 0xff2222,
-          displayName: 'Placental Arterial Tree',
+          displayName: 'Placental Tree',
           colorMappingType: this.modelStates.colorMappingType,
           pressureMapping: this.modelStates.pressureMapping
         });
@@ -158,7 +162,6 @@ export default {
       // Ensure pressure mapping state is properly synchronized
       if (newStates.hasOwnProperty('pressureMapping')) {
         this.modelStates.pressureMapping = newStates.pressureMapping;
-        console.log('[RightPane] Pressure mapping updated to:', newStates.pressureMapping);
       }
       
       // Handle loading state updates
@@ -173,7 +176,6 @@ export default {
       // Handle rendering complete state updates
       if (newStates.hasOwnProperty('renderingComplete')) {
         this.modelStates.renderingComplete = newStates.renderingComplete;
-        console.log('[RightPane] Rendering complete updated to:', newStates.renderingComplete);
       }
     },
     
@@ -243,7 +245,9 @@ export default {
     // Handle pregnancy condition updates from the interactive tool
     handleConditionsUpdated(data) {
       console.log('[RightPane] Received condition updates:', data);
-      
+      if (this.$refs.modelComponent && this.$refs.modelComponent.changeModel) {
+        this.$refs.modelComponent.changeModel(data.conditionData.config);
+      }
       // Store condition data for potential model integration
       this.lastConditionData = data;
       

@@ -40,6 +40,7 @@
 
 <script>
 import VTKLoader from '@/utils/vtkLoader'
+import modelData from '@/assets/data/modelData.js';
 
 export default {
   props: {
@@ -61,6 +62,7 @@ export default {
   // Component data - stores all reactive properties
   data() {
     return {
+      defaultModel: 'normal',
       Copper: null,        // Copper3D library instance for 3D rendering
       THREE: null,         // Three.js library instance for 3D geometry
       baseRenderer: null,  // Main renderer for managing 3D scenes
@@ -68,26 +70,15 @@ export default {
       vtkLoader: null,     // VTK loader utility instance
       _resizeHandler: null, // Store resize handler for cleanup
       clientMounted: false, // Track if component is mounted on client
-      currentModelType: 'arterial', // Track currently loaded model type
       currentColorMappingType: 'pressure', // Track current color mapping type
       renderingComplete: false, // Track if model is fully rendered and ready
-      
-      // Model configuration for arterial tree
-      modelConfig: {
-        arterial: {
-          path: '/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk',
-          displayName: 'Placental Arterial Tree',
-          color: 0xff2222,
-          opacity: 1.0,
-          modelSize: 420,
-          useCylinderGeometry: true,
-          cylinderSegments: 10
-        }
-      }
+      // Model configuration
+      modelConfig: null
     };
   },
 
   computed: {
+   
     mdAndUp() {
       // Ensure consistent behavior between SSR and client
       if (!this.clientMounted) {
@@ -107,6 +98,7 @@ export default {
 
   // Component mounted lifecycle - initializes 3D environment
   mounted() {
+    this.modelConfig = modelData.models.find(model => model.model === this.defaultModel).config;
     // Mark component as client-side mounted
     this.clientMounted = true;
     
@@ -140,7 +132,6 @@ export default {
       // Ensure the path starts with / if not already
       const cleanPath = relativePath.startsWith('/') ? relativePath : '/' + relativePath;
       
-      console.log(`[Model] Asset path: ${relativePath} -> ${basePath + cleanPath}`);
       return basePath + cleanPath;
     },
 
@@ -151,10 +142,8 @@ export default {
       
       // Check if required plugins are available
       if (this.checkPluginsAvailability()) {
-        console.log("[Model] Plugins ready, initializing 3D engine...");
         this.initializeCopper3D();
       } else if (retryCount < maxRetries) {
-        console.log(`[Model] Plugins not ready, retrying... (${retryCount + 1}/${maxRetries})`);
         this.$emit('model-state-updated', { modelName: `Loading 3D Engine... (${retryCount + 1}/${maxRetries})` });
         
         setTimeout(() => {
@@ -197,10 +186,8 @@ export default {
       this.container = this.$refs.baseDomObject;
       
       if (this.container) {
-        console.log("[Model] DOM container found, initializing 3D engine...");
         this.initialize3DEngine();
       } else if (retryCount < maxRetries) {
-        console.log(`[Model] DOM container not ready, retrying... (${retryCount + 1}/${maxRetries})`);
         this.$emit('model-state-updated', { modelName: `Preparing 3D Container... (${retryCount + 1}/${maxRetries})` });
         
         setTimeout(() => {
@@ -250,6 +237,12 @@ export default {
         this.$emit('model-state-updated', { modelName: "Error: Failed to initialize 3D engine" });
       }
     },
+    // get the model config
+  changeModel(config) {
+    this.modelConfig = config;
+    this.loadTree(); 
+    return config;
+    },
 
     // Setup window resize listener
     setupResizeListener(baseContainer) {
@@ -292,9 +285,6 @@ export default {
         
         // Set copper scene reference for camera control
         this.vtkLoader.setCopperScene(this.scene);
-        
-        
-        console.log("VTK Loader initialized with camera control and performance mode:", this.currentPerformanceMode);
       } catch (error) {
         console.error("[Model] Error initializing VTK loader:", error);
         this.$emit('model-state-updated', { modelName: "Error: VTK loader initialization failed" });
@@ -303,14 +293,12 @@ export default {
 
     // Main initialization method - called after component is mounted
     async start(){
-      console.log("Loading default placental model...");
       
-      // Use unified loadTree function for default arterial model
-      await this.loadTree('arterial');
+      // Use unified loadTree function for default model
+      await this.loadTree();
     },
 
     async reciveColoringType(colorModelBy){
-      console.log('[Model] Coloring type received:', colorModelBy);
       
       if (!this.vtkLoader) {
         console.warn('[Model] VTK loader not initialized');
@@ -328,7 +316,6 @@ export default {
         colorMappingType = 'pressure';
       }
       
-      console.log('[Model] Mapped to colorMappingType:', colorMappingType);
       
       // Store the current color mapping type
       this.currentColorMappingType = colorMappingType;
@@ -342,12 +329,11 @@ export default {
           renderingComplete: false 
         });
         
-        await this.loadTree(this.currentModelType, {
+        await this.loadTree({
           colorMappingType: colorMappingType,
           clearScene: true // Clear existing model first
         });
         
-        console.log('[Model] Model reloaded with new color mapping:', colorMappingType);
         
       } catch (error) {
         console.error('[Model] Error updating color mapping:', error);
@@ -356,36 +342,25 @@ export default {
     },
 
     /**
-     * Load arterial tree model with enhanced configuration
-     * @param {string} modelType - Currently only supports 'arterial'
+     * Load tree model with enhanced configuration
      * @param {Object} options - Override default options
      */
-    async loadTree(modelType, options = {}) {
-      console.log(`[Model] Loading ${modelType} model...`);
-      
-      // Only support arterial model now
-      if (modelType !== 'arterial') {
-        console.warn(`[Model] Only arterial model is supported. Requested: ${modelType}`);
-        modelType = 'arterial';
-      }
+    async loadTree(options = {}) {
       
       // Set rendering state to false when starting to load
       this.renderingComplete = false;
       this.$emit('model-state-updated', { 
-        modelName: `Loading arterial model...`,
+        modelName: `Loading model...`,
         renderingComplete: false 
       });
       
-      // Get base configuration for arterial model
-      const baseConfig = this.modelConfig[modelType];
+      // Get base configuration
+      const baseConfig = this.modelConfig;
       if (!baseConfig) {
-        console.error(`[Model] Arterial model configuration not found`);
-        this.$emit('model-state-updated', { modelName: `Error: Arterial model configuration not found` });
+        console.error(`[Model] Model configuration not found`);
+        this.$emit('model-state-updated', { modelName: `Error: Model configuration not found` });
         return;
       }
-      
-      // Track the current model type
-      this.currentModelType = modelType;
 
       // Merge base config with provided options
       const config = {
@@ -408,8 +383,8 @@ export default {
         useCylinderGeometry: config.useCylinderGeometry,
         cylinderSegments: config.cylinderSegments,
         colorMappingType: config.colorMappingType || 'pressure', // Pass color mapping type
+        defaultRotationY: config.defaultRotationY || 0, // Pass default horizontal rotation angle
         clearPrevious: options.clearScene !== false, // Only clear if not explicitly set to false
-        // Disable LoD to avoid showing lines first
         useLoD: false,
         onProgress: (message) => {
           const progressMessage = `${message}`;
@@ -439,24 +414,6 @@ export default {
       return result;
     },
 
-
-
-    /**
-     * Manual reload function - triggered by user button click
-     */
-    async reloadModel() {
-      console.log("User requested VTK model reload...");
-      
-      // Use unified loadTree function for reload
-      await this.loadTree('arterial', {
-        color: 0xff3333, // Slightly different color for reload
-        displayName: 'Placental Arterial Tree (Reloaded)'
-      });
-    },
-
-
-
-
     // Handle click on gesture icons area
     handleGestureIconClick(event) {
       const rect = event.target.getBoundingClientRect();
@@ -465,7 +422,6 @@ export default {
       
       // Check if click is in the first quarter (first 25% from left)
       if (clickX <= imageWidth / 4) {
-        console.log('[Model] Reset gesture clicked - resetting model to default position');
         this.resetModelToDefault();
       }
     },
@@ -491,7 +447,6 @@ export default {
           this.vtkLoader.clearTemporaryData();
         }
         
-        console.log('[Model] Model reset to default position completed');
         
         // Emit state update to parent
         this.$emit('model-state-updated', { 
@@ -508,6 +463,7 @@ export default {
   },
 
 
+
   beforeDestroy() {
     // Clean up VTK loader resources
     if (this.vtkLoader) {
@@ -519,6 +475,28 @@ export default {
     if (this._resizeHandler) {
       window.removeEventListener("resize", this._resizeHandler);
       this._resizeHandler = null;
+    }
+  },
+
+  // Set model rotation angle (in radians)
+  setModelRotation(rotationY) {
+    if (!this.scene) {
+      console.warn('[Model] Scene not available for rotation');
+      return;
+    }
+
+    try {
+      // Update the model configuration with new rotation
+      this.modelConfig.defaultRotationY = rotationY;
+      
+      // Reload the model with new rotation
+      this.loadTree({
+        defaultRotationY: rotationY
+      });
+      
+      
+    } catch (error) {
+      console.error('[Model] Error setting model rotation:', error);
     }
   }
 };
