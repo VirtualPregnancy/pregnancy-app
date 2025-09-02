@@ -33,12 +33,12 @@
 
       <!-- Waveform Panel -->
       <div class="waveform-panel">
+        <div>
+          <img class="pb-5" :src="getAssetUrl(waveformData.waveformImg)" alt="Waveform" />
+        </div>
         <div class="waveform-content">
-          <div class="text-center mb-5 font-weight-bold">
-            {{ waveformData.title }}
-          </div>
           <Waveform :waveform="waveformData" />
-          <div class="mt-5 text-center mb-5">
+          <div class="mt-15 text-center mb-5">
             {{ waveformData.description }}
           </div>
         </div>
@@ -117,6 +117,11 @@ export default {
   },
 
   methods: {
+    getAssetUrl(path) {
+      const base = this.$config?.basePath || '';
+      return `${base}${path}`;
+    },
+    
     // Handle events from PanelControls and forward to Model component
     handleReloadArterial() {
       if (this.$refs.modelComponent && this.$refs.modelComponent.loadTree) {
@@ -278,7 +283,6 @@ export default {
 
 .waveform-panel {
   flex: 1;
-  min-height: 60dvh;
   background: rgba(49, 54, 87, 0.1);
   border: 1px solid rgba(31, 102, 131, 0.3);
   border-radius: 12px;

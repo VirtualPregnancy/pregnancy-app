@@ -1,6 +1,10 @@
 <template>
   <div class="waveform-container">
+    <div class="text-center mb-5 font-weight-bold">
+      {{ waveform.title }}
+    </div>
     <div ref="chart" class="waveform-chart"></div>
+    
   </div>
 </template>
 
@@ -295,8 +299,7 @@ export default {
 <style scoped lang="scss">
 .waveform-container {
   width: 100%;
-  height: 40dvh;
-  border: 1px solid rgba(31, 102, 131, 0.3);
+  height: 35dvh;
   border-radius: 8px;
   padding: 10px;
 }
