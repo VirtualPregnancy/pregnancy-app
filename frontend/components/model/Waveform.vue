@@ -49,6 +49,10 @@ export default {
   },
   
   methods: {
+    getAssetUrl(path) {
+      const base = this.$config?.basePath || '';
+      return `${base}${path}`;
+    },
     initChart() {
       if (this.chart) {
         this.chart.dispose();
@@ -82,8 +86,8 @@ export default {
 
       try {
         const [xResponse, yResponse] = await Promise.all([
-          fetch(this.waveform.xDataPath),
-          fetch(this.waveform.yDataPath)
+          fetch(this.getAssetUrl(this.waveform.xDataPath)),
+          fetch(this.getAssetUrl(this.waveform.yDataPath))
         ]);
 
         if (!xResponse.ok || !yResponse.ok) {
@@ -130,8 +134,8 @@ export default {
         const firstModel = modelData.models[0];
         if (firstModel.waveform.xDataPath && firstModel.waveform.yDataPath) {
           const [xResponse, yResponse] = await Promise.all([
-            fetch(firstModel.waveform.xDataPath),
-            fetch(firstModel.waveform.yDataPath)
+            fetch(this.getAssetUrl(firstModel.waveform.xDataPath)),
+            fetch(this.getAssetUrl(firstModel.waveform.yDataPath))
           ]);
 
           if (xResponse.ok && yResponse.ok) {
