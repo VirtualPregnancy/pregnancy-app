@@ -1,5 +1,6 @@
 <template>
   <div class="fetal-development-timeline">
+    <img style='width: 50%; margin: 0 auto; display: block; padding-bottom: 20px;' src='https://www.mazecordblood.com/wp-content/uploads/2015/08/A-pink-infographic-final.jpg' alt='Fetal Development' />
     <v-timeline side="end" align="start">
       <!-- First Trimester -->
       <v-timeline-item

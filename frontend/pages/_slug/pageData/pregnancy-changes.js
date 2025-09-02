@@ -12,7 +12,9 @@ export default {
 "The pregnant uterus taking up so much space in the body also brings about other anatomical changes. As the other internal organs get pushed upwards, the space the lungs have to expand is reduced, although they become more efficient to help combat this. "+
 "<br /> <br /> Compression of the bladder means that you may need to visit the bathroom more often. Pregnancy also puts additional load onto the kidneys, which increase their activity and sometimes increase slightly in size to accommodate this. "+
 "<br /> <br /> Your breasts will enlarge in preparation to make milk, and the nipples may darken and become larger.  "+
-"<br /> <br /> Changes to the skin can also be seen, with increases in pigmentation, stretch marks appearing, and a dark line called the ‘linea nigra’ appearing down the centre of the belly. "
+"<br /> <br /> Changes to the skin can also be seen, with increases in pigmentation, stretch marks appearing, and a dark line called the ‘linea nigra’ appearing down the centre of the belly. "+
+"<br /> <br /> <img style='width: 50%; margin: 0 auto; display: block;' src='https://carbon-media.accelerator.net/0000000mtQX/665Zli4pcxBcf4GxRGUCUV;850x574.jpeg' alt='Linea Nigra' />"+
+"<span style='font-size: 12px; color: #666; text-align: center; display: block;'> Credit: Illustration by <a href='https://zoehansen.carbonmade.com/' >Zoe Hansen </a> </span>"
     },
     {
       id: "2",
@@ -23,8 +25,7 @@ export default {
 "<br /> <br /> By the end of the first trimester, your heart rate will have increased by about 10%, and your blood pressure will have decreased slightly. "+
 "<br /> <br /> Over the rest of pregnancy your body also increases the total amount of blood you have by around a third, which is important to allow enough blood to circulate to the placenta, and provides protection against blood loss during childbirth.  As so much new blood is being made, it is important to make sure that you are getting enough iron in your diet when pregnant, as this helps your blood cells carry oxygen to the placenta. "+
 "<br /> <br /> Your immune system also adapts to pregnancy.  This is important to ‘tolerate’ the placenta which could otherwise be recognised as foreign to your immune system and attacked.  The immune system is not ‘turned down’ though – it still operates well – but rather cells and factors released from your placenta teach it to accept your growing baby.  "+
-"<br /> <br /> All these adaptations help to support a healthy pregnancy. "
- 
+"<br /> <br /> All these adaptations help to support a healthy pregnancy.  <img style='width: 50%; height: 50%; margin: 0 auto; display: block;' src='https://i.ibb.co/spR0YTJT/Gemini-Generated-Image-1794dp1794dp1794.png' alt='Pregnancy Women' />"
     },
     {
       id: "3",
