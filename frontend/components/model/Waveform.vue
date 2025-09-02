@@ -164,7 +164,7 @@ export default {
       
       const { x, y } = this.waveformData;
       const defaultData = await this.loadDefaultWaveformData();
-      const isDefaultWaveform = this.waveform?.title === this.defaultWaveform.title;
+      const isDefaultWaveform = this.waveform?.lineTitle === this.defaultWaveform.lineTitle;
       
       this.chart.clear();
       
@@ -195,8 +195,6 @@ export default {
         },
         series: series,
         dataZoom: [{ type: "inside", start: 0, end: 100 }],
-        animation: true,
-        animationDuration: 1000,
         backgroundColor: "transparent",
       });
       
@@ -208,7 +206,7 @@ export default {
       
       if (!isDefaultWaveform) {
         series.push({
-          name: this.defaultWaveform.title,
+          name: this.defaultWaveform.lineTitle,
           data: defaultData.x.map((xVal, index) => [xVal, defaultData.y[index]]),
           type: "line",
           areaStyle: { color: 'rgba(221, 60, 81, 0.3)' },
@@ -219,7 +217,7 @@ export default {
       }
       
       series.push({
-        name: this.waveform?.title || 'Waveform',
+        name: this.waveform?.lineTitle || 'Waveform',
         data: x.map((xVal, index) => [xVal, y[index]]),
         type: "line",
         lineStyle: { color: '#4CAF50', width: 2 },
@@ -232,8 +230,8 @@ export default {
     
     buildLegendData(isDefaultWaveform) {
       return isDefaultWaveform ? 
-        [this.waveform?.title] : 
-        [this.defaultWaveform.title, this.waveform?.title];
+        [this.waveform?.lineTitle] : 
+      [this.defaultWaveform.lineTitle, this.waveform?.lineTitle];
     },
     
     startPlayheadAnimation() {
