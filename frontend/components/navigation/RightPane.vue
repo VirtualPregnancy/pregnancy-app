@@ -1,5 +1,5 @@
 <template>
-  <div class="responsive-container display-flex">
+  <div class="responsive-container display-flex ">
     <!-- Model Section -->
     <div class="model-section " :class="{ 'model-section-mobile': !mdAndUp }">
       <model
@@ -34,18 +34,18 @@
       <!-- Waveform Panel -->
       <div class="waveform-panel">
         <div class="waveform-content">
-          <div class="waveform-header">
+          <div class="text-center mb-5 font-weight-bold">
             {{ waveformData.title }}
           </div>
           <Waveform :waveform="waveformData" />
-          <div class="waveform-description">
+          <div class="mt-5 text-center mb-5">
             {{ waveformData.description }}
           </div>
         </div>
       </div>
 
       <!-- Logo Section for Desktop -->
-      <div  class="logo-section">
+      <div  class="logo-section ">
         <div class="logo-container">
           <Logo />
         </div>
@@ -244,11 +244,10 @@ export default {
   padding: 15px;
   padding-bottom: 120px; // Leave space for navigation
   overflow-y: auto;
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(10px);
-  border-left: 1px solid rgba(31, 102, 131, 0.2);
   
   &.controls-section-mobile {
+    display: flex;
+    flex-direction: row;
     position: relative;
     width: 100%;
     max-width: 100%;
@@ -256,9 +255,9 @@ export default {
     align-items: center;
     height: auto;
     overflow-y: auto;
-    flex-direction: row;
     flex-wrap: wrap;
-    padding: 10px;
+    margin: 10px;
+    box-sizing: border-box;
     padding-bottom: 100px; // Leave space for navigation on mobile
     border-left: none;
     border-top: 1px solid rgba(31, 102, 131, 0.2);
@@ -279,12 +278,12 @@ export default {
 
 .waveform-panel {
   flex: 1;
-  min-height: 160px;
+  min-height: 60dvh;
   background: rgba(49, 54, 87, 0.1);
+  border: 1px solid rgba(31, 102, 131, 0.3);
   border-radius: 12px;
   padding: 15px;
   margin-bottom: 15px;
-  border: 1px solid rgba(31, 102, 131, 0.3);
   transition: all 0.3s ease;
   
 
@@ -299,22 +298,14 @@ export default {
 
 
 
-.waveform-content {
-  height: 120px;
-  width: 100%;
-}
 
 
-.logo-container {
-  max-width: 150px;
+
+.logo-section {
+  max-width: 200px;
   margin: 0 auto;
   margin-top: 10px;
   opacity: 0.8;
-  
-  &:hover {
-    opacity: 1;
-    transition: opacity 0.3s ease;
-  }
 }
 
 // Legacy styles compatibility (remove after testing)

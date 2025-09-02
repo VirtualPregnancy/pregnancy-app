@@ -17,9 +17,9 @@ export default {
             },
             waveform: {
                 xAxis: 'Time (s)',
-                xDataPath: '/model/normal/time.csv',
+                xDataPath: '/waveforms/normal/time.csv',
                 yAxis: 'Signal',
-                yDataPath: '/model/normal/signal.csv',
+                yDataPath: '/waveforms/normal/signal.csv',
                 title: 'Normal Placenta',
                 isPlaying: true,
                 speed: 1,
@@ -43,13 +43,13 @@ export default {
             },
             waveform: {
                 xAxis: 'Time (s)',
-                xDataPath: '/model/fgr/time.csv',
+                xDataPath: '/waveforms/fgr/time.csv',
                 yAxis: 'Signal',
-                yDataPath: '/model/fgr/signal.csv',
-                title: 'Fetal Growth Restriction',
+                yDataPath: '/waveforms/fgr/signal.csv',
+                title: 'FGR',
                 isPlaying: true,
                 speed: 1,
-                description: 'Fetal Growth Restriction',
+                description: 'Fetal Growth Restriction, the blood flow is reduced compared to normal.',
             },
         }, 
         {
@@ -69,13 +69,13 @@ export default {
             },
             waveform: {
                 xAxis: 'Time (s)',
-                xDataPath: '/model/gdm/time.csv',
+                xDataPath: '/waveforms/gdm/time.csv',
                 yAxis: 'Signal',
-                yDataPath: '/model/gdm/signal.csv',
-                title: 'Gestational Diabetes Melitus',
+                yDataPath: '/waveforms/gdm/signal.csv',
+                title: 'GDM',
                 isPlaying: true,
                 speed: 1,
-                description: 'Gestational Diabetes Melitus',
+                description: 'Gestational Diabetes Melitus, the blood flow is increased compared to normal.',
             },
         }
     ]
