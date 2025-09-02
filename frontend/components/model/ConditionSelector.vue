@@ -9,7 +9,7 @@
       <span class="font-weight-bold header-text">Pregnancy Conditions</span>
       <v-spacer></v-spacer>
       <v-chip
-        v-if="selectedCondition !== 'normal'"
+        v-if="selectedCondition !== defaultCondition"
         :color="getSelectedCondition().color"
         dark
         small
@@ -52,7 +52,7 @@
               :key="condition.key"
               :value="condition.key"
               class="mb-3"
-              v-show="condition.key !== 'normal'"
+              v-show="condition.key !== defaultCondition"
               
             >
               <template v-slot:label >
@@ -88,7 +88,7 @@
 
         <v-card-actions class="px-4 pb-4">
           <v-btn
-            v-if="selectedCondition !== 'normal'"
+            v-if="selectedCondition !== defaultCondition"
             color="warning"
             outlined
             block
@@ -113,7 +113,8 @@ export default {
   
   data() {
     return {
-      selectedCondition: 'normal',
+      defaultCondition: modelData.models[0].model,
+      selectedCondition: modelData.models[0].model,
       expanded: false
     }
   },
@@ -125,7 +126,8 @@ export default {
         abbreviation: model.model,
         description: model.Description,
         color: model.color,
-        config: model.config
+        config: model.config,
+        waveform: model.waveform
       }));
     }
   },
@@ -140,7 +142,7 @@ export default {
     },
 
     resetSelection() {
-      this.selectedCondition = 'normal';
+      this.selectedCondition = this.defaultCondition;
       this.emitChange();
     },
 

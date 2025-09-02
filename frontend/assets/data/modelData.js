@@ -1,6 +1,7 @@
 export default {
     models: [
         {
+            // the first model is the default model
             model: 'normal',
             modelName: 'Normal',
             Description: 'Normal Placenta',
@@ -13,7 +14,17 @@ export default {
                 modelSize: 420,
                 useCylinderGeometry: true,
                 cylinderSegments: 10,
-            }
+            },
+            waveform: {
+                xAxis: 'Time (s)',
+                xDataPath: '/model/normal/time.csv',
+                yAxis: 'Signal',
+                yDataPath: '/model/normal/signal.csv',
+                title: 'Normal Placenta',
+                isPlaying: true,
+                speed: 1,
+                description: 'Blood flow characteristics in the umbilical cord can reflect the health of the fetus',
+            },
         },
         {    
             model: 'FGR',
@@ -29,13 +40,17 @@ export default {
                 useCylinderGeometry: true,
                 cylinderSegments: 10,
                 defaultRotationY: -Math.PI/2 // Default horizontal rotation angle in radians
-          // Examples:
-          // defaultRotationY: 0,        // No rotation
-          // defaultRotationY: Math.PI/4, // 45 degrees clockwise
-          // defaultRotationY: Math.PI/2, // 90 degrees clockwise
-          // defaultRotationY: Math.PI,   // 180 degrees
-          // defaultRotationY: -Math.PI/4, // 45 degrees counter-clockwise
-            }
+            },
+            waveform: {
+                xAxis: 'Time (s)',
+                xDataPath: '/model/fgr/time.csv',
+                yAxis: 'Signal',
+                yDataPath: '/model/fgr/signal.csv',
+                title: 'Fetal Growth Restriction',
+                isPlaying: true,
+                speed: 1,
+                description: 'Fetal Growth Restriction',
+            },
         }, 
         {
             model: 'GDM',
@@ -51,7 +66,17 @@ export default {
                 useCylinderGeometry: true,
                 cylinderSegments: 10,
                 defaultRotationY: Math.PI/2 
-            }
+            },
+            waveform: {
+                xAxis: 'Time (s)',
+                xDataPath: '/model/gdm/time.csv',
+                yAxis: 'Signal',
+                yDataPath: '/model/gdm/signal.csv',
+                title: 'Gestational Diabetes Melitus',
+                isPlaying: true,
+                speed: 1,
+                description: 'Gestational Diabetes Melitus',
+            },
         }
     ]
 }

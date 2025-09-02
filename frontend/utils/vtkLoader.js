@@ -309,7 +309,6 @@ export default class VTKLoader {
     
     // Check geometry cache first
     if (this.geometryCache.has(cacheKey)) {
-      console.log('[VTKLoader] Using cached geometry for performance');
       return this.geometryCache.get(cacheKey).clone();
     }
 
@@ -351,10 +350,6 @@ export default class VTKLoader {
     
     // Detect branching points for spherical junctions
     const branchingPoints = this.detectBranchingPoints(cellConnections, points.length / 3);
-    
-    console.log(`[VTKLoader] Processing ${cellConnections.length} lines with ${points.length / 3} total points`);
-    console.log(`[VTKLoader] Found ${branchingPoints.size} branching points`);
-    console.log(`[VTKLoader] Performance mode: ${config.performanceMode}, Radial segments: ${radialSegments}`);
     
     // Process each line to create smooth continuous tubes
     for (const connection of cellConnections) {
@@ -1062,7 +1057,6 @@ export default class VTKLoader {
   clearCache() {
     this.geometryCache.clear();
     this.materialCache.clear();
-    console.log('[VTKLoader] All caches cleared');
   }
 
   /**

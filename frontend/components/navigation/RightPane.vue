@@ -33,11 +33,14 @@
 
       <!-- Waveform Panel -->
       <div class="waveform-panel">
-        <div class="waveform-header">
-          <h4 style="color: black;">Blood Flow Analysis</h4>
-        </div>
         <div class="waveform-content">
+          <div class="waveform-header">
+            {{ waveformData.title }}
+          </div>
           <Waveform :waveform="waveformData" />
+          <div class="waveform-description">
+            {{ waveformData.description }}
+          </div>
         </div>
       </div>
 
@@ -61,6 +64,7 @@ import modelData from '@/assets/data/modelData.js';
 export default {
   data() {
     return {
+      
       clientMounted: false, // Track if component is mounted on client
       // Centralized model state management
       modelStates: {
@@ -75,19 +79,8 @@ export default {
         colorMappingType: 'pressure', // Track current color mapping type
         renderingComplete: false, // Track if model is fully rendered and ready for interaction
       },
-      // TODO: get waveform data from model
-      waveformData: {
-        data: [],
-        title: "Placental Blood Flow Waveform",
-        isPlaying: true,
-        speed: 1,
-      },
-      // Ultrasound tool integration properties
-      ultrasoundToolRef: null,
-      lastUltrasoundMetrics: null,
-      lastConditionData: null,
-      
-
+      // Waveform data
+      waveformData: modelData.models[0].waveform
     };
   },
 
@@ -98,15 +91,9 @@ export default {
       "data in RightPanel.vue send to Model.vue"
     );
     
-    // Generate realistic waveform data
-    this.waveformData.data = this.generateWaveformData(200);
-    console.log('[RightPane] Generated waveform data:', this.waveformData.data.length, 'points');
     
-    // Listen for ultrasound tool events from the layout
-    this.$nuxt.$on('trigger-model-visualization', this.handleTriggerModelVisualization);
-    this.$nuxt.$on('ultrasound-tool-ready', this.handleUltrasoundToolReady);
+    // Listen for condition events from the layout
     this.$nuxt.$on('conditions-updated', this.handleConditionsUpdated);
-    this.$nuxt.$on('trigger-condition-visualization', this.handleTriggerConditionVisualization);
   },
 
   computed: {
@@ -180,166 +167,32 @@ export default {
     },
     
     
-    // Handle model visualization requests from ultrasound tool
-    handleTriggerModelVisualization(eventData) {
-      console.log('[RightPane] Model visualization triggered:', eventData);
-      
-      if (eventData.type === 'pregnancy-conditions') {
-        this.visualizeConditions(eventData.data);
-      }
-    },
+
     
-    // Handle ultrasound tool ready event
-    handleUltrasoundToolReady(toolComponent) {
-      console.log('[RightPane] Ultrasound tool ready for model integration');
-      this.ultrasoundToolRef = toolComponent;
-      
-      // If model is already loaded, notify the tool
-      if (this.$refs.modelComponent && this.modelStates.modelName !== 'Loading...') {
-        this.notifyUltrasoundToolOfModelState();
-      }
-    },
-    
-    // Future implementation: visualize ultrasound metrics in 3D model
-    visualizeUltrasoundMetrics(metricsData) {
-      console.log('[RightPane] Visualizing ultrasound metrics in model:', metricsData);
-      
-      // Placeholder for future model integration
-      // This method will be expanded to:
-      // 1. Analyze the metrics interpretation
-      // 2. Adjust model visualization based on risk level
-      // 3. Highlight relevant parts of the placental model
-      // 4. Show color coding based on resistance/pulsatility indices
-      
-      const { metrics, interpretation } = metricsData;
-      
-      // Update model state to reflect ultrasound visualization mode
-      this.modelStates.modelName = `Ultrasound Analysis`;
-      
-      // Future: Trigger specific model loading/highlighting based on metrics
-      if (interpretation.riskLevel === 'high') {
-        // Load model with high-resistance visualization
-        console.log('[RightPane] Future: Load high-resistance placental model');
-      } else if (interpretation.riskLevel === 'moderate') {
-        // Load model with moderate-resistance visualization  
-        console.log('[RightPane] Future: Load moderate-resistance placental model');
-      } else {
-        // Load normal placental model
-        console.log('[RightPane] Future: Load normal placental model');
-      }
-    },
-    
-    // Notify ultrasound tool of current model state
-    notifyUltrasoundToolOfModelState() {
-      if (this.ultrasoundToolRef && this.ultrasoundToolRef.updateModelVisualization) {
-        const modelData = {
-          modelComponent: this.$refs.modelComponent,
-          modelStates: this.modelStates,
-          ready: true
-        };
-        
-        this.ultrasoundToolRef.updateModelVisualization(modelData);
-      }
-    },
-    
-    // Handle pregnancy condition updates from the interactive tool
+    // Update the model and the waveform data
     handleConditionsUpdated(data) {
-      console.log('[RightPane] Received condition updates:', data);
+      // update the model and transfer the config to the model component
       if (this.$refs.modelComponent && this.$refs.modelComponent.changeModel) {
         this.$refs.modelComponent.changeModel(data.conditionData.config);
       }
-      // Store condition data for potential model integration
-      this.lastConditionData = data;
+
+      // update the waveform data
+      this.waveformData = data.conditionData.waveform;
       
-      // Future implementation: update model based on selected conditions
-    },
-    
-    // Handle condition visualization requests specifically
-    handleTriggerConditionVisualization(eventData) {
-      console.log('[RightPane] Condition visualization specifically triggered:', eventData);
-      
-      if (eventData.type === 'pregnancy-conditions') {
-        this.visualizeConditions(eventData.data);
-      }
-    },
-    
-    // Future implementation: visualize pregnancy conditions in 3D model
-    visualizeConditions(conditionData) {
-      console.log('[RightPane] Visualizing pregnancy conditions in model:', conditionData);
-      
-      // TODO: Placeholder for future model integration
-      // This method will be expanded to:
-      // 1. Analyze the selected conditions
-      // 2. Load appropriate placental models based on conditions
-      // 3. Adjust model size and appearance based on condition effects
-      // 4. Show educational overlays explaining the changes
-      
-      const { selectedConditions, conditionDetails, combinedEffect } = conditionData;
-      
-      if (selectedConditions.length === 0) {
-        this.modelStates.modelName = 'Placental Model';
-        return;
-      }
-      
-      // Update model state to reflect condition visualization mode
-      const conditionNames = conditionDetails.map(c => c.abbreviation).join(', ');
-      this.modelStates.modelName = `${conditionNames} Analysis`;
-      
-      // Future: Trigger specific model loading based on conditions
-      const hasGrowthRestriction = selectedConditions.some(c => 
-        ['sga', 'fgr', 'iugr'].includes(c)
-      );
-      const hasPreeclampsia = selectedConditions.some(c => 
-        ['pe', 'sga_pe'].includes(c)
-      );
-      const hasDiabetes = selectedConditions.some(c => c === 'gdm');
-      
-      if (hasGrowthRestriction) {
-        console.log('[RightPane] Future: Load smaller placental model with compromised vasculature');
-      }
-      if (hasPreeclampsia) {
-        console.log('[RightPane] Future: Highlight increased resistance areas in model');
-      }
-      if (hasDiabetes) {
-        console.log('[RightPane] Future: Load larger placental model');
-      }
-      
-      // TODO：Future: Apply visual changes to the 3D model
-      // - Model scaling based on condition effects
-      // - Color coding for different risk levels
-      // - Highlighting specific areas affected by conditions
     },
     
 
     
-    // Generate realistic placental blood flow waveform data
-    generateWaveformData(numPoints = 200) {
-      const data = [];
-      const baseFlow = 3000; // Base blood flow value
-      const amplitude = 1500; // Amplitude of variation
-      
-      for (let i = 0; i < numPoints; i++) {
-        // Create a realistic placental blood flow pattern
-        // Combines multiple sine waves to simulate cardiac cycle and breathing
-        const cardiacCycle = Math.sin((i / numPoints) * Math.PI * 20) * amplitude * 0.8; // Main cardiac rhythm
-        const respiratoryCycle = Math.sin((i / numPoints) * Math.PI * 4) * amplitude * 0.3; // Respiratory variation
-        const microVariation = Math.sin((i / numPoints) * Math.PI * 60) * amplitude * 0.1; // Small variations
-        const randomNoise = (Math.random() - 0.5) * amplitude * 0.05; // Small random variation
-        
-        const flowValue = baseFlow + cardiacCycle + respiratoryCycle + microVariation + randomNoise;
-        data.push(Math.round(Math.max(500, flowValue))); // Ensure minimum flow of 500
-      }
-      
-      return data;
-    },
+
+    
+
+    
+
   },
   
   beforeDestroy() {
     // Clean up event listeners
-    this.$nuxt.$off('trigger-model-visualization', this.handleTriggerModelVisualization);
-    this.$nuxt.$off('ultrasound-tool-ready', this.handleUltrasoundToolReady);
     this.$nuxt.$off('conditions-updated', this.handleConditionsUpdated);
-    this.$nuxt.$off('trigger-condition-visualization', this.handleTriggerConditionVisualization);
   },
   
   components: { PanelControls, Waveform, Logo },
@@ -444,18 +297,7 @@ export default {
   }
 }
 
-.waveform-header {
-  margin-bottom: 10px;
-  
-  h4 {
-    color: #6C90B9;
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-}
+
 
 .waveform-content {
   height: 120px;
