@@ -77,13 +77,14 @@
   "conditions": {
     "title": "Pregnancy Complications",
     "component": "none",
+    "content":"Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told you have a complication in pregnancy you are not alone – pregnancy disorders affect around 6000 pepi and their whanau each year in New Zealand (1 in 10 pregnancies). On these pages you will find information to help you understand what causes common issues in pregnancy, how your doctor/midwife may check on pepi, and what this may mean for your pregnancy journey. ",
     "heading": "Navigating Pregnancy Complications",
     "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
       "fetal": {
         "title": "Fetal Growth",
         "component": "none",
-        "heading": "Reduced Fetal Growth",
+        "heading": "Reduced fetal growth/Fetal growth restriction",
         "icon": "mdi-heart-minus",
         "category": "success",
         "subTitle": "subSuccess",
