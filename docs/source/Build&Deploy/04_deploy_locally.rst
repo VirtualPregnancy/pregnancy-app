@@ -10,10 +10,10 @@ Documentation for host heart app locally on windows
   - npm install - -global yarn
 - In your Windows PowerShell:
   - cd desktop
-  - git clone https://github.com/UOA-Heart-Mechanics-Research/medtech-heart.git
-  - cd medtech-heart
+  - git clone https://github.com/VirtualPregnancy/pregnancy-app.git
+  - cd frontend
   - yarn
-- Find the start.bat file in the medtech-heart root folder, then open it in one of your Editors.
+- Find the start.bat file in the root folder, then open it in one of your Editors.
   - Replace "C:\path\to\your\project" with the actual path to your project folder.
 
     e.g, replace C:\Users\xxx\Desktop\medtech-heart to yours one: C:\Users\Yours_username_here\Desktop\medtech-heart
