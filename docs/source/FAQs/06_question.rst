@@ -7,5 +7,5 @@ Modify the landingPageData.js file under ./frontend/assets/data/landingPageData.
 
 You can change the index of the item to change the order of the items.
 
-Refer to this document for more details: :ref:`implementation_structure/02_assets:Landing Page Configuration`
+Refer to this document for more details: :ref:`implementation_structure/02_assets#landing-page-configuration:Landing Page Configuration`
 
