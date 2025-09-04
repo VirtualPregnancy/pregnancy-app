@@ -11,9 +11,9 @@ When we talk about a new page, that might be:
 How to add a new page with it's own route?
 ------------------------------------------
 
-All this is done in the `topics.json` file. Look at this document for more details: :ref:`/implementation_structure/01_intro.html#data-files`
+All this is done in the `topics.json` file. Look at this document for more details: :ref:`Data Files <implementation_structure/01_intro>`
 
-When you want to config the right side of the page, you can config it in the `pageData` folder. Look at this document for more details: :ref:`implementation_structure/06_pages`
+When you want to config the right side of the page, you can config it in the `pageData` folder. Look at this document for more details: :ref:`Pages Structure <implementation_structure/06_pages>`
 
 To sum up, you need:
 
@@ -29,4 +29,4 @@ How to add a new section in an existing page?
 Which might mean:
 
 1. Add a new sub-topic (i.e. you want to add a new item at the left menu part, and display new content in the right side). In this case, you need to config the sub-topic in the `topics.json` file, and follow the steps in the first case.
-2. Add a new section in an existing page. In this case, you need to go to the pageData folder, and find the data you are looking for. For example, if you want to add a new section in the "ultrasound-doppler" (this is the route name) page, you need to go to the `pageData` folder, and find the `ultrasound-doppler.js` file, and add a new section in the `contentSections` part. Look at this document for the configuration details: :ref:`implementation_structure/06_pages`
+2. Add a new section in an existing page. In this case, you need to go to the pageData folder, and find the data you are looking for. For example, if you want to add a new section in the "ultrasound-doppler" (this is the route name) page, you need to go to the `pageData` folder, and find the `ultrasound-doppler.js` file, and add a new section in the `contentSections` part. Look at this document for the configuration details: :ref:`Pages Structure <implementation_structure/06_pages>`
