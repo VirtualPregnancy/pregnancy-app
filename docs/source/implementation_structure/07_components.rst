@@ -1,7 +1,6 @@
 Components
-===========
+==========
 
-.. image:: images/06_components.jpg
 .. include:: ../style.rst
 
 :green:`COMPONENTS`
@@ -11,3 +10,13 @@ Components
 
 -  navigation/RightPane.vue is used in \_slug/index.vue page and
    facilitates displaying various features.
+
+-  navigation/SubMenu.vue provides topic navigation and subtopic selection.
+
+-  model/Model.vue renders 3D VTK models and handles model interactions.
+
+-  model/Waveform.vue displays Doppler ultrasound data with CSV files.
+
+-  content/* components are dynamically loaded based on page data files.
+
+

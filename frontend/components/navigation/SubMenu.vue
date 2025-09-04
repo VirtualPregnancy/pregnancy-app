@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  name: "QuickAccess",
+  name: "SubMenu",
   
   props: {
     subtopics: {

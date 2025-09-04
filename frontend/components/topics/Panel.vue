@@ -54,30 +54,8 @@ export default {
   },
 
   methods: {
-    play: function (event) {
-      // /model-heart#video-div
-      const routeStr = this.$nuxt.$route.path;
-
-      const lastChar = routeStr.charAt(routeStr.length - 1);
-
-      if (lastChar === "/") {
-        const newstr = routeStr.substr(0, routeStr.length - 1);
-        this.$router.push({
-          name: "video",
-          params: { videoId: event.target.id, originPath: newstr },
-        });
-      } else {
-        this.$router.push({
-          name: "video",
-          params: { videoId: event.target.id, originPath: routeStr },
-        });
-      }
-    },
-    
-
-    
-
-    
+   
+  
 
     
     // Handle condition changes from ConditionSelector

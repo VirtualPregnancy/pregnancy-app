@@ -1,7 +1,7 @@
 Introduction
 ===============
 
-This is a Web App Template using Nuxt2, Vue2.
+This is a pregnancy app using Nuxt2, Vue2.
 
 The UI Framework is Vuetify 2.
 

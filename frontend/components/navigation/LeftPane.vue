@@ -17,32 +17,28 @@
   
     <div v-if="$route.name == 'slug'">
       
-      <!-- Show different content based on page type -->
-      <div v-if="isModelPage" class="pa-4 mb-4" :class="currentBg" tile :style="panelHeightStyle">
+      <div class="pa-4 mb-4" :class="currentBg" tile :style="panelHeightStyle">
         <lazy-panel 
           @conditions-updated="handleConditionsUpdate"
         />
-        <QuickAccess 
+        <SubMenu 
           :subtopics="currentTopicSubtopics"
           :parent-slug="currentParentSlug"
           :topic-title="currentTopicTitle"
         />
-      
-        <!-- <Logo v-if="mdAndUp" :class="mdAndUp ? 'logo' : 'sm-logo'" /> -->
       </div>
 
    
-      <!-- Show quick access for content pages -->
-      <div v-else class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
+      <!-- Show Menu for content pages -->
+      <div class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
         <lazy-panel 
           @conditions-updated="handleConditionsUpdate"
         />
-        <QuickAccess 
+        <SubMenu 
           :subtopics="currentTopicSubtopics"
           :parent-slug="currentParentSlug"
           :topic-title="currentTopicTitle"
         />
-        <!-- <Logo v-if="mdAndUp" class="logo" /> -->
       </div>
     </div>
     
@@ -50,14 +46,14 @@
 </template>
 
 <script>
-import QuickAccess from './QuickAccess.vue';
+import SubMenu from './SubMenu.vue';
 import pageDataMap from '@/pages/_slug/pageData/index.js';
 
   export default {
   name: "LeftPane",
   
   components: {
-    QuickAccess
+    SubMenu
   },
 
   props: {
@@ -85,12 +81,6 @@ import pageDataMap from '@/pages/_slug/pageData/index.js';
       return pageData;
     },
     
-    // Check if current page should show model
-    isModelPage() {
-      const showModel = this.currentPageData.showModel || false;
-      //console.log('[LeftPane] isModelPage:', showModel, 'for page:', this.$route.params.slug);
-      return showModel;
-    },
     
     // Vuetify breakpoint helper
     mdAndUp() {

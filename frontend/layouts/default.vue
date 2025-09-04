@@ -50,7 +50,6 @@ export default {
     return {
       multiplier: 1,
       panelHeight: 0,
-      isVideo: true,
 
     };
   },

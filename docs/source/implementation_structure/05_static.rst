@@ -8,36 +8,6 @@ Static
 
 -  static folder is home for external javascript files containing zinc,
    dojo charts and models data.
--  img and videos folders are used to store images and videos, linked
-   through markdown files stored in assets/data/markdown, respectively.
+-  models and waveforms are stored in the static folder linked to the model page by the ``modelData.js``files.
+-  images are used to store images, the laning folder contains the images for the landing page, imported by the ``landingPageData.js`` file.
 -  Reorganisation of content in this folder is recommended.
-
-Static Assets (``frontend/static/``)
------------------------------------
-
-Medical Models
-~~~~~~~~~~~~~~
-
-.. code-block:: text
-
-    frontend/static/model/
-    ├── normal.vtk            # Normal placenta 3D model
-    ├── fgr.vtk              # FGR condition 3D Model
-    └── diabetes.vtk         # GDM condition 3D model
-
-Waveform Data
-~~~~~~~~~~~~~
-
-.. code-block:: text
-
-    frontend/static/waveforms/
-    ├── normal/
-    │   ├── time.csv         # Time data
-    │   └── signal.csv       # Signal data
-    ├── fgr/
-    │   ├── time.csv         # Time data
-    │   └── signal.csv       # Signal data
-    └── gdm/
-        ├── time.csv         # Time data
-        └── signal.csv       # Signal data
-
