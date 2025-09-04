@@ -47,7 +47,6 @@
 
 <script>
 import SubMenu from './SubMenu.vue';
-import pageDataMap from '@/pages/_slug/pageData/index.js';
 
   export default {
   name: "LeftPane",
@@ -72,14 +71,6 @@ import pageDataMap from '@/pages/_slug/pageData/index.js';
       } else return { height: "auto" };
     },
     
-    // Get current page data
-    currentPageData() {
-      const slug = this.$route.params.slug;
-      const pageData = pageDataMap[slug] || { contentSections: [], cards: [] };
-      //console.log('[LeftPane] Current slug:', slug);
-      //console.log('[LeftPane] Page data:', pageData);
-      return pageData;
-    },
     
     
     // Vuetify breakpoint helper
