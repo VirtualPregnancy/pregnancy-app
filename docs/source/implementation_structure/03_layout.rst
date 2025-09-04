@@ -103,3 +103,25 @@ Pages specify layout with `layout` property:
       layout: 'empty'
     }
 
+**Rules:**
+- **No layout specified** → Uses default layout
+- **`layout: 'empty'`** → No navigation panels
+- **Error pages** → Automatically use error layout
+
+Responsive Features
+------------------
+
+- **Desktop**: Side-by-side panels
+- **Mobile**: Stacked layout
+- **Panel height**: Automatically adjusts to screen size
+- **Fullscreen**: F11 key support
+
+Key Points
+----------
+
+1. **Default layout** = Navigation + Content
+2. **Empty layout** = Content only
+3. **Error layout** = Error handling
+4. **Responsive** = Works on all screen sizes
+5. **Easy to use** = Just add `layout: 'layoutName'` to pages
+

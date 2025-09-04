@@ -1,12 +1,13 @@
 Assets Structure
 ===============
+
 There are three main data assets:
 - data: for page content management and configuration
 - images, I won't cover this here since it is straightforward to understand.
 - sass: for styling
 
 Data Assets
---------------
+-----------
 
 .. code-block:: text
 
@@ -20,7 +21,9 @@ Model Configuration
 ~~~~~~~~~~~~~~~~~~
 
 The `modelData.js` file contains comprehensive configurations for 3D models and their associated data:
+
 The first model is the default model, following this format to add more models by just using data, and the interface will be updated automatically.
+
 .. code-block:: javascript
 
     export default {
@@ -57,14 +60,16 @@ The first model is the default model, following this format to add more models b
     }
 
 See the image below for the model confign and the elements on the page:
+
 .. image:: images/02_model_config.png
 
 Landing Page Configuration
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The `landingPageData.js` file contains the configuration for the landing page:
+
 .. code-block:: javascript
-    
+
     export default {
         items: [
             {
@@ -86,22 +91,26 @@ The `landingPageData.js` file contains the configuration for the landing page:
         ]
     }
 
-- index: the index of the item, used to sort the items (from left to right, from top to bottom)
-- title: the title of the card item
-- description: the description of the card item
-- image: the image at the left side of the card, store the image under `frontend/static/` and add the path here, you can use an icon instead of an image, just add the mdi icon name here.
-- backgroundColor: the background color of the item
-- link: define the page to navigate to when the item is clicked
+- **index**: the index of the item, used to sort the items (from left to right, from top to bottom)
+- **title**: the title of the card item
+- **description**: the description of the card item
+- **image**: the image at the left side of the card, store the image under `frontend/static/` and add the path here, you can use an icon instead of an image, just add the mdi icon name here.
+- **backgroundColor**: the background color of the item
+- **link**: define the page to navigate to when the item is clicked
 
 See the image below for the landing page configuration and the elements on the page:
+
 .. image:: images/02_landing_config.png
 
 Support Services Configuration
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 .. TODO: add the support services configuration documentation
+
 The `supportData.js` file contains the configuration for the support services page:
+
 .. code-block:: javascript
-    
+
     export default {
         items: [
             {
@@ -116,7 +125,7 @@ The `supportData.js` file contains the configuration for the support services pa
     }
 
 Styling Assets
----------------
+--------------
 
 .. code-block:: text
 
@@ -128,28 +137,19 @@ Styling Assets
     ├── components/           # Component styles
     └── pages/                # Page styles
 
-**Theme Variables (``variables.scss``):**
+Image Assets
+-----------
 
-.. code-block:: scss
+.. code-block:: text
 
-    :root {
-      --v-primary-base: #DD3C51;        // Primary red color
-      --v-accent-base: #313657;         // Dark navy
-      --v-accentLight-base: #1F6683;    // Teal blue
-      --v-secondary-base: #B8BCC8;      // Light grey
-      --v-info-base: #1F6683;           // Info teal
-      --v-warning-base: #DD3C51;        // Warning red
-      --v-error-base: #976533;          // Error brown
-      --v-success-base: #1F6683;        // Success teal
-      --v-background-base: #F5F9FC;     // Main background
-      --v-backgroundAlt-base: #FAF6F7;  // Alternative background
-    }
-
-**Component-Specific Styles:**
-
-- **`left-panel.scss`**: Left navigation panel styling
-- **`video-player.scss`**: Video component styling
-- **`pages/`**: Page-specific style overrides
+    frontend/assets/images/
+    ├── gestures-icons.png    # UI icons
+    ├── medtechcore-abi-logo.png
+    ├── headshots.png         # Team photos
+    ├── kiwirous.png         # Branding
+    ├── funding-abi-medtech.png
+    ├── Annie-Jones.png      # Team member
+    └── Liz-Broadbent.png    # Team member
 
 
 
