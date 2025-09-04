@@ -31,56 +31,49 @@ Page Organization
             ├── clinical-*.js        # Clinical care content
             └── support-*.js         # Support services content
 
-Routing System
---------------
-
-Dynamic Routes
-~~~~~~~~~~~~~~
-
-- **Slug-based routing**: All topic pages use `_slug/index.vue` for dynamic content
-- **Route generation**: Routes are created by concatenating topic and subtopic keys with '-' character
-- **Content mapping**: `pageData/index.js` maps slugs to content data files
-- **Fallback handling**: 404 errors for invalid slugs
-
-Route Examples
-~~~~~~~~~~~~~
-
-.. code-block:: text
-
-    /pregnancy-changes          # Pregnancy body changes
-    /pregnancy-placenta         # Placenta information
-    /conditions-fetal           # Fetal conditions
-    /ultrasound-doppler         # Doppler ultrasound
-    /clinical-mid-wife          # Midwife care
-    /support-services           # Support services
-
-Content Management
------------------
-
-Page Data Structure
-~~~~~~~~~~~~~~~~~~~
+The pageData folder contains the content data files for the pages. The file name should be the same as the slug/route name.
 
 Each page data file contains:
 
 .. code-block:: javascript
 
     export default {
-      title: 'Page Title',
-      description: 'Page description',
-      showModel: false,              // Enable 3D model display
-      componentType: 'ContentPane',  // Custom component type
-      contentSections: [             // Content blocks
-        {
-          id: "1",
-          title: "Section Title",
-          icon: "mdi-icon-name",
-          iconColor: "var(--v-primary-base)",
-          content: "Section content with HTML support"
-        }
-      ],
-      cards: [],                     // Card components
-      renderConfig: {}               // Custom rendering options
-    }
+        title: 'Sample', // the title of the page, shows in the left side of the page
+        description: 'Sample', // the description of the page, shows in the left side of the page
+        showModel: false, // if true, the model will be shown in the content pane
+        contentSections: [
+            {
+                id: "1", //id must be unique
+                title: "Sample",
+                icon: "mdi-heart-plus", //icon must be a valid mdi icon
+                iconColor: "var(--v-primary-base)", //iconColor must be a valid css color or a variable
+                content: "Sample" // the content of this section, can be HTML or plain text
+            },
+            {
+                id: "2",
+                title: "Fetal Development",
+                icon: "mdi-baby-face",
+                iconColor: "var(--v-primary-base)",
+                component: "PregnancyFetalDev" // the name of the component, stored in the ``frontend/components/content`` folder
+            }
+        ]
+    };
+
+See the image below for the page data structure:
+
+.. image:: images/06_page_structure.png
+
+If there is only one item in this page, it will be displayed as an article, looks like this:
+
+.. image:: images/06_single_section.png
+
+The content of the section can be ``content`` or ``component``. The content rendered by ``ContentPane.vue`` file, using html, therefore for simple content, you can directly use the ``content`` by setting the content in this js file.
+
+If you want to use a component, you can use the ``component`` property by putting the name of the component, and store the component in the ``frontend/components/content`` folder.
+
+For example, the image below shows one section using component and the other one using html content:
+
+.. image:: images/06_section_use_component.png
 
 Component Selection
 ~~~~~~~~~~~~~~~~~~
@@ -88,70 +81,5 @@ Component Selection
 The system automatically selects components based on:
 
 1. **Model pages**: `showModel: true` → `RightPane` component
-2. **Custom components**: `componentType` specification
+2. **Custom components**: `component` specification, will use a component from `frontend/components/content` folder
 3. **Default fallback**: `ContentPane` component
-
-Content Types
--------------
-
-Pregnancy Topics
-~~~~~~~~~~~~~~~
-
-- **pregnancy-changes.js**: Body changes during pregnancy
-- **pregnancy-placenta.js**: Placenta development and function
-- **pregnancy-baby.js**: Baby development information
-- **pregnancy-fetal-dev.js**: Fetal development stages
-- **pregnancy-keep-baby-healthy.js**: Health maintenance tips
-- **pregnancy-interact.js**: Interactive pregnancy content
-
-Medical Conditions
-~~~~~~~~~~~~~~~~~
-
-- **conditions-fetal.js**: Fetal growth restriction (FGR)
-- **conditions-birth.js**: Birth-related conditions
-- **conditions-care.js**: Care for medical conditions
-
-Ultrasound Information
-~~~~~~~~~~~~~~~~~~~~~~
-
-- **ultrasound-what-is-ultrasound.js**: Basic ultrasound concepts
-- **ultrasound-doppler.js**: Doppler ultrasound technology
-- **ultrasound-metric.js**: Ultrasound measurements
-- **ultrasound-what-ultrasound-means.js**: Ultrasound interpretation
-
-Clinical Care
-~~~~~~~~~~~~
-
-- **clinical-mid-wife.js**: Midwife care information
-- **clinical-when-care-changes.js**: Care pathway changes
-
-Support Services
-~~~~~~~~~~~~~~~
-
-- **support.js**: General support information
-- **support-specialist.js**: Specialist support services
-
-Key Features
------------
-
-Content Flexibility
-~~~~~~~~~~~~~~~~~~
-
-- **HTML support**: Content can include HTML for rich formatting
-- **Dynamic components**: Automatic component selection based on content type
-- **Modular structure**: Easy to add new topics and content
-
-Navigation Integration
-~~~~~~~~~~~~~~~~~~~~
-
-- **Menu generation**: Navigation automatically reflects available content
-- **Breadcrumb support**: Hierarchical navigation structure
-- **Content state management**: Vuex store integration for content state
-
-Performance Optimization
-~~~~~~~~~~~~~~~~~~~~~~~
-
-- **Lazy loading**: Components loaded on demand
-- **Content caching**: Efficient content retrieval system
-- **Static generation**: Pre-built pages for production deployment
-
