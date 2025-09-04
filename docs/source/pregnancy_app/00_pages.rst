@@ -9,7 +9,7 @@ Landing Page
 The landing page is the first page that users see when they access the app. It consists of three main sections:
 
 **Five Cards**
-    By clicking a card, users can navigate to the corresponding page. The title, background, icon, and content are stored in ``landingPageData.js``. Adding or updating this file will automatically update the cards on the landing page.
+    By clicking a card, users can navigate to the corresponding page. The title, background, icon, and content are stored in ``landingPageData.json``. Adding or updating this file will automatically update the cards on the landing page.
 
 **Menu**
     Located in the upper left corner, there is a menu button that includes all main topics and their sub-topics. Menu items are rendered based on the ``topics.json`` file, which is also used in the Navigation.vue file.
@@ -81,51 +81,51 @@ Basic Data Structure
 
 A typical data file looks like this:
 
-.. code-block:: javascript
+.. code-block:: json
 
-    export default {
-        title: 'Sample',
-        description: 'Sample',
-        showModel: false, // if true, the model will be shown in the content pane
-        contentSections: [
+    {
+        "title": "Sample",
+        "description": "Sample",
+        "showModel": false,
+        "contentSections": [
             {
-                id: "1", //id must be unique
-                title: "Sample",
-                icon: "mdi-heart-plus", //icon must be a valid mdi icon
-                iconColor: "var(--v-primary-base)", //iconColor must be a valid css color or a variable
-                content: "Sample"
+                "id": "1",
+                "title": "Sample",
+                "icon": "mdi-heart-plus",
+                "iconColor": "var(--v-primary-base)",
+                "content": "Sample"
             },
             {
-                id: "2",
-                title: "Sample",
-                icon: "mdi-heart-plus",
-                iconColor: "var(--v-primary-base)",
-                content: "Sample"
+                "id": "2",
+                "title": "Sample",
+                "icon": "mdi-heart-plus",
+                "iconColor": "var(--v-primary-base)",
+                "content": "Sample"
             }
         ]
-    };
+    }
 
 Component-Based Content
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 If HTML text alone is insufficient, you can also use components to render content:
 
-.. code-block:: javascript
+.. code-block:: json
 
-    export default {
-        title: 'Sample',
-        description: 'Sample',
-        showModel: false, // if true, the model will be shown in the content pane
-        contentSections: [
+    {
+        "title": "Sample",
+        "description": "Sample",
+        "showModel": false,
+        "contentSections": [
             {
-                id: "1", //id must be unique
-                title: "Sample",
-                icon: "mdi-heart-plus", //icon must be a valid mdi icon
-                iconColor: "var(--v-primary-base)", //iconColor must be a valid css color or a variable
-                component: "PregnancyPersonalisedAssessment" // the name of the component, stored in the ``frontend/components/content`` folder
-            },
+                "id": "1",
+                "title": "Sample",
+                "icon": "mdi-heart-plus",
+                "iconColor": "var(--v-primary-base)",
+                "component": "PregnancyPersonalisedAssessment"
+            }
         ]
-    };
+    }
 
 **Note:** If contentSections contains only one item, it will display as an article. Otherwise, it will display as expandable sections.
 

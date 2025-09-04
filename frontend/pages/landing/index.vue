@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import landingPageData from '@/assets/data/landingPageData';
+import landingPageData from '@/assets/data/landingPageData.json';
 import Menu from '@/components/landing/Menu.vue';
 import Logo from '@/components/Logo.vue';
 export default {

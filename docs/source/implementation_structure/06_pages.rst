@@ -24,40 +24,51 @@ Page Organization
     └── _slug/                       # Dynamic route handler
         ├── index.vue                # Dynamic page component
         └── pageData/                # Content data files
-            ├── index.js             # Content mapping
-            ├── pregnancy-*.js       # Pregnancy-related content
-            ├── conditions-*.js      # Medical condition content
-            ├── ultrasound-*.js      # Ultrasound-related content
-            ├── clinical-*.js        # Clinical care content
-            └── support-*.js         # Support services content
+            ├── pageDataLoader.js    # JSON data loader
+            └── json/                # JSON data files
+                ├── index.json       # Content mapping
+                ├── pregnancy-*.json # Pregnancy-related content
+                ├── conditions-*.json# Medical condition content
+                ├── ultrasound-*.json# Ultrasound-related content
+                ├── clinical-*.json  # Clinical care content
+                └── support-*.json   # Support services content
 
-The pageData folder contains the content data files for the pages. The file name should be the same as the slug/route name.
+The pageData folder contains the content data files for the pages. The file name should be the same as the slug/route name. All page data files are now stored in JSON format for better maintainability and performance.
+
+**JSON Data Loading**
+
+The application uses a custom JSON data loader (``pageDataLoader.js``) to dynamically load page data from JSON files. This approach provides:
+
+- **Lazy Loading**: Page data is loaded only when needed
+- **Better Performance**: JSON files are parsed faster than JavaScript modules, and can be used in other languages like Python, Java, etc.
+- **Easier Maintenance**: JSON format is more straightforward to edit and validate
+- **Consistent Structure**: All data files follow the same JSON schema
 
 Each page data file contains:
 
-.. code-block:: javascript
+.. code-block:: json
 
-    export default {
-        title: 'Sample', // the title of the page, shows in the left side of the page
-        description: 'Sample', // the description of the page, shows in the left side of the page
-        showModel: false, // if true, the model will be shown in the content pane
-        contentSections: [
+    {
+        "title": "Sample",
+        "description": "Sample",
+        "showModel": false,
+        "contentSections": [
             {
-                id: "1", //id must be unique
-                title: "Sample",
-                icon: "mdi-heart-plus", //icon must be a valid mdi icon
-                iconColor: "var(--v-primary-base)", //iconColor must be a valid css color or a variable
-                content: "Sample" // the content of this section, can be HTML or plain text
+                "id": "1",
+                "title": "Sample",
+                "icon": "mdi-heart-plus",
+                "iconColor": "var(--v-primary-base)",
+                "content": "Sample"
             },
             {
-                id: "2",
-                title: "Fetal Development",
-                icon: "mdi-baby-face",
-                iconColor: "var(--v-primary-base)",
-                component: "PregnancyFetalDev" // the name of the component, stored in the ``frontend/components/content`` folder
+                "id": "2",
+                "title": "Fetal Development",
+                "icon": "mdi-baby-face",
+                "iconColor": "var(--v-primary-base)",
+                "component": "PregnancyFetalDev"
             }
         ]
-    };
+    }
 
 See the image below for the page data structure:
 

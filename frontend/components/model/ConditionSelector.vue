@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import modelData from '~/assets/data/modelData.js'
+import modelData from '~/assets/data/modelData.json'
 
 export default {
   name: 'ConditionSelector',

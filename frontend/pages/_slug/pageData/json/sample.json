@@ -1,0 +1,21 @@
+{
+  "title": "Sample",
+  "description": "Sample",
+  "showModel": false,
+  "contentSections": [
+    {
+      "id": "1",
+      "title": "Sample",
+      "icon": "mdi-heart-plus",
+      "iconColor": "var(--v-primary-base)",
+      "content": "Sample"
+    },
+    {
+      "id": "2",
+      "title": "Sample",
+      "icon": "mdi-heart-plus",
+      "iconColor": "var(--v-primary-base)",
+      "content": "Sample"
+    }
+  ]
+}

@@ -40,7 +40,7 @@ import {
   regions,
   regionalServices,
   serviceSections,
-} from "@/assets/data/supportData";
+} from "@/assets/data/supportData.json";
 
 export default {
   layout: "default",

@@ -9,22 +9,37 @@ There are three main data assets:
 Data Assets
 -----------
 
+**Migration to JSON Format**
+
+All data files have been migrated from JavaScript (``.js``) to JSON (``.json``) format for better maintainability, performance, and consistency. This change provides:
+
+- **Better Performance**: JSON files are parsed faster than JavaScript modules
+- **Improved Maintainability**: JSON format is easier to edit and validate
+- **Consistency**: All data files now use the same format
+- **Better Tooling**: JSON files work better with content management systems and validation tools
+
+The migration includes:
+- ``modelData.js`` → ``modelData.json``
+- ``landingPageData.js`` → ``landingPageData.json``  
+- ``supportData.js`` → ``supportData.json``
+- All page data files in ``pages/_slug/pageData/`` → ``pages/_slug/pageData/json/``
+
 .. code-block:: text
 
     frontend/assets/data/
-    ├── modelData.js          # 3D model configs and waveform data, used in model component
-    ├── landingPageData.js    # Landing page content, used in landing page
-    ├── supportData.js        # Support services info, used in support-services page
+    ├── modelData.json        # 3D model configs and waveform data, used in model component
+    ├── landingPageData.json  # Landing page content, used in landing page
+    ├── supportData.json      # Support services info, used in support-services page
     └── topics.json           # Educational content structure
 
 Model Configuration
 ~~~~~~~~~~~~~~~~~~
 
-The `modelData.js` file contains comprehensive configurations for 3D models and their associated data:
+The `modelData.json` file contains comprehensive configurations for 3D models and their associated data:
 
 The first model is the default model, following this format to add more models by just using data, and the interface will be updated automatically.
 
-.. code-block:: javascript
+.. code-block:: json
 
     export default {
       models: [
@@ -66,11 +81,11 @@ See the image below for the model confign and the elements on the page:
 Landing Page Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The `landingPageData.js` file contains the configuration for the landing page:
+The `landingPageData.json` file contains the configuration for the landing page:
 
-.. code-block:: javascript
+.. code-block:: json
 
-    export default {
+   
         items: [
             {
                 index: 0,
@@ -81,13 +96,21 @@ The `landingPageData.js` file contains the configuration for the landing page:
                 link: '/pregnancy-changes'
             },
             {
-                index: 3,
-                title: 'Navigating pregnancy complications',
-                description: 'What you need to know about why complications occur, how they are detected, and what this may mean for your pregnancy journey and beyond.',
-                image: '/img/landing/embryo_icon.svg',
-                backgroundColor: '#313657',
-                link: '/conditions-fetal'
+                "index": 0,
+                "title": "What is happening in pregnancy?",
+                "description": "Information on how your body changes to support your babys growth during pregnancy, and how your midwife/doctor will track the health of you and your baby.",
+                "image": "/img/landing/pregnancy.svg",
+                "backgroundColor": "#7A3520",
+                "link": "/pregnancy-changes"
             },
+            {
+                "index": 3,
+                "title": "Navigating pregnancy complications",
+                "description": "What you need to know about why complications occur, how they are detected, and what this may mean for your pregnancy journey and beyond.",
+                "image": "/img/landing/embryo_icon.svg",
+                "backgroundColor": "#313657",
+                "link": "/conditions-fetal"
+            }
         ]
     }
 
@@ -107,20 +130,31 @@ Support Services Configuration
 
 .. TODO: add the support services configuration documentation
 
-The `supportData.js` file contains the configuration for the support services page:
+The `supportData.json` file contains the configuration for the support services page:
 
-.. code-block:: javascript
+.. code-block:: json
 
-    export default {
-        items: [
+    {
+        "regions": [
+            "Auckland",
+            "Bay of Plenty",
+            "Canterbury"
+        ],
+        "regionalServices": {
+            "Auckland": [
+                "Auckland City Hospital Maternity Services",
+                "National Women's Health - Auckland City Hospital"
+            ]
+        },
+        "serviceSections": [
             {
-                index: 0,
-                title: 'What is happening in pregnancy?',
-                description: 'Information on how your body changes to support your babys growth during pregnancy, and how your midwife/doctor will track the health of you and your baby.',
-                image: '/img/landing/pregnancy.svg',
-                backgroundColor: '#7A3520',
-                link: '/pregnancy-changes'
-            },
+                "key": "general",
+                "icon": "mdi-account-group",
+                "color": "success",
+                "title": "For Everyone Pregnant",
+                "description": "Services that help you navigate pregnancy and connect with appropriate care:",
+                "regional": true
+            }
         ]
     }
 

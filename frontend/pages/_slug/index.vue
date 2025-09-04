@@ -8,7 +8,7 @@
 <script>
 import ContentPane from '@/components/navigation/ContentPane.vue';
 import RightPane from '@/components/navigation/RightPane.vue';
-import pageDataMap from './pageData/index.js';
+import { getPageData } from './pageData/pageDataLoader.js';
 
 export default {
   layout: "default",
@@ -22,14 +22,15 @@ export default {
       error({ statusCode: 404, message: "Page not found" });
     }
     
+    // Load page data from JSON
+    const pageData = await getPageData(slug);
+    
     store.commit("setCurrentContent", content);
-    return { slug, content };
+    return { slug, content, pageData };
   },
 
   computed: {
-    pageData() {
-      return pageDataMap[this.slug] || null;
-    },
+    // pageData is now loaded in asyncData
 
     pageComponent() {
       // Priority order: Model pages > Custom component type > Default content pane

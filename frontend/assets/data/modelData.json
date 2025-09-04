@@ -1,0 +1,87 @@
+{
+  "models": [
+    {
+      "model": "normal",
+      "modelName": "Normal",
+      "Description": "Normal Placenta",
+      "color": "error",
+      "config": {
+        "path": "/model/normal.vtk",
+        "displayName": "Normal Placenta",
+        "color": 16716066,
+        "opacity": 1.0,
+        "modelSize": 420,
+        "useCylinderGeometry": true,
+        "cylinderSegments": 10
+      },
+      "waveform": {
+        "xAxis": "Time (s)",
+        "xDataPath": "/waveforms/normal/time.csv",
+        "yAxis": "Velocity",
+        "lineTitle": "Normal",
+        "yDataPath": "/waveforms/normal/signal.csv",
+        "waveformImg": "/img/normal-ultrasound.jpg",
+        "title": "Umbilical artery blood flow velocity (Normal)",
+        "isPlaying": true,
+        "speed": 1,
+        "description": "Blood flow characteristics in the umbilical cord can reflect the health of the fetus"
+      }
+    },
+    {
+      "model": "FGR",
+      "modelName": "Fetal Growth Restriction (FGR)",
+      "Description": "Fetal Growth Restriction",
+      "color": "info",
+      "config": {
+        "path": "/model/fgr.vtk",
+        "displayName": "Fetal Growth Restriction",
+        "color": 16716066,
+        "opacity": 1,
+        "modelSize": 420,
+        "useCylinderGeometry": true,
+        "cylinderSegments": 10,
+        "defaultRotationY": -1.5707963267948966
+      },
+      "waveform": {
+        "xAxis": "Time (s)",
+        "xDataPath": "/waveforms/fgr/time.csv",
+        "yAxis": "Velocity",
+        "yDataPath": "/waveforms/fgr/signal.csv",
+        "title": "Umbilical artery blood flow velocity (FGR)",
+        "waveformImg": "/img/fgr-ultrasound.jpeg",
+        "lineTitle": "FGR",
+        "isPlaying": true,
+        "speed": 1,
+        "description": "Fetal Growth Restriction, the blood flow is reduced compared to normal."
+      }
+    },
+    {
+      "model": "GDM",
+      "modelName": "Gestational Diabetes Melitus (GDM)",
+      "Description": "Gestational Diabetes Melitus",
+      "color": "error",
+      "config": {
+        "path": "/model/diabetes.vtk",
+        "displayName": "Gestational Diabetes Melitus",
+        "color": 16716066,
+        "opacity": 1.0,
+        "modelSize": 420,
+        "useCylinderGeometry": true,
+        "cylinderSegments": 10,
+        "defaultRotationY": 1.5707963267948966
+      },
+      "waveform": {
+        "xAxis": "Time (s)",
+        "xDataPath": "/waveforms/gdm/time.csv",
+        "yAxis": "Velocity",
+        "lineTitle": "GDM",
+        "yDataPath": "/waveforms/gdm/signal.csv",
+        "title": "Umbilical artery blood flow velocity (GDM)",
+        "isPlaying": true,
+        "waveformImg": "/img/gdm-ultrasound.png",
+        "speed": 1,
+        "description": "Gestational Diabetes Melitus, the blood flow is increased compared to normal."
+      }
+    }
+  ]
+}

@@ -10,7 +10,7 @@
 
 <script>
 import * as echarts from "echarts";
-import modelData from '@/assets/data/modelData.js';
+import modelData from '@/assets/data/modelData.json';
 
 export default {
   props: {

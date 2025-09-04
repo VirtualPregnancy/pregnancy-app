@@ -40,7 +40,7 @@
 
 <script>
 import VTKLoader from '@/utils/vtkLoader'
-import modelData from '@/assets/data/modelData.js';
+import modelData from '@/assets/data/modelData.json';
 
 export default {
   props: {

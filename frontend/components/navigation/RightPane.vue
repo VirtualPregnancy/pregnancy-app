@@ -60,7 +60,7 @@
 import PanelControls from "../model/PanelControls.vue";
 import Waveform from "../model/Waveform.vue";
 import Logo from '@/components/Logo.vue';
-import modelData from '@/assets/data/modelData.js';
+import modelData from '@/assets/data/modelData.json';
 export default {
   data() {
     return {
