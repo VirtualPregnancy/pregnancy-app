@@ -1,6 +1,8 @@
+How can I modify/change the model?
+=================================
+
 .. include:: ../style.rst
 
-What is the :blue:`category` field in subtopics data?
-======================================================
+Modify the modelData.js file under ./frontend/assets/data/modelData.js, and change the model name to the name of the model you want to use.
 
-The “category” field is used to identify the colour for the background at the left hand panel. It has only three possible values including error, success and warning. To include any further categories, the relevant stylesheets must be defined by the developer first. 
+Refer to this document for more details: :ref:`implementation_structure/02_assets.html#data-assets`

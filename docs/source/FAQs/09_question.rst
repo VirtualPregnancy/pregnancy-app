@@ -1,5 +1,5 @@
-how to setup kiwrious after build/generate?
-==============================================
+How to setup kiwrious after build/generate?
+===========================================
 
 There are two kiwrious config files, we must paste them in to build folder under _nuxt folder!
 

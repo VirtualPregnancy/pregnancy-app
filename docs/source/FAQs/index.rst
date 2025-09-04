@@ -1,6 +1,5 @@
 FAQs
-==========
-
+====
 
 .. toctree::
     :maxdepth: 2

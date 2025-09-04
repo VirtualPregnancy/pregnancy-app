@@ -1,9 +1,6 @@
+What should I do if I want to add a component at the left side of the page?
+=========================================================================
+
 .. include:: ../style.rst
 
-What is the difference between :red:`title` and :red:`heading` of topics/subtopics in topics.json?
-======================================================================================================
-
-The :blue:`title` is used as a caption in menu buttons whereas :blue:`heading` are actual headlines that appear at the top of the left panel for each topic/subtopic. (screenshots below)
-
-.. image:: images/q3_1.jpg
-.. image:: images/q3_2.jpg
+Look at the topics.json file, and find the topic you want to add a component to. Then, set the `component` property to the name of the component, and add the component in the `frontend/components/` folder.

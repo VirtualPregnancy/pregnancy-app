@@ -1,30 +1,29 @@
-Why the route is  `model-heart`?
-======================================
+Why the route is `pregnancy-changes`?
+====================================
 
-- Let's look at the `topics.json` file under ./frontend/assets/data/topics.json
+Let's look at the `topics.json` file under ./frontend/assets/data/topics.json:
 
-    .. code-block:: json
-        :linenos:
+.. code-block:: json
 
-        {
-            "model": {
-                "title": "Template",
-                "heading": "Te Manawa",
-                "icon": "mdi-home",
-                "subTopics": {
-                    "heart": {
+    {
+        "pregnancy": {
+            "title": "Template",
+            "heading": "Te Manawa",
+            "icon": "mdi-home",
+            "subTopics": {
+                "changes": {
                     "title": "Home",
                     "heading": "Heading",
                     "icon": "mdi-home-heart",
-                    "dataFile": "heart-main",
                     "category": "success",
                     "subTitle": "subSuccess",
                     "model": { "name": "NoInfarct" }
-                    }
                 }
-        },
+            }
+        }
+    }
 
-In here, you can see the first key of the root dictionary is `model` and the first subTopics key is `heart`, thus the first routes is `model-heart`.
+In here, you can see the first key of the root dictionary is `pregnancy` and the first subTopics key is `changes`, thus the first routes is `pregnancy-changes`.
 
 You can modify those key in json file to change to your own routes.
 

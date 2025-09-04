@@ -1,8 +1,11 @@
-How to understand the path specified for images, videos etc in these data files?
-====================================================================================
+What I should do if I want to modify the landing page?
+====================================================
 
 .. include:: ../style.rst
 
-.. image:: images/q6.jpg
+Modify the landingPageData.js file under ./frontend/assets/data/landingPageData.js, and change the content of the landing page.
 
-The specified paths consider the :blue:`static` folder of the application as the root folder. For example, the path shown for the video in the screenshot above assumes that the  :blue:`videos` folder exists in the :blue:`static` folder of the application.
+You can change the index of the item to change the order of the items.
+
+Refer to this document for more details: :ref:`implementation_structure/02_assets.html#landing-page-configuration`
+

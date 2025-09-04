@@ -1,10 +1,32 @@
-What are the attributes starting with “data-” in html tags in markdown files?
-=====================================================================================
+How can I add a new page?
+========================
 
 .. include:: ../style.rst
 
-These are data attributes that can be defined for html tags in order to store some extra information with the associated html tag. 
+When we talk about a new page, that might be:
 
-The :blue:`data-play=video` added to <a> tag instructs to load the video player at the right hand side panel. Similarly, it is important to add :red:`#video-div` in href attribute of the same <a> tag, as this is helpful to scroll to the appropriate place in small devices, while playing video. The key/name of the video(as defined in videos.json) is specified as the :blue:`id` of <img> tag of video icon.
+- `A new page with it's own route` - For example, a new page for "Pregnancy Journey".
+- `A new section in an existing page` - For example, a new page under "Pregnancy Journey" like "Changes to your body".
 
-.. image:: images/q7.jpg
+How to add a new page with it's own route?
+------------------------------------------
+
+All this is done in the `topics.json` file. Look at this document for more details: :ref:`/implementation_structure/01_intro.html#data-files`
+
+When you want to config the right side of the page, you can config it in the `pageData` folder. Look at this document for more details: :ref:`implementation_structure/06_pages`
+
+To sum up, you need:
+
+1. Add a new entry in the `topics.json` file, which contains the route name, title, description, icon. If you want to include any submenu, you can add it in the `subTopics` part in this file.
+2. Generate a new file (in .js format) in the `pageData` folder, which contains the content of the page, including the sections or components.
+   2.1. If this page need model, config `isShowModel` to `true`.
+   2.2. If this page need a component, config `component` to the name of the component, and add the component in the `frontend/components/content` folder.
+3. Import the new js file in the `index.js` file under the `pageData` folder.
+
+How to add a new section in an existing page?
+---------------------------------------------
+
+Which might mean:
+
+1. Add a new sub-topic (i.e. you want to add a new item at the left menu part, and display new content in the right side). In this case, you need to config the sub-topic in the `topics.json` file, and follow the steps in the first case.
+2. Add a new section in an existing page. In this case, you need to go to the pageData folder, and find the data you are looking for. For example, if you want to add a new section in the "ultrasound-doppler" (this is the route name) page, you need to go to the `pageData` folder, and find the `ultrasound-doppler.js` file, and add a new section in the `contentSections` part. Look at this document for the configuration details: :ref:`implementation_structure/06_pages`
