@@ -29,17 +29,6 @@
       </div>
 
    
-      <!-- Show Menu for content pages -->
-      <div class="pa-4" :class="currentBg" tile :style="panelHeightStyle">
-        <lazy-panel 
-          @conditions-updated="handleConditionsUpdate"
-        />
-        <SubMenu 
-          :subtopics="currentTopicSubtopics"
-          :parent-slug="currentParentSlug"
-          :topic-title="currentTopicTitle"
-        />
-      </div>
     </div>
     
   </div>
