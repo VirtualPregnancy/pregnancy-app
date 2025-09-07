@@ -35,6 +35,9 @@
       <div class="waveform-panel">
         <div>
           <img class="pb-5" :src="getAssetUrl(waveformData.waveformImg)" alt="Waveform" />
+          <div class="text-center mb-3 font-italic text-sm">
+            {{ waveformData.waveformNote }}
+          </div>
         </div>
         <div class="waveform-content">
           <Waveform :waveform="waveformData" />

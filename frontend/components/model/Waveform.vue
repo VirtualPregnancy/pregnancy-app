@@ -1,17 +1,19 @@
 <template>
   <div class="waveform-container">
-    <div class="flex justify-between items-center mb-5">
+    <div class="flex  justify-between items-center mb-5">
       <div class="text-center font-weight-bold flex-1">
         {{ waveform.title }}
       </div>
+      <div>
       <button 
         @click="toggleColorblindMode"
         class="ml-4 px-3 py-1 text-sm rounded-md transition-colors duration-200"
         :class="colorblindMode ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
         :title="colorblindMode ? 'Switch to normal colors' : 'Switch to colorblind-friendly colors'"
       >
-        {{ colorblindMode ? 'Normal' : 'Colorblind' }}
+       Change color
       </button>
+      </div>
     </div>
     <div ref="chart" class="waveform-chart"></div>
     
@@ -85,6 +87,7 @@ export default {
     getDefaultWaveformColor(colorType = 'normal') {
       return this.getWaveformColor(this.defaultWaveform, colorType);
     },
+
     initChart() {
       if (this.chart) {
         this.chart.dispose();
@@ -157,8 +160,7 @@ export default {
     
     parseXAxisCSV(csvText) {
       return csvText.trim().split('\n')
-        .map(line => parseFloat(line.trim()))
-        .filter(val => val >= 0 && val <= 2.387139);
+        .map(line => parseFloat(line.trim()));
     },
     
     async loadDefaultWaveformData() {
@@ -228,6 +230,7 @@ export default {
         series: series,
         dataZoom: [{ type: "inside", start: 0, end: 100 }],
         backgroundColor: "transparent",
+        animation: false,
       });
       
       this.updatePlayhead();
@@ -240,10 +243,17 @@ export default {
         const defaultColor = this.getDefaultWaveformColor();
         const defaultColorRgba = this.hexToRgba(defaultColor, 0.8);
         const defaultAreaRgba = this.hexToRgba(defaultColor, 0.3);
+        const defaultTimeOffset = this.defaultWaveform.timeOffset || 1.0;
+        
+        // Apply multiplicative time offset and normalize to start from 0
+        const minDefaultX = Math.min(...defaultData.x);
         
         series.push({
           name: this.defaultWaveform.lineTitle,
-          data: defaultData.x.map((xVal, index) => [xVal, defaultData.y[index]]),
+          data: defaultData.x.map((xVal, index) => {
+            const scaledX = (xVal - minDefaultX) * defaultTimeOffset;
+            return [scaledX, defaultData.y[index]];
+          }),
           type: "line",
           areaStyle: { color: defaultAreaRgba },
           lineStyle: { color: defaultColorRgba, width: 1 },
@@ -253,10 +263,17 @@ export default {
       }
       
       const currentColor = this.getWaveformColor(this.waveform);
+      const currentTimeOffset = this.waveform?.timeOffset || 1.0;
+      
+      // Apply multiplicative time offset and normalize to start from 0
+      const minCurrentX = Math.min(...x);
       
       series.push({
         name: this.waveform?.lineTitle || 'Waveform',
-        data: x.map((xVal, index) => [xVal, y[index]]),
+        data: x.map((xVal, index) => {
+          const scaledX = (xVal - minCurrentX) * currentTimeOffset;
+          return [scaledX, y[index]];
+        }),
         type: "line",
         lineStyle: { color: currentColor, width: 2 },
         symbol: 'none',
