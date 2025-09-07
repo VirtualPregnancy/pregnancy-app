@@ -1,5 +1,6 @@
 {
   "pregnancy": {
+    "id": "1",
     "title": "Pregnancy Journey",
     "component": "none",
     "heading": "What is Happening in Pregnancy?",
@@ -7,6 +8,7 @@
     "icon": "/img/landing/pregnancy.svg",
     "subTopics": {
       "changes": {
+        "id": "1.a",
         "title": "Your Body",
         "component": "none",
         "heading": "Changes To Your Body",
@@ -18,6 +20,7 @@
         }
       },
       "placenta": {
+        "id": "1.b",
         "title": "Placenta",
         "component": "none",
         "heading": "Roles of the Placenta",
@@ -29,6 +32,7 @@
         }
       },
       "interact-with-your-placenta": {
+        "id": "1.c",
         "title": "Interact With Your Placenta",
         "component": "ConditionSelector",
         "heading": "Interact With Your Placenta",
@@ -40,6 +44,7 @@
         }
       },
       "fetal-dev": {
+        "id": "1.d",
         "title": "Fetal Development",
         "component": "none",
         "heading": "Fetal Development",
@@ -51,6 +56,7 @@
         }
       },
       "keep-baby-healthy": {
+        "id": "1.e",
         "title": "Keep Baby Healthy",
         "component": "none",
         "heading": "Keep Baby Healthy",
@@ -62,6 +68,7 @@
         }
       },
       "baby": {
+        "id": "1.f",
         "title": "Health Checks",
         "component": "none",
         "heading": "How do we check on baby's health?",
@@ -75,6 +82,7 @@
     }
   },
   "conditions": {
+    "id": "2",
     "title": "Pregnancy Complications",
     "component": "none",
     "content":"Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told you have a complication in pregnancy you are not alone – pregnancy disorders affect around 6000 pepi and their whanau each year in New Zealand (1 in 10 pregnancies). On these pages you will find information to help you understand what causes common issues in pregnancy, how your doctor/midwife may check on pepi, and what this may mean for your pregnancy journey. ",
@@ -82,9 +90,10 @@
     "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
       "fetal": {
+        "id": "2.a",
         "title": "Fetal Growth",
         "component": "none",
-        "heading": "Reduced fetal growth/Fetal growth restriction",
+        "heading": "Reduced fetal growth",
         "icon": "mdi-heart-minus",
         "category": "success",
         "subTitle": "subSuccess",
@@ -92,31 +101,59 @@
           "name": "NoInfarct"
         }
       },
-      "birth": {
-        "title": "Birth",
+      "pe":{
+        "id": "2.b",
+        "title": "A similar framework for PE ",
         "component": "none",
-        "heading": "What does having a pregnancy issue mean for how my baby might be born?",
-        "icon": "mdi-baby-bottle-outline",
+        "heading": "Pre-eclampsia",
+        "icon": "mdi-heart-minus",
         "category": "success",
         "subTitle": "subSuccess",
         "model": {
-          "name": "SmallInfarct"
+          "name": "NoInfarct"
         }
       },
-      "care": {
-        "title": "Cares",
+      "gestational-diabetes":{
+        "id": "2.c",
+        "title": "A similar framework for Gestational Diabetes",
         "component": "none",
-        "heading": "When baby needs extra care after birth",
-        "icon": "mdi-human-baby-changing-table",
+        "heading": "Gestational Diabetes",
+        "icon": "mdi-heart-minus",
         "category": "success",
         "subTitle": "subSuccess",
         "model": {
-          "name": "LargeInfarct"
+          "name": "NoInfarct"
+        }
+      },
+      "disorders":{
+        "id": "2.d",
+        "title": "What does having a pregnancy disorder mean for how my baby might be born?",
+        "component": "none",
+        "heading": "Disorders",
+        "icon": "mdi-heart-minus",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": {
+          "name": "NoInfarct"
+        }
+      },
+      "extra-care":{
+        "id": "2.e",
+        "title": "When baby needs extra care after birth",
+        "component": "none",
+        "heading": "Extra Care",
+        "icon": "mdi-heart-minus",
+        "category": "success",
+        "subTitle": "subSuccess",
+        "model": {
+          "name": "NoInfarct"
         }
       }
+
     }
   },
   "ultrasound": {
+    "id": "3",
     "title": "Ultrasound",
     "component": "none",
     "heading": "What does my ultrasound scan mean",
@@ -124,6 +161,7 @@
     "content": "During pregnancy your baby will be checked on using ultrasound imaging.  This is a safe and widely used tool, that can help your midwife/doctor know that baby is healthy. This page helps you understand what ultrasound is and the different ways it is used and includes an interactive tool to help you understand your own ultrasound scan better. ",
     "subTopics": {
       "what-is-ultrasound": {
+        "id": "3.a",
         "title": "What Ultrasound Means",
         "component": "none",
         "heading": "Ultrasound",
@@ -135,6 +173,7 @@
         }
       },
       "doppler": {
+        "id": "3.b",
         "title": "Doppler Ultrasound",
         "component": "none",
         "heading": "Doppler Ultrasound in Pregnancy ",
@@ -146,6 +185,7 @@
         }
       },
       "how": {
+        "id": "3.c",
         "title": "How ",
         "component": "none",
         "heading": "How ultrasound can be used to detect pregnancy issues",
@@ -157,6 +197,7 @@
         }
       },
       "what-ultrasound-means": {
+        "id": "3.d",
         "title": "What Ultrasound Means",
         "component": "none",
         "heading": "What does my ultrasound scan mean? ",
@@ -170,6 +211,7 @@
     }
   },
   "clinical": {
+    "id": "4",
     "title": "Care Pathways",
     "component": "none",
     "heading": "Pregnancy Care in Aotearoa New Zealand",
@@ -200,6 +242,7 @@
     }
   },
   "support": {
+    "id": "5",
     "title": "Pregnancy Support",
     "component": "none",
     "heading": "Pregnancy Support Services",

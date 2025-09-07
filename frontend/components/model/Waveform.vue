@@ -1,7 +1,17 @@
 <template>
   <div class="waveform-container">
-    <div class="text-center mb-5 font-weight-bold">
-      {{ waveform.title }}
+    <div class="flex justify-between items-center mb-5">
+      <div class="text-center font-weight-bold flex-1">
+        {{ waveform.title }}
+      </div>
+      <button 
+        @click="toggleColorblindMode"
+        class="ml-4 px-3 py-1 text-sm rounded-md transition-colors duration-200"
+        :class="colorblindMode ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
+        :title="colorblindMode ? 'Switch to normal colors' : 'Switch to colorblind-friendly colors'"
+      >
+        {{ colorblindMode ? 'Normal' : 'Colorblind' }}
+      </button>
     </div>
     <div ref="chart" class="waveform-chart"></div>
     
@@ -26,6 +36,7 @@ export default {
       speed: 1,
       waveformData: { x: [], y: [] },
       defaultWaveform: modelData.models[0].waveform,
+      colorblindMode: false,
     };
   },
   
@@ -56,6 +67,23 @@ export default {
     getAssetUrl(path) {
       const base = this.$config?.basePath || '';
       return `${base}${path}`;
+    },
+    
+    getWaveformColor(waveform, colorType = 'normal') {
+      if (!waveform?.colors) {
+        // Fallback colors if not defined in modelData
+        const fallbackColors = {
+          normal: '#4CAF50',
+          colorblind: '#2196F3'
+        };
+        return fallbackColors[colorType] || fallbackColors.normal;
+      }
+      
+      return this.colorblindMode ? waveform.colors.colorblind : waveform.colors.normal;
+    },
+    
+    getDefaultWaveformColor(colorType = 'normal') {
+      return this.getWaveformColor(this.defaultWaveform, colorType);
     },
     initChart() {
       if (this.chart) {
@@ -209,27 +237,46 @@ export default {
       const series = [];
       
       if (!isDefaultWaveform) {
+        const defaultColor = this.getDefaultWaveformColor();
+        const defaultColorRgba = this.hexToRgba(defaultColor, 0.8);
+        const defaultAreaRgba = this.hexToRgba(defaultColor, 0.3);
+        
         series.push({
           name: this.defaultWaveform.lineTitle,
           data: defaultData.x.map((xVal, index) => [xVal, defaultData.y[index]]),
           type: "line",
-          areaStyle: { color: 'rgba(221, 60, 81, 0.3)' },
-          lineStyle: { color: 'rgba(221, 60, 81, 0.8)', width: 1 },
+          areaStyle: { color: defaultAreaRgba },
+          lineStyle: { color: defaultColorRgba, width: 1 },
           symbol: 'none',
-          itemStyle: { color: 'rgba(221, 60, 81, 0.8)' }
+          itemStyle: { color: defaultColorRgba }
         });
       }
+      
+      const currentColor = this.getWaveformColor(this.waveform);
       
       series.push({
         name: this.waveform?.lineTitle || 'Waveform',
         data: x.map((xVal, index) => [xVal, y[index]]),
         type: "line",
-        lineStyle: { color: '#4CAF50', width: 2 },
+        lineStyle: { color: currentColor, width: 2 },
         symbol: 'none',
-        itemStyle: { color: '#4CAF50' }
+        itemStyle: { color: currentColor }
       });
       
       return series;
+    },
+    
+    hexToRgba(hex, alpha = 1) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    },
+    
+    toggleColorblindMode() {
+      this.colorblindMode = !this.colorblindMode;
+      // Redraw chart with new colors
+      this.drawChart();
     },
     
     buildLegendData(isDefaultWaveform) {

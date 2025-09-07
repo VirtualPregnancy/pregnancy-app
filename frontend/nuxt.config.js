@@ -205,22 +205,6 @@ export default {
     dir: "build",
     fallback: true,
     routes: [
-      // Modify these routes, when you config your routes for app
-      "/pregnancy-changes",
-      "/pregnancy-placenta",
-      "/pregnancy-baby",
-      "/pregnancy-fetal-dev",
-      "/pregnancy-keep-baby-healthy",
-      "/conditions-fetal",
-      "/conditions-birth", 
-      "/conditions-care",
-      "/ultrasound-what-is-ultrasound",
-      "/ultrasound-doppler",
-      "/ultrasound-how",
-      "/clinical-mid-wife",
-      "/clinical-when-care-changes",
-      "support-services",
-      "/about",
     ],
   },
 };

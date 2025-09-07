@@ -24,7 +24,11 @@
         "title": "Umbilical artery blood flow velocity (Normal)",
         "isPlaying": true,
         "speed": 1,
-        "description": "Blood flow characteristics in the umbilical cord can reflect the health of the fetus"
+        "description": "Blood flow characteristics in the umbilical cord can reflect the health of the fetus",
+        "colors": {
+          "normal": "#4CAF50",
+          "colorblind": "#2196F3"
+        }
       }
     },
     {
@@ -52,7 +56,11 @@
         "lineTitle": "FGR",
         "isPlaying": true,
         "speed": 1,
-        "description": "Fetal Growth Restriction, the blood flow is reduced compared to normal."
+        "description": "Fetal Growth Restriction, the blood flow is reduced compared to normal.",
+        "colors": {
+          "normal": "#F44336",
+          "colorblind": "#9C27B0"
+        }
       }
     },
     {
@@ -80,7 +88,11 @@
         "isPlaying": true,
         "waveformImg": "/img/gdm-ultrasound.png",
         "speed": 1,
-        "description": "Gestational Diabetes Melitus, the blood flow is increased compared to normal."
+        "description": "Gestational Diabetes Melitus, the blood flow is increased compared to normal.",
+        "colors": {
+          "normal": "#FF9800",
+          "colorblind": "#9C27B0"
+        }
       }
     }
   ]
