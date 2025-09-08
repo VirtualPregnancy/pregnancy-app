@@ -6,7 +6,7 @@
       @click="toggleExpanded"
     >
       <v-icon left color="white" size="20">mdi-medical-bag</v-icon>
-      <span class="font-weight-bold header-text">Pregnancy Conditions</span>
+      <span class="font-weight-bold header-text">Pregnancy Complications</span>
       <v-spacer></v-spacer>
       <v-chip
         v-if="selectedCondition !== defaultCondition"

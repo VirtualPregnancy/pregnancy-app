@@ -76,23 +76,6 @@
         </template>
       </div>
 
-      <!-- Resources -->
-      <div class="grid md:grid-cols-2 gap-6">
-        <v-card 
-          v-for="card in cards" 
-          :key="card.id" 
-          class="resource-card elevation-2"
-          :style="{ backgroundColor: card.backgroundColor, color: card.textColor }"
-        >
-          <v-card-title class="resource-card-title">
-            <v-icon left :color="card.iconColor" class="resource-icon">{{ card.icon }}</v-icon>
-            <span class="resource-title">{{ card.title }}</span>
-          </v-card-title>
-          <v-card-text :style="{ color: card.textColor }" class="resource-content">
-            <div v-html="card.content"></div>
-          </v-card-text>
-        </v-card>
-      </div>
       <div class="logo">
         <Logo />
       </div>
@@ -268,16 +251,6 @@ export default {
   opacity: 1;
 }
 
-/* Resource Cards */
-.resource-card {
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.resource-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
 
 .logo {
   width: 100%;

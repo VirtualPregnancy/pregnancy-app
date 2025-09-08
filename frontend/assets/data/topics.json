@@ -12,76 +12,46 @@
         "title": "Your Body",
         "component": "none",
         "heading": "Changes To Your Body",
-        "icon": "mdi-radar",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-radar"
       },
       "placenta": {
         "id": "1.b",
         "title": "Placenta",
         "component": "none",
         "heading": "Roles of the Placenta",
-        "icon": "mdi-bowl-outline",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-bowl-outline"
       },
       "interact-with-your-placenta": {
         "id": "1.c",
         "title": "Interact With Your Placenta",
         "component": "ConditionSelector",
         "heading": "Interact With Your Placenta",
-        "icon": "mdi-gesture-tap",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NormalElectricity"
-        }
+        "icon": "mdi-gesture-tap"
       },
       "fetal-dev": {
         "id": "1.d",
         "title": "Fetal Development",
         "component": "none",
         "heading": "Fetal Development",
-        "icon": "mdi-flower-outline",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-flower-outline"
       },
       "keep-baby-healthy": {
         "id": "1.e",
         "title": "Keep Baby Healthy",
         "component": "none",
         "heading": "Keep Baby Healthy",
-        "icon": "mdi-charity",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-charity"
       },
       "baby": {
         "id": "1.f",
         "title": "Health Checks",
         "component": "none",
         "heading": "How do we check on baby's health?",
-        "icon": "mdi-baby-face-outline",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-baby-face-outline"
       }
     }
   },
-  "conditions": {
+  "complications": {
     "id": "2",
     "title": "Pregnancy Complications",
     "component": "none",
@@ -94,60 +64,35 @@
         "title": "Fetal Growth",
         "component": "none",
         "heading": "Reduced fetal growth",
-        "icon": "mdi-heart-minus",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-heart-minus"
       },
       "pe":{
         "id": "2.b",
         "title": "A similar framework for PE ",
         "component": "none",
         "heading": "Pre-eclampsia",
-        "icon": "mdi-heart-minus",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-heart-minus"
       },
       "gestational-diabetes":{
         "id": "2.c",
         "title": "A similar framework for Gestational Diabetes",
         "component": "none",
         "heading": "Gestational Diabetes",
-        "icon": "mdi-heart-minus",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-heart-minus"
       },
       "disorders":{
         "id": "2.d",
         "title": "What does having a pregnancy disorder mean for how my baby might be born?",
         "component": "none",
         "heading": "Disorders",
-        "icon": "mdi-heart-minus",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-heart-minus"
       },
       "extra-care":{
         "id": "2.e",
         "title": "When baby needs extra care after birth",
         "component": "none",
         "heading": "Extra Care",
-        "icon": "mdi-heart-minus",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-heart-minus"
       }
 
     }
@@ -165,48 +110,28 @@
         "title": "What Ultrasound Means",
         "component": "none",
         "heading": "Ultrasound",
-        "icon": "mdi-stethoscope",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NormalElectricity"
-        }
+        "icon": "mdi-stethoscope"
       },
       "doppler": {
         "id": "3.b",
         "title": "Doppler Ultrasound",
         "component": "none",
         "heading": "Doppler Ultrasound in Pregnancy ",
-        "icon": "mdi-chart-areaspline",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NormalElectricity"
-        }
+        "icon": "mdi-chart-areaspline"
       },
-      "how": {
+      "metric": {
         "id": "3.c",
-        "title": "How ",
+        "title": "Doppler Ultrasound Metrics",
         "component": "none",
         "heading": "How ultrasound can be used to detect pregnancy issues",
-        "icon": "mdi-alert-circle",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NormalElectricity"
-        }
+        "icon": "mdi-alert-circle"
       },
       "what-ultrasound-means": {
         "id": "3.d",
         "title": "What Ultrasound Means",
         "component": "ConditionSelector",
         "heading": "What does my ultrasound scan mean? ",
-        "icon": "mdi-help-circle",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NormalElectricity"
-        }
+        "icon": "mdi-help-circle"
       }
     }
   },
@@ -221,23 +146,13 @@
         "title": "Midwife Lead Care",
         "component": "none",
         "heading": "Midwife",
-        "icon": "mdi-account-heart",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-account-heart"
       },
       "when-care-changes": {
         "title": "When Care Changes",
         "component": "none",
         "heading": "How clinical care pathways may change during your pregnancy if there are any concerns about mother or baby.",
-        "icon": "mdi-heart-cog",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-heart-cog"
       }
     }
   },
@@ -253,23 +168,13 @@
         "title": "For Everyone Pregnant",
         "component": "none",
         "heading": "For Everyone Pregnant",
-        "icon": "mdi-account-group",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-account-group"
       },
       "specialist": {
         "title": "Specialist Services",
         "component": "none",
         "heading": "Specialist Services",
-        "icon": "mdi-account-group",
-        "category": "success",
-        "subTitle": "subSuccess",
-        "model": {
-          "name": "NoInfarct"
-        }
+        "icon": "mdi-account-group"
       }
     }
   }
