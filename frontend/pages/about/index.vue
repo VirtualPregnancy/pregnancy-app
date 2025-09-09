@@ -56,7 +56,7 @@
             class="rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
           >
             <img 
-              :src="photo.src" 
+              :src="getImagePath(photo.src)" 
               :alt="photo.alt" 
               class="w-full h-80 object-cover"
             />
@@ -141,7 +141,13 @@ export default {
     },
     navigateToMember(link) {
       window.open(link, '_blank');
-    }
+    },
+    getImagePath(imagePath) {
+      const basePath = this.$config.basePath || '';
+      // Ensure we don't double-add the base path
+      const cleanPath = imagePath.replace(/^\/pregnancy-app/, '');
+      return basePath + cleanPath;
+    },
   }
 }
 </script>
