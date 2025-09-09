@@ -19,7 +19,7 @@
       <!-- Background Image -->
       <div class="absolute inset-0">
         <img 
-          :src="aboutUs.heroimage" 
+          :src="getImagePath(aboutUs.heroimage)" 
           :alt="aboutUs.heroimage"
           class="w-full h-full object-cover"
         />
