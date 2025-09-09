@@ -1,38 +1,58 @@
 {
-    "title": "About Us",
+    "title": "About Our Team",
+    "heroimage": "/img/about/Alys.jpg",
     "id": "about-us",
-    "description": "The team aims to improve health in pregnancy and early childhood by providing a better understanding of physiology in the critical developmental period. We use data-driven computational models to provide a new understanding of the important contributors to healthy development and to interpret clinical data obtained in early-life.",
-    "Team": [
-        {
-            "name": "Associate Professor Alys Clark",
-            "role": "Co-Lead",
-            "image": "https://i.ibb.co/CsM8x3Yw/image.png",
-            "description": "Alys co-leads the pregnancy modelling group and leads the ABI research in this group. Her research expertise is in medical imaging, and pregnancy biomechanics, but she also does research more generally in smooth muscle, vasculature and respiratory medicine."
-        },
-        {
-            "name": "Associate Professor Jo James",
-            "role": "Co-Lead",
-            "image": "https://i.ibb.co/5W8DGJyQ/image.png",
-            "description": "Jo co-leads the pregnancy modelling group and leads the FMHS/experimental research in this group. Her research encompasses a range of work to understand how poor placental development contributes to the pathophysiology of fetal growth restriction, with a view to improving prediction and detection of this disorder. She has expertise in cell models of placental function, placental stem cells, blood vessel physiology, angiogenesis, anatomical imaging, and animal models.  Her team at FMHS collect normal and pathological placental tissue at delivery from Auckland City Hospital, Middlemore, as well as first trimester placental tissue from Auckland Medical Aid Centre."
-        },
-        {
-            "name": "Dr. Thiranja Prasad Babarenda Gamage",
-            "role": "Research Fellow",
-            "image": "https://i.ibb.co/XxNVwnpH/image.png",
-            "description":"Thiranja Prasad Babarenda Gamage is a Research Fellow at the Auckland Bioengineering Institute (ABI). In 2016, Prasad completed his University of Auckland PhD on techniques for analysing constitutive parameter identifiability and the design of experiments for applications in breast biomechanics. "
-        },
-        {
-            "name": "Zoea Chen",
-            "role": "Software Development",
-            "image": "https://i.ibb.co/QFXMb7jp/image.png",
-            "description":"Zoea is a Master of Information Technology student at the University of Auckland with a background in computer science.  She is focusing on model visualisations of the placenta and developing the pregnancy webapp. "
-        }
-    ],
-    "contact": [
-        {
-            "name": "Contact Us",
-            "email": "contact@pregnancy.com",
-            "phone": "1234567890"
-        }
-    ]
+    "description":"The Pregnancy Health group aims to improve health in pregnancy and early childhood by providing a better understanding of physiology in the critical developmental period. We use data-driven computational models to provide a new understanding of the important contributors to healthy development and to interpret clinical data obtained in early-life.",
+    "team": {
+        "photos": [
+            {
+                "src": "/img/about/Jo-Alys-Marsden-computer.jpg",
+                "alt": "Team member working on research"
+            },
+            {
+                "src": "/img/about/Jo-Alys-Marsden-microscope.jpg",
+                "alt": "Team headshots"
+            }
+        ]
+    },
+    "contributors": {
+        "title": "Web-app Contributors",
+        "members": [
+            {
+                "name": "Alys Clark",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/alys-clark.html"
+            },
+            {
+                "name": "Jo James",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/jo-james.html"
+            },
+            
+            {
+            "name": "Thiranja Prasad Babarenda Gamage",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/thiranja-prasad-babarenda-gamage.html"
+            },
+            {
+                "name": "Charlotte Oyston",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/charlotte-oyston.html"
+            },
+            {
+                "name": "Zoea Chen",
+                "role": "Web Developer",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/zoea-chen.html"
+            },
+            {
+                "name": "Linkun Gao",
+                "role": "Web Developer",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/linkun-gao.html"
+            }
+                
+        ]
+    },
+    "contact": {
+        "title": "Get in Touch",
+        "description": "We welcome collaboration opportunities and feedback from healthcare providers, researchers, and families.",
+        "website": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health.html",
+        "institution": "Auckland Bioengineering Institute, University of Auckland",
+        "address": "70 Symonds Street, Auckland 1010, New Zealand"
+    }
 }

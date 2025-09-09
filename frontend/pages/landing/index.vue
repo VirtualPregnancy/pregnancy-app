@@ -16,10 +16,10 @@
               <Logo />
             </div>
             <h1 class="main-title">
-              Pregnancy is an exciting time!
+              {{ landingPageData.title }}
             </h1>
             <p class="intro-text">
-              Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, this app is here to support you and your whānau every step of the way. Designed especially for people in Aotearoa New Zealand, we offer trusted information, helpful tools, and guidance to help you understand your health and make confident decisions.
+              {{ landingPageData.description }}
 
             </p>
           </div>
@@ -66,13 +66,18 @@
 import landingPageData from '@/assets/data/landingPageData.json';
 import Menu from '@/components/landing/Menu.vue';
 import Logo from '@/components/Logo.vue';
+
 export default {
   layout: 'empty',
   components: {
     Menu,
     Logo
   },
-  
+  data() {
+    return {
+      landingPageData: landingPageData
+    }
+  },
   computed: {
     cardColumns() {
       const processedItems = landingPageData.items.map(item => ({
