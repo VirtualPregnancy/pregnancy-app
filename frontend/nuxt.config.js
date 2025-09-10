@@ -6,6 +6,7 @@ const routerBase =
   process.env.DEPLOY_ENV === "GH_PAGES"
     ? {
         router: {
+          mode: "hash",
           base: "/pregnancy-app/",
         },
       }
@@ -203,8 +204,30 @@ export default {
   ...routerBase,
   generate: {
     dir: "build",
-    fallback: true,
+    fallback: "404.html",
     routes: [
+      '/',
+      '/about',
+      '/landing',
+      '/complications-fetal',
+      '/complications-gestational-diabetes',
+      '/complications-pe',
+      '/complications-disorders',
+      '/complications-extra-care',
+      '/pregnancy-baby',
+      '/pregnancy-changes',
+      '/pregnancy-fetal-dev',
+      '/pregnancy-interact',
+      '/pregnancy-keep-baby-healthy',
+      '/pregnancy-placenta',
+      '/clinical-mid-wife',
+      '/clinical-when-care-changes',
+      '/support-services',
+      '/support-specialist',
+      '/ultrasound-doppler',
+      '/ultrasound-metric',
+      '/ultrasound-what-is-ultrasound',
+      '/ultrasound-what-ultrasound-means'
     ],
   },
 };
