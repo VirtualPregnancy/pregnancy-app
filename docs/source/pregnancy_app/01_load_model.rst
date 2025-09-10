@@ -1,7 +1,7 @@
 How to add the model to the web app
 ====================================
 
-This is a guide on how to load the model into the app, for model configuration or add new model, please refer to the :ref:`implementation_structure/02_assets:Model Configuration` document.
+This is a guide on how to load the model into the app onto the page, for model configuration or add new model, please refer to the :ref:`implementation_structure/02_assets:Model Configuration` document.
 
 Loading the model
 ----------------

@@ -24,34 +24,26 @@ The data will be saved in the following files:
 .. code-block:: json
 
     "pregnancy": {
+        "id": "1",
         "title": "Pregnancy Journey",
         "component": "none",
         "heading": "What is Happening in Pregnancy?",
-        "content": "During pregnancy your body undergoes a remarkable transformation to accommodate the growth of new life. Here, you can find information on what is happening to your body, how the fetus grows and is nourished by the placenta, and the different ways your midwife or doctor may check on your baby's health during pregnancy.",
+        "content": "During pregnancy your body undergoes a remarkable transformation to accommodate the growth of new life. Here, you can find information on what is happening to your body, how the fetus grows and is nourished by the placenta, and the different ways your midwife or doctor may check on your baby’s health during pregnancy.",
         "icon": "/img/landing/pregnancy.svg",
         "subTopics": {
-            "changes": {
-                "title": "Your Body",
-                "component": "none",
-                "heading": "Changes To Your Body",
-                "icon": "mdi-radar",
-                "category": "success",
-                "subTitle": "subSuccess",
-                "model": {
-                    "name": "NoInfarct"
-                }
-            },
-            "placenta": {
-                "title": "Placenta",
-                "component": "none",
-                "heading": "Roles of the Placenta",
-                "icon": "mdi-bowl-outline",
-                "category": "success",
-                "subTitle": "subSuccess",
-                "model": {
-                    "name": "NoInfarct"
-                }
-            }
+        "changes": {
+            "id": "1.a",
+            "title": "Your Body",
+            "component": "none",
+            "heading": "Changes To Your Body",
+            "icon": "mdi-radar"
+        },
+        "placenta": {
+            "id": "1.b",
+            "title": "Placenta",
+            "component": "none",
+            "heading": "Roles of the Placenta",
+            "icon": "mdi-bowl-outline"
         }
     }
 
@@ -71,6 +63,9 @@ The data will be saved in the following files:
 - **Model**: Model name
 - **Customization**: You also can customise the key:value for yourself, but after this you need to setup it under :red:`./frontend/plugins/current-content.js`, then you can use it in vue files via :red:`this.$key()`, e.g. :red:`this.$category()`
 
+This data is read by the :red:`frontend/plugins/topics.js` file, if you want to add new item, you need to add the reading process in this file.
+
+
 Application Structure
 --------------------
 
@@ -85,4 +80,6 @@ The main app will be split into left and right pane (as it is currently).
 - SubMenu (the tabs and subtabs populated based on topics.json)
 
 **Right Pane** will switch between two type of pages i.e. :red:`content` and :red:`Model`.
+
+**Bottom Pane** will include the main navigation.
 

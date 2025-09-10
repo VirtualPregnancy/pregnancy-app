@@ -9,7 +9,7 @@ The color of background is defined in the `nuxt.config.js` file. The color palet
 
 Menu Button Color
 -----------------
-The color of menu button is defined in the `nuxt.config.js` file. Defined as following:
+The color of menu button is defined in the :red:`nuxt.config.js` file. Defined as following:
 
 .. code-block:: javascript
 

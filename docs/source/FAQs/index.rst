@@ -5,6 +5,7 @@ FAQs
     :maxdepth: 2
     :numbered: 2
 
+    00_question
     01_question
     02_question
     03_question

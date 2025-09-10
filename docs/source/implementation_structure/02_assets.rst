@@ -9,20 +9,6 @@ There are three main data assets:
 Data Assets
 -----------
 
-**Migration to JSON Format**
-
-All data files have been migrated from JavaScript (``.js``) to JSON (``.json``) format for better maintainability, performance, and consistency. This change provides:
-
-- **Better Performance**: JSON files are parsed faster than JavaScript modules
-- **Improved Maintainability**: JSON format is easier to edit and validate
-- **Consistency**: All data files now use the same format
-- **Better Tooling**: JSON files work better with content management systems and validation tools
-
-The migration includes:
-- ``modelData.js`` → ``modelData.json``
-- ``landingPageData.js`` → ``landingPageData.json``  
-- ``supportData.js`` → ``supportData.json``
-- All page data files in ``pages/_slug/pageData/`` → ``pages/_slug/pageData/json/``
 
 .. code-block:: text
 
@@ -41,42 +27,90 @@ The first model is the default model, following this format to add more models b
 
 .. code-block:: json
 
-    export default {
-      models: [
+    "models": [
         {
-          // the first model is the default model
-          model: 'normal',  //name of the model, displays as the tag at the 'ConditionSelector' component
-          modelName: 'Normal', //name of the model, displays as the title at the `ConditionSelector` component's card part
-          Description: 'Normal Placenta', // displays as the description of the model in the `ConditionSelector` component's card part
-          color: 'error', // color of tag at the 'ConditionSelector' component
-          config: {
-            path: '/model/normal.vtk', // store the model under `frontend/static/` and add the path here
-            displayName: 'Normal Placenta', // name of the model, displays as the model info at the `Model` component
-            color: 0xff2222, // defualt color of the model if no flux/pressure data is provided
-            opacity: 1.0, // opacity of the model
-            modelSize: 420, // size of the model
-            useCylinderGeometry: true, // use cylinder geometry for the model
-            cylinderSegments: 10, // number of segments for cylinder geometry
-          },
-          waveform: {
-            xAxis: 'Time (s)', // x-axis label for waveform display
-            xDataPath: '/waveforms/normal/time.csv', // store the time data under `frontend/static/` and add the path here
-            yAxis: 'Velocity', // y-axis label for waveform display
-            lineTitle:'Normal', // line title  for legend at the `Waveform` component
-            yDataPath: '/waveforms/normal/signal.csv', // store the signal data under `frontend/static/` and add the path here
-            waveformImg: '/img/normal-ultrasound.jpg', // store the waveform image under `frontend/static/` and add the path here, display at the top of the waveform 
-            title: 'Umbilical artery blood flow velocity (Normal)', // title of the waveform 
-            isPlaying: true, // set playhead to play automatically
-            speed: 1, // animation playhead speed multiplier
-            description: 'Blood flow characteristics in the umbilical cord can reflect the health of the fetus', // description of the waveform under the waveform
-          },
+        "model": "normal", 
+        "modelName": "Normal",
+        "Description": "Normal Placenta", 
+        "color": "error",
+        "config": {
+            "path": "/model/normal.vtk",
+            "displayName": "Normal Placenta",
+            "color": 16716066,
+            "opacity": 1.0,
+            "modelSize": 420,
+            "useCylinderGeometry": true,
+            "cylinderSegments": 10
+        },
+        "waveform": {
+            "xAxis": "Time (s)",
+            "xDataPath": "/waveforms/normal/time.csv",
+            "yAxis": "Velocity",
+            "lineTitle": "Normal",
+            "yDataPath": "/waveforms/normal/signal.csv",
+            "waveformImg": "/img/normal-ultrasound.jpg",
+            "title": "Umbilical artery blood flow velocity (Normal)",
+            "isPlaying": true,
+            "speed": 1,
+            "waveformNote":"* Normal Ultrasound Image",
+            "description": "Blood flow characteristics in the umbilical cord can reflect the health of the fetus",
+            "colors": {
+            "normal": "#4CAF50",
+            "colorblind": "#2196F3"
+            },
+            "timeOffset": 1.45
         }
-      ]
-    }
+        },
+    
+    ]
 
 See the image below for the model confign and the elements on the page:
 
 .. image:: images/02_model_config.png
+
+
+Below is the explanation of the key:value pairs:
+
+Model Data Configuration
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The `modelData.json` file contains configuration for 3D medical models. Here are the key:value pairs:
+
+**models**: Array containing all medical model configurations
+
+**model**: Unique identifier for the model (normal, FGR, GDM), displayed as the tag for the condition selector
+
+**modelName**: Display name for the model
+
+**Description**: Brief description of the medical condition
+
+**color**: The background color of the tag for the condition selector
+
+**config**: Model visualization settings
+  - **path**: Path to VTK 3D model file
+  - **displayName**: Name shown in the interface
+  - **color**: RGB color value for the model, if no flux/pressure color, this color will be used
+  - **opacity**: Transparency level (0.0-1.0)
+  - **modelSize**: Size of the 3D model
+  - **useCylinderGeometry**: Whether to use cylinder geometry
+  - **cylinderSegments**: Number of cylinder segments
+  - **defaultRotationY**: Default Y-axis rotation since some models are not facing the camera defaultly
+
+**waveform**: Blood flow data configuration
+  - **xAxis**: X-axis label for the chart
+  - **xDataPath**: Path to time data CSV file
+  - **yAxis**: Y-axis label for the chart
+  - **yDataPath**: Path to velocity data CSV file
+  - **lineTitle**: Title for the waveform line at the legend
+  - **title**: Chart title
+  - **waveformImg**: Path to ultrasound image
+  - **isPlaying**: Whether animation of playhead starts playing 
+  - **speed**: Animation playback speed
+  - **waveformNote**: Note displayed with the image
+  - **description**: Medical description of the condition
+  - **colors**: Color scheme for normal and colorblind users
+  - **timeOffset**: Time offset for data synchronization, so that the heart beat waveform is aligned
+
 
 Landing Page Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,35 +118,27 @@ Landing Page Configuration
 The `landingPageData.json` file contains the configuration for the landing page:
 
 .. code-block:: json
-
    
-        items: [
-            {
-                index: 0,
-                title: 'What is happening in pregnancy?',
-                description: 'Information on how your body changes to support your babys growth during pregnancy, and how your midwife/doctor will track the health of you and your baby.',
-                image: '/img/landing/pregnancy.svg',
-                backgroundColor: '#7A3520',
-                link: '/pregnancy-changes'
-            },
-            {
-                "index": 0,
-                "title": "What is happening in pregnancy?",
-                "description": "Information on how your body changes to support your babys growth during pregnancy, and how your midwife/doctor will track the health of you and your baby.",
-                "image": "/img/landing/pregnancy.svg",
-                "backgroundColor": "#7A3520",
-                "link": "/pregnancy-changes"
-            },
-            {
-                "index": 3,
-                "title": "Navigating pregnancy complications",
-                "description": "What you need to know about why complications occur, how they are detected, and what this may mean for your pregnancy journey and beyond.",
-                "image": "/img/landing/embryo_icon.svg",
-                "backgroundColor": "#313657",
-                "link": "/conditions-fetal"
-            }
-        ]
-    }
+  "title": "Pregnancy is an exciting time!",
+  "description": "Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, this app is here to support you and your whānau every step of the way. Designed especially for people in Aotearoa New Zealand, we offer trusted information, helpful tools, and guidance to help you understand your health and make confident decisions.",
+  "items": [
+    {
+      "index": 0,
+      "title": "What is happening in pregnancy?",
+      "description": "Information on how your body changes to support your babys growth during pregnancy, and how your midwife/doctor will track the health of you and your baby.",
+      "image": "/img/landing/pregnancy.svg",
+      "backgroundColor": "#7A3520",
+      "link": "/pregnancy-changes"
+    },
+    {
+      "index": 3,
+      "title": "Navigating pregnancy complications",
+      "description": "What you need to know about why complications occur, how they are detected, and what this may mean for your pregnancy journey and beyond.",
+      "image": "/img/landing/embryo_icon.svg",
+      "backgroundColor": "#313657",
+      "link": "/complications-fetal"
+    },
+  ]
 
 - **index**: the index of the item, used to sort the items (from left to right, from top to bottom)
 - **title**: the title of the card item
@@ -128,35 +154,103 @@ See the image below for the landing page configuration and the elements on the p
 Support Services Configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. TODO: add the support services configuration documentation
+The `supportData.json` file drives the Support Services page (rendered by `frontend/components/content/Support.vue`).
 
-The `supportData.json` file contains the configuration for the support services page:
+Location: `frontend/assets/data/supportData.json`
+
+Schema overview
+^^^^^^^^^^^^^^^
+
+- **regions**: List of region names shown in the region selector.
+- **regionalServices**: Map of region → list of services available in that region.
+  - Key must match exactly one of the items in `regions`.
+  - Each value is a list of strings (service names) displayed when a region is selected.
+  - If a region has no entry, a sensible default list is shown in the UI.
+- **serviceSections**: Array describing the major sections of the Support page.
+  - Common fields: `key` (one of `general`, `specialist`, `resources`), `icon` (MDI name), `color` (Vuetify color), `title` (string), `description` (optional).
+  - Section-specific fields:
+    - `general`: `regional` (boolean). When true, shows the region selector and per‑region services list.
+    - `specialist`: `items` (array). Each item has `icon`, `color`, `title`, `description`, `list` (array of bullet points).
+    - `resources`: `resources` (array). Each entry has `icon`, `color`, `title`, optional `subtitle`, and `content` (array of `{ "label": string, "value": string }`).
+
+Example
+^^^^^^^
+
+The following illustrates a minimal but complete configuration:
 
 .. code-block:: json
 
-    {
-        "regions": [
-            "Auckland",
-            "Bay of Plenty",
-            "Canterbury"
-        ],
-        "regionalServices": {
-            "Auckland": [
-                "Auckland City Hospital Maternity Services",
-                "National Women's Health - Auckland City Hospital"
+  {
+    "regions": [
+      "Auckland",
+      "Canterbury",
+      "Waikato"
+    ],
+    "regionalServices": {
+      "Auckland": [
+        "Auckland City Hospital Maternity Services",
+        "National Women's Health - Auckland City Hospital"
+      ],
+      "Canterbury": [
+        "Christchurch Women's Hospital",
+        "Pegasus Health Maternity Services"
+      ]
+    },
+    "serviceSections": [
+      {
+        "key": "general",
+        "icon": "mdi-account-group",
+        "color": "success",
+        "title": "For Everyone Pregnant",
+        "description": "Services that help you navigate pregnancy and connect with appropriate care:",
+        "regional": true
+      },
+      {
+        "key": "specialist",
+        "icon": "mdi-medical-bag",
+        "color": "warning",
+        "title": "Specialist Support Services",
+        "items": [
+          {
+            "icon": "mdi-brain",
+            "color": "accent",
+            "title": "Mental Health Support Services",
+            "description": "Specialized mental health support during pregnancy:",
+            "list": [
+              "Perinatal mental health services",
+              "Counselling and therapy services"
             ]
-        },
-        "serviceSections": [
-            {
-                "key": "general",
-                "icon": "mdi-account-group",
-                "color": "success",
-                "title": "For Everyone Pregnant",
-                "description": "Services that help you navigate pregnancy and connect with appropriate care:",
-                "regional": true
-            }
+          }
         ]
-    }
+      },
+      {
+        "key": "resources",
+        "icon": "mdi-book-open-variant",
+        "color": "accent",
+        "title": "Additional Resources & Contacts",
+        "resources": [
+          {
+            "icon": "mdi-phone",
+            "color": "primary",
+            "title": "Emergency Contacts",
+            "subtitle": "24/7 support services",
+            "content": [
+              { "label": "Emergency", "value": "111" },
+              { "label": "Healthline", "value": "0800 611 116" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+
+Notes
+^^^^^
+
+- Icons use Material Design Icons (e.g., `mdi-account-group`).
+- Colors may use Vuetify theme names (e.g., `primary`, `success`, `warning`) or project CSS variables.
+- To add a region, update `regions` and optionally add a matching entry in `regionalServices`. Missing regions fall back to default items in the UI.
+- The Support Services page route is defined via page data at `frontend/pages/_slug/pageData/json/support-services.json`, which references the `Support` component.
 
 Styling Assets
 --------------
@@ -184,7 +278,6 @@ Image Assets
     ├── funding-abi-medtech.png
     ├── Annie-Jones.png      # Team member
     └── Liz-Broadbent.png    # Team member
-
 
 
 
