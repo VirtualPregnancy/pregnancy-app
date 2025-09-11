@@ -1,41 +1,81 @@
 <template>
-  <div :class="mdAndUp ? 'supportPanel-l' : 'supportPanel-s'" class="support-container">
-    <h4 class="pt-2 main-heading text-center support-heading">
-      Services that help you navigate pregnancy and connect with appropriate
-      care:
-    </h4>
-    <div class="regional-services">
+  <div class="max-w-4xl mx-auto p-6">
+    <!-- Simple heading -->
+    <h2 class="text-2xl md:text-3xl font-bold text-center text-blue-600 mb-8">
+      Pregnancy Support Services
+    </h2>
+    
+    <p class="text-center text-gray-600 mb-8">
+      Services that help you navigate pregnancy and connect with appropriate care
+    </p>
+
+    <!-- Region selector -->
+    <div class="mb-8">
       <v-select
         v-model="selectedRegion"
         :items="regions"
-        label="Select your region for specific services"
-        outlined
-        dense
+        label="Select your region"
+        variant="outlined"
         color="primary"
-        class="region-selector"
-      >
-        <template v-slot:prepend-inner>
-          <v-icon color="primary">mdi-map-marker</v-icon>
-        </template>
-      </v-select>
-      <div v-if="selectedRegion" class="regional-info">
-        <div class="regional-services-list">
-          <h5>Services available in {{ selectedRegion }}:</h5>
-          <ul>
-            <li
-              v-for="service in getRegionalServices(selectedRegion)"
-              :key="service"
-            >
-              {{ service }}
-            </li>
-          </ul>
-        </div>
+        prepend-inner-icon="mdi-map-marker"
+        class="max-w-md mx-auto"
+      />
+    </div>
+
+    <!-- Services list -->
+    <div v-if="selectedRegion" class="bg-blue-50 rounded-lg p-6">
+      <h3 class="text-xl font-semibold text-blue-800 mb-4">
+        Services in {{ selectedRegion }}
+      </h3>
+      
+      <!-- Show services if available -->
+      <div v-if="getRegionalServices(selectedRegion).length > 0">
+        <ul class="space-y-3">
+          <li 
+            v-for="service in getRegionalServices(selectedRegion)" 
+            :key="service.name || service"
+            class="flex items-start space-x-3 p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+            @click="openServiceLink(service)"
+          >
+            <v-icon color="green" size="20" class="mt-0.5">mdi-check</v-icon>
+            <div class="flex-grow">
+              <span class="text-gray-700 hover:text-blue-600 transition-colors">
+                {{ service.name || service }}
+              </span>
+              <v-icon 
+                v-if="service.link" 
+                color="blue" 
+                size="16" 
+                class="ml-2"
+              >
+                mdi-open-in-new
+              </v-icon>
+            </div>
+          </li>
+        </ul>
+      </div>
+      
+      <!-- Show no services message -->
+      <div v-else class="text-center py-8">
+        <v-icon color="gray" size="48" class="mb-4">mdi-information-outline</v-icon>
+        <p class="text-gray-600 text-lg mb-2">No specific services found for {{ selectedRegion }}</p>
+        <p class="text-gray-500 text-sm">
+          Please contact your local healthcare provider or visit the nearest hospital for assistance.
+        </p>
+        <v-btn 
+          color="primary" 
+          variant="outlined" 
+          class="mt-4"
+        >
+          <v-icon start>mdi-phone</v-icon>
+          Contact Healthline (0800 611 116)
+        </v-btn>
       </div>
     </div>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import {
   regions,
   regionalServices,
@@ -71,14 +111,23 @@ export default {
       this.sections[section] = !this.sections[section];
     },
     getRegionalServices(region) {
-      return (
-        this.regionalServices[region] || [
-          "Local District Health Board Maternity Services",
-          "Community Midwifery Services",
-          "Local Birthing Units",
-          "Regional Support Groups",
-        ]
-      );
+      return this.regionalServices[region] || [];
+    },
+    openServiceLink(service) {
+      // Handle both old string format and new object format
+      if (typeof service === 'string') {
+        // For backward compatibility, show alert for string services
+        this.$toast.info(`Service: ${service}\n\nLink not available yet.`);
+        return;
+      }
+      
+      if (service.link) {
+        // Open link in new tab
+        window.open(service.link, '_blank', 'noopener,noreferrer');
+      } else {
+        // Show info if no link available
+        this.$toast.info(`Service: ${service.name}\n\nLink not available yet.`);
+      }
     },
     handleScrollToSection(sectionId) {
       if (this.sections.hasOwnProperty(sectionId)) {
@@ -112,247 +161,51 @@ export default {
   },
 };
 </script>
-  
+
 <style lang="scss" scoped>
-.support-container {
-  @apply max-w-4xl mx-auto p-6;
-  
-  // Responsive padding
-  @screen md {
-    @apply p-8;
-  }
-  
-  @screen lg {
-    @apply p-10;
-  }
+// Simple responsive design with Tailwind CSS
+.max-w-4xl {
+  max-width: 56rem;
 }
 
-.support-heading {
-  @apply text-xl md:text-2xl lg:text-3xl font-bold mb-8;
-  color: var(--v-primary-base, #1976d2);
-  line-height: 1.4;
-  
-  // Add subtle text shadow for better readability
-  text-shadow: 0 1px 3px rgba(25, 118, 210, 0.1);
-  
-  // Responsive font sizes
-  @screen sm {
-    @apply text-2xl;
-  }
-  
-  @screen md {
-    @apply text-3xl;
-  }
-  
-  @screen lg {
-    @apply text-4xl;
-  }
+// Ensure proper spacing and alignment
+.space-y-3 > * + * {
+  margin-top: 0.75rem;
 }
 
-.regional-services {
-  @apply space-y-6;
-  
-  // Add smooth transitions
-  transition: all 0.3s ease;
+.space-y-3 > * + * {
+  margin-top: 0.75rem;
 }
 
-.region-selector {
-  @apply mb-6;
-  
-  // Custom styling for the select component
-  ::v-deep .v-input__slot {
-    @apply bg-white border-2 border-gray-200 rounded-lg;
-    transition: all 0.3s ease;
-    
-    &:hover {
-      @apply border-blue-300;
-      box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
-    }
-    
-    &.v-input--is-focused {
-      @apply border-blue-500;
-      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
-    }
-  }
-  
-  ::v-deep .v-label {
-    @apply text-gray-700 font-medium;
-  }
-  
-  ::v-deep .v-select__selections {
-    @apply text-gray-900 font-medium;
-  }
-  
-  ::v-deep .v-icon {
-    @apply text-blue-500;
-  }
+// Enhanced hover effects for service items
+.shadow-sm:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease-in-out;
+  transform: translateY(-1px);
 }
 
-.regional-info {
-  @apply bg-gradient-to-br from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-lg p-6;
-  box-shadow: 0 4px 20px rgba(25, 118, 210, 0.1);
-  transition: all 0.3s ease;
-  
-  &:hover {
-    box-shadow: 0 8px 30px rgba(25, 118, 210, 0.15);
-    transform: translateY(-2px);
-  }
-  
-  // Responsive padding
-  @screen sm {
-    @apply p-8;
-  }
-  
-  @screen md {
-    @apply p-10;
-  }
+// Cursor pointer for clickable items
+.cursor-pointer {
+  cursor: pointer;
 }
 
-.regional-services-list {
-  @apply space-y-4;
-  
-  h5 {
-    @apply text-lg md:text-xl font-bold mb-4;
-    color: var(--v-primary-base, #1976d2);
-    
-    // Add underline decoration
-    position: relative;
-    
-    &::after {
-      content: '';
-      @apply absolute bottom-0 left-0 w-16 h-1 bg-blue-500 rounded-full;
-      transform: translateY(4px);
-    }
-  }
-  
-  ul {
-    @apply space-y-3;
-    
-    li {
-      @apply flex items-start space-x-3 p-3 bg-white rounded-lg border border-gray-100;
-      transition: all 0.3s ease;
-      
-      // Custom bullet point
-      position: relative;
-      
-      &::before {
-        content: '✓';
-        @apply flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold;
-        margin-top: 2px;
-      }
-      
-      &:hover {
-        @apply border-blue-200 bg-blue-50;
-        transform: translateX(4px);
-        box-shadow: 0 2px 8px rgba(25, 118, 210, 0.1);
-      }
-      
-      // Responsive text size
-      @apply text-sm md:text-base;
-      line-height: 1.6;
-      color: var(--v-on-surface-base, #212121);
-      font-weight: 500;
-    }
-  }
+// Smooth transitions
+.transition-shadow {
+  transition: box-shadow 0.2s ease-in-out;
 }
 
-// Responsive design for different screen sizes
-@screen sm {
-  .support-container {
-    @apply px-4;
-  }
-  
-  .regional-info {
-    @apply p-6;
-  }
+.transition-colors {
+  transition: color 0.2s ease-in-out;
 }
 
-@screen md {
-  .support-container {
-    @apply px-6;
+// Responsive text sizes
+@media (max-width: 768px) {
+  .text-2xl {
+    font-size: 1.5rem;
   }
   
-  .regional-info {
-    @apply p-8;
-  }
-  
-  .regional-services-list {
-    h5 {
-      @apply text-xl;
-    }
-    
-    ul li {
-      @apply text-base;
-    }
-  }
-}
-
-@screen lg {
-  .support-container {
-    @apply px-8;
-  }
-  
-  .regional-info {
-    @apply p-10;
-  }
-}
-
-// Dark mode support (if needed)
-@media (prefers-color-scheme: dark) {
-  .regional-info {
-    @apply bg-gray-800 border-blue-400;
-  }
-  
-  .regional-services-list {
-    ul li {
-      @apply bg-gray-700 border-gray-600 text-gray-100;
-      
-      &:hover {
-        @apply bg-gray-600 border-blue-400;
-      }
-    }
-  }
-}
-
-// Animation for smooth transitions
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.regional-info {
-  animation: fadeInUp 0.5s ease-out;
-}
-
-// Focus states for accessibility
-.region-selector:focus-within {
-  @apply ring-2 ring-blue-500 ring-opacity-50;
-}
-
-// Print styles
-@media print {
-  .support-container {
-    @apply max-w-none p-0;
-  }
-  
-  .regional-info {
-    @apply bg-white border border-gray-300 shadow-none;
-    break-inside: avoid;
-  }
-  
-  .regional-services-list ul li {
-    @apply bg-white border border-gray-200;
-    
-    &::before {
-      @apply bg-gray-500;
-    }
+  .text-xl {
+    font-size: 1.25rem;
   }
 }
 </style>
-  

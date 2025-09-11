@@ -78,10 +78,10 @@
 
       <!-- Additional Resources Section -->
       <div v-if="additionalResources && additionalResources.length > 0" class="mb-8">
-        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center">
           Additional Resources
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div :class="additionalResources.length > 1 ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'grid grid-cols-1 gap-6'">
           <div 
             v-for="resource in additionalResources" 
             :key="resource.title"

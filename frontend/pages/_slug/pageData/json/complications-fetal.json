@@ -38,13 +38,16 @@
       "icon": "mdi-account-group",
       "iconColor": "var(--v-primary-base)",
       "content":"..."
-    },
+    }
+  ],
+  "addtionalResources": [
     {
+      "title": "Fetal Growth Restriction",
       "id": "2.a.f",
-      "title": "Further resources and links",
-      "icon": "mdi-routes",
+      "description": "More information on Fetal Growth Restriction (FGR) / Having a Small Baby",
+      "icon": "mdi-web",
       "iconColor": "var(--v-primary-base)",
-      "content":"<a href='https://ranzcog.edu.au/wp-content/uploads/Fetal-Growth-Restriction.pdf'>Fetal Growth Restriction</a>"
+      "link": "https://ranzcog.edu.au/wp-content/uploads/Fetal-Growth-Restriction.pdf"
     }
   ]
 }
