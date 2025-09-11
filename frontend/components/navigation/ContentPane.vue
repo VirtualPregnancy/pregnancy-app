@@ -76,6 +76,51 @@
         </template>
       </div>
 
+      <!-- Additional Resources Section -->
+      <div v-if="additionalResources && additionalResources.length > 0" class="mb-8">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 text-center">
+          Additional Resources
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div 
+            v-for="resource in additionalResources" 
+            :key="resource.title"
+            class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border-l-4 border-transparent hover:border-blue-500"
+          >
+            <div class="p-6">
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                  <v-icon 
+                    :color="resource.iconColor" 
+                    size="32"
+                    class="resource-icon"
+                  >
+                    {{ resource.icon }}
+                  </v-icon>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
+                    {{ resource.title }}
+                  </h3>
+                  <p class="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3" v-html="resource.description">
+                  </p>
+                  <a 
+                    v-if="resource.link"
+                    :href="resource.link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors duration-200"
+                  >
+                    Learn More
+                    <v-icon size="16" class="ml-1">mdi-arrow-top-right</v-icon>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="logo">
         <Logo />
       </div>
@@ -103,7 +148,7 @@ export default {
       type: Array,
       default: () => []
     },
-    cards: {
+    additionalResources: {
       type: Array,
       default: () => []
     },
@@ -310,5 +355,31 @@ export default {
 
 .content-text ::v-deep em {
   font-style: italic;
+}
+
+/* Additional Resources Styles */
+.resource-icon {
+  transition: transform 0.3s ease;
+}
+
+.resource-card:hover .resource-icon {
+  transform: scale(1.1);
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style> 

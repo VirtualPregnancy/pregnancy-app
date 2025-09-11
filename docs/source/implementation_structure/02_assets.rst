@@ -71,8 +71,6 @@ See the image below for the model confign and the elements on the page:
 
 Below is the explanation of the key:value pairs:
 
-Model Data Configuration
-~~~~~~~~~~~~~~~~~~~~~~~~
 
 The `modelData.json` file contains configuration for 3D medical models. Here are the key:value pairs:
 

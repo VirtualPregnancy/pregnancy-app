@@ -141,15 +141,18 @@
     "component": "none",
     "heading": "Pregnancy Care in Aotearoa New Zealand",
     "icon": "mdi-routes",
+    "content":"Clinical care pathways for pregnancy in Aotearoa New Zealand are organized around a pyramid of community-based primary maternity services, supported by secondary and tertiary hospital services, with the woman choosing a Lead Maternity Carer (LMC), usually a midwife, to coordinate her care. Pathways include primary care for low-risk pregnancies, with consultations and referrals to higher-level specialist services for complex cases or emergencies, ensuring equitable access and appropriate care across all stages of pregnancy. ",
     "subTopics": {
       "mid-wife": {
         "title": "Midwife Lead Care",
+        "id": "4.a",
         "component": "none",
-        "heading": "Midwife",
+        "heading": "Midwife Lead Care",
         "icon": "mdi-account-heart"
       },
       "when-care-changes": {
         "title": "When Care Changes",
+        "id": "4.b",
         "component": "none",
         "heading": "How clinical care pathways may change during your pregnancy if there are any concerns about mother or baby.",
         "icon": "mdi-heart-cog"
@@ -166,12 +169,14 @@
     "subTopics": {
       "services": {
         "title": "For Everyone Pregnant",
+        "id": "5.a",
         "component": "none",
         "heading": "For Everyone Pregnant",
         "icon": "mdi-account-group"
       },
       "specialist": {
         "title": "Specialist Services",
+        "id": "5.b",
         "component": "none",
         "heading": "Specialist Services",
         "icon": "mdi-account-group"

@@ -82,8 +82,9 @@ export default {
         baseProps.renderConfig = this.pageData.renderConfig;
       }
 
-      // Add cards
-      baseProps.cards = this.pageData.cards || [];
+
+      // Add additional resources
+      baseProps.additionalResources = this.pageData.addtionalResources || [];
 
       return baseProps;
     },
