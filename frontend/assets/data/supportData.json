@@ -67,48 +67,6 @@
         "name": "Maternity Services in Canterbury",
         "link": "https://www.healthpoint.co.nz/maternity/canterbury/"
       }
-    ],
-    "Capital & Coast": [
-      {
-        "name": "Wellington Hospital Maternity Unit",
-        "link": "https://www.ccdhb.org.nz/our-services/maternity-services/"
-      },
-      {
-        "name": "Kenepuru Maternity Unit",
-        "link": "https://www.ccdhb.org.nz/our-services/maternity-services/kenepuru-maternity-unit/"
-      },
-      {
-        "name": "Capital & Coast DHB Community Midwives",
-        "link": "https://www.ccdhb.org.nz/our-services/maternity-services/community-midwives/"
-      }
-    ],
-    "Counties Manukau": [
-      {
-        "name": "Middlemore Hospital Maternity",
-        "link": "https://www.countiesmanukau.health.nz/our-services/maternity-services/"
-      },
-      {
-        "name": "Counties Manukau Health Maternity Services",
-        "link": "https://www.countiesmanukau.health.nz/our-services/maternity-services/"
-      },
-      {
-        "name": "Pukekohe Maternity Unit",
-        "link": "https://www.countiesmanukau.health.nz/our-services/maternity-services/pukekohe-maternity-unit/"
-      }
-    ],
-    "Waikato": [
-      {
-        "name": "Waikato Hospital Maternity Unit",
-        "link": "https://www.waikatodhb.health.nz/our-services/maternity-services/"
-      },
-      {
-        "name": "Te Awamutu Maternity Unit",
-        "link": "https://www.waikatodhb.health.nz/our-services/maternity-services/te-awamutu-maternity-unit/"
-      },
-      {
-        "name": "Thames Maternity Unit",
-        "link": "https://www.waikatodhb.health.nz/our-services/maternity-services/thames-maternity-unit/"
-      }
     ]
   }
 }

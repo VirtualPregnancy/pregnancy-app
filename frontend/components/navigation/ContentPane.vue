@@ -142,7 +142,7 @@ export default {
     },
     pageDescription: {
       type: String,
-      default: 'Page description'
+      default: ''
     },
     contentSections: {
       type: Array,
