@@ -1,0 +1,58 @@
+{
+    "title": "About Our Team",
+    "heroimage": "/img/about/Alys.jpg",
+    "id": "about-us",
+    "description":"The Pregnancy Health group aims to improve health in pregnancy and early childhood by providing a better understanding of physiology in the critical developmental period. We use data-driven computational models to provide a new understanding of the important contributors to healthy development and to interpret clinical data obtained in early-life.",
+    "team": {
+        "photos": [
+            {
+                "src": "/img/about/Jo-Alys-Marsden-computer.jpg",
+                "alt": "Team member working on research"
+            },
+            {
+                "src": "/img/about/Jo-Alys-Marsden-microscope.jpg",
+                "alt": "Team headshots"
+            }
+        ]
+    },
+    "contributors": {
+        "title": "Web-app Contributors",
+        "members": [
+            {
+                "name": "A/P Alys Clark",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/alys-clark.html"
+            },
+            {
+                "name": "A/P Jo James",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/jo-james.html"
+            },
+            
+            {
+            "name": "Dr Thiranja Prasad Babarenda Gamage",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/thiranja-prasad-babarenda-gamage.html"
+            },
+            {
+                "name": "Dr Charlotte Oyston",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/charlotte-oyston.html"
+            },
+            {
+                "name": "Zoea Chen",
+                "role": "Web Developer",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/zoea-chen.html"
+            },
+            {
+                "name": "Linkun Gao",
+                "role": "Web Developer",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/linkun-gao.html"
+            }
+                
+        ]
+    },
+    "contact": {
+        "title": "Get in Touch",
+        "description": "We welcome collaboration opportunities and feedback from healthcare providers, researchers, and families.",
+        "website": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health.html",
+        "institution": "Auckland Bioengineering Institute, University of Auckland",
+        "address": "70 Symonds Street, Auckland 1010, New Zealand"
+    }
+}

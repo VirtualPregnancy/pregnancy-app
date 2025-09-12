@@ -1,5 +1,5 @@
-Implementation Structure 
-=========================
+Implementation Structure
+========================
 
 The following section provides a higher level overview of the application structure with notes about some important files/folders and would be helpful to understand the coordination of various elements.
 
@@ -14,5 +14,3 @@ The following section provides a higher level overview of the application struct
     05_static
     06_pages
     07_components
-    08_load_data_from_backend
-    09_display_model

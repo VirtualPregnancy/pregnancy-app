@@ -48,9 +48,6 @@ p {
   font-style: italic;
   font-size: 13px;
 }
-.md-video {
-  cursor: pointer;
-}
 .md-mt {
   float: right;
 }
@@ -93,26 +90,6 @@ p {
   height: auto;
   @media #{map-get($display-breakpoints, 'xs-only')} {
     width: 7rem;
-  }
-}
-
-/* These following two styles are used in .md files */
-
-.video-icon {
-  height: 75px;
-  width: 70px;
-  @media #{map-get($display-breakpoints, 'xl-only')} {
-    height: 85px;
-    width: 80px;
-  }
-}
-
-.video-icon-tall {
-  height: 85px;
-  width: 70px;
-  @media #{map-get($display-breakpoints, 'xl-only')} {
-    height: 95px;
-    width: 80px;
   }
 }
 img {

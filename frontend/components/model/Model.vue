@@ -40,7 +40,7 @@
 
 <script>
 import VTKLoader from '@/utils/vtkLoader'
-import modelData from '@/assets/data/modelData.js';
+import modelData from '@/assets/data/modelData.json';
 
 export default {
   props: {
@@ -62,7 +62,6 @@ export default {
   // Component data - stores all reactive properties
   data() {
     return {
-      defaultModel: 'normal',
       Copper: null,        // Copper3D library instance for 3D rendering
       THREE: null,         // Three.js library instance for 3D geometry
       baseRenderer: null,  // Main renderer for managing 3D scenes
@@ -98,7 +97,7 @@ export default {
 
   // Component mounted lifecycle - initializes 3D environment
   mounted() {
-    this.modelConfig = modelData.models.find(model => model.model === this.defaultModel).config;
+    this.modelConfig = modelData.models[0].config;
     // Mark component as client-side mounted
     this.clientMounted = true;
     

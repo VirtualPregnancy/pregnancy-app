@@ -9,7 +9,6 @@
             :alt="title" 
             class="icon-image object-contain transition-all duration-300" 
             @error="onImageError"
-            @load="onImageLoad"
           />
         </div>
       </div>
@@ -65,9 +64,6 @@ export default {
       event.target.style.display = 'none';
     },
     
-    onImageLoad() {
-      // Image loaded successfully, no action needed
-    }
   }
 }
 </script>

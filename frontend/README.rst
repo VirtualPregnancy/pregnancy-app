@@ -1,5 +1,18 @@
-Web App Template Overview
-==========================
+Pregnancy App Frontend
+=====================
+
+A Nuxt.js 2.x application for pregnancy education and visualization, featuring 3D medical models and interactive content.
+
+Technology Stack
+----------------
+
+- **Framework**: Nuxt.js 2.15.8
+- **Frontend**: Vue.js 2.6.14
+- **UI Framework**: Vuetify 2.6.1
+- **Styling**: Sass/SCSS with custom variables
+- **3D Visualization**: Copper3D 2.2.2
+- **Charts**: Chart.js 4.5.0, ECharts 5.4.3, D3.js 7.9.0
+- **Build Tool**: Webpack 4.46.0
 
 Build Setup
 -----------
@@ -19,90 +32,93 @@ Build Setup
    # generate static project
    $ yarn generate
 
+   # build for GitHub Pages deployment
+   $ yarn build:gh-pages
+   $ yarn generate:gh-pages
 
-.. include:: example.md
-   :strat-line: 1
+Project Structure
+-----------------
 
-For detailed explanation on how things work, check out the
-`documentation`_.
-
-Special Directories
--------------------
-
-You can create the following extra directories, some of which have
-special behaviors. Only ``pages`` is required; you can delete them if
-you don’t want to use their functionality.
-
-``assets``
-~~~~~~~~~~
-
-The assets directory contains your uncompiled assets such as Stylus or
-Sass files, images, or fonts.
-
-More information about the usage of this directory in `the
-documentation`_.
-
-``components``
-~~~~~~~~~~~~~~
-
-The components directory contains your Vue.js components. Components
-make up the different parts of your page and can be reused and imported
-into your pages, layouts and even other components.
-
-More information about the usage of this directory in `the
-documentation <https://nuxtjs.org/docs/2.x/directory-structure/components>`__.
-
-``layouts``
+``assets/``
 ~~~~~~~~~~~
 
-Layouts are a great help when you want to change the look and feel of
-your Nuxt app, whether you want to include a sidebar or have distinct
-layouts for mobile and desktop.
+Contains uncompiled assets including:
 
-More information about the usage of this directory in `the
-documentation <https://nuxtjs.org/docs/2.x/directory-structure/layouts>`__.
+- **data/**: JSON configuration files for landing page, models, support content, and topics
+- **images/**: Project images and team photos
+- **sass/**: SCSS stylesheets with global styles, variables, and component-specific styles
 
-``pages``
-~~~~~~~~~
+``components/``
+~~~~~~~~~~~~~~~
 
-This directory contains your application views and routes. Nuxt will
-read all the ``*.vue`` files inside this directory and setup Vue Router
-automatically.
+Vue.js components organized by functionality:
 
-More information about the usage of this directory in `the
-documentation <https://nuxtjs.org/docs/2.x/get-started/routing>`__.
+- **content/**: Content display components for pregnancy education
+- **landing/**: Landing page specific components
+- **model/**: 3D model visualization and control components
+- **navigation/**: Navigation and layout components
+- **topics/**: Topic panel components
 
-``plugins``
-~~~~~~~~~~~
+``layouts/``
+~~~~~~~~~~~~
 
-The plugins directory contains JavaScript plugins that you want to run
-before instantiating the root Vue.js Application. This is the place to
-add Vue plugins and to inject functions or constants. Every time you
-need to use ``Vue.use()``, you should create a file in ``plugins/`` and
-add its path to plugins in ``nuxt.config.js``.
+Nuxt.js layout templates:
 
-More information about the usage of this directory in `the
-documentation <https://nuxtjs.org/docs/2.x/directory-structure/plugins>`__.
+- **default.vue**: Main application layout
+- **empty.vue**: Minimal layout for specific pages
+- **error.vue**: Error page layout
 
-``static``
+``pages/``
 ~~~~~~~~~~
 
-This directory contains your static files. Each file inside this
-directory is mapped to ``/``.
+Application routes and views:
 
-Example: ``/static/robots.txt`` is mapped as ``/robots.txt``.
+- **Dynamic routing**: ``_slug/`` directory with JSON data files
+- **Static pages**: About, landing, and index pages
+- **Content pages**: Pregnancy, complications, clinical, support, and ultrasound topics
 
-More information about the usage of this directory in `the
-documentation <https://nuxtjs.org/docs/2.x/directory-structure/static>`__.
+``plugins/``
+~~~~~~~~~~~~
 
-``store``
-~~~~~~~~~
+JavaScript plugins:
 
-This directory contains your Vuex store files. Creating a file in this
-directory automatically activates Vuex.
+- **copper.js**: Copper3D integration (client-side only)
+- **current-content.js**: Content management utilities
+- **topics.js**: Topic navigation functionality
 
-More information about the usage of this directory in `the
-documentation <https://nuxtjs.org/docs/2.x/directory-structure/store>`__.
+``static/``
+~~~~~~~~~~~
 
-.. _documentation: https://nuxtjs.org
-.. _the documentation: https://nuxtjs.org/docs/2.x/directory-structure/assets
+Static assets served directly:
+
+- **model/**: VTK 3D model files (diabetes.vtk, fgr.vtk, normal.vtk)
+- **waveforms/**: CSV data files for different conditions
+- **img/**: Static images and icons
+- **js/**: External JavaScript libraries (TailwindCSS)
+
+``store/``
+~~~~~~~~~~
+
+Vuex store for state management.
+
+``utils/``
+~~~~~~~~~~
+
+Utility functions including VTK model loading.
+
+Configuration
+-------------
+
+The application supports multiple deployment environments:
+
+- **Local development**: Standard Nuxt.js development server
+- **GitHub Pages**: Static generation with ``/pregnancy-app/`` base path
+- **Production**: Static generation with custom routing
+
+Key features:
+
+- **3D Medical Models**: Interactive VTK model visualization
+- **Responsive Design**: Mobile and desktop optimized layouts
+- **Content Management**: JSON-driven content system
+- **Analytics**: Google Analytics integration
+- **SEO**: Meta tags and structured content

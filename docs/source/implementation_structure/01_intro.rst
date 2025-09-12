@@ -1,177 +1,85 @@
 Implementation
-====================
+=============
 
 .. include:: ../style.rst
 
-Introduction:
---------------
-This document provides a brief overview of the new heart vue.js app. The app will be built using Vue3. Basically, it will cover main components and data files of the application. There might be some other small components (to facilitate reusability) that I may not mention here, as this document is primarily aimed to show the way the data will be saved and the flow of information (called as props in vue.js) among main components. 
+Introduction
+-----------
 
-**Terminologies:**  Main tabs like (Attack, Electricity etc) are referred to as “topics”.  The sub tabs like (Healthy, Minor, Severe etc) are referred as “Subtopics”.
+This document provides a brief overview of the new pregnancy web-app. The app will be built using Vue2. Basically, it will cover main components and data files of the application. There might be some other small components (to facilitate reusability) that I may not mention here, as this document is primarily aimed to show the way the data will be saved and the flow of information (called as props in vue.js) among main components.
 
-**Data Files:** The data will be saved in the following files:
+**Terminologies:** Main tabs like (Pregnancy Journey, Pregnancy Complications etc) are referred to as "topics". The sub tabs like (Changes to your body, Placenta etc) are referred as "Subtopics".
 
-- :red:`Topics.json`, containing information related to topics and their subtopics
+See the image below for more details:
 
-    .. code-block:: bash
-        :linenos:
+.. image:: images/01_topics.png
 
-        "failure":{
-            "title":"Failure",
-            "heading":"Heart Failure",
-            "icon":"mdi-heart-off",
-            "subTopics":{
-                "healthy":{
-                    "title":"Healthy",
-                    "heading":"Chronic Problems",     
-                    "icon":"mdi-account-heart",
-                    "dataFile":"failure-healthy",
-                    "category":"success",
-                    "model":{"name":"NoInfarct"}
-                },
-                "compensated":{
-                    "title":"Compensated",
-                    "heading":"Compensated",
-                    "icon":"mdi-heart-cog",
-                    "dataFile":"failure-compensated",
-                    "category":"warning",
-                    "model":{"name":"NoInfarct"}
-                },
-                "decompensated":{
-                    "title":"Decompensated",
-                    "heading":"Decompensated",
-                    "icon":"mdi-heart-remove",
-                    "dataFile":"failure-decompensated",
-                    "category":"error",
-                    "model":{"name":"NoInfarct"}
-                }
-            }
+Data Files
+----------
+
+The data will be saved in the following files:
+
+**Topics.json**, containing information related to topics and their subtopics:
+
+.. code-block:: json
+
+    "pregnancy": {
+        "id": "1",
+        "title": "Pregnancy Journey",
+        "component": "none",
+        "heading": "What is Happening in Pregnancy?",
+        "content": "During pregnancy your body undergoes a remarkable transformation to accommodate the growth of new life. Here, you can find information on what is happening to your body, how the fetus grows and is nourished by the placenta, and the different ways your midwife or doctor may check on your baby’s health during pregnancy.",
+        "icon": "/img/landing/pregnancy.svg",
+        "subTopics": {
+        "changes": {
+            "id": "1.a",
+            "title": "Your Body",
+            "component": "none",
+            "heading": "Changes To Your Body",
+            "icon": "mdi-radar"
+        },
+        "placenta": {
+            "id": "1.b",
+            "title": "Placenta",
+            "component": "none",
+            "heading": "Roles of the Placenta",
+            "icon": "mdi-bowl-outline"
         }
+    }
 
-    
-    - The topic name and the subTopic name will consist of a route, under this case here, there would be three routes: :red:`failure-healthy`, :red:`failure-compensated`, :red:`failure-decompensated`.
-    - heading: the heading for this topic and will display on frontend left panel.
-    - icon: the nav bar icon, you can find more on :red:`https://pictogrammers.com/library/mdi/`
-    - dataFile: the markdown filename related to this topic, it will be used in :red:`./frontend/components/topics/Panel.vue` line 63.
-    - category: the color for this topic. You can define your own color on :red:`nuxt.config.js` file Vuetify config line 115.
-    - model: model name.
-    - You also can customise the key:value for yourself, but after this you need to setup it under :red:`./frontend/plugins/current-content.js`, then you can use it in vue files via :red:`this.$key()`, e.g. :red:`this.$category()`.
+**Data Structure Explanation:**
 
-- To store information for each subtopic, we can have multiple options. The two proposed ways include
-    - :blue:`Panels.xml:` contents of each subtopic will be saved via xml tags. The application will read these tags and display contents accordingly. The format in which various elements are displayed will be controlled by code so, full potential of CSS styling can be used to design or to make things responsive. This means less control exercised by users, if they want to change things like design or want to add a new type of element that is not defined in existing xml etc. But still, it can be extended easily by a developer.
+- **Topic name**: Consists of a route, under this case here, there would be one main route: :red:`pregnancy`
+- **Content**: The content for this topic and will display on frontend left panel
+- **SubTopics**: The subtopics for this topic, also consist of a route, display on the left panel as menu item
+- **Title**: For topic will display on main navigation. For sub-topics, this is the main item title
+- **Heading**: The heading for this main-topic and will display on frontend left panel
+- **Icon**: The nav bar icon, you can find more on :red:`https://pictogrammers.com/library/mdi/`
+- **Category**: The color for this topic. You can define your own color on :red:`nuxt.config.js` file Vuetify config
+- **Component**: The component for this topic, if want the left side show a component, set the name of the component here, for example, if the topic needs to include pregnancy conditions, set the component to :red:`ConditionSelector` as shown in the image below:
 
-    .. code-block:: bash
-        :linenos:
-        
-        <?xml version="1.0" encoding="UTF-8"?>
-        <panels>
-            <heart-main>
-                <section type="text">
-                    The heart pumps blood to itself through blood vessels
-                    called the conronary arteries.
-                </section>
-                <inline>
-                    <section type="image" name="conronary.png">
-                    <section type="video" code="blocked">
-                </inline>
-                <section type="text">
-                    Good lifestyle choices help to keep the conronary arteries
-                    healthy and prevent heart attacks.
-                </section>
-                <inline>
-                    <section type="video" code="exercise">
-                    <section type="video" code="diet">
-                    <section type="video" code="smoking">
-                </inline>
-            </heart-main>
-        </panels>
+.. image:: images/01_topics_components.png
 
-    - :blue:`Markdown file:` Saving contents of each subtopic in an individual markdown file. The application will read the contents from the file and display in the allocated slot. This way, the user can have complete control of content. But the application may not be able to utilize the full potential of CSS in displaying contents.
+- **Model**: Model name
+- **Customization**: You also can customise the key:value for yourself, but after this you need to setup it under :red:`./frontend/plugins/current-content.js`, then you can use it in vue files via :red:`this.$key()`, e.g. :red:`this.$category()`
 
-    .. code-block::
-
-        This is an interactive model of the heart's two main pumping chambers:
-        the ventricles. Spin, zoom, drag, and open the heart using the gestures
-        shown at the bottom. Vary the heart rate using the slider on the right. 
-
-        ![schematic](img/schematic.png) 
-        <a href="#video-div" data-play="video">
-        <img id="healthy" src="img/heart-video.png" class="video-icon"/>
-        </a>
-
-        ---
-
-        The heart pumps blood around the body to provide all the organ systems
-        with oxygen and nutrients.
-
-        The ECG trace (top right) represents the electrical waves in the heart
-        that stimulate contraction and generate pressure (middle right) to pump
-        blood.
-        - - -
-        Click through the tabs below to learn about various heart diseases.
-
-- :red:`Videos.json`, containing information relevant to each video
-
-    .. code-block:: bash
-        :linenos:
-
-        {
-            "healthy":{
-                "heading":"View of a Healthy Heart", 
-                "link":"videos/1_healthy_heart.mp4"    
-            },
-
-            "blocked":{
-                "heading":"View of a Healthy Heart", 
-                "link":"videos/2_blocked_arteries.mp4"
-            },
-            
-            "exercise":{
-                "heading":"Lifestyle Factors: Exercise",
-                "link":"videos/5_exercise_v2.mp4"
-            },
-
-            "diet":{
-                "heading":"Lifestyle Factors: Diet",
-                "link":"videos/6_diet_v2.mp4"
-            },
-
-            "smoking":{
-                "heading":"Lifestyle Factors: Smoking",
-                "link":"videos/7_smoking_v2.mp4"
-            },
-
-            "statin":{
-                "heading":"How your static medication will help?",
-                "link":"videos/3_Statins.mp4"
-            },
-
-            "aspirin":{
-                "heading":"How your aspirin medication will help?",
-                "link":"videos/4_aspirin.mp4"
-            }
-        }
-- There might be other data files for team/people as in “about” information (needs further discussion)
+This data is read by the :red:`frontend/plugins/topics.js` file, if you want to add new item, you need to add the reading process in this file.
 
 
-The main app will be split into left and right pane (as it is currently) 
---------------------------------------------------------------------------
+Application Structure
+--------------------
 
-The **left pane** includes:
+The main app will be split into left and right pane (as it is currently).
 
--  Main Heading
+**Left Pane** includes:
 
--  Subheading
+- Go home button
+- Main Heading
+- Content
+- Panel (component)
+- SubMenu (the tabs and subtabs populated based on topics.json)
 
--  Panel (component), displaying contents of clicked subtopic from
-   (either markdown or xml, as discussed above in data section)
+**Right Pane** will switch between two type of pages i.e. :red:`content` and :red:`Model`.
 
--  Menu (the tabs and subtabs populated based on topics.json)
+**Bottom Pane** will include the main navigation.
 
-The **Right pane** will switch between two components i.e. :red:`Video Player` and :red:`Model`.
-
-Check the diagram below to understand the change events of these components.
-
-:red:`Note:` Since the work on the Model component will be done at the end when the rest of the app is completed, the props for it may not be final. Right now, when I refer to the Model component, it includes everything i.e. the heart model, the ECG, pressure and heart rate modifier.
-
-.. image:: images/01_intro_5.jpg

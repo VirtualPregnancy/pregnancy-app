@@ -30,9 +30,6 @@
         </div>
 
       </div>
-
-      <br />
-      
       <!-- Dynamic Color Bar -->
       <div class="control-section" v-if="coloredModelsBy !== 'default'">
         <h4 class="control-title" style="color: white;">{{this.coloredModelsBy.slice(0, 1).toUpperCase() + this.coloredModelsBy.slice(1)}} Scale</h4>
@@ -211,13 +208,6 @@ export default {
   }
 }
 
-.control-section {
-  margin-bottom: 20px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
 
 .control-title {
   color: #6C90B9;

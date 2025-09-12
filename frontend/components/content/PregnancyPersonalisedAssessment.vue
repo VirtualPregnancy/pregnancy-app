@@ -3,7 +3,7 @@
     <div class="input-section">
       <div class="input-group">
         <div>
-        <label for="gestationalAge">Gestational Age (weeks):</label>
+        <label for="gestationalAge">Gestational Age (11-41 Weeks):</label>
         <input 
           id="gestationalAge"
           v-model.number="userInput.week" 
@@ -11,7 +11,7 @@
           min="11" 
           max="41" 
           step="0.1"
-          placeholder="Enter weeks (11-41)"
+          placeholder="Enter Weeks"
         />
         </div>
         <div>
@@ -29,7 +29,7 @@
       </div>
       <div>
       <button @click="addUserPoint" class="check-btn">
-        <v-icon left >mdi-check</v-icon>
+        <v-icon left color="white" >mdi-check</v-icon>
         Check
       </button>
     </div>

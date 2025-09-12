@@ -1,0 +1,72 @@
+{
+  "regions": [
+    "Northland",
+    "Auckland",
+    "Waikato",
+    "Bay of Plenty",
+    "Gisborne",
+    "Hawke's Bay",
+    "Taranaki",
+    "Manawatū-Whanganui",
+    "Wellington",
+    "Tasman",
+    "Nelson",
+    "Marlborough",
+    "West Coast",
+    "Canterbury",
+    "Otago",
+    "Southland"
+  ],
+  "regionalServices": {
+    "Auckland": [
+      {
+        "name": "Find an independent midwife in Auckland",
+        "link": "https://www.findyourmidwife.co.nz/"
+      },
+      {
+        "name": "Maternity services — Auckland",
+        "link": "https://info.health.nz/locations/auckland/womens-health/maternity-services"
+      },
+      {
+        "name": "Information about hospitals and health centres in Auckland",
+        "link": "https://info.health.nz/locations/auckland"
+      },
+      {
+        "name": "Day assessment unit — Auckland ",
+        "link": "https://info.health.nz/locations/auckland/womens-health/day-assessment-unit"
+      }
+    ],
+    "Bay of Plenty": [
+      {
+        "name": "Tauranga Hospital",
+        "link": "https://info.health.nz/locations/bay-of-plenty/tauranga-hospital"
+      },
+      {
+        "name": "Whakatāne Hospital",
+        "link": "https://info.health.nz/locations/bay-of-plenty/whakatane-hospital"
+      },
+      {
+        "name": "Maternity services — Bay of Plenty",
+        "link": "https://info.health.nz/locations/bay-of-plenty/maternity-bay-of-plenty"
+      }
+    ],
+    "Canterbury": [
+      {
+        "name": "Christchurch Hospital",
+        "link": "https://info.health.nz/locations/canterbury/christchurch-hospital"
+      },
+      {
+        "name": "Ashburton Hospital",
+        "link": "https://info.health.nz/locations/canterbury/ashburton-hospital"
+      },
+      {
+        "name": "Maternity and newborn — Canterbury",
+        "link": "https://info.health.nz/locations/canterbury/maternity-and-newborn-canterbury"
+      },
+      {
+        "name": "Maternity Services in Canterbury",
+        "link": "https://www.healthpoint.co.nz/maternity/canterbury/"
+      }
+    ]
+  }
+}

@@ -1,7 +1,8 @@
 Model Configuration
 ===================
 
-The model configuration is handled in two main files: `VTKLoader.js` for rendering logic and `Model.vue` for model types.
+The overall model configuration is handled in two main files: `VTKLoader.js` for rendering logic and `Model.vue` for model types.
+For specific configuration, please refer to the :ref:`implementation_structure/02_assets:Model Configuration` document.
 
 Color Mapping
 -------------
@@ -10,15 +11,12 @@ VTKLoader supports three color mapping types:
 
 **Pressure-based Mapping**
 - Green (0.23, 0.70, 0.27) → Orange (0.98, 0.93, 0.00) → Dark Red (0.56, 0.12, 0.00)
-- Uses non-linear scaling with exponent 0.4 for enhanced sensitivity
 
 **Flux-based Mapping** 
 - Blue (reverse flow) → Cyan → Green → Yellow → Red (high flow)
-- Logarithmic scaling for better low-value sensitivity
 
 **Default Mapping**
 - Arterial vessels: Red (0xff2222)
-- Venous vessels: Blue (0x2222ff)
 
 .. code-block:: javascript
 
@@ -40,42 +38,8 @@ VTKLoader supports three color mapping types:
      }
    };
 
-Model Types
------------
+Waveform
+--------
+The waveform is under the component ``frontend/components/model/Waveform.vue``, which used `eCharts <https://echarts.apache.org/en/index.html>`_ to display the data. If you want to config the waveform, like adding a tooltip or change basic color, please refer to the echarts documentation.
 
-Three model types are configured in `Model.vue`:
-
-.. code-block:: javascript
-
-   modelConfig: {
-     arterial: {
-       path: '/model/healthy_gen_np3ns1_flux_250_arterial_tree.vtk',
-       displayName: 'Placental Arterial Tree',
-       color: 0xff2222,
-       opacity: 1.0,
-       modelSize: 420,
-       useCylinderGeometry: true,
-       cylinderSegments: 10
-     },
-     venous: {
-       path: '/model/healthy_gen_np3ns1_flux_250_venous_tree.vtk', 
-       displayName: 'Placental Venous Tree',
-       color: 0x2222ff,
-       opacity: 1.0,
-       modelSize: 420,
-       useCylinderGeometry: true,
-       cylinderSegments: 10
-     },
-     combined: {
-       displayName: 'Placental Vascular Network',
-       models: ['arterial', 'venous']
-     }
-   };
-
-Rendering Configuration
----------------------
-
-- **Geometry Type**: Cylinder geometry by default (`useCylinderGeometry: true`)
-- **Material**: MeshPhongMaterial with lighting support
-- **Performance**: Level of Detail (LoD) optimization enabled
-- **Lighting**: Multi-point lighting system with ambient, main, fill, and rim lights 
+For title/label/line color ect, look into the document :ref:`implementation_structure/02_assets:Model Configuration`.

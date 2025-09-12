@@ -76,23 +76,51 @@
         </template>
       </div>
 
-      <!-- Resources -->
-      <div class="grid md:grid-cols-2 gap-6">
-        <v-card 
-          v-for="card in cards" 
-          :key="card.id" 
-          class="resource-card elevation-2"
-          :style="{ backgroundColor: card.backgroundColor, color: card.textColor }"
-        >
-          <v-card-title class="resource-card-title">
-            <v-icon left :color="card.iconColor" class="resource-icon">{{ card.icon }}</v-icon>
-            <span class="resource-title">{{ card.title }}</span>
-          </v-card-title>
-          <v-card-text :style="{ color: card.textColor }" class="resource-content">
-            <div v-html="card.content"></div>
-          </v-card-text>
-        </v-card>
+      <!-- Additional Resources Section -->
+      <div v-if="additionalResources && additionalResources.length > 0" class="mb-8">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center">
+          Additional Resources
+        </h2>
+        <div :class="additionalResources.length > 1 ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'grid grid-cols-1 gap-6'">
+          <div 
+            v-for="resource in additionalResources" 
+            :key="resource.title"
+            class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden border-l-4 border-transparent hover:border-blue-500"
+          >
+            <div class="p-6">
+              <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                  <v-icon 
+                    :color="resource.iconColor" 
+                    size="32"
+                    class="resource-icon"
+                  >
+                    {{ resource.icon }}
+                  </v-icon>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
+                    {{ resource.title }}
+                  </h3>
+                  <p class="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3" v-html="resource.description">
+                  </p>
+                  <a 
+                    v-if="resource.link"
+                    :href="resource.link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center text-blue-600 hover:text-blue-800 font-medium text-sm transition-colors duration-200"
+                  >
+                    Learn More
+                    <v-icon size="16" class="ml-1">mdi-arrow-top-right</v-icon>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="logo">
         <Logo />
       </div>
@@ -114,13 +142,13 @@ export default {
     },
     pageDescription: {
       type: String,
-      default: 'Page description'
+      default: ''
     },
     contentSections: {
       type: Array,
       default: () => []
     },
-    cards: {
+    additionalResources: {
       type: Array,
       default: () => []
     },
@@ -268,16 +296,6 @@ export default {
   opacity: 1;
 }
 
-/* Resource Cards */
-.resource-card {
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.resource-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
 
 .logo {
   width: 100%;
@@ -337,5 +355,31 @@ export default {
 
 .content-text ::v-deep em {
   font-style: italic;
+}
+
+/* Additional Resources Styles */
+.resource-icon {
+  transition: transform 0.3s ease;
+}
+
+.resource-card:hover .resource-icon {
+  transform: scale(1.1);
+}
+
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style> 

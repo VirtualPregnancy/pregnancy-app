@@ -16,10 +16,7 @@
           >
             <left-pane 
               :panel-height="panelHeight"
-              @trigger-model-visualization="handleModelVisualization"
-              @ultrasound-tool-ready="handleUltrasoundToolReady"
               @conditions-updated="handleConditionsUpdate"
-              @trigger-condition-visualization="handleConditionVisualization"
             />
           </v-card>
         </div>
@@ -53,8 +50,7 @@ export default {
     return {
       multiplier: 1,
       panelHeight: 0,
-      isVideo: true,
-      ultrasoundToolComponent: null, // Reference to ultrasound tool component
+
     };
   },
 
@@ -98,11 +94,6 @@ export default {
   },
 
   created() {
-    console.log(
-      "%cPregnancy App %cBeta:v0.0.1",
-      "padding: 3px;color:white; background:#023047",
-      "padding: 3px;color:white; background:#219EBC"
-    );
     this.$nuxt.$on("menu-height-changed", (multiplier) => {
       this.multiplier = multiplier;
     });
@@ -110,26 +101,12 @@ export default {
 
   methods: {
     
-    // Handle model visualization requests
-    handleModelVisualization(data) {
-      console.log('[DefaultLayout] Model visualization requested:', data);
-      
-      // Emit global event for RightPane model component to handle
-      this.$nuxt.$emit('trigger-model-visualization', data);
-    },
+
     
-    // Handle ultrasound tool ready event
-    handleUltrasoundToolReady(toolComponent) {
-      console.log('[DefaultLayout] Ultrasound tool ready');
-      this.ultrasoundToolComponent = toolComponent;
-      
-      // Emit global event to notify other components that the tool is ready
-      this.$nuxt.$emit('ultrasound-tool-ready', toolComponent);
-    },
+
     
     // Handle pregnancy condition updates from the tool
     handleConditionsUpdate(data) {
-      console.log('[DefaultLayout] Pregnancy conditions updated:', data);
       
       // Emit global event for RightPane and other components to listen
       this.$nuxt.$emit('conditions-updated', data);
@@ -138,13 +115,7 @@ export default {
       this.lastConditionData = data;
     },
     
-    // Handle condition visualization requests
-    handleConditionVisualization(data) {
-      console.log('[DefaultLayout] Condition visualization requested:', data);
-      
-      // Emit global event for RightPane model component to handle
-      this.$nuxt.$emit('trigger-condition-visualization', data);
-    },
+
   },
 
   beforeDestroy() {

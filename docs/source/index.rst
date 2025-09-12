@@ -11,11 +11,11 @@ Pregnancy App's documentation
    :caption: Contents:
 
    introduction/index
+   FAQs/index
    pregnancy_app/index
    technology/index
    implementation_structure/index
    Build&Deploy/index
    important_note/index
-   FAQs/index
    issues/index
    contributors
