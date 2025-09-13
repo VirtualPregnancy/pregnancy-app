@@ -39,7 +39,7 @@
       "Description": "Fetal Growth Restriction",
       "color": "info",
       "config": {
-        "path": "/model/fgr.vtk",
+        "path": "/model/fgr_tree.vtk",
         "displayName": "Fetal Growth Restriction",
         "color": 16716066,
         "opacity": 1,
@@ -73,7 +73,7 @@
       "Description": "Gestational Diabetes Melitus",
       "color": "error",
       "config": {
-        "path": "/model/diabetes.vtk",
+        "path": "/model/diabetes_tree.vtk",
         "displayName": "Gestational Diabetes Melitus",
         "color": 16716066,
         "opacity": 1.0,

@@ -50,14 +50,15 @@
             <div class="color-segment flux-mid-segment"></div>
             <div class="color-segment flux-high-segment"></div>
             <div class="color-segment flux-max-segment"></div>
+            <div class="color-segment flux-very-high-segment"></div>
           </div>
           
           <div class="color-labels">
             <span v-if="coloredModelsBy === 'pressure'" class="label-left">Low</span>
             <span v-if="coloredModelsBy === 'pressure'" class="label-right">High</span>
             
-            <span v-if="coloredModelsBy === 'flux'" class="label-left">Low</span>
-            <span v-if="coloredModelsBy === 'flux'" class="label-right">High</span>
+            <span v-if="coloredModelsBy === 'flux'" class="label-left">0</span>
+            <span v-if="coloredModelsBy === 'flux'" class="label-right">>10</span>
           </div>
         </div>
       </div>
@@ -427,25 +428,29 @@ export default {
   background: rgb(140, 41, 38); 
 }
 
-// Blood flow Color Segments (Blue → Cyan → Green → Yellow → Red) - solid colors
+// Blood flow Color Segments - Updated to match vtkLoader.js FLUX_COLORS
 .flux-reverse-segment {
-  background: rgb(0, 0, 204); // Blue
+  background: rgb(0, 51, 204); // ZERO: Blue (0)
 }
 
 .flux-low-segment {
-  background: rgb(0, 204, 204); // Cyan
+  background: rgb(51, 153, 255); // LOW: Light Blue (0-2.5)
 }
 
 .flux-mid-segment {
-  background: rgb(0, 204, 0); // Green
+  background: rgb(0, 255, 128); // MEDIUM_LOW: Green (2.5-5)
 }
 
 .flux-high-segment {
-  background: rgb(204, 204, 0); // Yellow
+  background: rgb(255, 255, 0); // MEDIUM_HIGH: Yellow (5-7.5)
 }
 
 .flux-max-segment {
-  background: rgb(204, 0, 0); // Red
+  background: rgb(255, 128, 0); // HIGH: Orange (7.5-10)
+}
+
+.flux-very-high-segment {
+  background: rgb(255, 0, 0); // VERY_HIGH: Red (>10)
 }
 
 // No flow/pressure Color Legend

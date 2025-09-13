@@ -16,6 +16,21 @@ const COLOR_CONSTANTS = {
     HIGH: { r: 242/255, g: 183/255, b: 68/255 },     // Orange
     MAX: { r: 170/255, g: 68/255, b: 47/255 },       // Red-Orange
     ULTRA: { r: 140/255, g: 41/255, b: 38/255 }      // Dark Red
+  },
+  // Flux color mapping - linear scale 0-10, >10 as high flow
+  FLUX_COLORS: {
+    ZERO: { r: 0.0, g: 0.2, b: 0.8 },        // Blue (0)
+    LOW: { r: 0.2, g: 0.6, b: 1.0 },         // Light Blue (0-2.5)
+    MEDIUM_LOW: { r: 0.0, g: 1.0, b: 0.5 },  // Green (2.5-5)
+    MEDIUM_HIGH: { r: 1.0, g: 1.0, b: 0.0 }, // Yellow (5-7.5)
+    HIGH: { r: 1.0, g: 0.5, b: 0.0 },        // Orange (7.5-10)
+    VERY_HIGH: { r: 1.0, g: 0.0, b: 0.0 }    // Red (>10)
+  },
+  FLUX_THRESHOLDS: {
+    HIGH_FLOW: 10.0,
+    MEDIUM_HIGH: 7.5,
+    MEDIUM: 5.0,
+    MEDIUM_LOW: 2.5
   }
 };
 
@@ -464,7 +479,8 @@ export default class VTKLoader {
   }
 
   /**
-   * Map flux value to color using flow-based color scheme
+   * Map flux value to color using linear flow-based color scheme
+   * >10 as high flow, 0-10 divided evenly for other colors
    */
   fluxToColor(flux, minFlux, maxFlux) {
     const color = new this.THREE.Color();
@@ -475,37 +491,49 @@ export default class VTKLoader {
       return color;
     }
     
-    // Calculate dynamic range and apply logarithmic scaling
-    const absMinFlux = Math.abs(minFlux);
-    const absMaxFlux = Math.abs(maxFlux);
-    const maxAbsValue = Math.max(absMinFlux, absMaxFlux);
+    // Use absolute value for flux mapping
+    const absFlux = Math.abs(flux);
+    const { FLUX_COLORS, FLUX_THRESHOLDS } = COLOR_CONSTANTS;
     
-    const offset = maxAbsValue * 0.01;
-    const logFlux = Math.sign(flux) * Math.log(Math.abs(flux) + offset);
-    const logMin = Math.sign(minFlux) * Math.log(Math.abs(minFlux) + offset);
-    const logMax = Math.sign(maxFlux) * Math.log(Math.abs(maxFlux) + offset);
-    const logRange = logMax - logMin;
-    
-    let normalized;
-    if (logRange !== 0) {
-      normalized = (logFlux - logMin) / logRange;
+    // Determine color based on flux value ranges
+    if (absFlux <= 0) {
+      // Zero flow - blue
+      color.setRGB(FLUX_COLORS.ZERO.r, FLUX_COLORS.ZERO.g, FLUX_COLORS.ZERO.b);
+    } else if (absFlux <= FLUX_THRESHOLDS.MEDIUM_LOW) {
+      // Low flow (0-2.5) - light blue
+      const t = absFlux / FLUX_THRESHOLDS.MEDIUM_LOW;
+      color.setRGB(
+        FLUX_COLORS.ZERO.r + (FLUX_COLORS.LOW.r - FLUX_COLORS.ZERO.r) * t,
+        FLUX_COLORS.ZERO.g + (FLUX_COLORS.LOW.g - FLUX_COLORS.ZERO.g) * t,
+        FLUX_COLORS.ZERO.b + (FLUX_COLORS.LOW.b - FLUX_COLORS.ZERO.b) * t
+      );
+    } else if (absFlux <= FLUX_THRESHOLDS.MEDIUM) {
+      // Medium-low flow (2.5-5) - green
+      const t = (absFlux - FLUX_THRESHOLDS.MEDIUM_LOW) / (FLUX_THRESHOLDS.MEDIUM - FLUX_THRESHOLDS.MEDIUM_LOW);
+      color.setRGB(
+        FLUX_COLORS.LOW.r + (FLUX_COLORS.MEDIUM_LOW.r - FLUX_COLORS.LOW.r) * t,
+        FLUX_COLORS.LOW.g + (FLUX_COLORS.MEDIUM_LOW.g - FLUX_COLORS.LOW.g) * t,
+        FLUX_COLORS.LOW.b + (FLUX_COLORS.MEDIUM_LOW.b - FLUX_COLORS.LOW.b) * t
+      );
+    } else if (absFlux <= FLUX_THRESHOLDS.MEDIUM_HIGH) {
+      // Medium-high flow (5-7.5) - yellow
+      const t = (absFlux - FLUX_THRESHOLDS.MEDIUM) / (FLUX_THRESHOLDS.MEDIUM_HIGH - FLUX_THRESHOLDS.MEDIUM);
+      color.setRGB(
+        FLUX_COLORS.MEDIUM_LOW.r + (FLUX_COLORS.MEDIUM_HIGH.r - FLUX_COLORS.MEDIUM_LOW.r) * t,
+        FLUX_COLORS.MEDIUM_LOW.g + (FLUX_COLORS.MEDIUM_HIGH.g - FLUX_COLORS.MEDIUM_LOW.g) * t,
+        FLUX_COLORS.MEDIUM_LOW.b + (FLUX_COLORS.MEDIUM_HIGH.b - FLUX_COLORS.MEDIUM_LOW.b) * t
+      );
+    } else if (absFlux <= FLUX_THRESHOLDS.HIGH_FLOW) {
+      // High flow (7.5-10) - orange
+      const t = (absFlux - FLUX_THRESHOLDS.MEDIUM_HIGH) / (FLUX_THRESHOLDS.HIGH_FLOW - FLUX_THRESHOLDS.MEDIUM_HIGH);
+      color.setRGB(
+        FLUX_COLORS.MEDIUM_HIGH.r + (FLUX_COLORS.HIGH.r - FLUX_COLORS.MEDIUM_HIGH.r) * t,
+        FLUX_COLORS.MEDIUM_HIGH.g + (FLUX_COLORS.HIGH.g - FLUX_COLORS.MEDIUM_HIGH.g) * t,
+        FLUX_COLORS.MEDIUM_HIGH.b + (FLUX_COLORS.HIGH.b - FLUX_COLORS.MEDIUM_HIGH.b) * t
+      );
     } else {
-      normalized = 0.5;
-    }
-    
-    const sensitivityFactor = 0.3;
-    const enhancedNormalized = Math.pow(normalized, sensitivityFactor);
-    const t = enhancedNormalized * 2 - 1;
-    
-    // Simplified color mapping
-    if (t < -0.5) {
-      color.setRGB(0.0, 0.2, 0.8); // Blue
-    } else if (t < 0) {
-      color.setRGB(0.2, 0.6, 1.0); // Light blue
-    } else if (t < 0.5) {
-      color.setRGB(0.0, 1.0, 0.5); // Green
-    } else {
-      color.setRGB(1.0, 0.5, 0.0); // Orange to red
+      // Very high flow (>10) - red
+      color.setRGB(FLUX_COLORS.VERY_HIGH.r, FLUX_COLORS.VERY_HIGH.g, FLUX_COLORS.VERY_HIGH.b);
     }
     
     return color;
