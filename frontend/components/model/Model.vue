@@ -440,6 +440,8 @@ export default {
       }
 
       try {
+        this.handleModelSizeChange(this.modelConfig.modelSize);
+        this.$emit('model-size-changed', this.modelConfig.modelSize);
         // Reset camera to default view
         const viewPath = this.getAssetPath('modelView/noInfarct_view.json');
         this.scene.loadViewUrl(viewPath);

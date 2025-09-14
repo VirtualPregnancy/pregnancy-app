@@ -44,7 +44,7 @@
         </div>
         <div class="waveform-content">
           <Waveform :waveform="waveformData" />
-          <div class="mt-15 text-center mb-5">
+          <div class="mt-20 text-center mb-5">
             {{ waveformData.description }}
           </div>
         </div>
