@@ -2,37 +2,72 @@
   <div class="model-control">
     <!-- Collapse Toggle Button -->
     <div class="collapse-header" @click="toggleCollapse">
-      <h3 class="panel-title ">
+      <h3 class="panel-title">
         <v-icon left color="white">mdi-cog-outline</v-icon>
         Model Controls
       </h3>
       <v-btn icon small class="collapse-btn" color="white">
-        <v-icon>{{ isCollapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' }}</v-icon>
+        <v-icon>{{
+          isCollapsed ? "mdi-chevron-down" : "mdi-chevron-up"
+        }}</v-icon>
       </v-btn>
     </div>
 
-    <!-- Collapsible Content -->
+    <!-- Collapsible Content --> 
     <div v-show="!isCollapsed" class="panel-content">
+      <!-- Scale Bar -->
+      <div class="scale-bar">
+        <div class="control-title">
+          Adjust the size of the model
+        </div>
+        <v-slider
+          v-model="modelSize"
+          :min="100"
+          :max="800"
+          :step="10"
+          track-color="rgba(255,255,255,0.3)"
+          thumb-color="green"
+          @input="$emit('model-size-changed', modelSize)"
+        >
+        </v-slider>
+      </div>
+  
+
       <!-- Main Model Controls -->
       <div class="control-section">
         <div class="control-group">
-          <div class="colored-models" style="color: white;">
-            Colored Models by: 
-            <v-radio-group v-model="coloredModelsBy" @change="$emit('colored-models-by-changed', coloredModelsBy)" :disabled="isLoading || !renderingComplete" class="custom-radio-group">
+          <div class="colored-models" style="color: white">
+            Colored Models by:
+            <v-radio-group
+              v-model="coloredModelsBy"
+              @change="$emit('colored-models-by-changed', coloredModelsBy)"
+              :disabled="isLoading || !renderingComplete"
+              class="custom-radio-group"
+            >
               <v-radio label="Blood pressure" value="pressure"></v-radio>
               <v-radio label="Blood flow" value="flux"></v-radio>
               <v-radio label="No flow/pressure" value="default"></v-radio>
             </v-radio-group>
-            <div v-if="!renderingComplete && !isLoading" class="rendering-status">
-              <small style="color: white; font-style: italic;">Waiting for model to fully render...</small>
+            <div
+              v-if="!renderingComplete && !isLoading"
+              class="rendering-status"
+            >
+              <small style="color: white; font-style: italic"
+                >Waiting for model to fully render...</small
+              >
             </div>
           </div>
         </div>
-
       </div>
       <!-- Dynamic Color Bar -->
       <div class="control-section" v-if="coloredModelsBy !== 'default'">
-        <h4 class="control-title" style="color: white;">{{this.coloredModelsBy.slice(0, 1).toUpperCase() + this.coloredModelsBy.slice(1)}} Scale</h4>
+        <h4 class="control-title" style="color: white">
+          {{
+            this.coloredModelsBy.slice(0, 1).toUpperCase() +
+            this.coloredModelsBy.slice(1)
+          }}
+          Scale
+        </h4>
         <div class="color-bar-container">
           <!-- Pressure Color Bar -->
           <div v-if="coloredModelsBy === 'pressure'" class="color-bar">
@@ -42,7 +77,7 @@
             <div class="color-segment pressure-max-segment"></div>
             <div class="color-segment pressure-ultra-segment"></div>
           </div>
-          
+
           <!-- Flux Color Bar -->
           <div v-else-if="coloredModelsBy === 'flux'" class="color-bar">
             <div class="color-segment flux-reverse-segment"></div>
@@ -50,15 +85,21 @@
             <div class="color-segment flux-mid-segment"></div>
             <div class="color-segment flux-high-segment"></div>
             <div class="color-segment flux-max-segment"></div>
-            <div class="color-segment flux-very-high-segment"></div>
+            <div class="color-segment flux-red-high-segment"></div>
           </div>
-          
+
           <div class="color-labels">
-            <span v-if="coloredModelsBy === 'pressure'" class="label-left">Low</span>
-            <span v-if="coloredModelsBy === 'pressure'" class="label-right">High</span>
-            
+            <span v-if="coloredModelsBy === 'pressure'" class="label-left"
+              >Low</span
+            >
+            <span v-if="coloredModelsBy === 'pressure'" class="label-right"
+              >High</span
+            >
+
             <span v-if="coloredModelsBy === 'flux'" class="label-left">0</span>
-            <span v-if="coloredModelsBy === 'flux'" class="label-right">>10</span>
+            <span v-if="coloredModelsBy === 'flux'" class="label-right"
+              >>10</span
+            >
           </div>
         </div>
       </div>
@@ -77,34 +118,41 @@
       </div>
 
       <br />
-
-      
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   props: {
-    
-    
     isLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     loadingComplete: {
       type: Boolean,
-      default: false
+      default: false,
     },
     renderingComplete: {
       type: Boolean,
-      default: false
+      default: false,
     },
     waveform: { type: Array, default: () => [] }, // [{t, value}]
+    currentModelSize: {
+      type: Number,
+      default: 200,
+    },
   },
   mounted() {
-    this.coloredModelsBy = 'pressure';
+    this.coloredModelsBy = "pressure";
+    // Initialize modelSize with prop value
+    this.modelSize = this.currentModelSize;
+  },
+
+  watch: {
+    currentModelSize(newSize) {
+      this.modelSize = newSize;
+    },
   },
 
   data() {
@@ -112,13 +160,10 @@ export default {
       isCollapsed: true,
       chart: null,
       playheadTimer: null,
-      coloredModelsBy: 'pressure'
+      coloredModelsBy: "pressure",
+      modelSize: 200,
     };
   },
-
- 
- 
-
 
   methods: {
     // Toggle collapse state of the control panel
@@ -126,36 +171,26 @@ export default {
       this.isCollapsed = !this.isCollapsed;
     },
 
-
-
-
     getPerformanceLabel(mode) {
       const labels = {
-        'high': 'High Performance',
-        'medium': 'Medium Performance',
-        'low': 'Low Performance',
-        'auto': 'Auto Adjust'
+        high: "High Performance",
+        medium: "Medium Performance",
+        low: "Low Performance",
+        auto: "Auto Adjust",
       };
-      return labels[mode] || 'Unknown';
-    }
+      return labels[mode] || "Unknown";
+    },
   },
-
-  // Events emitted to parent component:
-  // - 'reload-arterial': load arterial tree
-  // - 'load-venous': load venous tree
-  // - 'load-combined': load combined arterial and venous trees
-
 
   beforeDestroy() {
     if (this.playheadTimer) cancelAnimationFrame(this.playheadTimer);
     if (this.chart) this.chart.dispose();
     // Component cleanup if needed
-  }
-}
+  },
+};
 </script>
 
 <style scoped lang="scss">
-
 .model-control {
   position: relative;
   width: 100%;
@@ -209,17 +244,13 @@ export default {
   }
 }
 
-
 .control-title {
-  color: #6C90B9;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-
-
 
 .controls-content {
   padding: 20px;
@@ -242,7 +273,7 @@ export default {
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
-  border-left: 4px solid #7A3520;
+  border-left: 4px solid #7a3520;
 }
 
 .color-bar-title {
@@ -283,11 +314,11 @@ export default {
   font-size: 10px;
   color: rgba(255, 255, 255, 0.7);
   font-weight: 500;
-  
 }
 
-.label-min, .label-max {
-  font-family: 'Courier New', monospace;
+.label-min,
+.label-max {
+  font-family: "Courier New", monospace;
   color: rgba(255, 255, 255, 0.8);
 }
 
@@ -299,7 +330,7 @@ export default {
 .color-bar-description {
   text-align: center;
   margin-top: 8px;
-  
+
   small {
     color: rgba(255, 255, 255, 0.6);
     font-size: 10px;
@@ -345,7 +376,7 @@ export default {
   border-radius: 12px;
   padding: 16px;
   margin-top: 16px;
-  border-left: 4px solid #2F414B;
+  border-left: 4px solid #2f414b;
 }
 
 .info-item {
@@ -407,25 +438,24 @@ export default {
   }
 }
 
-
 .pressure-low-segment {
-  background: rgb(173, 204, 83); 
+  background: rgb(173, 204, 83);
 }
 
 .pressure-mid-segment {
-  background: rgb(250, 236, 79); 
+  background: rgb(250, 236, 79);
 }
 
 .pressure-high-segment {
-  background: rgb(242, 183, 68); 
+  background: rgb(242, 183, 68);
 }
 
 .pressure-max-segment {
-  background: rgb(170, 68, 47); 
+  background: rgb(170, 68, 47);
 }
 
 .pressure-ultra-segment {
-  background: rgb(140, 41, 38); 
+  background: rgb(140, 41, 38);
 }
 
 // Blood flow Color Segments - Updated to match vtkLoader.js FLUX_COLORS
@@ -438,7 +468,7 @@ export default {
 }
 
 .flux-mid-segment {
-  background: rgb(0, 255, 128); // MEDIUM_LOW: Green (2.5-5)
+  background: rgb(0, 255, 128); // BLUE_LOW: Green (2.5-5)
 }
 
 .flux-high-segment {
@@ -449,9 +479,10 @@ export default {
   background: rgb(255, 128, 0); // HIGH: Orange (7.5-10)
 }
 
-.flux-very-high-segment {
-  background: rgb(255, 0, 0); // VERY_HIGH: Red (>10)
+.flux-red-high-segment {
+  background: rgb(255, 0, 0); // RED_HIGH: Red (>10)
 }
+
 
 // No flow/pressure Color Legend
 .vessel-legend {
@@ -472,16 +503,15 @@ export default {
   height: 16px;
   border-radius: 3px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  
+
   &.arterial-color {
     background: #ff2222; // Arterial red
   }
-  
 }
 
 .legend-text {
   font-size: 12px;
-  color: #D1C7B5;
+  color: #d1c7b5;
   font-weight: 500;
 }
 
@@ -489,12 +519,13 @@ export default {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #D1C7B5;
+  color: #d1c7b5;
   font-weight: 500;
   margin-top: 4px;
 }
 
-.label-left, .label-right {
+.label-left,
+.label-right {
   flex: 1;
 }
 
@@ -512,24 +543,22 @@ export default {
   font-weight: 600 !important;
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2) !important;
   transition: all 0.3s ease !important;
-  
+
   &.arterial-btn {
-    background-color: #DD3C51 !important;
-    border-color: #DD3C51 !important;
-    
+    background-color: #dd3c51 !important;
+    border-color: #dd3c51 !important;
+
     &:hover:not(:disabled) {
-      background-color: #C13347 !important;
+      background-color: #c13347 !important;
       box-shadow: 0 6px 20px rgba(221, 60, 81, 0.4) !important;
       transform: translateY(-2px);
     }
-    
+
     &:disabled {
       opacity: 0.5 !important;
       cursor: not-allowed !important;
     }
   }
-  
-
 }
 
 .rendering-status {
@@ -538,7 +567,7 @@ export default {
 }
 
 .status-text {
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   font-weight: 600;
   font-size: 14px;
   letter-spacing: 2px;
@@ -554,13 +583,11 @@ export default {
             .v-radio__radio--native {
               color: white !important;
             }
-            
           }
-          
         }
       }
     }
-    
+
     .v-label {
       color: white !important;
       font-weight: 500;
@@ -571,12 +598,12 @@ export default {
 // Custom button group styles
 .v-btn-toggle {
   border-radius: 8px !important;
-  
+
   .v-btn {
     text-transform: none !important;
     font-weight: 500 !important;
     min-width: 100px;
-    
+
     &.v-btn--active {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
     }
@@ -586,11 +613,11 @@ export default {
 // Animation for collapse/expand
 .control-panel {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   .controls-content {
     transition: opacity 0.2s ease;
   }
-  
+
   &.collapsed .controls-content {
     opacity: 0;
   }

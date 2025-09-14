@@ -10,7 +10,7 @@
         "displayName": "Normal Placenta",
         "color": 16716066,
         "opacity": 1.0,
-        "modelSize": 420,
+        "modelSize": 250,
         "useCylinderGeometry": true,
         "cylinderSegments": 10
       },
@@ -43,7 +43,7 @@
         "displayName": "Fetal Growth Restriction",
         "color": 16716066,
         "opacity": 1,
-        "modelSize": 420,
+        "modelSize": 250,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
         "defaultRotationY": -1.5707963267948966
@@ -77,7 +77,7 @@
         "displayName": "Gestational Diabetes Melitus",
         "color": 16716066,
         "opacity": 1.0,
-        "modelSize": 420,
+        "modelSize": 250,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
         "defaultRotationY": 1.5707963267948966

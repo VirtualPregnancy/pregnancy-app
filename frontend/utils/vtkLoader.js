@@ -21,16 +21,16 @@ const COLOR_CONSTANTS = {
   FLUX_COLORS: {
     ZERO: { r: 0.0, g: 0.2, b: 0.8 },        // Blue (0)
     LOW: { r: 0.2, g: 0.6, b: 1.0 },         // Light Blue (0-2.5)
-    MEDIUM_LOW: { r: 0.0, g: 1.0, b: 0.5 },  // Green (2.5-5)
+    BLUE_LOW: { r: 0.0, g: 1.0, b: 0.5 },  // Green (2.5-5)
     MEDIUM_HIGH: { r: 1.0, g: 1.0, b: 0.0 }, // Yellow (5-7.5)
     HIGH: { r: 1.0, g: 0.5, b: 0.0 },        // Orange (7.5-10)
-    VERY_HIGH: { r: 1.0, g: 0.0, b: 0.0 }    // Red (>10)
+    RED_HIGH: { r: 1.0, g: 0.0, b: 0.0 }    // Red (>10)
   },
   FLUX_THRESHOLDS: {
     HIGH_FLOW: 10.0,
     MEDIUM_HIGH: 7.5,
     MEDIUM: 5.0,
-    MEDIUM_LOW: 2.5
+    BLUE_LOW: 2.5
   }
 };
 
@@ -499,9 +499,9 @@ export default class VTKLoader {
     if (absFlux <= 0) {
       // Zero flow - blue
       color.setRGB(FLUX_COLORS.ZERO.r, FLUX_COLORS.ZERO.g, FLUX_COLORS.ZERO.b);
-    } else if (absFlux <= FLUX_THRESHOLDS.MEDIUM_LOW) {
+    } else if (absFlux <= FLUX_THRESHOLDS.BLUE_LOW) {
       // Low flow (0-2.5) - light blue
-      const t = absFlux / FLUX_THRESHOLDS.MEDIUM_LOW;
+      const t = absFlux / FLUX_THRESHOLDS.BLUE_LOW;
       color.setRGB(
         FLUX_COLORS.ZERO.r + (FLUX_COLORS.LOW.r - FLUX_COLORS.ZERO.r) * t,
         FLUX_COLORS.ZERO.g + (FLUX_COLORS.LOW.g - FLUX_COLORS.ZERO.g) * t,
@@ -509,19 +509,19 @@ export default class VTKLoader {
       );
     } else if (absFlux <= FLUX_THRESHOLDS.MEDIUM) {
       // Medium-low flow (2.5-5) - green
-      const t = (absFlux - FLUX_THRESHOLDS.MEDIUM_LOW) / (FLUX_THRESHOLDS.MEDIUM - FLUX_THRESHOLDS.MEDIUM_LOW);
+      const t = (absFlux - FLUX_THRESHOLDS.BLUE_LOW) / (FLUX_THRESHOLDS.MEDIUM - FLUX_THRESHOLDS.BLUE_LOW);
       color.setRGB(
-        FLUX_COLORS.LOW.r + (FLUX_COLORS.MEDIUM_LOW.r - FLUX_COLORS.LOW.r) * t,
-        FLUX_COLORS.LOW.g + (FLUX_COLORS.MEDIUM_LOW.g - FLUX_COLORS.LOW.g) * t,
-        FLUX_COLORS.LOW.b + (FLUX_COLORS.MEDIUM_LOW.b - FLUX_COLORS.LOW.b) * t
+        FLUX_COLORS.LOW.r + (FLUX_COLORS.BLUE_LOW.r - FLUX_COLORS.LOW.r) * t,
+        FLUX_COLORS.LOW.g + (FLUX_COLORS.BLUE_LOW.g - FLUX_COLORS.LOW.g) * t,
+        FLUX_COLORS.LOW.b + (FLUX_COLORS.BLUE_LOW.b - FLUX_COLORS.LOW.b) * t
       );
     } else if (absFlux <= FLUX_THRESHOLDS.MEDIUM_HIGH) {
       // Medium-high flow (5-7.5) - yellow
       const t = (absFlux - FLUX_THRESHOLDS.MEDIUM) / (FLUX_THRESHOLDS.MEDIUM_HIGH - FLUX_THRESHOLDS.MEDIUM);
       color.setRGB(
-        FLUX_COLORS.MEDIUM_LOW.r + (FLUX_COLORS.MEDIUM_HIGH.r - FLUX_COLORS.MEDIUM_LOW.r) * t,
-        FLUX_COLORS.MEDIUM_LOW.g + (FLUX_COLORS.MEDIUM_HIGH.g - FLUX_COLORS.MEDIUM_LOW.g) * t,
-        FLUX_COLORS.MEDIUM_LOW.b + (FLUX_COLORS.MEDIUM_HIGH.b - FLUX_COLORS.MEDIUM_LOW.b) * t
+        FLUX_COLORS.BLUE_LOW.r + (FLUX_COLORS.MEDIUM_HIGH.r - FLUX_COLORS.BLUE_LOW.r) * t,
+        FLUX_COLORS.BLUE_LOW.g + (FLUX_COLORS.MEDIUM_HIGH.g - FLUX_COLORS.BLUE_LOW.g) * t,
+        FLUX_COLORS.BLUE_LOW.b + (FLUX_COLORS.MEDIUM_HIGH.b - FLUX_COLORS.BLUE_LOW.b) * t
       );
     } else if (absFlux <= FLUX_THRESHOLDS.HIGH_FLOW) {
       // High flow (7.5-10) - orange
@@ -533,7 +533,7 @@ export default class VTKLoader {
       );
     } else {
       // Very high flow (>10) - red
-      color.setRGB(FLUX_COLORS.VERY_HIGH.r, FLUX_COLORS.VERY_HIGH.g, FLUX_COLORS.VERY_HIGH.b);
+      color.setRGB(FLUX_COLORS.RED_HIGH.r, FLUX_COLORS.RED_HIGH.g, FLUX_COLORS.RED_HIGH.b);
     }
     
     return color;
@@ -907,6 +907,40 @@ export default class VTKLoader {
     if (this.copperRenderer && this.copperRenderer.render) {
       this.copperRenderer.render();
     }
+  }
+
+  /**
+   * Scale all loaded models without re-rendering
+   */
+  scaleModel(newSize) {
+    if (!this.allVTKMeshes || this.allVTKMeshes.length === 0) {
+      console.warn('[VTKLoader] No meshes to scale');
+      return;
+    }
+
+    // Calculate scale factor based on new size
+    // Original size from modelData is 200
+    const originalSize = 200;
+    const scaleFactor = newSize / originalSize;
+
+    // Apply scaling to all meshes
+    this.allVTKMeshes.forEach(mesh => {
+      if (mesh && mesh.scale) {
+        mesh.scale.setScalar(scaleFactor);
+      }
+    });
+
+    // Update current mesh if it exists
+    if (this.currentVTKMesh && this.currentVTKMesh.scale) {
+      this.currentVTKMesh.scale.setScalar(scaleFactor);
+    }
+
+    // Trigger re-render
+    if (this.copperRenderer && this.copperRenderer.render) {
+      this.copperRenderer.render();
+    }
+
+    console.log(`[VTKLoader] Scaled model to size: ${newSize} (scale factor: ${scaleFactor.toFixed(3)})`);
   }
 
   /**

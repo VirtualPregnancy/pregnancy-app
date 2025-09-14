@@ -392,7 +392,7 @@ export default {
         onComplete: () => {
           // Set rendering state to true when loading is complete
           this.renderingComplete = true;
-          
+          this.$emit('model-size-changed', config.modelSize);
           // Emit state update to parent
           this.$emit('model-state-updated', { 
             modelName: config.displayName,
@@ -422,6 +422,13 @@ export default {
       // Check if click is in the first quarter (first 25% from left)
       if (clickX <= imageWidth / 4) {
         this.resetModelToDefault();
+      }
+    },
+
+    // Handle model size changes from PanelControls
+    handleModelSizeChange(newSize) {
+      if (this.vtkLoader && this.vtkLoader.scene) {
+        this.vtkLoader.scaleModel(newSize*2);
       }
     },
 

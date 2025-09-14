@@ -8,6 +8,7 @@
         :current-performance-mode="modelStates.currentPerformanceMode"
         :model-name="modelStates.modelName"
         :model-config="modelStates.modelConfig"
+        @model-size-changed="handleModelSizeChanged"
         @model-state-updated="handleModelStateUpdate"
 
       />
@@ -26,8 +27,10 @@
           :is-loading="modelStates.isLoading"
           :loading-complete="modelStates.loadingComplete"
           :rendering-complete="modelStates.renderingComplete"
+          :current-model-size="modelStates.modelSize"
           @reload-arterial="handleReloadArterial"
           @colored-models-by-changed="handleColoredModelsByChanged"
+          @model-size-changed="handleModelSizeChanged"
         />
       </div>
 
@@ -81,6 +84,7 @@ export default {
         loadingComplete: false, // Track if loading has completed
         colorMappingType: 'pressure', // Track current color mapping type
         renderingComplete: false, // Track if model is fully rendered and ready for interaction
+        modelSize: 200,
       },
       // Waveform data
       waveformData: modelData.models[0].waveform
@@ -174,7 +178,13 @@ export default {
       }
     },
     
-    
+    handleModelSizeChanged(modelSize) {
+      this.modelStates.modelSize = modelSize;
+      // Forward the size change to the model component for scaling
+      if (this.$refs.modelComponent && this.$refs.modelComponent.handleModelSizeChange) {
+        this.$refs.modelComponent.handleModelSizeChange(modelSize);
+      }
+    },
 
     
     // Update the model and the waveform data
@@ -187,6 +197,10 @@ export default {
       // update the waveform data
       this.waveformData = data.conditionData.waveform;
       
+      // update model size from config
+      if (data.conditionData.config && data.conditionData.config.modelSize) {
+        this.modelStates.modelSize = data.conditionData.config.modelSize;
+      }
     },
     
 

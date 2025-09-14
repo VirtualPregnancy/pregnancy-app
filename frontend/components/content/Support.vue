@@ -79,7 +79,6 @@
 import {
   regions,
   regionalServices,
-  serviceSections,
 } from "@/assets/data/supportData.json";
 
 export default {
@@ -96,7 +95,6 @@ export default {
       selectedRegion: "",
       regions,
       regionalServices,
-      serviceSections,
     };
   },
 
