@@ -1,23 +1,41 @@
 {
   "regions": [
-    "Northland",
     "Auckland",
-    "Waikato",
     "Bay of Plenty",
-    "Gisborne",
-    "Hawke's Bay",
-    "Taranaki",
-    "Manawatū-Whanganui",
-    "Wellington",
-    "Tasman",
-    "Nelson",
-    "Marlborough",
-    "West Coast",
     "Canterbury",
-    "Otago",
-    "Southland"
+    "Hawke's Bay",
+    "Manawatū-Whanganui",
+    "Nelson, Marlborough and Tasman",
+    "Northland",
+    "Otago and Southland",
+    "Rotorua and Taupō",
+    "South Canterbury",
+    "Tairāwhiti",
+    "Taranaki",
+    "Wellington, Hutt and Kapiti",
+    "West Coast",
+    "Waikato",
+    "Wairarapa"
   ],
   "regionalServices": {
+    "National": [
+      {
+        "name": "Pregnancy services",
+        "link": "https://www.tewhatuora.govt.nz/for-health-providers/publicly-funded-health-and-disability-services/pregnancy-services"
+      },
+      {
+        "name": "Pregnancy Counselling Services",
+        "link": "https://www.familyservices.govt.nz/directory/viewprovider.htm?id=3422&letter=P&back=searchprovideralphabetical&pageNumber=1&pageSize=10"
+      },
+      {
+        "name": "While you're pregnant - Find out about maternity care, getting a midwife, parental leave, antenatal classes, health tests and parenting support",
+        "link": "https://www.govt.nz/browse/family-and-whanau/having-a-baby/while-youre-pregnant/"
+      },
+      {
+        "name": "Maternity service and referral information for health professionals",
+        "link": "https://www.tewhatuora.govt.nz/for-health-professionals/hospital-and-specialist-services/maternity-services"
+      }
+    ],
     "Auckland": [
       {
         "name": "Find an independent midwife in Auckland",
@@ -32,8 +50,20 @@
         "link": "https://info.health.nz/locations/auckland"
       },
       {
-        "name": "Day assessment unit — Auckland ",
+        "name": "Day assessment unit — Auckland",
         "link": "https://info.health.nz/locations/auckland/womens-health/day-assessment-unit"
+      },
+      {
+        "name": "Maternity Services in Auckland",
+        "link": "https://www.healthpoint.co.nz/maternity/central-auckland/"
+      },
+      {
+        "name": "National Women's Health",
+        "link": "https://info.health.nz/locations/auckland/womens-health"
+      },
+      {
+        "name": "Pregnancy Counselling Services – Auckland",
+        "link": "https://www.familyservices.govt.nz/directory/viewprovider.htm?id=6514&letter=P&back=searchprovideralphabetical&pageNumber=1&pageSize=10"
       }
     ],
     "Bay of Plenty": [
@@ -48,6 +78,14 @@
       {
         "name": "Maternity services — Bay of Plenty",
         "link": "https://info.health.nz/locations/bay-of-plenty/maternity-bay-of-plenty"
+      },
+      {
+        "name": "Maternity Services in Bay of Plenty",
+        "link": "https://www.healthpoint.co.nz/maternity/bay-of-plenty"
+      },
+      {
+        "name": "Childbirth education — Bay of Plenty",
+        "link": "https://info.health.nz/locations/bay-of-plenty/maternity-bay-of-plenty/childbirth-education-bay-of-plenty"
       }
     ],
     "Canterbury": [
@@ -60,13 +98,300 @@
         "link": "https://info.health.nz/locations/canterbury/ashburton-hospital"
       },
       {
+        "name": "Christchurch Women's Hospital",
+        "link": "https://info.health.nz/locations/canterbury/christchurch-womens-hospital"
+      },
+      {
         "name": "Maternity and newborn — Canterbury",
         "link": "https://info.health.nz/locations/canterbury/maternity-and-newborn-canterbury"
       },
       {
         "name": "Maternity Services in Canterbury",
         "link": "https://www.healthpoint.co.nz/maternity/canterbury/"
+      },
+      {
+        "name": "Places where you can give birth — Canterbury",
+        "link": "https://info.health.nz/locations/canterbury/places-you-can-give-birth-canterbury"
+      },
+      {
+        "name": "Gynaecology — Canterbury",
+        "link": "https://info.health.nz/locations/canterbury/gynaecology"
+      },
+      {
+        "name": "Neonatal service — Canterbury",
+        "link": "https://info.health.nz/locations/canterbury/child-and-youth-health-canterbury/matataki-neonatal-service-canterbury"
+      },
+      {
+        "name": "Pregnancy Counselling Services – Christchurch",
+        "link": "https://www.familyservices.govt.nz/directory/viewprovider.htm?id=6516&letter=P&back=searchprovideralphabetical&pageNumber=1&pageSize=10"
+      }
+    ],
+    "Hawke's Bay": [
+      {
+        "name": "Maternity care in Hawke's Bay",
+        "link": "https://info.health.nz/locations/hawkes-bay/maternity-care-in-hawkes-bay"
+      },
+      {
+        "name": "Te Ara Manapou - Pregnancy and Parenting Support | Hawke's Bay",
+        "link": "https://www.healthpoint.co.nz/public/psychiatry/te-ara-manapou-pregnancy-and-parenting-support/"
+      },
+      {
+        "name": "Obstetrics (Maternity) -  Maternity Services in Hastings, Hawke's Bay",
+        "link": "https://www.healthpoint.co.nz/maternity/obstetrics-maternity/hawkes-bay/hastings/"
+      },
+      {
+        "name": "Pregnancy Counselling Services - Hawkes Bay",
+        "link": "https://www.familyservices.govt.nz/directory/viewprovider.htm?id=6520&letter=P&back=searchprovideralphabetical&pageNumber=1&pageSize=10"
+      }
+    ],
+
+    "Manawatū-Whanganui": [
+      {
+        "name": "Maternity and newborn services in Whanganui",
+        "link": "https://info.health.nz/locations/manawatu-whanganui/whanganui-hospital/maternity-and-newborn-services-in-whanganui"
+      },
+      {
+        "name": "Information about hospitals and health centres in Palmerston North, Whanganui, Levin and Dannevirke, such as address and contact details, services, and patient and visitor information",
+        "link": "https://info.health.nz/locations/manawatu-whanganui"
+      },
+      {
+        "name": "Palmerston North Hospital - Hōhipera o Papaioea",
+        "link": "https://info.health.nz/locations/manawatu-whanganui/palmerston-north-regional-hospital"
+      },
+      {
+        "name": "Whanganui Hospital",
+        "link": "https://info.health.nz/locations/manawatu-whanganui/whanganui-hospital"
+      }
+    ],
+    "Nelson, Marlborough and Tasman": [
+      {
+        "name": "Information about hospitals and other health services in Marlborough, Nelson and Tasman",
+        "link": "https://info.health.nz/locations/nelson-marlborough"
+      },
+      {
+        "name": "Nelson Hospital Whakatū Hōhipera",
+        "link": "https://info.health.nz/locations/nelson-marlborough/nelson-hospital"
+      },
+      {
+        "name": "Obstetrics and gynaecology — Nelson Marlborough",
+        "link": "https://info.health.nz/locations/nelson-marlborough/obstetrics-gynaecology"
+      }
+    ],
+    "Northland": [
+      {
+        "name": "Obstetrics (Maternity) • Maternity Services in Northland",
+        "link": "https://www.healthpoint.co.nz/maternity/obstetrics-maternity/northland/"
+      },
+      {
+        "name": "Maternity Services | Te Tai Tokerau (Northland)",
+        "link": "https://www.healthpoint.co.nz/public/obstetrics-maternity/maternity-services-te-tai-tokerau-northland/at/whangarei-hospital/"
+      },
+      {
+        "name": "Maternity and newborn services",
+        "link": "https://info.health.nz/locations/northland/maternity-and-newborn-services"
+      },
+      {
+        "name": "Information about hospitals, health centres, and health services in Northland, such as address and contact details, and patient and visitor information",
+        "link": "https://info.health.nz/locations/northland"
+      }
+    ],
+    "Otago and Southland": [
+      {
+        "name": "Pregnancy Counselling Services – Dunedin",
+        "link": "https://www.familyservices.govt.nz/directory/viewprovider.htm?id=6517&letter=P&back=searchprovideralphabetical&pageNumber=1&pageSize=10"
+      },
+      {
+        "name": "Information about hospitals and health services in Otago and Southland, such as address and contact details, services, and patient and visitor information",
+        "link": "https://info.health.nz/locations/otago-southland"
+      },
+      {
+        "name": "Obstetrics and Gynaecology Services - Otago | Southern",
+        "link": "https://www.healthpoint.co.nz/public/obstetrics-maternity/obstetrics-and-gynaecology-services-otago/"
+      },
+      {
+        "name": "Obstetrics (Maternity) • Public Hospital Services in Southland",
+        "link": "https://www.healthpoint.co.nz/public/obstetrics-maternity/southland/"
+      },
+      {
+        "name": "Obstetrics and gynaecology services — Otago and Southland",
+        "link": "https://info.health.nz/locations/otago-southland/obstetrics-gynaecology"
+      },
+      {
+        "name": "Maternity services — Otago and Southland",
+        "link": "https://info.health.nz/locations/otago-southland/maternity-services"
+      }
+    ],
+    "Rotorua and Taupō": [
+      {
+        "name": "Maternity Services in Lakes",
+        "link": "https://www.healthpoint.co.nz/maternity/lakes/"
+      },
+      {
+        "name": "Maternity service — Taupō Hospital",
+        "link": "https://info.health.nz/locations/rotorua-taupo-lakes/taupo-hospital/maternity-service"
+      },
+      {
+        "name": "Maternity service — Rotorua Hospital",
+        "link": "https://info.health.nz/locations/rotorua-taupo-lakes/rotorua-hospital/maternity-service"
+      },
+      {
+        "name": "Information about services in Rotorua, Taupō and surrounding areas, such as address and contact details, services, and patient and visitor information",
+        "link": "https://info.health.nz/locations/rotorua-taupo-lakes"
+      }
+    ],
+    "South Canterbury": [
+      {
+        "name": "Obstetrics (Maternity) - Public Hospital Services in Timaru, South Canterbury",
+        "link": "https://www.healthpoint.co.nz/public/obstetrics-maternity/south-canterbury/timaru/"
+      },
+      {
+        "name": "Support after birth Services",
+        "link": "https://www.healthpoint.co.nz/community-health-and-social-services/pregnancy-and-parenting-1/support-after-birth/south-canterbury/"
+      },
+      {
+        "name": "Maternity and newborn — South Canterbury",
+        "link": "https://info.health.nz/locations/south-canterbury/maternity-newborn"
+      },
+      {
+        "name": "Information about hospitals and other health service providers in South Canterbury — including Timaru, Geraldine, and Lake Takapō (Tekapo)",
+        "link": "https://info.health.nz/locations/south-canterbury"
+      }
+    ],
+    "Tairāwhiti": [
+      {
+        "name": "Information about hospitals and health services in Tairāwhiti (Gisborne) on the East Coast",
+        "link": "https://info.health.nz/locations/tairawhiti-gisborne"
+      },
+      {
+        "name": "Maternity and newborn — Tairāwhiti",
+        "link": "https://info.health.nz/locations/tairawhiti-gisborne/maternity-and-newborn-tairawhiti"
+      },
+      {
+        "name": "Obstetrics (Maternity) - Public Hospital Services in Tairāwhiti",
+        "link": "https://www.healthpoint.co.nz/public/obstetrics-maternity/tairawhiti/"
+      },
+      {
+        "name": "Maternity guidelines for Tairāwhiti",
+        "link": "https://www.tewhatuora.govt.nz/publications/maternity-guidelines-for-tairawhiti"
+      },
+      {
+        "name": "Community Health and Social Services in Tairāwhiti",
+        "link": "https://www.healthpoint.co.nz/community-health-and-social-services/pregnancy-and-parenting-1/pregnancy-support/tairawhiti/"
+      }
+    ],
+    "Taranaki": [
+      {
+        "name": "Information about hospitals and health services in Taranaki",
+        "link": "https://info.health.nz/locations/taranaki"
+      },
+      {
+        "name": "New Plymouth Clinic – Taranaki",
+        "link": "https://sexualwellbeing.org.nz/taranaki/new-plymouth/"
+      },
+      {
+        "name": "Maternity and newborn services",
+        "link": "https://info.health.nz/locations/taranaki/taranaki-base-hospital/maternity-and-newborn-services"
+      },
+      {
+        "name": "Community Health and Social Services in Taranaki",
+        "link": "https://www.healthpoint.co.nz/community-health-and-social-services/pregnancy-and-parenting-1/pregnancy-support/taranaki/"
+      }
+    ],
+    "Wellington, Hutt and Kapiti": [
+      {
+        "name": "Information about hospitals and health centres in Wellington, the Hutt Valley, Porirua, and Kapiti",
+        "link": "https://info.health.nz/locations/wellington-hutt-and-kapiti"
+      },
+      {
+        "name": "Maternity — Wellington, Hutt and Kapiti",
+        "link": "https://info.health.nz/locations/wellington-hutt-and-kapiti/maternity"
+      },
+      {
+        "name": "Maternal fetal medicine — Wellington, Hutt and Kapiti",
+        "link": "https://info.health.nz/locations/wellington-hutt-and-kapiti/maternal-fetal-medicine"
+      },
+      {
+        "name": "Lead maternity carer access — Wellington, Hutt and Kapiti",
+        "link": "https://www.tewhatuora.govt.nz/for-health-professionals/hospital-and-specialist-services/maternity-services/lead-maternity-carer-access-wellington-hutt-and-kapiti"
+      },
+      {
+        "name": "Obstetrics (Maternity) • Private Hospitals & Specialists in Paraparaumu Beach, Wellington",
+        "link": "https://www.healthpoint.co.nz/private/obstetrics-maternity/wellington/paraparaumu-beach/"
+      }
+    ],
+    "West Coast": [
+      {
+        "name": "Information about hospitals and services on West Coast, such as address and contact details, services, and patient and visitor information",
+        "link": "https://info.health.nz/locations/west-coast"
+      },
+      {
+        "name": "Maternity services",
+        "link": "https://info.health.nz/locations/west-coast/maternity-services"
+      },
+      {
+        "name": "Community Health and Social Services in West Coast",
+        "link": "https://healthpoint.co.nz/community-health-and-social-services/pregnancy-and-parenting-1/pregnancy-support/west-coast/"
+      },
+      {
+        "name": "Gynaecology services",
+        "link": "https://info.health.nz/locations/west-coast/gynae-services"
+      },
+      {
+        "name": "Obstetrics (Maternity) • Maternity Services in West Coast",
+        "link": "https://www.healthpoint.co.nz/maternity/obstetrics-maternity/west-coast/"
+      }
+    ],
+     "Waikato": [
+      {
+        "name": "Information about hospitals and community services in the Waikato region",
+        "link": "https://info.health.nz/locations/waikato"
+      },
+      {
+        "name": "Midwives Resources",
+        "link": "https://waikato.midwife.org.nz/resources/"
+      },
+      {
+        "name": "Obstetrics (Maternity) • Private Hospitals & Specialists in Waikato",
+        "link": "https://www.healthpoint.co.nz/private/obstetrics-maternity/waikato/"
+      },
+      {
+        "name": "Hapū Wānanga ki Tainui — Waikato",
+        "link": "https://info.health.nz/locations/waikato/maternity-and-newborn/hapu-wananga"
+      },
+      {
+        "name": "Community Health and Social Services in Waikato",
+        "link": "https://www.healthpoint.co.nz/community-health-and-social-services/pregnancy-and-parenting-1/support-after-birth/waikato/"
+      },
+      {
+        "name": "Maternity and newborn — Waikato",
+        "link": "https://info.health.nz/locations/waikato/maternity-and-newborn"
+      }
+    ],
+    "Wairarapa": [
+      {
+        "name": "Information about Wairarapa Hospital in Masterton and other health services in the Wairarapa",
+        "link": "https://info.health.nz/locations/wairarapa"
+      },
+      {
+        "name": "Perinatal Support Service",
+        "link": "https://hokaitahi.nz/our-services/"
+      },
+      {
+        "name": "Community Health and Social Services in Wairarapa",
+        "link": "https://www.healthpoint.co.nz/community-health-and-social-services/pregnancy-and-parenting-1/pregnancy-support/wairarapa/"
+      },
+      {
+        "name": "Wairarapa Maternity",
+        "link": "https://wairarapamaternity.nz/"
+      },
+      {
+        "name": "Ante Natal Classes Wairarapa",
+        "link": "https://www.familyservices.govt.nz/directory/viewprovider.htm?id=5262&back=searchprovideralphabetical&letter=A&providerId=&scrollPos="
       }
     ]
+
+
   }
 }
+
+
