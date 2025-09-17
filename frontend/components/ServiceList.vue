@@ -13,13 +13,13 @@
       />
     </div>
 
-    <div v-if="selectedRegion" class="bg-blue-50 rounded-lg p-6">
+    <div v-if="selectedRegion && getRegionalServices(selectedRegion).length > 0" class="bg-blue-50 rounded-lg p-6">
       <h3 class="text-xl font-semibold text-blue-800 mb-4">
-        Find Out {{ this.title }} in {{ selectedRegion }}
+        {{ this.title }} in {{ selectedRegion }}
       </h3>
 
       <!-- Show services if available -->
-      <div v-if="getRegionalServices(selectedRegion).length > 0">
+      <div v-if="getRegionalServices(selectedRegion).length >= 1 && !getRegionalServices(selectedRegion)[0].note">
         <ul class="space-y-3">
           <li
             v-for="service in getRegionalServices(selectedRegion)"
@@ -45,26 +45,23 @@
         <v-icon color="gray" size="48" class="mb-4"
           >mdi-information-outline</v-icon
         >
-        <p class="text-center text-gray-600 text-lg mb-2">
-          No specific services found for {{ selectedRegion }}
-        </p>
-
-        <v-btn
+        <div v-if="getRegionalServices(selectedRegion)[0].note" class="text-center text-gray-600 text-lg mb-2">
+         <p> {{ getRegionalServices(selectedRegion)[0].note }}</p>
+          <v-btn
           color="primary"
           variant="outlined"
-          class="mt-4"
-          @click="
-            window.open(
-              'https://www.tewhatuora.govt.nz/for-health-providers/publicly-funded-health-and-disability-services/pregnancy-services',
-              '_blank'
-            )
-          "
+          class="mt-4 hover:text-blue-600 transition-colors"
+          @click="openServiceLink(getRegionalServices(selectedRegion)[0])"
         >
-          <v-icon color="white" size="16" class="ml-2">
+          <v-icon color="white" size="16" class="mr-2">
             mdi-open-in-new
           </v-icon>
-          For overall pregnancy services.
+          Find out more
         </v-btn>
+        </div>
+        <div v-else class="text-center text-gray-600 text-lg mb-2">
+          <p>No specific services found for {{ selectedRegion }}.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -79,17 +76,17 @@ export default {
     },
     regions: {
       type: Array,
+      default: () => [],
     },
     regionalServices: {
       type: Object,
+      default: () => ({}),
     },
   },
   name: "ServiceList",
   data() {
     return {
       selectedRegion: "",
-      regions: this.regions,
-      regionalServices: this.regionalServices,
     };
   },
 
@@ -116,7 +113,9 @@ export default {
 
       if (service.link) {
         // Open link in new tab
-        window.open(service.link, "_blank", "noopener,noreferrer");
+        if (typeof window !== 'undefined') {
+          window.open(service.link, "_blank", "noopener,noreferrer");
+        }
       } else {
         // Show info if no link available
         this.$toast.info(`Service: ${service.name}\n\nLink not available yet.`);

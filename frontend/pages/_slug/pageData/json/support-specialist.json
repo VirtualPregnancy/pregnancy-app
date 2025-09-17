@@ -9,28 +9,22 @@
       "title": "Mental Health Support Services",
       "icon": "mdi-brain",
       "iconColor": "var(--v-primary-base)",
-      "content": "Specialized mental health support during pregnancy and postpartum period."
+      "component": "SupportMentalHealth"
+
     },
     {
       "id": "5.b.b",
       "title": "Pregnancy Complications Support",
       "icon": "mdi-alert-circle-outline",
       "iconColor": "var(--v-primary-base)",
-      "content": "Support for various pregnancy complications and high-risk conditions."
+      "component": "SupportComplicationService"
     },
     {
       "id": "5.b.c",
-      "title": "Premature Birth Support",
+      "title": "Premature Birth Support and NICU / SCBU Services",
       "icon": "mdi-baby-face-outline",
-      "iconColor": "var(--v-primary-base)",
-      "content": "Specialized care and support for premature birth and NICU services."
-    },
-    {
-      "id": "5.b.d",
-      "title": "NICU / SCBU Services",
-      "icon": "mdi-hospital-building",
-      "iconColor": "var(--v-primary-base)",
-      "content": "Neonatal Intensive Care Unit and Special Care Baby Unit services."
+        "iconColor": "var(--v-primary-base)",
+        "component": "SupportNICUService"
     }
   ]
 }

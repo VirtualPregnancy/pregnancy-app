@@ -144,7 +144,6 @@
         "link": "https://www.familyservices.govt.nz/directory/viewprovider.htm?id=6520&letter=P&back=searchprovideralphabetical&pageNumber=1&pageSize=10"
       }
     ],
-
     "Manawatū-Whanganui": [
       {
         "name": "Maternity and newborn services in Whanganui",
@@ -341,7 +340,7 @@
         "link": "https://www.healthpoint.co.nz/maternity/obstetrics-maternity/west-coast/"
       }
     ],
-     "Waikato": [
+    "Waikato": [
       {
         "name": "Information about hospitals and community services in the Waikato region",
         "link": "https://info.health.nz/locations/waikato"
@@ -389,9 +388,205 @@
         "link": "https://www.familyservices.govt.nz/directory/viewprovider.htm?id=5262&back=searchprovideralphabetical&letter=A&providerId=&scrollPos="
       }
     ]
-
-
+  },
+  "mentalHealthServices": {
+    "National": [
+      {
+        "name": "PADA − Perinatal Anxiety & Depression Aotearoa",
+        "link": "https://pada.nz/",
+        "description": "A national charity providing information, awareness, tools, training and support for families/whānau and health professionals around perinatal anxiety & depression, during pregnancy, childbirth and early parenting."
+      },
+      {
+        "name": "Maternal Mental Health Service Provision in New Zealand (Ministry of Health stocktake)",
+        "link": "https://www.health.govt.nz/system/files/2021-11/maternal_mental_health_service_provision_in_new_zealand-19_nov.pdf",
+        "description": "A report that surveys District Health Board (DHB) services for maternal mental health: what is offered during pregnancy and the first 12 months postpartum, eligibility, gaps and issues."
+      },
+      {
+        "name": "Whāraurau − Perinatal Mental Health Resources & Training",
+        "link": "https://www.wharaurau.org.nz/all-resources/perinatal-mental-health-and-wharaurau",
+        "description": "Provides resources, online courses, workshops and webinars to support workforce capacity in perinatal mental health."
+      },
+      {
+        "name": "Maternal mental health - Aronui Ora",
+        "link": "https://info.health.nz/locations/auckland/womens-health/maternal-mental-health",
+        "description": "Aronui Ora provides mental health support for parents during pregnancy and up to 1 year after birth."
+      }
+    ]
+  },
+  "pregnancyComplicationSupport": {
+   
+    "National": [
+      {
+        "name": "Diabetes in Pregnancy Clinic — Auckland",
+        "link": "https://info.health.nz/locations/auckland/womens-health/diabetes-in-pregnancy-clinic"
+      },
+      {
+        "name": "National Women's Health - Pregnancy Complications",
+        "link": "https://www.nationalwomenshealth.adhb.govt.nz/our-services/maternity/general-gynaecology/"
+      },
+      {
+        "name": "Diabetes in Pregnancy Service - Counties Manukau",
+        "link": "https://www.healthpoint.co.nz/public/community/diabetes-in-pregnancy-service-counties-manukau/"
+      },
+      {
+        "name": "Diabetes & Pregnancy New Zealand",
+        "link": "https://www.diabetes.org.nz/managing-diabetes-pregnancy"
+      },
+      {
+        "name": "Type 2 Diabetes Management Guidelines - Diabetes in pregnancy",
+        "link": "https://t2dm.nzssd.org.nz/Section-99-Diabetes-in-pregnancy"
+      },
+      {
+        "name": "Growth Assessment Protocol (GAP) New Zealand",
+        "link": "https://www.perinatal.org.uk/GAP/NZ"
+      },
+      {
+        "name": "Gestational diabetes – diabetes that develops during pregnancy | Mate huka i te hapūtanga",
+        "link": "https://healthify.nz/health-a-z/d/diabetes-gestational"
+      },
+      {
+        "name": "Small for Gestational Age / Fetal Growth Restriction Guidelines",
+        "link": "https://www.tewhatuora.govt.nz/publications/small-for-gestational-age-fetal-growth-restriction-guidelines"
+      }
+    ]
+  },
+  "prematureBirthSupport": {
+      "Auckland": [
+        {
+          "name": "Special care baby unit — Auckland (North and West)",
+          "link": "https://info.health.nz/locations/auckland/auckland-north-west/special-care-baby-unit-auckland-north-west"
+        },
+        {
+          "name": "Starship Paediatric Intensive Care Unit",
+          "link": "https://www.healthpoint.co.nz/public/intensive-care/starship-paediatric-intensive-care-unit-picu/"
+        },
+        {
+          "name": "Special Care Baby Unit - North Shore and Waitākere Hospitals",
+          "link": "https://info.health.nz/locations/auckland/auckland-north-west/paediatrics-and-newborn-services-auckland-north-west/special-care-baby-unit-auckland-north-west"
+        }
+        
+      ],
+      "Bay of Plenty": [
+        {
+          "name": "Tauranga Hospital SCBU",
+          "link": "https://www.nzno.org.nz/groups/colleges_sections/colleges/neonatal_nurses_college/national_nicu_scbu_units#Tauranga"
+        }
+      ],
+      "Canterbury": [
+        {
+          "name": "Christchurch Women's Hospital Neonatal Service",
+          "link": "https://www.cdhb.health.nz/health-services/neonatal-service/"
+        }
+      ],
+      "Hawke's Bay": [
+        {
+          "name": "Special Care Baby Unit (SCBU) - Hawke's Bay",
+          "link": "https://info.health.nz/locations/canterbury/maternity-and-newborn-canterbury"
+        }
+      ],
+      "Manawatū-Whanganui": [
+        {
+          "name":"Whanganui Base Hospital SCBU",
+          "link":"https://www.nzno.org.nz/groups/colleges_sections/colleges/neonatal_nurses_college/national_nicu_scbu_units#Whanganui"
+        },
+        {
+          "name":"Children's ward at Whanganui Hospital",
+          "link":"https://info.health.nz/locations/manawatu-whanganui/whanganui-hospital/wards-at-whanganui-hospital"
+        }
+      ],
+      "Nelson, Marlborough and Tasman": [
+        {
+          "name":"Maternity and newborn — Nelson Marlborough: Neonatal units",
+          "link":"https://info.health.nz/locations/nelson-marlborough/maternity-newborn#neonatal-units-7556"
+        }
+      ],
+      "Northland": [
+        {
+          "name": "Whangārei Hospital Neonatal Unit",
+          "link": "https://info.health.nz/locations/northland/whangarei-hospital/neonatal-unit"
+        }
+      ],
+      "Otago and Southland": [
+        {
+          "name": "Neonatal Intensive Care Unit (NICU) - Otago | Southern",
+          "link": "https://www.healthpoint.co.nz/public/paediatrics/neonatal-intensive-care-unit-nicu-otago-southern/at/dunedin-hospital/"
+        },
+        {
+          "name":"Neonatal Intensive Care - Otage and Southland",
+          "link":"https://info.health.nz/locations/otago-southland/tamariki-and-rangatahi-health/neonatal-care"
+        }
+      ],
+      "Rotorua and Taupō": [
+        {
+          "name": "Te Whatu Ora Lakes - Special Care Baby Unit (SCBU)",
+          "link": "https://www.healthpoint.co.nz/public/intensive-care/special-care-baby-unit-scbu-lakes-te-whatu/"
+        }
+      ],
+      "South Canterbury": [
+        {
+          "name":"Neonatal service — Canterbury",
+          "link":"https://info.health.nz/locations/canterbury/maternity-and-newborn-canterbury/matataki-neonatal-service-canterbury"
+        }
+      ],
+      "Tairāwhiti": [
+        {
+          "name":"Neonatal unit — Tairāwhiti: Gisborne Hospital",
+          "link":"https://info.health.nz/locations/tairawhiti-gisborne/maternity-and-newborn-tairawhiti/neonatal-unit-tairawhiti"
+        }
+      ],
+      "Taranaki": [
+        {
+          "name":"After the birth Neonatal unit — Taranaki Base Hospital",
+          "link":"https://info.health.nz/locations/taranaki/taranaki-base-hospital/maternity-and-newborn-services#after-the-birth-9630"
+        }
+      ],
+      "Wellington, Hutt and Kapiti": [
+        {
+          "name":"Tertiary birthing unit — Wellington Regional Hospital Nga Puna Wai Ora",
+          "link":"https://info.health.nz/locations/wellington-hutt-and-kapiti/wellington-regional-hospital"
+        },
+        {
+          "name":"Neonatal unit — Wellington Regional Hospital",
+          "link":"https://info.health.nz/locations/wellington-hutt-and-kapiti/maternity#neonatal-intensive-care-unit-11632"
+        }
+      ],
+      "West Coast": [
+        {
+          "name":" ",
+          "note":"There are no tertiary maternity facilities in the West Coast. The Te Nīkau Hospital & Health Centre is a secondary birthing unit, and can provide services for those who may have complex medical or pregnancy complications..",
+          "link":"https://info.health.nz/locations/west-coast/te-nikau-grey-hospital-and-health-centre"
+        }
+      ],
+      "Waikato": [
+        {
+          "name": "Waikato Hospital, Waikids NICU",
+          "link": "https://www.nzno.org.nz/groups/colleges_sections/colleges/neonatal_nurses_college/national_nicu_scbu_units#Waikato"
+        }
+      ],
+      "Wairarapa": [
+        {
+          "name":"Wairarapa Hospital SCBU",
+          "link":"https://www.nzno.org.nz/groups/colleges_sections/colleges/neonatal_nurses_college/national_nicu_scbu_units#Wairarapa"
+        }
+      ],
+      "National": [
+        {
+          "name": "What to expect when your baby is born prematurely or critically ill",
+          "link": "https://littlemiraclestrust.org.nz/my-baby-is-in-a-nicu-or-scbu/"
+        },
+        {
+          "name": "National NICU/ SCBU units",
+          "link": "https://www.nzno.org.nz/groups/colleges_sections/colleges/neonatal_nurses_college/national_nicu_scbu_units"
+        },
+        {
+          "name": "When your baby is in NICU - Starship",
+          "link": "https://www.starship.org.nz/when-your-baby-is-in-nicu"
+        },
+        {
+          "name": "Australian and New Zealand Neonatal Network",
+          "link": "https://www.anznn.net/"
+        }
+      ]
+    
   }
 }
-
-
