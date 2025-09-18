@@ -59,7 +59,6 @@
     </div>
   </div>
 
-  <!-- </div> -->
 </template>
 
 <script>
@@ -101,6 +100,13 @@ export default {
     
     // Listen for condition events from the layout
     this.$nuxt.$on('conditions-updated', this.handleConditionsUpdated);
+
+    // Proactively show loading overlay until first render completes
+    try {
+      this.$nuxt && this.$nuxt.$emit('global-loading', true);
+    } catch (e) {
+      // no-op
+    }
   },
 
   computed: {
@@ -175,6 +181,12 @@ export default {
       // Handle rendering complete state updates
       if (newStates.hasOwnProperty('renderingComplete')) {
         this.modelStates.renderingComplete = newStates.renderingComplete;
+        // Emit global loading overlay toggle based on rendering state
+        try {
+          this.$nuxt && this.$nuxt.$emit('global-loading', !newStates.renderingComplete);
+        } catch (e) {
+          // no-op
+        }
       }
     },
     

@@ -34,6 +34,14 @@
       </div>
       
     </div>
+
+    <!-- Global Loading Overlay to block interactions until ready -->
+    <div v-if="isAppLoading" class="global-loading-overlay">
+      <div class="loading-card">
+        <v-progress-circular indeterminate color="primary" size="48"></v-progress-circular>
+        <div class="loading-text">Loading, please wait…</div>
+      </div>
+    </div>
   </v-app>
 </template>
 
@@ -50,6 +58,7 @@ export default {
     return {
       multiplier: 1,
       panelHeight: 0,
+      isAppLoading: false,
 
     };
   },
@@ -87,6 +96,9 @@ export default {
     document.addEventListener("fullscreenchange", this.handleFullscreen);
     document.addEventListener("keydown", this.handleKeydown);
     window.addEventListener("resize", this.handleResize);
+
+    // Listen to global loading state emitted from RightPane/Model
+    this.$nuxt.$on('global-loading', this.handleGlobalLoading);
   },
 
   updated() {
@@ -115,6 +127,11 @@ export default {
       this.lastConditionData = data;
     },
     
+    // Toggle global loading overlay state
+    handleGlobalLoading(isLoading) {
+      this.isAppLoading = !!isLoading;
+    },
+    
 
   },
 
@@ -125,6 +142,9 @@ export default {
     window.removeEventListener("resize", this.handleResize);
     document.removeEventListener("fullscreenchange", this.handleFullscreen);
     document.removeEventListener("keydown", this.handleKeydown);
+
+    // Remove global loading listener
+    this.$nuxt.$off('global-loading', this.handleGlobalLoading);
   },
 };
 </script>
@@ -196,5 +216,33 @@ export default {
 }
 .panel-height2 {
   height: 100%;
+}
+
+/* Global loading overlay */
+.global-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all; /* block clicks behind */
+}
+
+.loading-card {
+  background: var(--v-background-base);
+  color: var(--v-text-base);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.loading-text {
+  font-weight: 600;
 }
 </style>
