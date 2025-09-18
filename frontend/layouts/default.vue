@@ -93,9 +93,23 @@ export default {
       }
     };
 
+    // Handle route changes to scroll to top
+    this.handleRouteChange = () => {
+      // Scroll content panel to top
+      const contentPanel = document.querySelector('.content-panel');
+      if (contentPanel) {
+        contentPanel.scrollTop = 0;
+      }
+      // Also scroll window to top as fallback
+      window.scrollTo(0, 0);
+    };
+
     document.addEventListener("fullscreenchange", this.handleFullscreen);
     document.addEventListener("keydown", this.handleKeydown);
     window.addEventListener("resize", this.handleResize);
+
+    // Listen to route changes
+    this.$router.afterEach(this.handleRouteChange);
 
     // Listen to global loading state emitted from RightPane/Model
     this.$nuxt.$on('global-loading', this.handleGlobalLoading);
@@ -143,6 +157,11 @@ export default {
     document.removeEventListener("fullscreenchange", this.handleFullscreen);
     document.removeEventListener("keydown", this.handleKeydown);
 
+    // Remove route change listener
+    if (this.handleRouteChange) {
+      this.$router.afterEach(this.handleRouteChange);
+    }
+
     // Remove global loading listener
     this.$nuxt.$off('global-loading', this.handleGlobalLoading);
   },
@@ -151,6 +170,7 @@ export default {
 
 <style scoped lang="scss">
 .root {
+  overflow-y: hidden;
   user-select: none;
 }
 
