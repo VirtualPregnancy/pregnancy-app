@@ -38,8 +38,8 @@ const getTouchSensitivityConfig = (deviceType) => {
       return {
         ...baseConfig,
         touchSensitivity: 0.3,    
-        rotateSpeed: 0.5,       
-        zoomSpeed: 0.6,          
+        rotateSpeed: 0.3,       
+        zoomSpeed: 0.4,          
         panSpeed: 0.4,            
         dampingFactor: 0.15,      
         touchThreshold: 3         
@@ -47,12 +47,12 @@ const getTouchSensitivityConfig = (deviceType) => {
     case 'tablet':
       return {
         ...baseConfig,
-        touchSensitivity: 0.4,    // less sensitive
-        rotateSpeed: 0.6,         // Moderate rotation speed
-        zoomSpeed: 0.7,           // zoom speed
-        panSpeed: 0.5,            // pan speed
+        touchSensitivity: 0.4,    // sensitive
+        rotateSpeed: 0.4,         // Moderate rotation speed
+        zoomSpeed: 0.5,           // zoom speed
+        panSpeed: 0.3,            // pan speed
         dampingFactor: 0.12,      // damping
-        touchThreshold: 2.5       // Moderate threshold
+        touchThreshold: 3       // threshold
       };
     default: // desktop
       return baseConfig;

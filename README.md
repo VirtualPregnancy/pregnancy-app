@@ -1,4 +1,4 @@
-# Web App Template
+# Pregnancy App
 
 [Read the docs](https://pregnancy-app.readthedocs.io/en/latest/pregnancy_app/index.html)
 
