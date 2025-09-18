@@ -6,6 +6,59 @@ let container = null;
 let baseRenderer = null;
 let isInitialized = false;
 
+// Device detection utility
+const detectDeviceType = () => {
+  if (!process.client) return 'desktop';
+  
+  const userAgent = navigator.userAgent.toLowerCase();
+  const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+  const isTablet = /ipad|android(?!.*mobile)/i.test(userAgent);
+  
+  if (isTablet) return 'tablet';
+  if (isMobile) return 'mobile';
+  return 'desktop';
+};
+
+// Get touch sensitivity configuration based on device type
+const getTouchSensitivityConfig = (deviceType) => {
+  const baseConfig = {
+    touchSensitivity: 0.5,
+    rotateSpeed: 0.8,
+    zoomSpeed: 0.8,
+    panSpeed: 0.6,
+    enableDamping: true,
+    dampingFactor: 0.1,
+    touchThreshold: 2,
+    autoRotate: false,
+    autoRotateSpeed: 0
+  };
+
+  switch (deviceType) {
+    case 'mobile':
+      return {
+        ...baseConfig,
+        touchSensitivity: 0.3,    
+        rotateSpeed: 0.5,       
+        zoomSpeed: 0.6,          
+        panSpeed: 0.4,            
+        dampingFactor: 0.15,      
+        touchThreshold: 3         
+      };
+    case 'tablet':
+      return {
+        ...baseConfig,
+        touchSensitivity: 0.4,    // less sensitive
+        rotateSpeed: 0.6,         // Moderate rotation speed
+        zoomSpeed: 0.7,           // zoom speed
+        panSpeed: 0.5,            // pan speed
+        dampingFactor: 0.12,      // damping
+        touchThreshold: 2.5       // Moderate threshold
+      };
+    default: // desktop
+      return baseConfig;
+  }
+};
+
 // Initialize function to be called when needed
 const initializeCopper = () => {
   if (isInitialized || !process.client) {
@@ -22,7 +75,13 @@ const initializeCopper = () => {
     
     const guiOpen = false;
     
-    // Create copper renderer
+    // Detect device type and get appropriate touch sensitivity config
+    const deviceType = detectDeviceType();
+    const touchConfig = getTouchSensitivityConfig(deviceType);
+    
+    console.log(`[Copper] Initializing for ${deviceType} device with touch sensitivity: ${touchConfig.touchSensitivity}`);
+    
+    // Create copper renderer with device-specific touch sensitivity adjustments
     baseRenderer = new Copper.copperRenderer(container, {
       guiOpen,
       camera: true,
@@ -31,6 +90,8 @@ const initializeCopper = () => {
       logarithmicDepthBuffer: true,
       light: false,
       controls: "copper3d",
+      // Apply device-specific touch sensitivity configuration
+      controlsOptions: touchConfig
     });
     
     if (guiOpen) baseRenderer.gui.closed = true;
