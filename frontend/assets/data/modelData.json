@@ -10,9 +10,15 @@
         "displayName": "Normal Placenta",
         "color": 16716066,
         "opacity": 1.0,
-        "modelSize": 250,
+        "modelSize": 220,
         "useCylinderGeometry": true,
-        "cylinderSegments": 10
+        "cylinderSegments": 10,
+        "scaleBar": {
+          "enabled": true,
+          "length": 100,
+          "unit": "mm",
+          "label": "18cm"
+        }
       },
       "waveform": {
         "xAxis": "Time (s)",
@@ -43,10 +49,16 @@
         "displayName": "Fetal Growth Restriction",
         "color": 16716066,
         "opacity": 1,
-        "modelSize": 250,
+        "modelSize": 220,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
-        "defaultRotationY": -1.5707963267948966
+        "defaultRotationY": -1.5707963267948966,
+        "scaleBar": {
+          "enabled": true,
+          "length": 80,
+          "unit": "mm",
+          "label": "15cm"
+        }
       },
       "waveform": {
         "xAxis": "Time (s)",
@@ -77,10 +89,16 @@
         "displayName": "Gestational Diabetes Melitus",
         "color": 16716066,
         "opacity": 1.0,
-        "modelSize": 250,
+        "modelSize": 220,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
-        "defaultRotationY": 1.5707963267948966
+        "defaultRotationY": 1.5707963267948966,
+        "scaleBar": {
+          "enabled": true,
+          "length": 120,
+          "unit": "mm",
+          "label": "20cm"
+        }
       },
       "waveform": {
         "xAxis": "Time (s)",
