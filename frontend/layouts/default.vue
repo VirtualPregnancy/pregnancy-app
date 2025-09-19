@@ -1,5 +1,18 @@
 <template>
   <v-app ref="base_background" class="root" style="background-color: var(--v-backgroundAlt-base);">
+    <!-- Global floating controls (top-left, above all pages) -->
+    <div class="fixed top-2 left-2 z-50">
+      <template v-if="mdAndUp">
+        <!-- Desktop screens: show Home only -->
+        <v-btn fab small color="primary" :to="{ path: '/' }" title="Home">
+          <v-icon >mdi-home</v-icon>
+        </v-btn>
+      </template>
+      <template v-else>
+        <!-- Mobile/Tablet: show Menu -->
+        <Menu :show-back-to-landing="true" />
+      </template>
+    </div>
     <!-- Main Container: Upper and Lower sections -->
     <div class="main-container">
       
@@ -47,11 +60,13 @@
 
 <script>
 import Navigation from '@/components/navigation/Navigation.vue';
+import Menu from '@/components/landing/Menu.vue';
 
 export default {
   name: "DefaultLayout",
   components: {
-    Navigation
+    Navigation,
+    Menu
   },
 
   data: () => {

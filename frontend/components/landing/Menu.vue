@@ -1,78 +1,105 @@
 <template>
   <div>
     <!-- Menu Icon -->
-    <v-icon 
-      size="28" 
-      color="#333" 
+    <v-icon
+      size="28"
+      color="primary"
       @click="toggleMenu"
       class="transition-transform duration-300 hover:scale-110 cursor-pointer"
     >
       mdi-menu
     </v-icon>
-    <!-- Menu Popup -->
-    <div 
-      v-if="showMenu" 
-      class="menu-popup"
-      @click.stop
-    >
-      <!-- Menu Content -->
-      <div class="menu-content">
-        <!-- Header -->
-        <div class="menu-header">
-          <span class="text-h6">Pregnancy App Menu</span>
-          <v-btn icon small @click="closeMenu" class="close-btn">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </div>
 
-        <!-- Menu Items -->
-        <div class="menu-items border-b border-gray-200">
-          <!-- Main Topics -->
-          <div v-for="(topic, topicKey) in menuData" :key="topicKey" class="topic-section mb-1 ">
-            <!-- Main Topic -->
-            <v-btn
-              block
-              text
-              small
-              class="menu-main-item justify-start"
-              :class="{ 'topic-expanded': expandedTopic === topicKey }"
-              @click="toggleTopic(topicKey, topic)"
-            >
-              <span class="text-left break-words whitespace-normal leading-tight pr-2" style="width: 320px; max-width: 320px;">{{ topic.heading }}</span>
-              <v-icon class="chevron-icon" :class="{ 'rotated': expandedTopic === topicKey }" size="16">
-                mdi-chevron-down
-              </v-icon>
+    <!-- Fullscreen Floating Menu -->
+    <div v-if="showMenu" class="fixed inset-0 z-50" @click="closeMenu">
+      <!-- Backdrop -->
+      <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+
+      <!-- Panel anchored to top-left, expands to the right -->
+      <div
+        class="absolute top-4 left-4 md:top-6 md:left-6 w-[92vw] sm:w-[70vw] md:w-[420px] max-w-[92vw]"
+        @click.stop
+      >
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+          <!-- Header -->
+          <div class="flex items-center justify-between px-4 py-3 text-white" :style="{ background: 'var(--v-success-base)' }">
+            <span class="text-base md:text-lg font-semibold">Pregnancy App Menu</span>
+            <v-btn icon small @click="closeMenu" class="!text-white">
+              <v-icon>mdi-close</v-icon>
             </v-btn>
-
-            <!-- Subtopics -->
-            <v-expand-transition>
-              <div v-show="expandedTopic === topicKey" class="subtopics-container ml-3 mt-1">
-                <v-btn
-                  v-for="(subtopic, subKey) in topic.subTopics"
-                  :key="subKey"
-                  block
-                  text
-                  x-small
-                  class="menu-sub-item justify-start mb-1"
-                  @click="navigateToPage(topicKey, subKey)"
-                >
-                  <span class="text-left text-caption break-words whitespace-normal leading-tight" style="width: 280px; max-width: 280px; display: block;">{{ subtopic.heading }}</span>
-                </v-btn>
-              </div>
-            </v-expand-transition>
           </div>
 
-          <!-- About -->
-          <div class="menu-item">
+          <!-- Back to Landing Page (optional) -->
+          <div v-if="showBackToLanding && !isOnLanding" class="px-2 pt-2">
             <v-btn
               block
               text
               small
-              class="menu-main-item justify-start"
-              @click="navigateToAbout"
+              class="justify-start rounded-md"
+              @click="goLanding"
             >
-              <span class="text-left">About Us</span>
+              <v-icon left small>mdi-home</v-icon>
+              <span>Back to Landing Page</span>
             </v-btn>
+          </div>
+
+          <!-- Menu Items -->
+          <div class="px-2 pb-2 max-h-[70vh] overflow-y-auto">
+            <div
+              v-for="(topic, topicKey) in menuData"
+              :key="topicKey"
+              class="mb-1"
+            >
+              <!-- Main Topic -->
+              <v-btn
+                block
+                text
+                small
+                class="justify-start rounded-md"
+                :class="[
+                  expandedTopic === topicKey ? 'bg-blue-50 border-l-2 border-blue-400' : '',
+                  activeTopicClass(topicKey) ? 'bg-blue-100' : ''
+                ]"
+                @click="toggleTopic(topicKey, topic)"
+              >
+                <span class="text-left break-words whitespace-normal leading-tight pr-2 w-[70vw] sm:w-[60vw] md:w-[340px]">{{ topic.heading }}</span>
+                <v-icon :class="expandedTopic === topicKey ? 'transform rotate-180 transition-transform' : 'transition-transform'" size="16">
+                  mdi-chevron-down
+                </v-icon>
+              </v-btn>
+
+              <!-- Subtopics -->
+              <v-expand-transition>
+                <div v-show="expandedTopic === topicKey" :class="expandedTopic === topicKey ? 'bg-blue-50 ml-3 pt-1 border-l border-gray-200 pl-2' : 'ml-3 mt-1 border-l border-gray-200 pl-2'">
+                  <v-btn
+                    v-for="(subtopic, subKey) in topic.subTopics"
+                    :key="subKey"
+                    block
+                    text
+                    x-small
+                    class="justify-start rounded-md mb-1"
+                    
+                    :class="isActiveSub(topicKey, subKey) ? 'bg-blue-200 font-bold text-blue-700' : ''"
+                    @click="navigateToPage(topicKey, subKey)"
+                  >
+                    <span class="border-b border-gray-200 text-left text-caption break-words whitespace-normal leading-tight w-[66vw] sm:w-[56vw] md:w-[300px] block">{{ subtopic.heading }}</span>
+                  </v-btn>
+                </div>
+              </v-expand-transition>
+            </div>
+
+            <!-- About -->
+            <div class="mt-1">
+              <v-btn
+                block
+                text
+                small
+                class="justify-start rounded-md"
+                @click="navigateToAbout"
+              >
+                <span class="text-left">About Us</span>
+              </v-btn>
+            </div>
           </div>
         </div>
       </div>
@@ -83,11 +110,35 @@
 <script>
 export default {
   name: 'Menu',
+  props: {
+    showBackToLanding: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       showMenu: false,
       expandedTopic: null,
       menuData: {}
+    }
+  },
+  computed: {
+    // Parse current topic/sub from slug route like `topic-sub`
+    currentTopicKey() {
+      const slug = this.$route && this.$route.params && this.$route.params.slug;
+      if (!slug) return '';
+      const [topic] = slug.split('-');
+      return (topic || '').toLowerCase();
+    },
+    currentSubKey() {
+      const slug = this.$route && this.$route.params && this.$route.params.slug;
+      if (!slug) return '';
+      const parts = slug.split('-');
+      return parts.slice(1).join('-');
+    },
+    isOnLanding() {
+      return this.$route && (this.$route.path === '/' || this.$route.name === 'index');
     }
   },
 
@@ -96,6 +147,8 @@ export default {
       this.showMenu = !this.showMenu;
       if (this.showMenu) {
         this.loadMenuData();
+        // Expand current topic by default
+        this.expandedTopic = this.currentTopicKey;
       }
     },
 
@@ -175,186 +228,24 @@ export default {
       const slug = `${topicKey}-${subKey}`;
       this.$router.push(`/${slug}`);
       this.closeMenu();
+    },
+
+    goLanding() {
+      this.$router.push('/');
+      this.closeMenu();
+    },
+
+    activeTopicClass(topicKey) {
+      return this.currentTopicKey === topicKey ? 'active-topic' : '';
+    },
+
+    isActiveSub(topicKey, subKey) {
+      return this.currentTopicKey === topicKey && this.currentSubKey === subKey;
     }
   }
 }
 </script>
 
 <style scoped>
-.menu-icon {
-  transition: transform 0.3s ease;
-}
-
-.menu-icon:hover {
-  transform: scale(1.1);
-}
-
-.menu-popup {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  z-index: 1000;
-  margin-top: 8px;
-}
-
-.menu-content {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  min-width: 250px;
-  max-width: 400px;
-  animation: slideDown 0.2s ease;
-  overflow: hidden;
-}
-
-.menu-header {
-  background: var(--v-success-base);
-  color:white;
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 8px 8px 0 0;
-}
-
-.close-btn {
-  color: white !important;
-}
-
-.menu-items {
-  padding: 8px;
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.menu-main-item {
-  border-radius: 6px;
-  margin-bottom: 2px;
-  min-width: 250px;
-  max-width: 400px;
-  transition: all 0.2s ease;
-  color: #333 !important;
-  min-height: 36px;
-  height: auto !important;
-  white-space: normal !important;
-  word-wrap: break-word;
-  padding: 8px 12px;
-  align-items: flex-start !important;
-}
-
-.menu-main-item:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.topic-expanded {
-  background-color: rgba(25, 118, 210, 0.08);
-  border-left: 3px solid var(--v-accent-base);
-}
-
-.menu-sub-item {
-  border-radius: 4px;
-  margin-left: 8px;
-  transition: all 0.2s ease;
-  color: #666 !important;
-  min-height: 28px;
-  height: auto !important;
-  white-space: normal !important;
-  word-wrap: break-word;
-  padding: 6px 12px;
-  width: 100%;
-}
-
-.menu-sub-item:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.chevron-icon {
-  transition: transform 0.2s ease;
-}
-
-.chevron-icon.rotated {
-  transform: rotate(180deg);
-}
-
-.subtopics-container {
-  border-left: 1px solid rgba(0, 0, 0, 0.1);
-  padding-left: 8px;
-}
-
-@keyframes slideDown {
-  from { 
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-width: 768px) {
-  .menu-content {
-    min-width: 200px;
-    max-width: 250px;
-  }
-  
-  .menu-main-item {
-    min-width: 200px;
-    max-width: 250px;
-  }
-  
-  .menu-main-item span {
-    width: 180px !important;
-    max-width: 180px !important;
-  }
-  
-  .menu-sub-item span {
-    width: 160px !important;
-    max-width: 160px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .menu-content {
-    min-width: 250px;
-    max-width: 300px;
-  }
-  
-  .menu-main-item {
-    min-width: 200px;
-    max-width: 250px;
-  }
-  
-  .menu-main-item span {
-    width: 180px !important;
-    max-width: 180px !important;
-  }
-  
-  .menu-sub-item span {
-    width: 160px !important;
-    max-width: 160px !important;
-  }
-}
-
-@media (max-width: 360px) {
-  .menu-content {
-    min-width: 120px;
-    max-width: 160px;
-  }
-  
-  .menu-main-item {
-    min-width: 120px;
-    max-width: 160px;
-  }
-  
-  .menu-main-item span {
-    width: 100px !important;
-    max-width: 100px !important;
-  }
-  
-  .menu-sub-item span {
-    width: 80px !important;
-    max-width: 80px !important;
-  }
-}
+/* Minimal: most styling via Tailwind utility classes */
 </style>

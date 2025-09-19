@@ -1,16 +1,6 @@
 <template>
   <div class="left-pane h-full">
-    <!-- Home button in top right corner -->
-    <v-btn
-      fab
-      small
-      color="primary"
-      class="home-btn"
-      :to="{ path: '/' }"
-      @click="goHome"
-    >
-      <v-icon>mdi-home</v-icon>
-    </v-btn>
+    <!-- Global menu now floats in layout; remove local controls -->
 
    
     
@@ -21,7 +11,9 @@
         <lazy-panel 
           @conditions-updated="handleConditionsUpdate"
         />
+        <!-- Hide the full sub-topics list on small screens; use Menu instead -->
         <SubMenu 
+          v-if="mdAndUp"
           :subtopics="currentTopicSubtopics"
           :parent-slug="currentParentSlug"
           :topic-title="currentTopicTitle"

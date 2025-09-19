@@ -154,14 +154,14 @@
         "title": "When Care Changes",
         "id": "4.b",
         "component": "none",
-        "heading": "How clinical care pathways may change during your pregnancy if there are any concerns about mother or baby.",
+        "heading": "How clinical care pathways may change?",
         "icon": "mdi-heart-cog"
       }
     }
   },
   "support": {
     "id": "5",
-    "title": "Pregnancy Support",
+    "title": "Support Services",
     "component": "none",
     "heading": "Pregnancy / Baby Support Services",
     "icon": "mdi-account-group",
