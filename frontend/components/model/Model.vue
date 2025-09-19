@@ -146,6 +146,54 @@ export default {
   },
 
   methods: {
+    // Apply device-aware, stable camera control settings
+    applyControlTuning() {
+      try {
+        const scene = this.scene;
+        if (!scene || !scene.controls) return;
+
+        const controls = scene.controls;
+        const size = (this.modelConfig && this.modelConfig.modelSize) ? this.modelConfig.modelSize : 200;
+
+        // Mobile/tablet detection: fall back to Vuetify breakpoint
+        const isTouchDevice = (typeof window !== 'undefined') && (
+          'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
+        );
+        const isMobileOrTablet = isTouchDevice && !this.mdAndUp;
+
+        if (isMobileOrTablet) {
+          // Lower speeds to avoid sudden jumps; clamp distances
+          controls.rotateSpeed = 0.2;
+          controls.zoomSpeed = 0.2;
+          controls.panSpeed = 0.15;
+          // Constrain camera distance around model size
+          controls.minDistance = Math.max(10, size * 0.25);
+          controls.maxDistance = Math.max(controls.minDistance + 10, size * 6);
+          if (typeof controls.minZoom !== 'undefined') {
+            controls.minZoom = 0.8;
+            controls.maxZoom = 2.0;
+          }
+        } else {
+          // Desktop: slightly faster but still stable
+          controls.rotateSpeed = 1.0;
+          controls.zoomSpeed = 0.8;
+          controls.panSpeed = 0.5;
+          controls.minDistance = Math.max(10, size * 0.2);
+          controls.maxDistance = Math.max(controls.minDistance + 10, size * 10);
+          if (typeof controls.minZoom !== 'undefined') {
+            controls.minZoom = 0.5;
+            controls.maxZoom = 4.0;
+          }
+        }
+
+        // Nudge an update if available
+        if (typeof controls.update === 'function') {
+          controls.update();
+        }
+      } catch (e) {
+        console.warn('[Model] Failed to apply control tuning:', e);
+      }
+    },
     // Get correct path for static assets based on deployment environment
     getAssetPath(relativePath) {
       let basePath = "";
@@ -351,6 +399,9 @@ export default {
 
         // Set copper scene reference for camera control
         this.vtkLoader.setCopperScene(this.scene);
+
+        // Apply safer/tuned controls, especially for touch devices
+        this.applyControlTuning();
       } catch (error) {
         console.error("[Model] Error initializing VTK loader:", error);
         this.$emit("model-state-updated", {
@@ -473,6 +524,9 @@ export default {
           const viewPath = this.getAssetPath("modelView/noInfarct_view.json");
           this.scene.loadViewUrl(viewPath);
           this.scene.onWindowResize();
+
+          // Re-apply control tuning after view load
+          this.applyControlTuning();
         },
       });
 
@@ -501,6 +555,8 @@ export default {
     handleModelSizeChange(newSize) {
       if (this.vtkLoader && this.vtkLoader.scene) {
         this.vtkLoader.scaleModel(newSize * 2);
+        // Update controls to keep distances proportional to size
+        this.applyControlTuning();
       }
     },
 
@@ -526,6 +582,9 @@ export default {
           // Remove any overlaid data or effects
           this.vtkLoader.clearTemporaryData();
         }
+
+        // Ensure controls remain within sane limits after reset
+        this.applyControlTuning();
 
         // Emit state update to parent
         this.$emit("model-state-updated", {
