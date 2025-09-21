@@ -1,5 +1,18 @@
 <template>
   <v-app ref="base_background" class="root" style="background-color: var(--v-backgroundAlt-base);">
+    <!-- Global floating controls (top-left, above all pages) -->
+    <div class="fixed top-2 left-2 z-50">
+      <template v-if="mdAndUp">
+        <!-- Desktop screens: show Home only -->
+        <v-btn fab small color="primary" :to="{ path: '/' }" title="Home">
+          <v-icon >mdi-home</v-icon>
+        </v-btn>
+      </template>
+      <template v-else>
+        <!-- Mobile/Tablet: show Menu -->
+        <Menu :show-back-to-landing="true" />
+      </template>
+    </div>
     <!-- Main Container: Upper and Lower sections -->
     <div class="main-container">
       
@@ -34,22 +47,33 @@
       </div>
       
     </div>
+
+    <!-- Global Loading Overlay to block interactions until ready -->
+    <div v-if="isAppLoading" class="global-loading-overlay">
+      <div class="loading-card">
+        <v-progress-circular indeterminate color="primary" size="48"></v-progress-circular>
+        <div class="loading-text">Loading, please wait…</div>
+      </div>
+    </div>
   </v-app>
 </template>
 
 <script>
 import Navigation from '@/components/navigation/Navigation.vue';
+import Menu from '@/components/landing/Menu.vue';
 
 export default {
   name: "DefaultLayout",
   components: {
-    Navigation
+    Navigation,
+    Menu
   },
 
   data: () => {
     return {
       multiplier: 1,
       panelHeight: 0,
+      isAppLoading: false,
 
     };
   },
@@ -84,9 +108,26 @@ export default {
       }
     };
 
+    // Handle route changes to scroll to top
+    this.handleRouteChange = () => {
+      // Scroll content panel to top
+      const contentPanel = document.querySelector('.content-panel');
+      if (contentPanel) {
+        contentPanel.scrollTop = 0;
+      }
+      // Also scroll window to top as fallback
+      window.scrollTo(0, 0);
+    };
+
     document.addEventListener("fullscreenchange", this.handleFullscreen);
     document.addEventListener("keydown", this.handleKeydown);
     window.addEventListener("resize", this.handleResize);
+
+    // Listen to route changes
+    this.$router.afterEach(this.handleRouteChange);
+
+    // Listen to global loading state emitted from RightPane/Model
+    this.$nuxt.$on('global-loading', this.handleGlobalLoading);
   },
 
   updated() {
@@ -115,6 +156,11 @@ export default {
       this.lastConditionData = data;
     },
     
+    // Toggle global loading overlay state
+    handleGlobalLoading(isLoading) {
+      this.isAppLoading = !!isLoading;
+    },
+    
 
   },
 
@@ -125,12 +171,21 @@ export default {
     window.removeEventListener("resize", this.handleResize);
     document.removeEventListener("fullscreenchange", this.handleFullscreen);
     document.removeEventListener("keydown", this.handleKeydown);
+
+    // Remove route change listener
+    if (this.handleRouteChange) {
+      this.$router.afterEach(this.handleRouteChange);
+    }
+
+    // Remove global loading listener
+    this.$nuxt.$off('global-loading', this.handleGlobalLoading);
   },
 };
 </script>
 
 <style scoped lang="scss">
 .root {
+  overflow-y: hidden;
   user-select: none;
 }
 
@@ -196,5 +251,33 @@ export default {
 }
 .panel-height2 {
   height: 100%;
+}
+
+/* Global loading overlay */
+.global-loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all; /* block clicks behind */
+}
+
+.loading-card {
+  background: var(--v-background-base);
+  color: var(--v-text-base);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.loading-text {
+  font-weight: 600;
 }
 </style>

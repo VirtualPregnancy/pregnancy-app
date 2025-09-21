@@ -6,6 +6,7 @@ let container = null;
 let baseRenderer = null;
 let isInitialized = false;
 
+
 // Initialize function to be called when needed
 const initializeCopper = () => {
   if (isInitialized || !process.client) {
@@ -22,7 +23,9 @@ const initializeCopper = () => {
     
     const guiOpen = false;
     
-    // Create copper renderer
+    
+    
+    // Create copper renderer with device-specific touch sensitivity adjustments
     baseRenderer = new Copper.copperRenderer(container, {
       guiOpen,
       camera: true,
@@ -30,7 +33,7 @@ const initializeCopper = () => {
       alpha: true,
       logarithmicDepthBuffer: true,
       light: false,
-      controls: "copper3d",
+      controls: "copper3d"
     });
     
     if (guiOpen) baseRenderer.gui.closed = true;

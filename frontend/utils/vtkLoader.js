@@ -16,6 +16,21 @@ const COLOR_CONSTANTS = {
     HIGH: { r: 242/255, g: 183/255, b: 68/255 },     // Orange
     MAX: { r: 170/255, g: 68/255, b: 47/255 },       // Red-Orange
     ULTRA: { r: 140/255, g: 41/255, b: 38/255 }      // Dark Red
+  },
+  // Flux color mapping - linear scale 0-10, >10 as high flow
+  FLUX_COLORS: {
+    ZERO: { r: 0.0, g: 0.2, b: 0.8 },        // Blue (0)
+    LOW: { r: 0.2, g: 0.6, b: 1.0 },         // Light Blue (0-2.5)
+    BLUE_LOW: { r: 0.0, g: 1.0, b: 0.5 },  // Green (2.5-5)
+    MEDIUM_HIGH: { r: 1.0, g: 1.0, b: 0.0 }, // Yellow (5-7.5)
+    HIGH: { r: 1.0, g: 0.5, b: 0.0 },        // Orange (7.5-10)
+    RED_HIGH: { r: 1.0, g: 0.0, b: 0.0 }    // Red (>10)
+  },
+  FLUX_THRESHOLDS: {
+    HIGH_FLOW: 10.0,
+    MEDIUM_HIGH: 7.5,
+    MEDIUM: 5.0,
+    BLUE_LOW: 2.5
   }
 };
 
@@ -298,9 +313,8 @@ export default class VTKLoader {
   }
 
   /**
-   * Create smooth continuous tube geometry from LINES data
-   * Creates seamless tubes by generating continuous rings along each line
-   * This eliminates the "bamboo joint" effect and creates realistic tissue-like appearance
+   * Create tube geometry from LINES data
+   * Generates rings along each line without extra joint-connection work
    * LINES format: [numPoints, point1, point2, point3, ...] where points are connected sequentially
    */
   createCylinderGeometry(points, radiusData, pressureData, fluxData, cellConnections, modelSize, config) {
@@ -347,10 +361,6 @@ export default class VTKLoader {
       maxFlux = max;
     }
     
-    
-    // Detect branching points for spherical junctions
-    const branchingPoints = this.detectBranchingPoints(cellConnections, points.length / 3);
-    
     // Process each line to create smooth continuous tubes
     for (const connection of cellConnections) {
       const cellSize = connection[0];
@@ -359,8 +369,8 @@ export default class VTKLoader {
       
       // Create smooth tube for this entire line
       const tubeGeometry = this.createSmoothTube(
-        connection, points, radiusData, pressureData, fluxData, 
-        radialSegments, branchingPoints, minPressure, maxPressure, minFlux, maxFlux, config
+        connection, points, radiusData, pressureData, fluxData,
+        radialSegments, minPressure, maxPressure, minFlux, maxFlux, config
       );
       
       // Validate tube geometry
@@ -382,10 +392,7 @@ export default class VTKLoader {
       }
     }
     
-    // Create spherical junctions at branching points (only in quality mode)
-    if (config.performanceMode !== 'fast') {
-      this.createSmoothSphericalJunctions(branchingPoints, points, radiusData, pressureData, fluxData, minPressure, maxPressure, minFlux, maxFlux, vertices, normals, colors, indices, indexOffset, config);
-    }
+    // Skip creating spherical junctions at branching points to improve load time
     
     // Set geometry attributes
     combinedGeometry.setAttribute('position', new this.THREE.Float32BufferAttribute(vertices, 3));
@@ -464,7 +471,8 @@ export default class VTKLoader {
   }
 
   /**
-   * Map flux value to color using flow-based color scheme
+   * Map flux value to color using linear flow-based color scheme
+   * >10 as high flow, 0-10 divided evenly for other colors
    */
   fluxToColor(flux, minFlux, maxFlux) {
     const color = new this.THREE.Color();
@@ -475,37 +483,49 @@ export default class VTKLoader {
       return color;
     }
     
-    // Calculate dynamic range and apply logarithmic scaling
-    const absMinFlux = Math.abs(minFlux);
-    const absMaxFlux = Math.abs(maxFlux);
-    const maxAbsValue = Math.max(absMinFlux, absMaxFlux);
+    // Use absolute value for flux mapping
+    const absFlux = Math.abs(flux);
+    const { FLUX_COLORS, FLUX_THRESHOLDS } = COLOR_CONSTANTS;
     
-    const offset = maxAbsValue * 0.01;
-    const logFlux = Math.sign(flux) * Math.log(Math.abs(flux) + offset);
-    const logMin = Math.sign(minFlux) * Math.log(Math.abs(minFlux) + offset);
-    const logMax = Math.sign(maxFlux) * Math.log(Math.abs(maxFlux) + offset);
-    const logRange = logMax - logMin;
-    
-    let normalized;
-    if (logRange !== 0) {
-      normalized = (logFlux - logMin) / logRange;
+    // Determine color based on flux value ranges
+    if (absFlux <= 0) {
+      // Zero flow - blue
+      color.setRGB(FLUX_COLORS.ZERO.r, FLUX_COLORS.ZERO.g, FLUX_COLORS.ZERO.b);
+    } else if (absFlux <= FLUX_THRESHOLDS.BLUE_LOW) {
+      // Low flow (0-2.5) - light blue
+      const t = absFlux / FLUX_THRESHOLDS.BLUE_LOW;
+      color.setRGB(
+        FLUX_COLORS.ZERO.r + (FLUX_COLORS.LOW.r - FLUX_COLORS.ZERO.r) * t,
+        FLUX_COLORS.ZERO.g + (FLUX_COLORS.LOW.g - FLUX_COLORS.ZERO.g) * t,
+        FLUX_COLORS.ZERO.b + (FLUX_COLORS.LOW.b - FLUX_COLORS.ZERO.b) * t
+      );
+    } else if (absFlux <= FLUX_THRESHOLDS.MEDIUM) {
+      // Medium-low flow (2.5-5) - green
+      const t = (absFlux - FLUX_THRESHOLDS.BLUE_LOW) / (FLUX_THRESHOLDS.MEDIUM - FLUX_THRESHOLDS.BLUE_LOW);
+      color.setRGB(
+        FLUX_COLORS.LOW.r + (FLUX_COLORS.BLUE_LOW.r - FLUX_COLORS.LOW.r) * t,
+        FLUX_COLORS.LOW.g + (FLUX_COLORS.BLUE_LOW.g - FLUX_COLORS.LOW.g) * t,
+        FLUX_COLORS.LOW.b + (FLUX_COLORS.BLUE_LOW.b - FLUX_COLORS.LOW.b) * t
+      );
+    } else if (absFlux <= FLUX_THRESHOLDS.MEDIUM_HIGH) {
+      // Medium-high flow (5-7.5) - yellow
+      const t = (absFlux - FLUX_THRESHOLDS.MEDIUM) / (FLUX_THRESHOLDS.MEDIUM_HIGH - FLUX_THRESHOLDS.MEDIUM);
+      color.setRGB(
+        FLUX_COLORS.BLUE_LOW.r + (FLUX_COLORS.MEDIUM_HIGH.r - FLUX_COLORS.BLUE_LOW.r) * t,
+        FLUX_COLORS.BLUE_LOW.g + (FLUX_COLORS.MEDIUM_HIGH.g - FLUX_COLORS.BLUE_LOW.g) * t,
+        FLUX_COLORS.BLUE_LOW.b + (FLUX_COLORS.MEDIUM_HIGH.b - FLUX_COLORS.BLUE_LOW.b) * t
+      );
+    } else if (absFlux <= FLUX_THRESHOLDS.HIGH_FLOW) {
+      // High flow (7.5-10) - orange
+      const t = (absFlux - FLUX_THRESHOLDS.MEDIUM_HIGH) / (FLUX_THRESHOLDS.HIGH_FLOW - FLUX_THRESHOLDS.MEDIUM_HIGH);
+      color.setRGB(
+        FLUX_COLORS.MEDIUM_HIGH.r + (FLUX_COLORS.HIGH.r - FLUX_COLORS.MEDIUM_HIGH.r) * t,
+        FLUX_COLORS.MEDIUM_HIGH.g + (FLUX_COLORS.HIGH.g - FLUX_COLORS.MEDIUM_HIGH.g) * t,
+        FLUX_COLORS.MEDIUM_HIGH.b + (FLUX_COLORS.HIGH.b - FLUX_COLORS.MEDIUM_HIGH.b) * t
+      );
     } else {
-      normalized = 0.5;
-    }
-    
-    const sensitivityFactor = 0.3;
-    const enhancedNormalized = Math.pow(normalized, sensitivityFactor);
-    const t = enhancedNormalized * 2 - 1;
-    
-    // Simplified color mapping
-    if (t < -0.5) {
-      color.setRGB(0.0, 0.2, 0.8); // Blue
-    } else if (t < 0) {
-      color.setRGB(0.2, 0.6, 1.0); // Light blue
-    } else if (t < 0.5) {
-      color.setRGB(0.0, 1.0, 0.5); // Green
-    } else {
-      color.setRGB(1.0, 0.5, 0.0); // Orange to red
+      // Very high flow (>10) - red
+      color.setRGB(FLUX_COLORS.RED_HIGH.r, FLUX_COLORS.RED_HIGH.g, FLUX_COLORS.RED_HIGH.b);
     }
     
     return color;
@@ -515,7 +535,7 @@ export default class VTKLoader {
    * Create a smooth continuous tube along a line of points
    * This eliminates the "bamboo joint" effect by creating seamless rings
    */
-  createSmoothTube(connection, points, radiusData, pressureData, fluxData, radialSegments, branchingPoints, minPressure, maxPressure, minFlux, maxFlux, config) {
+  createSmoothTube(connection, points, radiusData, pressureData, fluxData, radialSegments, minPressure, maxPressure, minFlux, maxFlux, config) {
     const vertices = [];
     const normals = [];
     const colors = [];
@@ -667,119 +687,8 @@ export default class VTKLoader {
   }
 
   /**
-   * Create a tapered cylinder between two points (legacy method for junctions)
+   * Previously contained legacy junction helpers; removed for performance.
    */
-  createTaperedCylinder(p1, p2, radius1, radius2, radialSegments, color1, color2, isBranchPoint1 = false, isBranchPoint2 = false) {
-    const vertices = [];
-    const normals = [];
-    const colors = [];
-    const indices = [];
-    
-    // Calculate cylinder direction and perpendicular vectors
-    const direction = new this.THREE.Vector3().subVectors(p2, p1).normalize();
-    
-    // Create perpendicular vectors for cylinder cross-section
-    const up = new this.THREE.Vector3(0, 1, 0);
-    const right = new this.THREE.Vector3().crossVectors(direction, up).normalize();
-    if (right.lengthSq() < 0.1) {
-      right.crossVectors(direction, new this.THREE.Vector3(1, 0, 0)).normalize();
-    }
-    const forward = new this.THREE.Vector3().crossVectors(right, direction).normalize();
-    
-    let vertexIndex = 0;
-    
-    // 1. Generate center points for end caps (if not branching points)
-    let centerIndex1 = -1, centerIndex2 = -1;
-    
-    if (!isBranchPoint1) {
-      // Center point for first cap
-      vertices.push(p1.x, p1.y, p1.z);
-      normals.push(-direction.x, -direction.y, -direction.z);
-      colors.push(color1.r, color1.g, color1.b);
-      centerIndex1 = vertexIndex++;
-    }
-    
-    if (!isBranchPoint2) {
-      // Center point for second cap
-      vertices.push(p2.x, p2.y, p2.z);
-      normals.push(direction.x, direction.y, direction.z);
-      colors.push(color2.r, color2.g, color2.b);
-      centerIndex2 = vertexIndex++;
-    }
-    
-    // 2. Generate vertices for cylinder rings
-    const ringStartIndex = vertexIndex;
-    
-    for (let ring = 0; ring <= 1; ring++) {
-      const t = ring;
-      const currentPos = new this.THREE.Vector3().lerpVectors(p1, p2, t);
-      const currentRadius = radius1 + (radius2 - radius1) * t;
-      const currentColor = new this.THREE.Color().lerpColors(color1, color2, t);
-      
-      for (let segment = 0; segment < radialSegments; segment++) {
-        const angle = (segment / radialSegments) * Math.PI * 2;
-        const x = Math.cos(angle) * currentRadius;
-        const y = Math.sin(angle) * currentRadius;
-        
-        // Calculate vertex position
-        const vertexPos = new this.THREE.Vector3()
-          .copy(currentPos)
-          .add(right.clone().multiplyScalar(x))
-          .add(forward.clone().multiplyScalar(y));
-        
-        vertices.push(vertexPos.x, vertexPos.y, vertexPos.z);
-        
-        // Calculate normal for side surface
-        const normal = new this.THREE.Vector3()
-          .copy(right.clone().multiplyScalar(x))
-          .add(forward.clone().multiplyScalar(y))
-          .normalize();
-        
-        normals.push(normal.x, normal.y, normal.z);
-        colors.push(currentColor.r, currentColor.g, currentColor.b);
-        vertexIndex++;
-      }
-    }
-    
-    // 3. Generate indices for cylinder side walls
-    for (let ring = 0; ring < 1; ring++) {
-      for (let segment = 0; segment < radialSegments; segment++) {
-        const current = ringStartIndex + ring * radialSegments + segment;
-        const next = ringStartIndex + ring * radialSegments + ((segment + 1) % radialSegments);
-        const currentNext = ringStartIndex + (ring + 1) * radialSegments + segment;
-        const nextNext = ringStartIndex + (ring + 1) * radialSegments + ((segment + 1) % radialSegments);
-        
-        // Two triangles per quad
-        indices.push(current, next, currentNext);
-        indices.push(currentNext, next, nextNext);
-      }
-    }
-    
-    // 4. Generate indices for end caps (only if not branching points)
-    if (!isBranchPoint1 && centerIndex1 >= 0) {
-      // First cap (facing backwards)
-      for (let segment = 0; segment < radialSegments; segment++) {
-        const current = ringStartIndex + segment;
-        const next = ringStartIndex + ((segment + 1) % radialSegments);
-        
-        // Triangle from center to edge (reversed winding for correct normal)
-        indices.push(centerIndex1, next, current);
-      }
-    }
-    
-    if (!isBranchPoint2 && centerIndex2 >= 0) {
-      // Second cap (facing forwards)
-      for (let segment = 0; segment < radialSegments; segment++) {
-        const current = ringStartIndex + radialSegments + segment;
-        const next = ringStartIndex + radialSegments + ((segment + 1) % radialSegments);
-        
-        // Triangle from center to edge
-        indices.push(centerIndex2, current, next);
-      }
-    }
-    
-    return { vertices, normals, colors, indices };
-}
 
   /**
    * Create appropriate mesh from geometry
@@ -882,137 +791,40 @@ export default class VTKLoader {
   }
 
   /**
-   * Detect branching points where multiple tubes connect
+   * Scale all loaded models without re-rendering
    */
-  detectBranchingPoints(cellConnections, totalPoints) {
-    const pointConnections = new Map();
-    
-    // Build connectivity graph from LINES data
-    for (const connection of cellConnections) {
-      const cellSize = connection[0];
-      
-      // For LINES data, each line represents a continuous path
-      // Connect all consecutive points in the line
-      for (let i = 1; i < cellSize; i++) {
-        const idx1 = connection[i];
-        const idx2 = connection[i + 1];
-        
-        if (idx2 !== undefined && idx1 < totalPoints && idx2 < totalPoints) {
-          // Add bidirectional connections
-          if (!pointConnections.has(idx1)) {
-            pointConnections.set(idx1, new Set());
-          }
-          if (!pointConnections.has(idx2)) {
-            pointConnections.set(idx2, new Set());
-          }
-          
-          pointConnections.get(idx1).add(idx2);
-          pointConnections.get(idx2).add(idx1);
-        }
-      }
+  scaleModel(newSize) {
+    if (!this.allVTKMeshes || this.allVTKMeshes.length === 0) {
+      console.warn('[VTKLoader] No meshes to scale');
+      return;
     }
-    
-    // Filter to only branching points (more than 2 connections)
-    // These are points where multiple lines intersect
-    const branchingPoints = new Map();
-    for (const [pointIdx, connections] of pointConnections) {
-      if (connections.size > 2) {
-        branchingPoints.set(pointIdx, Array.from(connections));
+
+    // Calculate scale factor based on new size
+    // Original size from modelData is 200
+    const originalSize = 200;
+    const scaleFactor = newSize / originalSize;
+
+    // Apply scaling to all meshes
+    this.allVTKMeshes.forEach(mesh => {
+      if (mesh && mesh.scale) {
+        mesh.scale.setScalar(scaleFactor);
       }
+    });
+
+    // Update current mesh if it exists
+    if (this.currentVTKMesh && this.currentVTKMesh.scale) {
+      this.currentVTKMesh.scale.setScalar(scaleFactor);
     }
-    
-    return branchingPoints;
+
+    // Trigger re-render
+    if (this.copperRenderer && this.copperRenderer.render) {
+      this.copperRenderer.render();
+    }
+
+    console.log(`[VTKLoader] Scaled model to size: ${newSize} (scale factor: ${scaleFactor.toFixed(3)})`);
   }
 
-  /**
-   * Create smooth spherical junctions at branching points
-   */
-  createSmoothSphericalJunctions(branchingPoints, points, radiusData, pressureData, fluxData, minPressure, maxPressure, minFlux, maxFlux, vertices, normals, colors, indices, indexOffset, config) {
-    for (const [branchPointIdx, connectedPoints] of branchingPoints) {
-      // Get branch point data
-      const branchPos = new this.THREE.Vector3(
-        points[branchPointIdx * 3],
-        points[branchPointIdx * 3 + 1],
-        points[branchPointIdx * 3 + 2]
-      );
-      const branchRadius = radiusData[branchPointIdx] || COLOR_CONSTANTS.DEFAULT_RADIUS_FALLBACK;
-      
-      // Get branch point color
-      let branchColor;
-      if (config.colorMappingType === 'pressure' && pressureData.length > 0) {
-        const branchPressure = pressureData[branchPointIdx] || 0;
-        branchColor = this.pressureToColor(branchPressure, minPressure, maxPressure);
-      } else if (config.colorMappingType === 'flux' && fluxData.length > 0) {
-        const branchFlux = fluxData[branchPointIdx] || 0;
-        branchColor = this.fluxToColor(branchFlux, minFlux, maxFlux);
-      } else {
-        branchColor = new this.THREE.Color(1, 1, 1);
-      }
-      
-      // Create smooth sphere geometry for junction
-      const sphereGeometry = this.createSmoothSphere(branchPos, branchRadius * 1.3, branchColor);
-      
-      // Add sphere geometry to combined mesh
-      vertices.push(...sphereGeometry.vertices);
-      normals.push(...sphereGeometry.normals);
-      colors.push(...sphereGeometry.colors);
-      
-      // Add indices with offset
-      for (const index of sphereGeometry.indices) {
-        indices.push(index + indexOffset);
-      }
-      
-      indexOffset += sphereGeometry.vertices.length / 3;
-    }
-  }
-
-  /**
-   * Create smooth sphere geometry for junctions
-   */
-  createSmoothSphere(center, radius, color) {
-    const vertices = [];
-    const normals = [];
-    const colors = [];
-    const indices = [];
-    
-    // Reduced resolution for better performance
-    const segments = 6;
-    const rings = 4;
-    
-    // Generate sphere vertices
-    for (let ring = 0; ring <= rings; ring++) {
-      const phi = (ring / rings) * Math.PI;
-      const sinPhi = Math.sin(phi);
-      const cosPhi = Math.cos(phi);
-      
-      for (let segment = 0; segment <= segments; segment++) {
-        const theta = (segment / segments) * Math.PI * 2;
-        const sinTheta = Math.sin(theta);
-        const cosTheta = Math.cos(theta);
-        
-        const x = sinPhi * cosTheta * radius;
-        const y = cosPhi * radius;
-        const z = sinPhi * sinTheta * radius;
-        
-        vertices.push(center.x + x, center.y + y, center.z + z);
-        normals.push(x / radius, y / radius, z / radius);
-        colors.push(color.r, color.g, color.b);
-      }
-    }
-    
-    // Generate sphere indices
-    for (let ring = 0; ring < rings; ring++) {
-      for (let segment = 0; segment < segments; segment++) {
-        const first = ring * (segments + 1) + segment;
-        const second = first + segments + 1;
-        
-        indices.push(first, second, first + 1);
-        indices.push(second, second + 1, first + 1);
-      }
-    }
-    
-    return { vertices, normals, colors, indices };
-  }
+  // Joint-connection helpers (branch detection, spherical junctions) removed to improve load time
 
   /**
    * Set reference to copper scene for camera control

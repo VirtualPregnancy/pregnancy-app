@@ -2,7 +2,7 @@
   <div class="pa-2">
     <div class="flexbox demo-head">
       <div>
-        <h1 class="pt-2 main-heading">
+        <h1 class="pt-2 pl-6 main-heading">
           {{ $parentTopic().heading }} 
         </h1>
       </div>

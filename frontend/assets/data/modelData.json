@@ -4,15 +4,21 @@
       "model": "normal",
       "modelName": "Normal",
       "Description": "Normal Placenta",
-      "color": "error",
+      "color": "#4CAF50",
       "config": {
         "path": "/model/normal.vtk",
         "displayName": "Normal Placenta",
         "color": 16716066,
         "opacity": 1.0,
-        "modelSize": 420,
+        "modelSize": 220,
         "useCylinderGeometry": true,
-        "cylinderSegments": 10
+        "cylinderSegments": 10,
+        "scaleBar": {
+          "enabled": true,
+          "length": 100,
+          "unit": "mm",
+          "label": "18cm"
+        }
       },
       "waveform": {
         "xAxis": "Time (s)",
@@ -37,16 +43,22 @@
       "model": "FGR",
       "modelName": "Fetal Growth Restriction (FGR)",
       "Description": "Fetal Growth Restriction",
-      "color": "info",
+      "color": "#F44336",
       "config": {
-        "path": "/model/fgr.vtk",
+        "path": "/model/fgr_tree.vtk",
         "displayName": "Fetal Growth Restriction",
         "color": 16716066,
         "opacity": 1,
-        "modelSize": 420,
+        "modelSize": 220,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
-        "defaultRotationY": -1.5707963267948966
+        "defaultRotationY": -1.5707963267948966,
+        "scaleBar": {
+          "enabled": true,
+          "length": 80,
+          "unit": "mm",
+          "label": "15cm"
+        }
       },
       "waveform": {
         "xAxis": "Time (s)",
@@ -55,7 +67,7 @@
         "yDataPath": "/waveforms/fgr/signal.csv",
         "title": "Umbilical artery blood flow velocity (FGR)",
         "waveformImg": "/img/normal-ultrasound.jpg",
-        "lineTitle": "FGR",
+        "lineTitle": "Fetal Growth Restriction",
         "isPlaying": true,
         "speed": 1,
         "waveformNote":"* FGR Ultrasound Image",
@@ -71,22 +83,28 @@
       "model": "GDM",
       "modelName": "Gestational Diabetes Melitus (GDM)",
       "Description": "Gestational Diabetes Melitus",
-      "color": "error",
+      "color": "#FF9800",
       "config": {
-        "path": "/model/diabetes.vtk",
+        "path": "/model/diabetes_tree.vtk",
         "displayName": "Gestational Diabetes Melitus",
         "color": 16716066,
         "opacity": 1.0,
-        "modelSize": 420,
+        "modelSize": 220,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
-        "defaultRotationY": 1.5707963267948966
+        "defaultRotationY": 1.5707963267948966,
+        "scaleBar": {
+          "enabled": true,
+          "length": 120,
+          "unit": "mm",
+          "label": "20cm"
+        }
       },
       "waveform": {
         "xAxis": "Time (s)",
         "xDataPath": "/waveforms/gdm/time.csv",
         "yAxis": "Velocity",
-        "lineTitle": "GDM",
+        "lineTitle": "Gestational Diabetes Melitus",
         "yDataPath": "/waveforms/gdm/signal.csv",
         "title": "Umbilical artery blood flow velocity (GDM)",
         "isPlaying": true,

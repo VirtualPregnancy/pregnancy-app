@@ -8,7 +8,7 @@
       "title": "Support Services",
       "icon": "mdi-account-group",
       "iconColor": "var(--v-primary-base)",
-      "component": "Support"
+      "component": "SupportService"
     }
   ]
 }

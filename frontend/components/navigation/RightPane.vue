@@ -8,6 +8,7 @@
         :current-performance-mode="modelStates.currentPerformanceMode"
         :model-name="modelStates.modelName"
         :model-config="modelStates.modelConfig"
+        @model-size-changed="handleModelSizeChanged"
         @model-state-updated="handleModelStateUpdate"
 
       />
@@ -26,8 +27,10 @@
           :is-loading="modelStates.isLoading"
           :loading-complete="modelStates.loadingComplete"
           :rendering-complete="modelStates.renderingComplete"
+          :current-model-size="modelStates.modelSize"
           @reload-arterial="handleReloadArterial"
           @colored-models-by-changed="handleColoredModelsByChanged"
+          @model-size-changed="handleModelSizeChanged"
         />
       </div>
 
@@ -41,7 +44,7 @@
         </div>
         <div class="waveform-content">
           <Waveform :waveform="waveformData" />
-          <div class="mt-15 text-center mb-5">
+          <div class="mt-20 text-center mb-5">
             {{ waveformData.description }}
           </div>
         </div>
@@ -56,7 +59,6 @@
     </div>
   </div>
 
-  <!-- </div> -->
 </template>
 
 <script>
@@ -81,6 +83,7 @@ export default {
         loadingComplete: false, // Track if loading has completed
         colorMappingType: 'pressure', // Track current color mapping type
         renderingComplete: false, // Track if model is fully rendered and ready for interaction
+        modelSize: 200,
       },
       // Waveform data
       waveformData: modelData.models[0].waveform
@@ -97,6 +100,13 @@ export default {
     
     // Listen for condition events from the layout
     this.$nuxt.$on('conditions-updated', this.handleConditionsUpdated);
+
+    // Proactively show loading overlay until first render completes
+    try {
+      this.$nuxt && this.$nuxt.$emit('global-loading', true);
+    } catch (e) {
+      // no-op
+    }
   },
 
   computed: {
@@ -171,10 +181,22 @@ export default {
       // Handle rendering complete state updates
       if (newStates.hasOwnProperty('renderingComplete')) {
         this.modelStates.renderingComplete = newStates.renderingComplete;
+        // Emit global loading overlay toggle based on rendering state
+        try {
+          this.$nuxt && this.$nuxt.$emit('global-loading', !newStates.renderingComplete);
+        } catch (e) {
+          // no-op
+        }
       }
     },
     
-    
+    handleModelSizeChanged(modelSize) {
+      this.modelStates.modelSize = modelSize;
+      // Forward the size change to the model component for scaling
+      if (this.$refs.modelComponent && this.$refs.modelComponent.handleModelSizeChange) {
+        this.$refs.modelComponent.handleModelSizeChange(modelSize);
+      }
+    },
 
     
     // Update the model and the waveform data
@@ -187,6 +209,10 @@ export default {
       // update the waveform data
       this.waveformData = data.conditionData.waveform;
       
+      // update model size from config
+      if (data.conditionData.config && data.conditionData.config.modelSize) {
+        this.modelStates.modelSize = data.conditionData.config.modelSize;
+      }
     },
     
 

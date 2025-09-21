@@ -200,7 +200,14 @@ export default {
 
   target: "static",
 
-  ...routerBase,
+  // Router configuration
+  router: {
+    ...routerBase.router,
+    scrollBehavior(to, from, savedPosition) {
+      // Always scroll to top when navigating to a new page
+      return { x: 0, y: 0 }
+    }
+  },
   generate: {
     dir: "build",
     fallback: "404.html",

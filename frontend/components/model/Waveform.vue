@@ -1,6 +1,6 @@
 <template>
   <div class="waveform-container">
-    <div class="flex  justify-between items-center mb-5">
+    <div class="flex flex-col gap-2 justify-between items-center mb-5">
       <div class="text-center font-weight-bold flex-1">
         {{ waveform.title }}
       </div>
@@ -8,8 +8,7 @@
       <button 
         @click="toggleColorblindMode"
         class="ml-4 px-3 py-1 text-sm rounded-md transition-colors duration-200"
-        :class="colorblindMode ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'"
-        :title="colorblindMode ? 'Switch to normal colors' : 'Switch to colorblind-friendly colors'"
+        :class="colorblindMode ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black hover:bg-gray-500'"
       >
        Change color
       </button>
@@ -208,8 +207,8 @@ export default {
       this.chart.setOption({
         legend: {
           data: legendData,
-          textStyle: { color: '#000' },
-          top: -5,
+          textStyle: { color: '#000', fontSize: 14},
+          top: -3,
           icon: 'rect',
         },
         xAxis: {
@@ -225,7 +224,8 @@ export default {
           type: "value",
           axisLine: { lineStyle: { color: '#000' } },
           axisLabel: { color: '#999' },
-          name: this.waveform?.yAxis || 'Signal'
+          name: this.waveform?.yAxis || 'Signal',
+          nameGap: 5
         },
         series: series,
         dataZoom: [{ type: "inside", start: 0, end: 100 }],
@@ -370,6 +370,7 @@ export default {
 
 .waveform-chart {
   margin: 5px;
+  margin-top: 30px;
   width: 100%;
   height: 100%;
 }

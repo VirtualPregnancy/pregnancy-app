@@ -37,9 +37,9 @@
       },
       "keep-baby-healthy": {
         "id": "1.e",
-        "title": "Keep Baby Healthy",
+        "title": "Keeping Baby Healthy",
         "component": "none",
-        "heading": "Keep Baby Healthy",
+        "heading": "Keeping Baby Healthy",
         "icon": "mdi-charity"
       },
       "baby": {
@@ -154,16 +154,16 @@
         "title": "When Care Changes",
         "id": "4.b",
         "component": "none",
-        "heading": "How clinical care pathways may change during your pregnancy if there are any concerns about mother or baby.",
+        "heading": "How clinical care pathways may change?",
         "icon": "mdi-heart-cog"
       }
     }
   },
   "support": {
     "id": "5",
-    "title": "Pregnancy Support",
+    "title": "Support Services",
     "component": "none",
-    "heading": "Pregnancy Support Services",
+    "heading": "Pregnancy / Baby Support Services",
     "icon": "mdi-account-group",
     "content": "This application provides comprehensive information about support services available for pregnant people and their whānau throughout Aotearoa New Zealand.",
     "subTopics": {

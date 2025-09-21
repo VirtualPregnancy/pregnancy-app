@@ -164,12 +164,6 @@ Schema overview
   - Key must match exactly one of the items in `regions`.
   - Each value is a list of strings (service names) displayed when a region is selected.
   - If a region has no entry, a sensible default list is shown in the UI.
-- **serviceSections**: Array describing the major sections of the Support page.
-  - Common fields: `key` (one of `general`, `specialist`, `resources`), `icon` (MDI name), `color` (Vuetify color), `title` (string), `description` (optional).
-  - Section-specific fields:
-    - `general`: `regional` (boolean). When true, shows the region selector and per‑region services list.
-    - `specialist`: `items` (array). Each item has `icon`, `color`, `title`, `description`, `list` (array of bullet points).
-    - `resources`: `resources` (array). Each entry has `icon`, `color`, `title`, optional `subtitle`, and `content` (array of `{ "label": string, "value": string }`).
 
 Example
 ^^^^^^^
