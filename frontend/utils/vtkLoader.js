@@ -444,6 +444,7 @@ export default class VTKLoader {
    * Map pressure value 
    */
   pressureToColor(pressure, minPressure, maxPressure) {
+    // Linear mapping of pressure to color
     const linear = maxPressure > minPressure ? 
       (pressure - minPressure) / (maxPressure - minPressure) : 0.5;
     

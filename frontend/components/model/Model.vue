@@ -163,7 +163,7 @@ export default {
 
         if (isMobileOrTablet) {
           // Lower speeds to avoid sudden jumps; clamp distances
-          controls.rotateSpeed = 0.2;
+          controls.rotateSpeed = 0.8;
           controls.zoomSpeed = 0.2;
           controls.panSpeed = 0.15;
           // Constrain camera distance around model size
