@@ -171,7 +171,74 @@ export default {
 
   methods: {
     toggleSection(sectionId) {
-      this.$set(this.expandedSections, sectionId, !this.expandedSections[sectionId]);
+      const willExpand = !this.expandedSections[sectionId];
+      this.$set(this.expandedSections, sectionId, willExpand);
+      if (willExpand) {
+        // After expanding, scroll this section to the top for maximum view
+        this.$nextTick(() => {
+          setTimeout(() => this.scrollSectionToTop(sectionId), 300);
+        });
+      }
+    },
+    
+    // Find the nearest scrollable ancestor
+    getScrollParent(el) {
+      if (!el) return null;
+      let node = el.parentElement;
+      while (node) {
+        const style = window.getComputedStyle(node);
+        const overflowY = style.overflowY;
+        if (overflowY === 'auto' || overflowY === 'scroll') {
+          return node;
+        }
+        node = node.parentElement;
+      }
+      return document.scrollingElement || document.documentElement;
+    },
+
+    // Check if an element can scroll vertically
+    isScrollable(el) {
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      const overflowY = style.overflowY;
+      const canScroll = (overflowY === 'auto' || overflowY === 'scroll') && el.scrollHeight > el.clientHeight;
+      return canScroll;
+    },
+
+    // Smoothly scroll a section card to the top of its scroll container
+    scrollSectionToTop(sectionId) {
+      const element = document.querySelector(`[data-section-id="${sectionId}"]`);
+      if (!element) return;
+
+      // Prefer the layout's content panel if present
+      const contentPanel = document.querySelector('.content-panel');
+      const preferred = (contentPanel && this.isScrollable(contentPanel)) ? contentPanel : null;
+      const container = preferred || this.getScrollParent(element);
+
+      try {
+        const isWindowContainer = (container === document.scrollingElement) || (container === document.documentElement) || (container === document.body);
+        const elementRect = element.getBoundingClientRect();
+        const offset = 12; // small breathing space from the very top
+
+        if (isWindowContainer) {
+          const targetTop = (window.pageYOffset || document.documentElement.scrollTop || 0) + elementRect.top - offset;
+          window.scrollTo({ top: targetTop, behavior: 'smooth' });
+        } else {
+          const containerRect = container.getBoundingClientRect();
+          const currentScrollTop = container.scrollTop || 0;
+          const delta = elementRect.top - containerRect.top - offset;
+          const targetTop = currentScrollTop + delta;
+          if (typeof container.scrollTo === 'function') {
+            container.scrollTo({ top: targetTop, behavior: 'smooth' });
+          } else {
+            // Fallback
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      } catch (e) {
+        // Ultimate fallback
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     },
     
     // Handle scroll to section requests from quick access navigation
@@ -184,12 +251,7 @@ export default {
       
       // Wait for section to expand, then scroll to it
       this.$nextTick(() => {
-        setTimeout(() => {
-          const element = document.querySelector(`[data-section-id="${sectionId}"]`);
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 300); // Wait for expansion animation
+        setTimeout(() => this.scrollSectionToTop(sectionId), 300);
       });
     },
     
