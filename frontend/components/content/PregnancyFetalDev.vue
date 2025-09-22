@@ -1,34 +1,29 @@
 <template>
   <div class="fetal-development-timeline">
     <img style='width: 50%; margin: 0 auto; display: block; padding-bottom: 20px;' src='https://www.mazecordblood.com/wp-content/uploads/2015/08/A-pink-infographic-final.jpg' alt='Fetal Development' />
-    <v-timeline side="end" align="start">
-      <!-- First Trimester -->
+    <v-timeline
+      :reverse="false"
+      dense
+    >
       <v-timeline-item
-        dot-color="white"
-        size="large"
         v-for="item in fetalDevelopment"
         :key="item.title"
       >
         <template v-slot:icon>
           <v-icon color="white">{{ item.icon }}</v-icon>
         </template>
-        <template v-slot:opposite>
-          <div class="text-h6 font-weight-bold ">
-            {{ item.title }}
-          </div>
-          <div class="text-subtitle-1 text--secondary">
-            {{ item.description }}
-          </div>
-        </template>
         <v-card class="elevation-2">
+          <v-card-title class="text-h5">
+            {{ item.title }}
+          </v-card-title>
+          <v-card-subtitle>
+            {{ item.description }}
+          </v-card-subtitle>
           <v-card-text>
-            <p>
-              {{ item.content }}
-            </p>
+            {{ item.content }}
           </v-card-text>
         </v-card>
       </v-timeline-item>
-
     </v-timeline>
   </div>
 </template>
@@ -67,7 +62,7 @@ export default {
 <style scoped lang="scss">
 .fetal-development-timeline {
   padding: 20px;
-  max-width: 1000px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
