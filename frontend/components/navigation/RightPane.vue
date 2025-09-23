@@ -329,11 +329,6 @@ export default {
   }
 }
 
-
-
-
-
-
 .logo-section {
   max-width: 200px;
   margin: 0 auto;

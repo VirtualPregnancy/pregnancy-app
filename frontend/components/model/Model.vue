@@ -1,31 +1,66 @@
 <template>
   <div class="model-container">
-    <!-- Model Info Header -->
-    <header class="model-info">{{ modelName }}</header>
-     <!-- Scale Bar -->
-     <div
-       v-if="scaleBarConfig && scaleBarConfig.enabled"
-       class="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
-     >
-       <div class="rounded px-3 py-2 flex flex-col items-center gap-1">
-         <!-- Scale bar with end markers -->
-         <div class="relative flex items-center" :style="{ width: scaleBarConfig.length + 'px' }">
-           <!-- Left vertical marker -->
-           <div class="absolute left-0 bg-black" :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"></div>
-           <!-- Horizontal line -->
-           <div class="bg-black mx-1" :class="mdAndUp ? 'h-0.5' : 'h-0.5'" :style="{ width: (scaleBarConfig.length - 8) + 'px' }"></div>
-           <!-- Right vertical marker -->
-           <div class="absolute right-0 bg-black" :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"></div>
-         </div>
-         <!-- Label -->
-         <div
-           class="text-black font-semibold text-shadow-sm whitespace-nowrap"
-           :class="mdAndUp ? 'text-sm' : 'text-xs'"
+    <div class="flex justify-between items-center row-flex">
+      <!-- Model Info Header -->
+      <header class="flex items-center gap-2 header-info">
+        <!-- Help Icon -->
+         <v-btn
+         @click="showHelpDialog = true"
+         color="primary"
+         
+         class="mr-5"
          >
-           {{ scaleBarConfig.label }}
-         </div>
-       </div>
-     </div>
+         <v-icon size="32">mdi-help-circle-outline</v-icon>
+        </v-btn>
+        <!-- Model Name -->
+        <span class="model-info">{{ modelName }}</span>
+        <!-- Refresh Icon -->
+        <v-btn
+          @click="resetModelToDefault"
+          color="primary"
+          class="ml-5"
+        >
+          <v-icon size="32">mdi-refresh</v-icon>
+        </v-btn>
+      </header>
+    </div>
+    <!-- Scale Bar -->
+    <div
+      v-if="scaleBarConfig && scaleBarConfig.enabled"
+      class="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
+    >
+      <div class="rounded px-3 py-2 flex flex-col items-center gap-1">
+        <!-- Scale bar with end markers -->
+        <div
+          class="relative flex items-center"
+          :style="{ width: scaleBarConfig.length + 'px' }"
+        >
+          <!-- Left vertical marker -->
+          <div
+            class="absolute left-0 bg-black"
+            :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"
+          ></div>
+          <!-- Horizontal line -->
+          <div
+            class="bg-black mx-1"
+            :class="mdAndUp ? 'h-0.5' : 'h-0.5'"
+            :style="{ width: scaleBarConfig.length - 8 + 'px' }"
+          ></div>
+          <!-- Right vertical marker -->
+          <div
+            class="absolute right-0 bg-black"
+            :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"
+          ></div>
+        </div>
+        <!-- Label -->
+        <div
+          class="text-black font-semibold text-shadow-sm whitespace-nowrap"
+          :class="mdAndUp ? 'text-sm' : 'text-xs'"
+        >
+          {{ scaleBarConfig.label }}
+        </div>
+      </div>
+    </div>
 
     <client-only>
       <!-- 3D model container -->
@@ -34,27 +69,6 @@
           ref="baseDomObject"
           :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
         />
-        
-      </div>
-
-      <!-- Controls -->
-      <div
-        ref="threeDControls"
-        class="baseModelControl"
-        :class="mdAndUp ? 'baseModelControl-md' : 'baseModelControl-sm'"
-      >
-        <div class="baseModelCB" :class="mdAndUp ? 'baseModelCB-md' : ''">
-          <img
-            src="~/assets/images/gestures-icons.png"
-            class="h-full w-full md:object-contain"
-            @click="handleGestureIconClick"
-            style="
-              background-color: var(--v-info-base);
-              border-radius: 10px;
-              padding: 10px;
-            "
-          />
-        </div>
       </div>
 
       <!-- Fallback template for SSR -->
@@ -64,6 +78,38 @@
         </div>
       </template>
     </client-only>
+
+    <!-- Help Dialog -->
+    <v-dialog v-model="showHelpDialog" max-width="400" persistent>
+      <v-card class="help-dialog">
+        <v-card-title class="text-h6 pb-2">
+          <v-icon left color="primary">mdi-gesture-tap</v-icon>
+          Model Controls
+        </v-card-title>
+        <v-card-text class="pt-0">
+          <div class="help-content">
+            <div class="help-item">
+              <v-icon color="primary" class="mr-3">mdi-gesture-two-tap</v-icon>
+              <span>Use 3 fingers to drag and move the model</span>
+            </div>
+            <div class="help-item">
+              <v-icon color="primary" class="mr-3">mdi-gesture-pinch</v-icon>
+              <span>Use 2 fingers to pinch and zoom the model</span>
+            </div>
+            <div class="help-item">
+              <v-icon color="primary" class="mr-3">mdi-gesture-swipe</v-icon>
+              <span>Swipe to rotate the model</span>
+            </div>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="showHelpDialog = false">
+            Got it
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -105,6 +151,8 @@ export default {
       // Scale bar configuration
       scaleBarConfig: null,
       scaleBarWidth: 50, // Default width in pixels
+      // Help dialog state
+      showHelpDialog: false, // Control help dialog visibility
     };
   },
 
@@ -153,12 +201,17 @@ export default {
         if (!scene || !scene.controls) return;
 
         const controls = scene.controls;
-        const size = (this.modelConfig && this.modelConfig.modelSize) ? this.modelConfig.modelSize : 200;
+        const size =
+          this.modelConfig && this.modelConfig.modelSize
+            ? this.modelConfig.modelSize
+            : 200;
 
         // Mobile/tablet detection: fall back to Vuetify breakpoint
-        const isTouchDevice = (typeof window !== 'undefined') && (
-          'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
-        );
+        const isTouchDevice =
+          typeof window !== "undefined" &&
+          ("ontouchstart" in window ||
+            navigator.maxTouchPoints > 0 ||
+            navigator.msMaxTouchPoints > 0);
         const isMobileOrTablet = isTouchDevice && !this.mdAndUp;
 
         if (isMobileOrTablet) {
@@ -169,7 +222,7 @@ export default {
           // Constrain camera distance around model size
           controls.minDistance = Math.max(10, size * 0.25);
           controls.maxDistance = Math.max(controls.minDistance + 10, size * 6);
-          if (typeof controls.minZoom !== 'undefined') {
+          if (typeof controls.minZoom !== "undefined") {
             controls.minZoom = 0.8;
             controls.maxZoom = 2.0;
           }
@@ -180,18 +233,18 @@ export default {
           controls.panSpeed = 0.5;
           controls.minDistance = Math.max(10, size * 0.2);
           controls.maxDistance = Math.max(controls.minDistance + 10, size * 10);
-          if (typeof controls.minZoom !== 'undefined') {
+          if (typeof controls.minZoom !== "undefined") {
             controls.minZoom = 0.5;
             controls.maxZoom = 4.0;
           }
         }
 
         // Nudge an update if available
-        if (typeof controls.update === 'function') {
+        if (typeof controls.update === "function") {
           controls.update();
         }
       } catch (e) {
-        console.warn('[Model] Failed to apply control tuning:', e);
+        console.warn("[Model] Failed to apply control tuning:", e);
       }
     },
     // Get correct path for static assets based on deployment environment
@@ -539,18 +592,6 @@ export default {
       return result;
     },
 
-    // Handle click on gesture icons area
-    handleGestureIconClick(event) {
-      const rect = event.target.getBoundingClientRect();
-      const clickX = event.clientX - rect.left;
-      const imageWidth = rect.width;
-
-      // Check if click is in the first quarter (first 25% from left)
-      if (clickX <= imageWidth / 4) {
-        this.resetModelToDefault();
-      }
-    },
-
     // Handle model size changes from PanelControls
     handleModelSizeChange(newSize) {
       if (this.vtkLoader && this.vtkLoader.scene) {
@@ -634,54 +675,30 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.baseModelControl {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .baseModelCB {
-    width: 240px;
-    height: 70px;
-    position: relative;
-  }
-  .baseModelCB-md {
-    width: 280px;
-    height: 100px;
-  }
-}
-
-.baseModelControl-md {
-  // Desktop specific styles
-  bottom: 20px;
-}
-.baseModelControl-sm {
-  height: 60px;
-  bottom: 10px;
-
-  .baseModelCB {
-    width: 200px;
-    height: 60px;
-  }
-}
-
-.model-info {
+.header-info {
   position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.2em;
-  color: white;
+}
+.model-info {
   z-index: 1000;
   background-color: var(--v-info-base);
   padding: 8px 16px;
   border-radius: 4px;
+  font-size: 1.2em;
+  color: white;
 }
+
+.help-icon {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
 .model-container {
   position: relative;
   display: flex;
@@ -711,5 +728,24 @@ export default {
 .baseDom-sm {
   width: 100%;
   height: 100%;
+}
+
+.help-dialog {
+  .help-content {
+    .help-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      span {
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.87);
+      }
+    }
+  }
 }
 </style> 
