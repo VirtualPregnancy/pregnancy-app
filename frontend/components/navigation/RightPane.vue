@@ -256,8 +256,8 @@ export default {
   &.model-section-mobile {
     width: 100%;
     min-width: 100%;
-    height: 45vh; /* Fallback for browsers that don't support dvh */
-    height: 45dvh; /* Dynamic viewport height for modern browsers */
+    height: 60vh; /* Fallback for browsers that don't support dvh */
+    height: 60dvh; /* Dynamic viewport height for modern browsers */
     min-height: 300px; /* Ensure minimum height */
     margin: 0;
     padding: 0;
