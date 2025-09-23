@@ -1,7 +1,7 @@
 <template>
   <div class="responsive-container display-flex ">
     <!-- Model Section -->
-    <div class="model-section " :class="{ 'model-section-mobile': !mdAndUp }">
+    <div class="model-section" :class="{ 'model-section-mobile': !mdAndUp }">
       <model
         ref="modelComponent"
         :use-tube-rendering="modelStates.useTubeRendering"
@@ -52,9 +52,7 @@
 
       <!-- Logo Section for Desktop -->
       <div  class="logo-section ">
-        <div class="logo-container">
           <Logo />
-        </div>
       </div>
     </div>
   </div>
@@ -234,15 +232,18 @@ export default {
 </script>
 
 <style scoped lang="scss">
-// Responsive Container
+// Layout: grid on desktop, stacked on mobile
 .responsive-container {
-  height: 100%;
-  display: flex;
-  flex-direction: row;
   width: 100%;
-  
-  @media (max-width: 768px) {
-    flex-direction: column;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr clamp(280px, 28vw, 420px);
+  grid-column-gap: 16px;
+  align-items: start;
+
+  // Vuetify md breakpoint ~960px
+  @media (max-width: 959.98px) {
+    display: block;
   }
 }
 
@@ -250,16 +251,14 @@ export default {
 .model-section {
   position: relative;
   min-height: 60vh;
-  width: 60dvw;
-  right: 10dvw;
-  
+  width: 100%;
+
   &.model-section-mobile {
-    width: 100vw;
-    min-width: 100vw;
-    flex: 1;
-    height: 50vh;
-    right: 0;
-    left: 0;
+    width: 100%;
+    min-width: 100%;
+    height: 45vh; /* Fallback for browsers that don't support dvh */
+    height: 45dvh; /* Dynamic viewport height for modern browsers */
+    min-height: 300px; /* Ensure minimum height */
     margin: 0;
     padding: 0;
   }
@@ -269,74 +268,77 @@ export default {
 .controls-section {
   display: flex;
   flex-direction: column;
-  position: fixed;
+  position: sticky;
   top: 0;
-  right: 0;
-  height: 100vh;
-  width: 25dvw;
-  max-width: 30vw;
-  padding: 15px;
-  padding-bottom: 120px; // Leave space for navigation
+  height: 100vh; 
+  padding: 16px;
+  padding-bottom: calc(96px + env(safe-area-inset-bottom)); 
   overflow-y: auto;
-  
+  box-sizing: border-box;
+
+  // Mobile responsive layout
   &.controls-section-mobile {
-    display: flex;
-    flex-direction: row;
-    position: relative;
+    position: static;
+    height: auto;
     width: 100%;
     max-width: 100%;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    overflow-y: auto;
-    flex-wrap: wrap;
-    margin: 10px;
-    box-sizing: border-box;
-    padding-bottom: 100px; // Leave space for navigation on mobile
-    border-left: none;
+    overflow: visible;
+    padding: 16px;
+    padding-bottom: 120px; // Extra space for bottom navigation
     border-top: 1px solid rgba(31, 102, 131, 0.2);
+    background-color: var(--v-background-base);
   }
 }
 
-// Individual Panels
+// Individual Panels spacing
 .controls-panel {
-  margin-bottom: 15px;
-  
+  margin-bottom: 16px;
+
   .controls-section-mobile & {
-    flex: 1;
-    min-width: 300px;
-    margin-right: 15px;
-    margin-bottom: 10px;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
   }
 }
 
 .waveform-panel {
-  flex: 1;
-  background: rgba(49, 54, 87, 0.1);
-  border: 1px solid rgba(31, 102, 131, 0.3);
+  flex: 1 1 auto;
+  background: rgba(49, 54, 87, 0.06);
+  border: 1px solid rgba(31, 102, 131, 0.25);
   border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
-  transition: all 0.3s ease;
-  
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 
-  
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
   .controls-section-mobile & {
     width: 100%;
-    min-width: 100%;
-    margin-right: 0;
-    order: 3;
+    max-width: 100%;
+    margin-bottom: 20px;
+    order: 2;
   }
 }
 
 .logo-section {
   max-width: 200px;
-  margin: 0 auto;
-  margin-top: 10px;
-  opacity: 0.8;
+  margin: 10px auto 0 auto;
+  opacity: 0.85;
+  display: block;
+
+  .controls-section-mobile & {
+    order: 3;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
 }
 
-// Legacy styles compatibility (remove after testing)
+// Legacy styles compatibility (kept for safety)
 .model-panel {
   position: relative;
 }

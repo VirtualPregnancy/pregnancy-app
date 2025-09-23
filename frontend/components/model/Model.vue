@@ -1,29 +1,19 @@
 <template>
-  <div class="model-container">
-    <div class="flex justify-between items-center row-flex">
-      <!-- Model Info Header -->
-      <header class="flex items-center gap-2 header-info">
-        <!-- Help Icon -->
-         <v-btn
-         @click="showHelpDialog = true"
-         color="primary"
-         
-         class="mr-5"
-         >
-         <v-icon size="32">mdi-help-circle-outline</v-icon>
-        </v-btn>
-        <!-- Model Name -->
-        <span class="model-info">{{ modelName }}</span>
-        <!-- Refresh Icon -->
-        <v-btn
-          @click="resetModelToDefault"
-          color="primary"
-          class="ml-5"
-        >
-          <v-icon size="32">mdi-refresh</v-icon>
-        </v-btn>
-      </header>
+  <div :class="mdAndUp ? 'model-container' : 'model-container-sm'">
+    <!-- Model Info Header -->
+    <div class="model-header">
+      <!-- Refresh Icon -->
+      <v-btn @click="resetModelToDefault" color="primary" icon>
+        <v-icon :size="mdAndUp ? 30 : 24">mdi-refresh</v-icon>
+      </v-btn>
+      <!-- Model Name -->
+      <span class="model-info">{{ modelName }}</span>
+      <!-- Help Icon -->
+      <v-btn @click="showHelpDialog = true" color="primary" icon>
+        <v-icon :size="mdAndUp ? 30 : 24">mdi-help-circle-outline</v-icon>
+      </v-btn>
     </div>
+
     <!-- Scale Bar -->
     <div
       v-if="scaleBarConfig && scaleBarConfig.enabled"
@@ -61,29 +51,11 @@
         </div>
       </div>
     </div>
-
-    <client-only>
-      <!-- 3D model container -->
-      <div class="model-viewport">
-        <div
-          ref="baseDomObject"
-          :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
-        />
-      </div>
-
-      <!-- Fallback template for SSR -->
-      <template #fallback>
-        <div class="loading-placeholder">
-          <div class="loading-text">Loading 3D Engine...</div>
-        </div>
-      </template>
-    </client-only>
-
     <!-- Help Dialog -->
     <v-dialog v-model="showHelpDialog" max-width="400" persistent>
       <v-card class="help-dialog">
         <v-card-title class="text-h6 pb-2">
-          <v-icon left color="primary">mdi-gesture-tap</v-icon>
+          <v-icon left color="info">mdi-gesture-tap</v-icon>
           Model Controls
         </v-card-title>
         <v-card-text class="pt-0">
@@ -110,6 +82,23 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <client-only>
+      <!-- 3D model container -->
+      <div class="model-viewport">
+        <div
+          ref="baseDomObject"
+          :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
+        />
+      </div>
+
+      <!-- Fallback template for SSR -->
+      <template #fallback>
+        <div class="loading-placeholder">
+          <div class="loading-text">Loading 3D Engine...</div>
+        </div>
+      </template>
+    </client-only>
   </div>
 </template>
 
@@ -174,6 +163,21 @@ export default {
         return false;
       }
     },
+  },
+
+  watch: {
+    // Watch for changes in mdAndUp to trigger re-render
+    mdAndUp: {
+      handler(newVal) {
+        // Force re-render when breakpoint changes
+        this.$nextTick(() => {
+          if (this.scene && this.scene.onWindowResize) {
+            this.scene.onWindowResize();
+          }
+        });
+      },
+      immediate: false
+    }
   },
 
   // Component mounted lifecycle - initializes 3D environment
@@ -592,6 +596,18 @@ export default {
       return result;
     },
 
+    // Handle click on gesture icons area
+    handleGestureIconClick(event) {
+      const rect = event.target.getBoundingClientRect();
+      const clickX = event.clientX - rect.left;
+      const imageWidth = rect.width;
+
+      // Check if click is in the first quarter (first 25% from left)
+      if (clickX <= imageWidth / 4) {
+        this.resetModelToDefault();
+      }
+    },
+
     // Handle model size changes from PanelControls
     handleModelSizeChange(newSize) {
       if (this.vtkLoader && this.vtkLoader.scene) {
@@ -675,39 +691,61 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.header-info {
+.baseModelControl-md {
+  // Desktop specific styles
+  bottom: 20px;
+}
+.baseModelControl-sm {
+  height: 60px;
+  bottom: 10px;
+
+  .baseModelCB {
+    width: 200px;
+    height: 60px;
+  }
+}
+
+.model-header {
   position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+
 .model-info {
-  z-index: 1000;
+  font-size: 1.2em;
+  color: white;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
   background-color: var(--v-info-base);
   padding: 8px 16px;
   border-radius: 4px;
-  font-size: 1.2em;
-  color: white;
 }
-
-.help-icon {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 1000;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
 .model-container {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  background-color: var(--v-backgroundAlt-base);
+  height: 80dvh;
+
 }
+.model-container-sm{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 50vh; /* Fallback for browsers that don't support dvh */
+  height: 50dvh; /* Dynamic viewport height for modern browsers */
+  min-height: 300px; /* Ensure minimum height */
+}
+
 
 .model-viewport {
   flex: 1;
@@ -717,6 +755,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+
 
 .baseDom-md {
   width: 100%;
@@ -729,23 +768,5 @@ export default {
   width: 100%;
   height: 100%;
 }
-
-.help-dialog {
-  .help-content {
-    .help-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 12px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-
-      span {
-        font-size: 14px;
-        color: rgba(0, 0, 0, 0.87);
-      }
-    }
-  }
-}
 </style> 
+
