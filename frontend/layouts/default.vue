@@ -107,13 +107,14 @@ export default {
 
     // Handle route changes to scroll to top
     this.handleRouteChange = () => {
-      // Scroll content panel to top
-      const contentPanel = document.querySelector('.content-panel');
-      if (contentPanel) {
-        contentPanel.scrollTop = 0;
-      }
-      // Also scroll window to top as fallback
-      window.scrollTo(0, 0);
+      this.$nextTick(() => {
+        this.scrollToTop();
+        
+        // Additional mobile scroll fix with delay
+        if (!this.mdAndUp) {
+          setTimeout(() => this.scrollToTop(), 100);
+        }
+      });
     };
 
     document.addEventListener("fullscreenchange", this.handleFullscreen);
@@ -138,14 +139,23 @@ export default {
   },
 
   methods: {
-    
-
-    
-
+    // Scroll to top helper method
+    scrollToTop() {
+      const targetContainer = !this.mdAndUp 
+        ? document.querySelector('.upper-section')
+        : document.querySelector('.content-panel');
+      
+      if (targetContainer) {
+        targetContainer.scrollTop = 0;
+        targetContainer.scrollTo(0, 0);
+      }
+      
+      // Fallback to window scroll
+      window.scrollTo(0, 0);
+    },
     
     // Handle pregnancy condition updates from the tool
     handleConditionsUpdate(data) {
-      
       // Emit global event for RightPane and other components to listen
       this.$nuxt.$emit('conditions-updated', data);
       
@@ -156,9 +166,7 @@ export default {
     // Toggle global loading overlay state
     handleGlobalLoading(isLoading) {
       this.isAppLoading = !!isLoading;
-    },
-    
-
+    }
   },
 
   beforeDestroy() {
@@ -203,6 +211,7 @@ export default {
   @media (max-width: 960px) {
     flex-direction: column;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
   }
 }
 
@@ -231,6 +240,7 @@ export default {
     width: 100vw;
     min-height: 100vh;
     overflow-y: visible;
+    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
   }
 }
 
