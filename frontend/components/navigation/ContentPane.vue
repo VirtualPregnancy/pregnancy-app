@@ -152,6 +152,10 @@ export default {
       type: Array,
       default: () => []
     },
+    defaultExpandedIndex: {
+      type: Number,
+      default: null
+    },
   },
 
   data() {
@@ -278,7 +282,22 @@ export default {
   },
 
   mounted() {
-    // No sections expanded by default for cleaner initial appearance
+    // Handle default expanded section based on URL parameter
+    if (this.defaultExpandedIndex !== null && this.contentSections && this.contentSections.length > 0) {
+      // Convert 1-based index to 0-based array index
+      const sectionIndex = this.defaultExpandedIndex - 1;
+      if (sectionIndex >= 0 && sectionIndex < this.contentSections.length) {
+        const targetSection = this.contentSections[sectionIndex];
+        if (targetSection && targetSection.id) {
+          this.$set(this.expandedSections, targetSection.id, true);
+          
+          // Scroll to the expanded section after a short delay
+          this.$nextTick(() => {
+            setTimeout(() => this.scrollSectionToTop(targetSection.id), 500);
+          });
+        }
+      }
+    }
     
     // Listen for scroll to section events from quick access navigation
     this.$nuxt.$on('scroll-to-content-section', this.handleScrollToSection);
