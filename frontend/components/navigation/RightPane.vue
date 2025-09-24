@@ -154,6 +154,13 @@ export default {
       this.modelStates.coloredModelsBy = coloredModelsBy;
       this.modelStates.colorMappingType = coloredModelsBy; // Keep both for compatibility
       
+      // Show global loading immediately for better perceived responsiveness
+      try {
+        this.$nuxt && this.$nuxt.$emit('global-loading', true);
+      } catch (e) {
+        // no-op
+      }
+
       // Apply the color change to the current model
       this.$refs.modelComponent.reciveColoringType(coloredModelsBy);
     },
@@ -200,6 +207,11 @@ export default {
     // Update the model and the waveform data
     handleConditionsUpdated(data) {
       // update the model and transfer the config to the model component
+      try {
+        this.$nuxt && this.$nuxt.$emit('global-loading', true);
+      } catch (e) {
+        // no-op
+      }
       if (this.$refs.modelComponent && this.$refs.modelComponent.changeModel) {
         this.$refs.modelComponent.changeModel(data.conditionData.config);
       }

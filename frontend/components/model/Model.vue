@@ -741,8 +741,8 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 50vh; /* Fallback for browsers that don't support dvh */
-  height: 50dvh; /* Dynamic viewport height for modern browsers */
+  height: 60vh; /* Fallback for browsers that don't support dvh */
+  height: 60dvh; /* Dynamic viewport height for modern browsers */
   min-height: 300px; /* Ensure minimum height */
 }
 

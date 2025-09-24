@@ -266,7 +266,6 @@ Image Assets
     ├── gestures-icons.png    # UI icons
     ├── medtechcore-abi-logo.png
     ├── headshots.png         # Team photos
-    ├── kiwirous.png         # Branding
     ├── funding-abi-medtech.png
     ├── Annie-Jones.png      # Team member
     └── Liz-Broadbent.png    # Team member
