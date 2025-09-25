@@ -1,31 +1,87 @@
 <template>
-  <div class="model-container">
+  <div :class="mdAndUp ? 'model-container' : 'model-container-sm'">
     <!-- Model Info Header -->
-    <header class="model-info">{{ modelName }}</header>
-     <!-- Scale Bar -->
-     <div
-       v-if="scaleBarConfig && scaleBarConfig.enabled"
-       class="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
-     >
-       <div class="rounded px-3 py-2 flex flex-col items-center gap-1">
-         <!-- Scale bar with end markers -->
-         <div class="relative flex items-center" :style="{ width: scaleBarConfig.length + 'px' }">
-           <!-- Left vertical marker -->
-           <div class="absolute left-0 bg-black" :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"></div>
-           <!-- Horizontal line -->
-           <div class="bg-black mx-1" :class="mdAndUp ? 'h-0.5' : 'h-0.5'" :style="{ width: (scaleBarConfig.length - 8) + 'px' }"></div>
-           <!-- Right vertical marker -->
-           <div class="absolute right-0 bg-black" :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"></div>
-         </div>
-         <!-- Label -->
-         <div
-           class="text-black font-semibold text-shadow-sm whitespace-nowrap"
-           :class="mdAndUp ? 'text-sm' : 'text-xs'"
-         >
-           {{ scaleBarConfig.label }}
-         </div>
-       </div>
-     </div>
+    <div class="model-header">
+      <!-- Refresh Icon -->
+      <v-btn @click="resetModelToDefault" color="primary" icon>
+        <v-icon :size="mdAndUp ? 30 : 24">mdi-refresh</v-icon>
+      </v-btn>
+      <!-- Model Name -->
+      <span class="model-info">{{ modelName }}</span>
+      <!-- Help Icon -->
+      <v-btn @click="showHelpDialog = true" color="primary" icon>
+        <v-icon :size="mdAndUp ? 30 : 24">mdi-help-circle-outline</v-icon>
+      </v-btn>
+    </div>
+
+    <!-- Scale Bar -->
+    <div
+      v-if="scaleBarConfig && scaleBarConfig.enabled"
+      class="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
+    >
+      <div class="rounded px-3 py-2 flex flex-col items-center gap-1">
+        <!-- Scale bar with end markers -->
+        <div
+          class="relative flex items-center"
+          :style="{ width: scaleBarConfig.length + 'px' }"
+        >
+          <!-- Left vertical marker -->
+          <div
+            class="absolute left-0 bg-black"
+            :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"
+          ></div>
+          <!-- Horizontal line -->
+          <div
+            class="bg-black mx-1"
+            :class="mdAndUp ? 'h-0.5' : 'h-0.5'"
+            :style="{ width: scaleBarConfig.length - 8 + 'px' }"
+          ></div>
+          <!-- Right vertical marker -->
+          <div
+            class="absolute right-0 bg-black"
+            :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"
+          ></div>
+        </div>
+        <!-- Label -->
+        <div
+          class="text-black font-semibold text-shadow-sm whitespace-nowrap"
+          :class="mdAndUp ? 'text-sm' : 'text-xs'"
+        >
+          {{ scaleBarConfig.label }}
+        </div>
+      </div>
+    </div>
+    <!-- Help Dialog -->
+    <v-dialog v-model="showHelpDialog" max-width="400" persistent>
+      <v-card class="help-dialog">
+        <v-card-title class="text-h6 pb-2">
+          <v-icon left color="info">mdi-gesture-tap</v-icon>
+          Model Controls
+        </v-card-title>
+        <v-card-text class="pt-0">
+          <div class="help-content">
+            <div class="help-item">
+              <v-icon color="primary" class="mr-3">mdi-gesture-two-tap</v-icon>
+              <span>Use 3 fingers to drag and move the model</span>
+            </div>
+            <div class="help-item">
+              <v-icon color="primary" class="mr-3">mdi-gesture-pinch</v-icon>
+              <span>Use 2 fingers to pinch and zoom the model</span>
+            </div>
+            <div class="help-item">
+              <v-icon color="primary" class="mr-3">mdi-gesture-swipe</v-icon>
+              <span>Swipe to rotate the model</span>
+            </div>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="showHelpDialog = false">
+            Got it
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
     <client-only>
       <!-- 3D model container -->
@@ -34,27 +90,6 @@
           ref="baseDomObject"
           :class="mdAndUp ? 'baseDom-md' : 'baseDom-sm'"
         />
-        
-      </div>
-
-      <!-- Controls -->
-      <div
-        ref="threeDControls"
-        class="baseModelControl"
-        :class="mdAndUp ? 'baseModelControl-md' : 'baseModelControl-sm'"
-      >
-        <div class="baseModelCB" :class="mdAndUp ? 'baseModelCB-md' : ''">
-          <img
-            src="~/assets/images/gestures-icons.png"
-            class="h-full w-full md:object-contain"
-            @click="handleGestureIconClick"
-            style="
-              background-color: var(--v-info-base);
-              border-radius: 10px;
-              padding: 10px;
-            "
-          />
-        </div>
       </div>
 
       <!-- Fallback template for SSR -->
@@ -105,6 +140,8 @@ export default {
       // Scale bar configuration
       scaleBarConfig: null,
       scaleBarWidth: 50, // Default width in pixels
+      // Help dialog state
+      showHelpDialog: false, // Control help dialog visibility
     };
   },
 
@@ -126,6 +163,21 @@ export default {
         return false;
       }
     },
+  },
+
+  watch: {
+    // Watch for changes in mdAndUp to trigger re-render
+    mdAndUp: {
+      handler(newVal) {
+        // Force re-render when breakpoint changes
+        this.$nextTick(() => {
+          if (this.scene && this.scene.onWindowResize) {
+            this.scene.onWindowResize();
+          }
+        });
+      },
+      immediate: false
+    }
   },
 
   // Component mounted lifecycle - initializes 3D environment
@@ -153,23 +205,28 @@ export default {
         if (!scene || !scene.controls) return;
 
         const controls = scene.controls;
-        const size = (this.modelConfig && this.modelConfig.modelSize) ? this.modelConfig.modelSize : 200;
+        const size =
+          this.modelConfig && this.modelConfig.modelSize
+            ? this.modelConfig.modelSize
+            : 200;
 
         // Mobile/tablet detection: fall back to Vuetify breakpoint
-        const isTouchDevice = (typeof window !== 'undefined') && (
-          'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0
-        );
+        const isTouchDevice =
+          typeof window !== "undefined" &&
+          ("ontouchstart" in window ||
+            navigator.maxTouchPoints > 0 ||
+            navigator.msMaxTouchPoints > 0);
         const isMobileOrTablet = isTouchDevice && !this.mdAndUp;
 
         if (isMobileOrTablet) {
           // Lower speeds to avoid sudden jumps; clamp distances
-          controls.rotateSpeed = 0.2;
+          controls.rotateSpeed = 0.8;
           controls.zoomSpeed = 0.2;
           controls.panSpeed = 0.15;
           // Constrain camera distance around model size
           controls.minDistance = Math.max(10, size * 0.25);
           controls.maxDistance = Math.max(controls.minDistance + 10, size * 6);
-          if (typeof controls.minZoom !== 'undefined') {
+          if (typeof controls.minZoom !== "undefined") {
             controls.minZoom = 0.8;
             controls.maxZoom = 2.0;
           }
@@ -180,18 +237,18 @@ export default {
           controls.panSpeed = 0.5;
           controls.minDistance = Math.max(10, size * 0.2);
           controls.maxDistance = Math.max(controls.minDistance + 10, size * 10);
-          if (typeof controls.minZoom !== 'undefined') {
+          if (typeof controls.minZoom !== "undefined") {
             controls.minZoom = 0.5;
             controls.maxZoom = 4.0;
           }
         }
 
         // Nudge an update if available
-        if (typeof controls.update === 'function') {
+        if (typeof controls.update === "function") {
           controls.update();
         }
       } catch (e) {
-        console.warn('[Model] Failed to apply control tuning:', e);
+        console.warn("[Model] Failed to apply control tuning:", e);
       }
     },
     // Get correct path for static assets based on deployment environment
@@ -634,28 +691,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.baseModelControl {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  .baseModelCB {
-    width: 240px;
-    height: 70px;
-    position: relative;
-  }
-  .baseModelCB-md {
-    width: 280px;
-    height: 100px;
-  }
-}
-
 .baseModelControl-md {
   // Desktop specific styles
   bottom: 20px;
@@ -670,14 +705,23 @@ export default {
   }
 }
 
-.model-info {
+.model-header {
   position: absolute;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.model-info {
   font-size: 1.2em;
   color: white;
-  z-index: 1000;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
   background-color: var(--v-info-base);
   padding: 8px 16px;
   border-radius: 4px;
@@ -688,9 +732,20 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  background-color: var(--v-backgroundAlt-base);
+  height: 80dvh;
+
 }
+.model-container-sm{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 60vh; /* Fallback for browsers that don't support dvh */
+  height: 60dvh; /* Dynamic viewport height for modern browsers */
+  min-height: 300px; /* Ensure minimum height */
+}
+
 
 .model-viewport {
   flex: 1;
@@ -700,6 +755,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+
 
 .baseDom-md {
   width: 100%;
@@ -713,3 +769,4 @@ export default {
   height: 100%;
 }
 </style> 
+

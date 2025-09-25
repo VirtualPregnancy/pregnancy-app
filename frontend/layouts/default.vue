@@ -49,24 +49,21 @@
     </div>
 
     <!-- Global Loading Overlay to block interactions until ready -->
-    <div v-if="isAppLoading" class="global-loading-overlay">
-      <div class="loading-card">
-        <v-progress-circular indeterminate color="primary" size="48"></v-progress-circular>
-        <div class="loading-text">Loading, please wait…</div>
-      </div>
-    </div>
+    <LoadingOverlay :visible="isAppLoading" />
   </v-app>
 </template>
 
 <script>
 import Navigation from '@/components/navigation/Navigation.vue';
 import Menu from '@/components/landing/Menu.vue';
+import LoadingOverlay from '@/components/common/LoadingOverlay.vue';
 
 export default {
   name: "DefaultLayout",
   components: {
     Navigation,
-    Menu
+    Menu,
+    LoadingOverlay
   },
 
   data: () => {
@@ -110,13 +107,14 @@ export default {
 
     // Handle route changes to scroll to top
     this.handleRouteChange = () => {
-      // Scroll content panel to top
-      const contentPanel = document.querySelector('.content-panel');
-      if (contentPanel) {
-        contentPanel.scrollTop = 0;
-      }
-      // Also scroll window to top as fallback
-      window.scrollTo(0, 0);
+      this.$nextTick(() => {
+        this.scrollToTop();
+        
+        // Additional mobile scroll fix with delay
+        if (!this.mdAndUp) {
+          setTimeout(() => this.scrollToTop(), 100);
+        }
+      });
     };
 
     document.addEventListener("fullscreenchange", this.handleFullscreen);
@@ -141,14 +139,23 @@ export default {
   },
 
   methods: {
-    
-
-    
-
+    // Scroll to top helper method
+    scrollToTop() {
+      const targetContainer = !this.mdAndUp 
+        ? document.querySelector('.upper-section')
+        : document.querySelector('.content-panel');
+      
+      if (targetContainer) {
+        targetContainer.scrollTop = 0;
+        targetContainer.scrollTo(0, 0);
+      }
+      
+      // Fallback to window scroll
+      window.scrollTo(0, 0);
+    },
     
     // Handle pregnancy condition updates from the tool
     handleConditionsUpdate(data) {
-      
       // Emit global event for RightPane and other components to listen
       this.$nuxt.$emit('conditions-updated', data);
       
@@ -159,9 +166,7 @@ export default {
     // Toggle global loading overlay state
     handleGlobalLoading(isLoading) {
       this.isAppLoading = !!isLoading;
-    },
-    
-
+    }
   },
 
   beforeDestroy() {
@@ -206,6 +211,7 @@ export default {
   @media (max-width: 960px) {
     flex-direction: column;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
   }
 }
 
@@ -234,6 +240,7 @@ export default {
     width: 100vw;
     min-height: 100vh;
     overflow-y: visible;
+    -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
   }
 }
 
@@ -253,31 +260,5 @@ export default {
   height: 100%;
 }
 
-/* Global loading overlay */
-.global-loading-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: all; /* block clicks behind */
-}
-
-.loading-card {
-  background: var(--v-background-base);
-  color: var(--v-text-base);
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 12px;
-  padding: 20px 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
-}
-
-.loading-text {
-  font-weight: 600;
-}
+/* Loading overlay styles moved to LoadingOverlay.vue */
 </style>

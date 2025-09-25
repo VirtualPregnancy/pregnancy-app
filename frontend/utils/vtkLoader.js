@@ -113,7 +113,7 @@ export default class VTKLoader {
   }
 
   async fetchVTKFile(vtkFilePath, onProgress = null) {
-    if (onProgress) onProgress("Downloading model data...", 20);
+    if (onProgress) onProgress("Downloading...", 20);
 
     const response = await fetch(vtkFilePath);
     if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -444,6 +444,7 @@ export default class VTKLoader {
    * Map pressure value 
    */
   pressureToColor(pressure, minPressure, maxPressure) {
+    // Linear mapping of pressure to color
     const linear = maxPressure > minPressure ? 
       (pressure - minPressure) / (maxPressure - minPressure) : 0.5;
     

@@ -3,7 +3,7 @@
     
     <v-bottom-navigation
       grow
-      :fixed="$vuetify.breakpoint.smAndDown ? true : false"
+      :fixed="shouldFixBottom"
       :color="activeColor"
       v-model="currentMenuCaption"
       :background-color="$vuetify.theme.themes.light.background"
@@ -68,6 +68,23 @@ export default {
   },
 
   computed: {
+    shouldFixBottom() {
+      // Fix bottom nav on phones (smAndDown) and iPad (md with touch)
+      try {
+        const bp = this.$vuetify && this.$vuetify.breakpoint ? this.$vuetify.breakpoint : {};
+        const isPhone = !!bp.smAndDown;
+        // Detect iPad (including iPadOS 13+ which reports as Mac)
+        const ua = (typeof navigator !== 'undefined' && navigator.userAgent) ? navigator.userAgent : '';
+        const isOldIPad = /iPad/.test(ua);
+        const isNewIPad = typeof navigator !== 'undefined' && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+        const isTouch = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+        const isIPad = (isOldIPad || isNewIPad) && isTouch;
+        return isPhone || (isIPad && !!bp.md);
+      } catch (e) {
+        // Safe fallback for any env errors
+        return this.$vuetify.breakpoint ? this.$vuetify.breakpoint.smAndDown : true;
+      }
+    },
     activeColor() {
       return this.$route.name === "support"
         ? this.$vuetify.theme.themes.light.secondary
@@ -130,6 +147,9 @@ export default {
   position: relative;
   width: 100%;
   z-index: 1000;
+  // Respect safe area on iOS devices with home indicator
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .sub-menu {

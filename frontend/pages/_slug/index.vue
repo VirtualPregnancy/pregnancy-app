@@ -25,8 +25,12 @@ export default {
     // Load page data from JSON
     const pageData = await getPageData(slug);
     
+    // Extract URL query parameters for section expansion
+    const query = route.query || {};
+    const defaultExpandedIndex = query.index ? parseInt(query.index, 10) : null;
+    
     store.commit("setCurrentContent", content);
-    return { slug, content, pageData };
+    return { slug, content, pageData, defaultExpandedIndex };
   },
 
   computed: {
@@ -85,6 +89,9 @@ export default {
 
       // Add additional resources
       baseProps.additionalResources = this.pageData.addtionalResources || [];
+
+      // Add default expanded section index from URL parameter
+      baseProps.defaultExpandedIndex = this.defaultExpandedIndex;
 
       return baseProps;
     },
