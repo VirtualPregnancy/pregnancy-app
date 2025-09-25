@@ -33,7 +33,8 @@ release = '0.0.1'
 # ones.
 extensions = [
     'recommonmark',
-    'sphinx.ext.autosectionlabel'
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.graphviz'
 ]
 source_parsers = {
     '.rst': 'restructuredtext',
@@ -73,3 +74,5 @@ html_css_files = [
 
 autosectionlabel_prefix_document = True
 
+# Render Graphviz diagrams as SVG for crisp docs
+graphviz_output_format = 'svg'
