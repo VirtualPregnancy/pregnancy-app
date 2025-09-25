@@ -105,12 +105,24 @@ export default {
       }
     };
 
-    // Handle route changes to scroll to top
+    // Handle route changes to scroll smartly
     this.handleRouteChange = () => {
       this.$nextTick(() => {
+        const hash = this.$route && this.$route.hash;
+        // If navigating with a hash to content-start on mobile, scroll into view
+        if (hash === '#content-start' && !this.mdAndUp) {
+          const anchor = document.getElementById('content-start');
+          if (anchor && typeof anchor.scrollIntoView === 'function') {
+            anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Fallback in case of delayed render
+            setTimeout(() => anchor.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+            return;
+          }
+        }
+
+        // Default behavior: scroll to top
         this.scrollToTop();
-        
-        // Additional mobile scroll fix with delay
+
         if (!this.mdAndUp) {
           setTimeout(() => this.scrollToTop(), 100);
         }
