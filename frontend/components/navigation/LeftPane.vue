@@ -11,9 +11,7 @@
         <lazy-panel 
           @conditions-updated="handleConditionsUpdate"
         />
-        <!-- Hide the full sub-topics list on small screens; use Menu instead -->
         <SubMenu 
-          v-if="mdAndUp"
           :subtopics="currentTopicSubtopics"
           :parent-slug="currentParentSlug"
           :topic-title="currentTopicTitle"

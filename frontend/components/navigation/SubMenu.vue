@@ -15,7 +15,7 @@
         :class="{ 'active-btn': isCurrentPage(key) }"
         large 
         block
-        :to="{ name: 'slug', params: { slug: `${parentSlug}-${key}` }}"
+        :to="navTo(key)"
       >
         <v-icon left>{{ subtopic. icon }}</v-icon>
         <span class="btn-text">{{ subtopic.heading }}</span>
@@ -63,6 +63,13 @@ export default {
     isCurrentPage(key) {
       const expectedSlug = `${this.parentSlug}-${key}`;
       return this.currentSlug === expectedSlug;
+    },
+
+    navTo(key) {
+      const base = { name: 'slug', params: { slug: `${this.parentSlug}-${key}` } };
+      // On mobile, add hash to jump below the submenu into content
+      const isMobile = !this.$vuetify.breakpoint.mdAndUp;
+      return isMobile ? { ...base, hash: '#content-start' } : base;
     }
   }
 };

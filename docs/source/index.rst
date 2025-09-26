@@ -3,19 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Pregnancy App's documentation
+Virtual Pregnancy's documentation
 =============================================
+
+
+In this documentation, we will introduce the Virtual Pregnancy web-app and how to update the app with new content.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   introduction/index
-   FAQs/index
-   pregnancy_app/index
-   technology/index
-   implementation_structure/index
-   Build&Deploy/index
-   important_note/index
-   issues/index
-   contributors
+   00_Project_Overview/index
+   01_Technology_Architecture/index
+   02_Build_Deploy/index
+   03_implementation_structure/index
+   04_pregnancy_app/index
+   05_FAQs/index

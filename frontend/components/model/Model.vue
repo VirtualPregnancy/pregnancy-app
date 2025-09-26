@@ -56,9 +56,10 @@
       <v-card class="help-dialog">
         <v-card-title class="text-h6 pb-2">
           <v-icon left color="info">mdi-gesture-tap</v-icon>
-          Model Controls
+          Model Controls 
         </v-card-title>
         <v-card-text class="pt-0">
+          <span class="text-l mt-4 font-bold"> For touchable devices, use the following gestures to control the model:</span>
           <div class="help-content">
             <div class="help-item">
               <v-icon color="primary" class="mr-3">mdi-gesture-two-tap</v-icon>
@@ -71,6 +72,13 @@
             <div class="help-item">
               <v-icon color="primary" class="mr-3">mdi-gesture-swipe</v-icon>
               <span>Swipe to rotate the model</span>
+            </div>
+          </div>
+          <span class="text-l mt-4 font-bold">For non-touchable devices, use the mouse to control the model:</span>
+          <div class="help-content">
+            <div class="help-item">
+              <v-icon color="primary" class="mr-3">mdi-mouse</v-icon>
+              <span>Use the mouse to drag and move the model</span>
             </div>
           </div>
         </v-card-text>
