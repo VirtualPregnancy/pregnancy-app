@@ -53,6 +53,11 @@ Technical Implementation
    - Nuxt.js plugins for global content access
    - Dynamic slug-to-content mapping
 
+**State Management**:
+   - Centralized 3D model state in dedicated Vuex module
+   - Reactive data synchronization between components
+   - Unified error handling and loading states
+
 This approach ensures lightweight, maintainable, and fast content delivery.
 
-For detailed implementation, see the :ref:`implementation_structure/02_assets:Data Assets` documentation.
+For detailed implementation, see the :ref:`03_implementation_structure/02_assets:Data Assets` and :ref:`03_implementation_structure/04_store:Store` documentation.

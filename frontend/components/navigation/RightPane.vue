@@ -63,28 +63,18 @@
 import PanelControls from "../model/PanelControls.vue";
 import Waveform from "../model/Waveform.vue";
 import Logo from '@/components/Logo.vue';
-import modelData from '@/assets/data/modelData.json';
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
+  components: {
+    PanelControls,
+    Waveform,
+    Logo
+  },
+  
   data() {
     return {
-      
       clientMounted: false, // Track if component is mounted on client
-      // Centralized model state management
-      modelStates: {
-        useTubeRendering: true,
-        currentPerformanceMode: "high",
-        modelName: "Loading...",
-        modelConfig: modelData.models[0].config, // Initialize with healthy model config
-        pressureColorMapping: null, // Pressure color mapping for display
-        pressureMapping: true, // Track pressure mapping state
-        isLoading: false, // Track if model is currently loading - initialize to false
-        loadingComplete: false, // Track if loading has completed
-        colorMappingType: 'pressure', // Track current color mapping type
-        renderingComplete: false, // Track if model is fully rendered and ready for interaction
-        modelSize: 200,
-      },
-      // Waveform data
-      waveformData: modelData.models[0].waveform
     };
   },
 
@@ -108,6 +98,22 @@ export default {
   },
 
   computed: {
+    ...mapGetters('model', [
+      'getModelStates',
+      'getWaveformData',
+      'isModelReady',
+      'hasErrors'
+    ]),
+    
+    // Map Vuex getters to local computed properties
+    modelStates() {
+      return this.getModelStates;
+    },
+    
+    waveformData() {
+      return this.getWaveformData;
+    },
+    
     mdAndUp() {
       // Ensure consistent behavior between SSR and client
       if (!this.clientMounted) {
@@ -128,6 +134,13 @@ export default {
   },
 
   methods: {
+    ...mapActions('model', [
+      'updateColorMapping',
+      'updateModelSize',
+      'updateConditions',
+      'loadModel'
+    ]),
+    
     getAssetUrl(path) {
       const base = this.$config?.basePath || '';
       return `${base}${path}`;
@@ -145,14 +158,12 @@ export default {
       }
     },
 
-
-
-    handleColoredModelsByChanged(coloredModelsBy) {
+    // Handle color mapping changes using Vuex action
+    async handleColoredModelsByChanged(coloredModelsBy) {
       console.log('[RightPane] Color mapping changed to:', coloredModelsBy);
       
-      // Store the color mapping type in our state
-      this.modelStates.coloredModelsBy = coloredModelsBy;
-      this.modelStates.colorMappingType = coloredModelsBy; // Keep both for compatibility
+      // Use Vuex action to update color mapping
+      await this.updateColorMapping(coloredModelsBy);
       
       // Show global loading immediately for better perceived responsiveness
       try {
@@ -165,27 +176,13 @@ export default {
       this.$refs.modelComponent.reciveColoringType(coloredModelsBy);
     },
 
-    // Handle state updates from Model component
+    // Handle state updates from Model component using Vuex mutations
     handleModelStateUpdate(newStates) {
-      Object.assign(this.modelStates, newStates);
-      
-      // Ensure pressure mapping state is properly synchronized
-      if (newStates.hasOwnProperty('pressureMapping')) {
-        this.modelStates.pressureMapping = newStates.pressureMapping;
-      }
-      
-      // Handle loading state updates
-      if (newStates.hasOwnProperty('isLoading')) {
-        this.modelStates.isLoading = newStates.isLoading;
-      }
-      
-      if (newStates.hasOwnProperty('loadingComplete') && newStates.loadingComplete) {
-        this.modelStates.loadingComplete = newStates.loadingComplete;
-      }
+      // Use Vuex mutation to update states
+      this.$store.commit('model/UPDATE_MODEL_STATES', newStates);
       
       // Handle rendering complete state updates
       if (newStates.hasOwnProperty('renderingComplete')) {
-        this.modelStates.renderingComplete = newStates.renderingComplete;
         // Emit global loading overlay toggle based on rendering state
         try {
           this.$nuxt && this.$nuxt.$emit('global-loading', !newStates.renderingComplete);
@@ -195,8 +192,11 @@ export default {
       }
     },
     
-    handleModelSizeChanged(modelSize) {
-      this.modelStates.modelSize = modelSize;
+    // Handle model size changes using Vuex action
+    async handleModelSizeChanged(modelSize) {
+      // Use Vuex action to update model size
+      await this.updateModelSize(modelSize);
+      
       // Forward the size change to the model component for scaling
       if (this.$refs.modelComponent && this.$refs.modelComponent.handleModelSizeChange) {
         this.$refs.modelComponent.handleModelSizeChange(modelSize);
@@ -204,9 +204,10 @@ export default {
     },
 
     
-    // Update the model and the waveform data
-    handleConditionsUpdated(data) {
-      // update the model and transfer the config to the model component
+    // Update the model and the waveform data using Vuex action
+    async handleConditionsUpdated(data) {
+      // Use Vuex action to update conditions and model configuration
+      await this.updateConditions(data);
       try {
         this.$nuxt && this.$nuxt.$emit('global-loading', true);
       } catch (e) {

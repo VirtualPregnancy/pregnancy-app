@@ -123,7 +123,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
+  // Keep props for backward compatibility, but also add Vuex integration
   props: {
     isLoading: {
       type: Boolean,
@@ -155,6 +158,23 @@ export default {
     },
   },
 
+  computed: {
+    ...mapGetters('model', [
+      'getModelSize',
+      'getCurrentColorMapping',
+      'isModelReady'
+    ]),
+    
+    // Use Vuex state as fallback if props are not provided
+    effectiveModelSize() {
+      return this.currentModelSize || this.getModelSize;
+    },
+    
+    effectiveColorMapping() {
+      return this.getCurrentColorMapping;
+    }
+  },
+  
   data() {
     return {
       isCollapsed: true,
