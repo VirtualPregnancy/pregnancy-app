@@ -217,8 +217,8 @@ export default {
         this.$refs.modelComponent.changeModel(data.conditionData.config);
       }
 
-      // update the waveform data
-      this.waveformData = data.conditionData.waveform;
+      // update the waveform data using Vuex
+      this.$store.commit('model/SET_WAVEFORM_DATA', data.conditionData.waveform);
       
       // update model size from config
       if (data.conditionData.config && data.conditionData.config.modelSize) {

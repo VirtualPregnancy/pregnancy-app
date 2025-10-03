@@ -41,21 +41,13 @@
             <v-radio-group
               v-model="coloredModelsBy"
               @change="$emit('colored-models-by-changed', coloredModelsBy)"
-              :disabled="isLoading || !renderingComplete"
+              :disabled="!renderingComplete"
               class="custom-radio-group"
             >
               <v-radio label="Blood pressure" value="pressure"></v-radio>
               <v-radio label="Blood flow" value="flux"></v-radio>
               <v-radio label="No flow/pressure" value="default"></v-radio>
             </v-radio-group>
-            <div
-              v-if="!renderingComplete && !isLoading"
-              class="rendering-status"
-            >
-              <small style="color: white; font-style: italic"
-                >Waiting for model to fully render...</small
-              >
-            </div>
           </div>
         </div>
       </div>
@@ -128,14 +120,6 @@ import { mapGetters } from 'vuex';
 export default {
   // Keep props for backward compatibility, but also add Vuex integration
   props: {
-    isLoading: {
-      type: Boolean,
-      default: false,
-    },
-    loadingComplete: {
-      type: Boolean,
-      default: false,
-    },
     renderingComplete: {
       type: Boolean,
       default: false,
