@@ -81,3 +81,14 @@ The modelName is desplayed at the top of the model viewport like the following:
 .. image:: images/01_model_name.png
 
 By default, the modelName is defined in the ``modelData.json`` file, you can change the modelName by updating the ``modelData.json`` file.
+
+Following pictures are the mapping between model data and the UI:
+
+Configuration of the model and the ui settings on the left side:
+
+.. image:: images/01_model_config.png
+
+
+Waveform of the model configuration:
+
+.. image:: images/01_model_waveform.png

@@ -124,10 +124,17 @@ export default {
           }
         }
 
-        // Default behavior: scroll to top
+        // Default behavior: scroll to top for all page changes
         self.scrollToTop();
+        
+        // Enhanced mobile scroll to top with multiple attempts
         if (!self.mdAndUp) {
-          setTimeout(() => self.scrollToTop(), 100);
+          // Immediate scroll
+          setTimeout(() => self.scrollToTop(), 50);
+          // Secondary scroll for delayed renders
+          setTimeout(() => self.scrollToTop(), 200);
+          // Final scroll to ensure we're at top
+          setTimeout(() => self.scrollToTop(), 500);
         }
       });
     };
@@ -154,19 +161,40 @@ export default {
   },
 
   methods: {
-    // Scroll to top helper method
+    // Enhanced scroll to top helper method
     scrollToTop() {
-      const targetContainer = !this.mdAndUp 
-        ? document.querySelector('.upper-section')
-        : document.querySelector('.content-panel');
-      
-      if (targetContainer) {
-        targetContainer.scrollTop = 0;
-        targetContainer.scrollTo(0, 0);
+      if (!this.mdAndUp) {
+        // Mobile: comprehensive scroll to top
+        const upperSection = document.querySelector('.upper-section');
+        const contentPanel = document.querySelector('.content-panel');
+        const body = document.body;
+        const html = document.documentElement;
+        
+        // Reset all possible scroll containers
+        if (upperSection) {
+          upperSection.scrollTop = 0;
+          upperSection.scrollTo({ top: 0, behavior: 'auto' });
+        }
+        if (contentPanel) {
+          contentPanel.scrollTop = 0;
+          contentPanel.scrollTo({ top: 0, behavior: 'auto' });
+        }
+        
+        // Reset body and html scroll
+        body.scrollTop = 0;
+        html.scrollTop = 0;
+        
+        // Fallback to window scroll
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      } else {
+        // Desktop: scroll content panel
+        const targetContainer = document.querySelector('.content-panel');
+        if (targetContainer) {
+          targetContainer.scrollTop = 0;
+          targetContainer.scrollTo({ top: 0, behavior: 'auto' });
+        }
+        window.scrollTo({ top: 0, behavior: 'auto' });
       }
-      
-      // Fallback to window scroll
-      window.scrollTo(0, 0);
     },
 
     // Scroll to leftpane bottom on mobile

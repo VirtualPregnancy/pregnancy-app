@@ -99,6 +99,13 @@ export default {
     handTopicClick(topic) {
       this.selectedTopic = topic;
       
+      // Mobile: scroll to top when switching main topics
+      if (this.isMobile) {
+        this.$nextTick(() => {
+          this.scrollToTopMobile();
+        });
+      }
+      
       // Only show sub-menu if topic has more than one sub-topic and it's not "Home"
       if (topic.title !== "Home" && topic.subTopics) {
         const subTopicsCount = Object.keys(topic.subTopics).length;
@@ -106,6 +113,22 @@ export default {
       } else {
         this.subMenuActive = false;
       }
+    },
+
+    // Mobile scroll to top method
+    scrollToTopMobile() {
+      const upperSection = document.querySelector('.upper-section');
+      const body = document.body;
+      const html = document.documentElement;
+      
+      if (upperSection) {
+        upperSection.scrollTop = 0;
+        upperSection.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      
+      body.scrollTop = 0;
+      html.scrollTop = 0;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
   },
 

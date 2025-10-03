@@ -25,7 +25,7 @@ The `modelData.json` file contains comprehensive configurations for 3D models an
 
 The first model is the default model, following this format to add more models by just using data, and the interface will be updated automatically.
 
-.. code-block:: json
+.. code-block:: javascript
 
     "models": [
         {
@@ -48,15 +48,15 @@ The first model is the default model, following this format to add more models b
             "yAxis": "Velocity",
             "lineTitle": "Normal",
             "yDataPath": "/waveforms/normal/signal.csv",
-            "waveformImg": "/img/normal-ultrasound.jpg",
-            "title": "Umbilical artery blood flow velocity (Normal)",
-            "isPlaying": true,
-            "speed": 1,
+            "waveformImg": "/img/normal-ultrasound.jpg", // image above the waveform
+            "title": "Umbilical artery blood flow velocity (Normal)", // title of the waveform
+            "isPlaying": true, // whether the waveform is playing
+            "speed": 1, // speed of the waveform
             "waveformNote":"* Normal Ultrasound Image",
             "description": "Blood flow characteristics in the umbilical cord can reflect the health of the fetus",
             "colors": {
-            "normal": "#4CAF50",
-            "colorblind": "#2196F3"
+              "normal": "#4CAF50", // color for the line for normal mode
+              "colorblind": "#2196F3" // color for the line for colorblind mode
             },
             "timeOffset": 1.45
         }
@@ -64,7 +64,7 @@ The first model is the default model, following this format to add more models b
     
     ]
 
-See the image below for the model confign and the elements on the page:
+See the image below for the model confign and the elements on the page (note the model used here might be different from the current model), you can also refer to the :doc:`display model <../04_pregnancy_app/01_load_model>` document for more details.
 
 .. image:: images/02_model_config.png
 
@@ -106,7 +106,7 @@ The `modelData.json` file contains configuration for 3D medical models. Here are
   - **speed**: Animation playback speed
   - **waveformNote**: Note displayed with the image
   - **description**: Medical description of the condition
-  - **colors**: Color scheme for normal and colorblind users
+  - **colors**: Color scheme of the line for normal and colorblind users
   - **timeOffset**: Time offset for data synchronization, so that the heart beat waveform is aligned
 
 
