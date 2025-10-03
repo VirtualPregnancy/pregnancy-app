@@ -8,10 +8,13 @@
       v-model="currentMenuCaption"
       :background-color="$vuetify.theme.themes.light.background"
     >
-    <!-- :class="mdAndUp? 'button-default button-main-topic' : 'button-default button-main-topic-mobile'" -->
       <v-btn
         v-for="(topic, index) in topics"
-        class="button-default button-main-topic"
+        :class="[
+          'button-default',
+          isMobile ? 'button-main-topic-mobile' : 'button-main-topic',
+          { 'active-tab': currentMenuCaption === index }
+        ]"
         :key="index"
         :value="index"
         :disabled="$isTopicDisabled(topic)"
@@ -22,12 +25,51 @@
         @click="handTopicClick(topic)"
         :style="buttonStyles"
       >
-        <span>{{ topic.title }}</span>
-        <SvgIcon 
-          v-if="topic.icon && topic.icon.startsWith('/')" 
-          :icon="topic.icon" 
-        />
-        <v-icon v-else>{{ topic.icon }}</v-icon>
+        <!-- Mobile: Dynamic icon size and text display -->
+        <template v-if="isMobile">
+          <div class="mobile-tab-content">
+            <SvgIcon 
+              v-if="topic.icon && topic.icon.startsWith('/')" 
+              :icon="topic.icon" 
+              :class="[
+                'mobile-icon',
+                { 
+                  'icon-active': currentMenuCaption === index,
+                  'icon-inactive': currentMenuCaption !== index
+                }
+              ]"
+            />
+            <v-icon 
+              v-else 
+              :class="[
+                'mobile-icon',
+                { 
+                  'icon-active': currentMenuCaption === index,
+                  'icon-inactive': currentMenuCaption !== index
+                }
+              ]"
+            >
+              {{ topic.icon }}
+            </v-icon>
+            <span 
+              v-if="currentMenuCaption === index" 
+              class="mobile-text-expanded"
+              :title="topic.title"
+            >
+              {{ topic.title }}
+            </span>
+          </div>
+        </template>
+        
+        <!-- Desktop: Show both text and icon -->
+        <template v-else>
+          <span>{{ topic.title }}</span>
+          <SvgIcon 
+            v-if="topic.icon && topic.icon.startsWith('/')" 
+            :icon="topic.icon" 
+          />
+          <v-icon v-else>{{ topic.icon }}</v-icon>
+        </template>
       </v-btn>
     </v-bottom-navigation>
   </div>
@@ -68,6 +110,15 @@ export default {
   },
 
   computed: {
+    isMobile() {
+      // Detect mobile devices (phones and small tablets)
+      try {
+        const bp = this.$vuetify && this.$vuetify.breakpoint ? this.$vuetify.breakpoint : {};
+        return !!bp.smAndDown;
+      } catch (e) {
+        return true; // Safe fallback
+      }
+    },
     shouldFixBottom() {
       // Fix bottom nav on phones (smAndDown) and iPad (md with touch)
       try {
@@ -152,6 +203,7 @@ export default {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+
 .sub-menu {
   position: fixed;
   bottom: 8dvh;
@@ -200,7 +252,7 @@ export default {
   &.button-main-topic-mobile{
     height: auto !important;
     min-height: 56px !important;
-    font-size: 0.6rem !important;
+    font-size: 0.7rem !important;
     display: flex !important;
     flex-direction: column !important;
     border-left: 2px solid var(--secondary-color);
@@ -209,6 +261,14 @@ export default {
     text-align: center !important;
     background: var(--button-main-color);
     color: var(--button-text-color);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    padding: 8px 4px !important;
+    
+    // More balanced width for inactive buttons
+    min-width: 60px !important;
+    flex: 1;
     
     &:hover {
       background: var(--button-main-hover-color) !important;
@@ -217,10 +277,50 @@ export default {
       color: var(--button-text-color);
     }
     
-    &.v-btn--active {
+    &.v-btn--active, &.active-tab {
       background: var(--button-main-active-color) !important;
       font-weight: 700 !important;
       color: var(--button-text-active-color) !important;
+      flex: 2.5;
+      min-width: 120px !important;
+      padding: 8px 16px !important;
+    }
+    
+    .mobile-tab-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .mobile-icon {
+      transition: all 0.3s ease;
+      color: var(--button-text-color) !important;
+      
+      &.icon-inactive {
+        font-size: 20px !important;
+        opacity: 0.8;
+      }
+      
+      &.icon-active {
+        font-size: 18px !important;
+        transform: translateY(-2px);
+        opacity: 1;
+        color: var(--button-text-active-color) !important;
+      }
+    }
+    
+    .mobile-text-expanded {
+      font-size: 0.75rem !important;
+      font-weight: 600;
+      margin-top: 2px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: slideInText 0.3s ease-out forwards;
+      animation-delay: 0.1s;
+      color: var(--button-text-active-color) !important;
+      line-height: 1.2;
+      text-align: center;
     }
   }
   
@@ -231,6 +331,18 @@ export default {
   span {
     color: var(--button-text-color) !important;
     font-weight: inherit;
+  }
+}
+
+// Simple slide-in animation for mobile text
+@keyframes slideInText {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 </style>

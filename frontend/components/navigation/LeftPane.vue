@@ -16,6 +16,9 @@
           :parent-slug="currentParentSlug"
           :topic-title="currentTopicTitle"
         />
+        
+        <!-- Anchor for mobile scroll target -->
+        <div id="leftpane-bottom" class="scroll-anchor"></div>
       </div>
 
    
@@ -112,3 +115,10 @@ import SubMenu from './SubMenu.vue';
 <!-- Not scoped, will be available at other places. Currently, also used in Panel(.md files) and Support components -->
 
 <style lang="scss" src="@/assets/sass/components/left-panel.scss"></style>
+
+<style scoped>
+.scroll-anchor {
+  height: 1px;
+  visibility: hidden;
+}
+</style>

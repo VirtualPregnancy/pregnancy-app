@@ -106,25 +106,28 @@ export default {
     };
 
     // Handle route changes to scroll smartly
-    this.handleRouteChange = () => {
-      this.$nextTick(() => {
-        const hash = this.$route && this.$route.hash;
-        // If navigating with a hash to content-start on mobile, scroll into view
-        if (hash === '#content-start' && !this.mdAndUp) {
-          const anchor = document.getElementById('content-start');
-          if (anchor && typeof anchor.scrollIntoView === 'function') {
-            anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // Fallback in case of delayed render
-            setTimeout(() => anchor.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+    const self = this;
+    this.handleRouteChange = function() {
+      self.$nextTick(() => {
+        const hash = self.$route && self.$route.hash;
+        
+        if (!self.mdAndUp && hash) {
+          // Mobile: handle hash-based scrolling
+          if (hash === '#leftpane-bottom') {
+            self.scrollToLeftPaneBottom();
+            return;
+          }
+          // Legacy support for content-start (can be removed later)
+          if (hash === '#content-start') {
+            self.scrollToContentStart();
             return;
           }
         }
 
         // Default behavior: scroll to top
-        this.scrollToTop();
-
-        if (!this.mdAndUp) {
-          setTimeout(() => this.scrollToTop(), 100);
+        self.scrollToTop();
+        if (!self.mdAndUp) {
+          setTimeout(() => self.scrollToTop(), 100);
         }
       });
     };
@@ -164,6 +167,31 @@ export default {
       
       // Fallback to window scroll
       window.scrollTo(0, 0);
+    },
+
+    // Scroll to leftpane bottom on mobile
+    scrollToLeftPaneBottom() {
+      if (!this.mdAndUp) {
+        const leftPanel = this.$refs.leftPanel;
+        const upperSection = document.querySelector('.upper-section');
+        
+        if (leftPanel && upperSection) {
+          // Calculate scroll position to show leftpane bottom
+          const leftPanelHeight = leftPanel.offsetHeight;
+          upperSection.scrollTo({ 
+            top: leftPanelHeight - 100, // Leave some margin
+            behavior: 'smooth' 
+          });
+        }
+      }
+    },
+
+    // Legacy method for content-start anchor
+    scrollToContentStart() {
+      const anchor = document.getElementById('content-start');
+      if (anchor) {
+        anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     },
     
     // Handle pregnancy condition updates from the tool

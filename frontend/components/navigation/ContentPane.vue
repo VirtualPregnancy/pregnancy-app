@@ -10,10 +10,6 @@
         <p class="text-lg text-gray-600 max-w-2xl mx-auto" v-html="pageDescription">
         </p>
       </div>
-
-      <!-- Anchor below submenu for mobile hash scroll -->
-      <div id="content-start"></div>
-
       <!-- Content Sections -->
       <div class="space-y-6 mb-8">
         <!-- Single section article layout -->

@@ -67,9 +67,9 @@ export default {
 
     navTo(key) {
       const base = { name: 'slug', params: { slug: `${this.parentSlug}-${key}` } };
-      // On mobile, add hash to jump below the submenu into content
+      // On mobile, add hash to scroll to leftpane bottom
       const isMobile = !this.$vuetify.breakpoint.mdAndUp;
-      return isMobile ? { ...base, hash: '#content-start' } : base;
+      return isMobile ? { ...base, hash: '#leftpane-bottom' } : base;
     }
   }
 };
