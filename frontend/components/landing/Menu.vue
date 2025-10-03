@@ -248,4 +248,5 @@ export default {
 
 <style scoped>
 /* Minimal: most styling via Tailwind utility classes */
+
 </style>

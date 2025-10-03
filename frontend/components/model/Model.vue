@@ -17,7 +17,7 @@
     <!-- Scale Bar -->
     <div
       v-if="scaleBarConfig && scaleBarConfig.enabled"
-      class="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
+      class="absolute top-20 left-1/2 transform -translate-x-1/2 z-20 pointer-events-none"
     >
       <div class="rounded px-3 py-2 flex flex-col items-center gap-1">
         <!-- Scale bar with end markers -->
