@@ -11,11 +11,31 @@
         <lazy-panel 
           @conditions-updated="handleConditionsUpdate"
         />
+        <div v-if="$component() == 'ConditionSelector' && $vuetify.breakpoint.mdAndUp">
+          <div class="conditions-panel">
+            <ConditionSelector
+              @conditions-changed="handleConditionsChanged"
+              @reset-to-normal="handleResetToNormal"
+              @panel-expanded="handleConditionsPanelExpanded"
+              @panel-collapsed="handleConditionsPanelCollapsed"
+            />
+          </div>
+        </div>
         <SubMenu 
           :subtopics="currentTopicSubtopics"
           :parent-slug="currentParentSlug"
           :topic-title="currentTopicTitle"
         />
+        <div v-if="$component() == 'ConditionSelector' && !$vuetify.breakpoint.mdAndUp">
+          <div class="conditions-panel">
+            <ConditionSelector
+              @conditions-changed="handleConditionsChanged"
+              @reset-to-normal="handleResetToNormal"
+              @panel-expanded="handleConditionsPanelExpanded"
+              @panel-collapsed="handleConditionsPanelCollapsed"
+            />
+          </div>
+        </div>
         
         <!-- Anchor for mobile scroll target -->
         <div id="leftpane-bottom" class="scroll-anchor"></div>
@@ -28,13 +48,15 @@
 </template>
 
 <script>
+import ConditionSelector from "../model/ConditionSelector.vue"
 import SubMenu from './SubMenu.vue';
 
   export default {
   name: "LeftPane",
   
   components: {
-    SubMenu
+    SubMenu,
+    ConditionSelector
   },
 
   props: {
@@ -96,11 +118,35 @@ import SubMenu from './SubMenu.vue';
       //console.log('[LeftPane] Navigating to home');
     },
     
+    // Handle condition changes from ConditionSelector
+    handleConditionsChanged(data) {
+      //console.log('[Panel] Conditions changed:', data);
+      
+      // Forward to parent components
+      this.$emit('conditions-updated', data);
+      
+      // Store condition data for potential future use
+      this.lastConditionData = data;
+    },
+    // Handle reset to normal from ConditionSelector
+    handleResetToNormal() {
+      //console.log('[Panel] Reset to normal conditions');
+      
+      // Forward to parent components
+      this.$emit('conditions-updated', { selectedConditions: [], reset: true });
+    },
     
-
+    // Handle condition panel expansion
+    handleConditionsPanelExpanded() {
+      //console.log('[Panel] Conditions panel expanded');
+      // Optional: handle layout adjustments if needed
+    },
     
-
-    
+    // Handle condition panel collapse
+    handleConditionsPanelCollapsed() {
+      //console.log('[Panel] Conditions panel collapsed');
+      // Optional: handle layout adjustments if needed
+    },
     // Forward pregnancy condition updates to parent components
     handleConditionsUpdate(data) {
       //console.log('[LeftPane] Forwarding conditions update:', data);
@@ -111,8 +157,6 @@ import SubMenu from './SubMenu.vue';
   },
 };
 </script>
-
-<!-- Not scoped, will be available at other places. Currently, also used in Panel(.md files) and Support components -->
 
 <style lang="scss" src="@/assets/sass/components/left-panel.scss"></style>
 

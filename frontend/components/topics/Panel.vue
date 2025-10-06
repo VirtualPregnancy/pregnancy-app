@@ -16,16 +16,7 @@
         >
         {{ $parentTopic().content }}
       </div>
-      <div v-if="$component() == 'ConditionSelector'">
-        <div class="conditions-panel">
-          <ConditionSelector
-            @conditions-changed="handleConditionsChanged"
-            @reset-to-normal="handleResetToNormal"
-            @panel-expanded="handleConditionsPanelExpanded"
-            @panel-collapsed="handleConditionsPanelCollapsed"
-          />
-        </div>
-      </div>
+      
         <template #fallback>
           <div class="loading-placeholder pt-2">
             <v-skeleton-loader type="article" />
@@ -37,10 +28,9 @@
 </template>
 
 <script>
-import ConditionSelector from "../model/ConditionSelector.vue"
+
 
 export default {
-  components: { ConditionSelector },
   name: "Panel",
 
   data() {
@@ -58,36 +48,9 @@ export default {
   
 
     
-    // Handle condition changes from ConditionSelector
-    handleConditionsChanged(data) {
-      //console.log('[Panel] Conditions changed:', data);
-      
-      // Forward to parent components
-      this.$emit('conditions-updated', data);
-      
-      // Store condition data for potential future use
-      this.lastConditionData = data;
-    },
     
-    // Handle reset to normal from ConditionSelector
-    handleResetToNormal() {
-      //console.log('[Panel] Reset to normal conditions');
-      
-      // Forward to parent components
-      this.$emit('conditions-updated', { selectedConditions: [], reset: true });
-    },
     
-    // Handle condition panel expansion
-    handleConditionsPanelExpanded() {
-      //console.log('[Panel] Conditions panel expanded');
-      // Optional: handle layout adjustments if needed
-    },
     
-    // Handle condition panel collapse
-    handleConditionsPanelCollapsed() {
-      //console.log('[Panel] Conditions panel collapsed');
-      // Optional: handle layout adjustments if needed
-    },
   },
 
   mounted() {
@@ -110,9 +73,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.conditions-panel {
-  margin-top: 2dvh;
-}
+
 .select {
   width: 127px;
 }
