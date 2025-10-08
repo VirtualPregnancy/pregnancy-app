@@ -3,24 +3,22 @@
     <div class="quick-access-header">
       <h3 class="section-title">
         <v-icon left color="accent">mdi-compass-outline</v-icon>
-        {{ topicTitle + ' Menu' || 'Quick Access' }}
+        What's in this section?
       </h3>
     </div>
 
-    <div class="access-buttons">
-      <v-btn 
+    <nav class="nav-menu">
+      <nuxt-link 
         v-for="(subtopic, key) in subtopics" 
         :key="key"
-        class="access-btn" 
-        :class="{ 'active-btn': isCurrentPage(key) }"
-        large 
-        block
+        class="nav-item" 
+        :class="{ 'nav-item--active': isCurrentPage(key) }"
         :to="navTo(key)"
       >
-        <v-icon left>{{ subtopic. icon }}</v-icon>
-        <span class="btn-text">{{ subtopic.heading }}</span>
-      </v-btn>
-    </div>
+        <v-icon class="nav-icon" size="18">{{ subtopic.icon }}</v-icon>
+        <span class="nav-text">{{ subtopic.heading }}</span>
+      </nuxt-link>
+    </nav>
   </div>
 </template>
 
@@ -77,100 +75,75 @@ export default {
 
 <style scoped lang="scss">
 .quick-access-container {
-  padding: 15px;
-  background: var(--v-subSuccess-base);
-  border-radius: 8px;
-  border: 1px solid var(--v-secondary-base);
-  margin-bottom: 10px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-bottom: 0;
 }
 
 .quick-access-header {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  padding-left: 16px;
 }
 
 .section-title {
-  color: black;
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 500;
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-.access-buttons {
+.nav-menu {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 10px;
-  padding: 0.5rem;
+  gap: 0;
+  margin-bottom: 0;
+  padding: 0;
   
-  .access-btn {
-    min-height: 50px;
-    height: auto !important;
-    font-weight: 500;
-    background-color: var(--v-buttonMain-base);
-    color: var(--v-buttonText-base);
-    text-transform: none;
-    justify-content: flex-start;
-    text-align: left;
-    padding: 12px 16px !important;
+  .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    color: black;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.4;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    background-color: #dbeafe;
+    transition: all 0.15s ease;
     
-    
-    ::v-deep .v-btn__content {
-      width: 100%;
-      height: auto !important;
-      white-space: normal !important;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      flex-wrap: nowrap;
-      gap: 8px;
-      padding: 4px 0;
-    }
-    
-    
-    ::v-deep .v-icon {
-      margin-right: 0 !important;
-      margin-left: 0 !important;
+    .nav-icon {
+      margin-right: 12px;
+      color: inherit;
       flex-shrink: 0;
-      align-self: flex-start;
-      margin-top: 2px;
     }
     
-    .btn-text {
-      white-space: normal !important;
+    .nav-text {
+      flex: 1;
+      white-space: normal;
       word-break: break-word;
       overflow-wrap: break-word;
-      hyphens: auto;
-      width: 100%;
-      line-height: 1.4;
-      flex: 1;
-      display: block;
-      text-align: left;
-      font-size: 0.95rem;
-      
-     
-      word-wrap: break-word;
-      -webkit-hyphens: auto;
-      -moz-hyphens: auto;
-      -ms-hyphens: auto;
     }
     
     &:hover {
-        transform: translateX(4px);
-        transition: transform 0.2s ease;
-        background-color: var(--v-buttonMainHover-base);
-        color: var(--v-buttonTextHover-base);
+      background-color: #b1cde7;
+      color: #334155;
     }
     
-    &.active-btn {
-        background-color: var(--v-buttonMainActive-base);
-        color: var(--v-buttonTextActive-base);
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        scale: 1.02;
-
+    &.nav-item--active {
+      background-color: #cce5fb;
+      color: #1e40af;
+      font-weight: 500;
+      
+      .nav-icon {
+        color: #1e40af;
+      }
     }
   }
 }
@@ -244,6 +217,7 @@ export default {
 ::v-deep .v-btn {
   text-transform: none !important;
   font-weight: 500 !important;
+  
   
   &.access-btn {
     white-space: normal !important;

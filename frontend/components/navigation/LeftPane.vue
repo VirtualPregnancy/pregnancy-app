@@ -8,9 +8,7 @@
     <div v-if="$route.name == 'slug'">
       
       <div class="pa-4 mb-4" :class="currentBg" tile :style="panelHeightStyle">
-        <lazy-panel 
-          @conditions-updated="handleConditionsUpdate"
-        />
+
         <div v-if="$component() == 'ConditionSelector' && $vuetify.breakpoint.mdAndUp">
           <div class="conditions-panel">
             <ConditionSelector
@@ -113,10 +111,7 @@ import SubMenu from './SubMenu.vue';
   },
   
   methods: {
-    // Navigate to home route
-    goHome() {
-      //console.log('[LeftPane] Navigating to home');
-    },
+   
     
     // Handle condition changes from ConditionSelector
     handleConditionsChanged(data) {

@@ -116,7 +116,64 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     "@nuxtjs/vuetify",
+    "@nuxtjs/pwa"
   ],
+  
+  // PWA module configuration
+  pwa: {
+    meta: {
+      title: 'Pregnancy App',
+      author: 'ABI',
+      description: 'A comprehensive pregnancy education and care application.',
+      theme_color: '#DD3C51',
+      lang: 'en',
+      ogSiteName: 'Pregnancy App',
+      ogTitle: 'Pregnancy App',
+      ogDescription: 'A comprehensive pregnancy education and care application.',
+      ogImage: '/favicon.ico',
+      twitterCard: 'summary',
+      twitterSite: '@ABI'
+    },
+    manifest: {
+      name: 'Pregnancy App',
+      short_name: 'Pregnancy App',
+      description: 'A comprehensive pregnancy education and care application.',
+      theme_color: '#DD3C51',
+      background_color: '#F5F9FC',
+      display: 'standalone',
+      start_url: '/',
+      scope: '/',
+      orientation: 'portrait-primary',
+      icons: [
+        {
+          src: '/favicon.ico',
+          sizes: '64x64 32x32 24x24 16x16',
+          type: 'image/x-icon'
+        }
+      ]
+    },
+    workbox: {
+      enabled: true,
+      runtimeCaching: [
+        {
+          urlPattern: 'https://fonts.googleapis.com/.*',
+          handler: 'CacheFirst',
+          method: 'GET',
+          strategyOptions: {
+            cacheableResponse: { statuses: [0, 200] }
+          }
+        },
+        {
+          urlPattern: 'https://www.googletagmanager.com/.*',
+          handler: 'CacheFirst',
+          method: 'GET',
+          strategyOptions: {
+            cacheableResponse: { statuses: [0, 200] }
+          }
+        }
+      ]
+    }
+  },
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [

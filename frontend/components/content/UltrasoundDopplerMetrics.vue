@@ -96,7 +96,7 @@
           Normal Ranges of Doppler Metrics - Third Trimester
         </v-card-title>
 
-        <v-card-text class="pa-0">
+        <v-card-text>
           <v-tabs v-model="activeTab" centered color="primary">
             <v-tab v-for="item in dialogData" :key="item.title">
               <v-icon left>mdi-heart</v-icon>

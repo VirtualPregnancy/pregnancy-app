@@ -1,18 +1,12 @@
 <template>
   <v-app ref="base_background" class="root" style="background-color: var(--v-backgroundAlt-base);">
-    <!-- Global floating controls (top-left, above all pages) -->
-    <div class="fixed top-2 left-2 z-50">
-      <template v-if="mdAndUp">
-        <!-- Desktop screens: show Home only -->
-        <v-btn fab small color="primary" :to="{ path: '/' }" title="Home">
-          <v-icon >mdi-home</v-icon>
-        </v-btn>
-      </template>
-      <template v-else>
-        <!-- Mobile/Tablet: show Menu -->
-        <Menu :show-back-to-landing="true" />
-      </template>
+    <!-- Mobile Menu (only show on mobile) -->
+    <div class="fixed top-2 left-2 z-50" v-if="!mdAndUp">
+      <Menu :show-back-to-landing="true" />
     </div>
+    <!-- Page Header -->
+    <Header />
+    
     <!-- Main Container: Upper and Lower sections -->
     <div class="main-container">
       
@@ -21,17 +15,11 @@
         
         <!-- Left Panel -->
         <div class="left-panel" ref="leftPanel">
-          <v-card
-            outlined
-            tile
-            class="pa-0 overflow-y-auto h-full"
-            :class="mdAndUp ? 'panel-height' + multiplier : ''"
-          >
+         
             <left-pane 
               :panel-height="panelHeight"
               @conditions-updated="handleConditionsUpdate"
             />
-          </v-card>
         </div>
         
         <!-- Content Panel -->
@@ -57,13 +45,15 @@
 import Navigation from '@/components/navigation/Navigation.vue';
 import Menu from '@/components/landing/Menu.vue';
 import LoadingOverlay from '@/components/common/LoadingOverlay.vue';
+import Header from '@/components/navigation/Header.vue';
 
 export default {
   name: "DefaultLayout",
   components: {
     Navigation,
     Menu,
-    LoadingOverlay
+    LoadingOverlay,
+    Header
   },
 
   data: () => {
@@ -78,7 +68,7 @@ export default {
   computed: {
     mdAndUp() {
       return this.$vuetify.breakpoint.mdAndUp;
-    },
+    }
   },
 
   mounted() {
@@ -260,13 +250,17 @@ export default {
 .root {
   overflow-y: hidden;
   user-select: none;
-}
-
-// Main container: full height with flex layout
-.main-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+// Main container: remaining height with flex layout
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 // Upper section: takes remaining space, horizontal split on desktop, vertical on mobile
@@ -285,16 +279,13 @@ export default {
 
 // Left panel: fixed width on desktop, full width on mobile
 .left-panel {
-  width: 30vw;
-  min-width: 409px;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
-  background-color: var(--v-background-base);
+  width: 25vw;
+  min-width: 350px;
+  background-color: var(--v-backgroundAlt-base);
   
   @media (max-width: 960px) {
     width: 100vw;
     min-width: unset;
-    border-right: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
     flex-shrink: 0;
   }
 }
@@ -302,7 +293,7 @@ export default {
 // Content panel: takes remaining space
 .content-panel {
   flex: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
   
   @media (max-width: 960px) {
     width: 100vw;
