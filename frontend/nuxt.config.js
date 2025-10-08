@@ -146,8 +146,14 @@ export default {
       orientation: 'portrait-primary',
       icons: [
         {
+          src: '/img/pwa-icon.svg',
+          sizes: '192x192',
+          type: 'image/svg+xml',
+          purpose: 'any maskable'
+        },
+        {
           src: '/favicon.ico',
-          sizes: '64x64 32x32 24x24 16x16',
+          sizes: '16x16 32x32 48x48',
           type: 'image/x-icon'
         }
       ]

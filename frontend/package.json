@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.13.6",
-    "@nuxtjs/pwa": "^3.3.5",
     "chart.js": "^4.5.0",
     "copper3d": "^2.2.2",
     "core-js": "^3.19.3",
@@ -32,10 +31,15 @@
     "webpack": "^4.46.0"
   },
   "devDependencies": {
+    "@nuxtjs/pwa": "^3.0.2",
+    "@nuxtjs/tailwindcss": "^4.2.1",
     "@nuxtjs/vuetify": "^1.12.3",
+    "autoprefixer": "^10.4.7",
     "html-loader": "^3.1.0",
     "markdown-loader": "^6.0.0",
+    "postcss": "^8.4.14",
     "sass": "^1.49.0",
-    "sass-loader": "10.1.1"
+    "sass-loader": "10.1.1",
+    "tailwindcss": "^3.1.8"
   }
 }
