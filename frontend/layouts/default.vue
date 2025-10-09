@@ -1,12 +1,5 @@
 <template>
   <v-app ref="base_background" class="root" style="background-color: var(--v-backgroundAlt-base);">
-    <!-- Mobile Menu (only show on mobile) -->
-    <div class="fixed top-2 left-2 z-50" v-if="!mdAndUp">
-      <Menu :show-back-to-landing="true" />
-    </div>
-    <!-- Page Header -->
-    <Header />
-    
     <!-- Main Container: Upper and Lower sections -->
     <div class="main-container">
       
@@ -14,19 +7,19 @@
       <div class="upper-section">
         
         <!-- Left Panel -->
-        <div class="left-panel" ref="leftPanel">
+        <div class="left-panel" ref="leftPanel" :class="{ 'collapsed': isSidebarCollapsed }">
          
             <left-pane 
               :panel-height="panelHeight"
               @conditions-updated="handleConditionsUpdate"
+              @sidebar-toggle="handleSidebarToggle"
             />
         </div>
         
         <!-- Content Panel -->
-        <div class="content-panel">
+        <div class="content-panel" :class="{ 'expanded': isSidebarCollapsed }">
           <Nuxt />
         </div>
-        
       </div>
       
       <!-- Lower Section: Navigation -->
@@ -43,9 +36,9 @@
 
 <script>
 import Navigation from '@/components/navigation/Navigation.vue';
-import Menu from '@/components/landing/Menu.vue';
 import LoadingOverlay from '@/components/common/LoadingOverlay.vue';
 import Header from '@/components/navigation/Header.vue';
+import Menu from '@/components/landing/Menu.vue';
 
 export default {
   name: "DefaultLayout",
@@ -61,7 +54,7 @@ export default {
       multiplier: 1,
       panelHeight: 0,
       isAppLoading: false,
-
+      isSidebarCollapsed: false,
     };
   },
 
@@ -132,6 +125,7 @@ export default {
     document.addEventListener("fullscreenchange", this.handleFullscreen);
     document.addEventListener("keydown", this.handleKeydown);
     window.addEventListener("resize", this.handleResize);
+    // no-op
 
     // Listen to route changes
     this.$router.afterEach(this.handleRouteChange);
@@ -224,6 +218,11 @@ export default {
     // Toggle global loading overlay state
     handleGlobalLoading(isLoading) {
       this.isAppLoading = !!isLoading;
+    },
+    
+    // Handle sidebar toggle from LeftPane
+    handleSidebarToggle(isCollapsed) {
+      this.isSidebarCollapsed = isCollapsed;
     }
   },
 
@@ -234,6 +233,7 @@ export default {
     window.removeEventListener("resize", this.handleResize);
     document.removeEventListener("fullscreenchange", this.handleFullscreen);
     document.removeEventListener("keydown", this.handleKeydown);
+    // no-op
 
     // Remove route change listener
     if (this.handleRouteChange) {
@@ -280,13 +280,25 @@ export default {
 // Left panel: fixed width on desktop, full width on mobile
 .left-panel {
   width: 25vw;
-  min-width: 350px;
+  min-width: 250px;
   background-color: var(--v-backgroundAlt-base);
+  transition: width 0.3s ease, min-width 0.3s ease;
   
   @media (max-width: 960px) {
     width: 100vw;
     min-width: unset;
     flex-shrink: 0;
+  }
+  
+  // Collapsed state
+  &.collapsed {
+    width: 50px;
+    min-width: 50px;
+    
+    @media (max-width: 960px) {
+      width: 60px;
+      min-width: 60px;
+    }
   }
 }
 
@@ -294,12 +306,33 @@ export default {
 .content-panel {
   flex: 1;
   overflow-y: auto;
+  min-width: 0; // Allow flex item to shrink below content size
+  transition: all 0.3s ease;
   
   @media (max-width: 960px) {
     width: 100vw;
     min-height: 100vh;
     overflow-y: visible;
     -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
+    padding-top: 20px; /* Space for mobile sticky header */
+  }
+  
+  // Ensure content panel is visible in fullscreen
+  @media screen and (display-mode: fullscreen) {
+    width: auto;
+    min-width: 300px; // Minimum width to ensure visibility
+  }
+  
+  // Expanded state when sidebar is collapsed
+  &.expanded {
+    // Add extra width when sidebar is collapsed
+    width: calc(75vw + 25vw); // Original 75vw + the 25vw from collapsed sidebar
+    max-width: calc(100vw - 50px); // Ensure it doesn't exceed viewport minus collapsed sidebar
+    
+    @media (max-width: 960px) {
+      width: calc(100vw - 60px); // Full width minus the 60px collapsed sidebar
+      max-width: calc(100vw - 60px);
+    }
   }
 }
 

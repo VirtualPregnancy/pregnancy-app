@@ -250,6 +250,17 @@ export default {
         use: "raw-loader",
       });
     },
+    postcss: {
+      // Support both Nuxt 2 PostCSS paths (dev/build differences)
+      plugins: {
+        autoprefixer: {},
+      },
+      postcssOptions: {
+        plugins: {
+          autoprefixer: {},
+        },
+      },
+    },
     loaders: {
       sass: {
         implementation: require("sass"),

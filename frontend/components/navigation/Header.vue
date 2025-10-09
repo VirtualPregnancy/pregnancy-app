@@ -4,23 +4,22 @@
       <div class="header-content">
         <div class="header-text">
           <h1 class="page-title">
-            {{ $parentTopic().heading }} 
+            {{ $parentTopic().heading }}
           </h1>
-          <div 
+          <div
             v-if="$parentTopic().content"
             class="page-description"
             v-html="$parentTopic().content"
-          >
-          </div>
+          ></div>
         </div>
-        
+
         <!-- Home Button -->
-        <div class="header-actions">
-          <v-btn 
-            fab 
-            small 
-            color="primary" 
-            :to="{ path: '/' }" 
+        <div v-if="mdAndUp" class="header-actions">
+          <v-btn
+            fab
+            small
+            color="primary"
+            :to="{ path: '/' }"
             title="Home"
             class="home-btn"
           >
@@ -33,8 +32,6 @@
 </template>
 
 <script>
-
-
 export default {
   name: "Header",
 
@@ -47,24 +44,21 @@ export default {
       isClient: false, // Track if we're on client side
     };
   },
-  
+
   computed: {
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp;
+    },
     showHeader() {
       // Only show header on slug pages and when we have content
-      return this.$route.name === 'slug' && 
-             (this.$parentTopic()?.heading || this.$parentTopic()?.content);
-    }
+      return (
+        this.$route.name === "slug" &&
+        (this.$parentTopic()?.heading || this.$parentTopic()?.content)
+      );
+    },
   },
 
-  methods: {
-   
-  
-
-    
-    
-    
-    
-  },
+  methods: {},
 
   mounted() {
     this.isClient = true;
@@ -88,63 +82,70 @@ export default {
 <style lang="scss" scoped>
 .page-header {
   background-color: var(--v-backgroundAlt-base);
-  padding: 20px 0 16px 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-  
+  position: relative !important; // Force it to scroll with content, not fixed
+  top: auto !important;
+  left: auto !important;
+  margin: 0 !important; // Ensure no margins affect positioning
+  margin-bottom: 10px !important;
+  right: auto !important;
+  width: auto !important;
+  z-index: auto !important; // Remove any z-index that might make it appear fixed
+  transform: none !important; // Remove any transforms that might affect positioning
+
   .header-container {
     margin: 0 auto;
-    padding: 0 24px;
-    
+
     @media (max-width: 960px) {
       padding: 0 16px;
     }
   }
-  
+
   .header-content {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     gap: 20px;
   }
-  
+
   .header-text {
     flex: 1;
     min-width: 0;
   }
-  
+
   .header-actions {
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
     padding-top: 4px;
   }
-  
+
   .home-btn {
     transition: transform 0.2s ease;
-    
+
     &:hover {
       transform: scale(1.1);
     }
   }
-  
+
   .page-title {
     font-size: 1.75rem;
     font-weight: 600;
     color: #1f2937;
     margin: 0 0 8px 0;
     line-height: 1.3;
-    
+
     @media (max-width: 960px) {
       font-size: 1.5rem;
     }
   }
-  
+
   .page-description {
     font-size: 0.95rem;
     color: #6b7280;
     margin: 0;
     line-height: 1.5;
-    
+
     @media (max-width: 960px) {
       font-size: 0.9rem;
     }

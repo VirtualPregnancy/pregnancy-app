@@ -1,13 +1,16 @@
 <template>
   <div class="quick-access-container" v-if="Object.keys(subtopics).length > 1">
-    <div class="quick-access-header">
+
+    <!-- Section title - always visible -->
+    <div class="section-title-container" v-if="!isMobile">
       <h3 class="section-title">
         <v-icon left color="accent">mdi-compass-outline</v-icon>
         What's in this section?
       </h3>
     </div>
 
-    <nav class="nav-menu">
+    <!-- Navigation menu - always visible on desktop, collapsible on mobile -->
+    <nav class="nav-menu" :class="{ 'mobile-hidden': isMobile && isMobileCollapsed }">
       <nuxt-link 
         v-for="(subtopic, key) in subtopics" 
         :key="key"
@@ -38,12 +41,27 @@ export default {
     topicTitle: {
       type: String,
       default: ''
+    },
+    isMobileCollapsed: {
+      type: Boolean,
+      default: false
+    },
+    isMobile: {
+      type: Boolean,
+      default: false
     }
+  },
+
+  data() {
+    return {}
   },
 
   computed: {
     currentSlug() {
       return this.$route.params.slug;
+    },
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp;
     }
   },
 
@@ -68,7 +86,15 @@ export default {
       // On mobile, add hash to scroll to leftpane bottom
       const isMobile = !this.$vuetify.breakpoint.mdAndUp;
       return isMobile ? { ...base, hash: '#leftpane-bottom' } : base;
-    }
+    },
+  },
+
+  mounted() {
+    // Component mounted
+  },
+
+  beforeDestroy() {
+    // Component destroyed
   }
 };
 </script>
@@ -79,9 +105,24 @@ export default {
   background: transparent;
   border: none;
   margin-bottom: 0;
+  position: relative;
+}
+
+
+// Desktop header styles
+.desktop-header {
+  .quick-access-header {
+    margin-bottom: 16px;
+    padding-left: 16px;
+  }
 }
 
 .quick-access-header {
+  margin-bottom: 16px;
+  padding-left: 16px;
+}
+
+.section-title-container {
   margin-bottom: 16px;
   padding-left: 16px;
 }
@@ -103,6 +144,11 @@ export default {
   gap: 0;
   margin-bottom: 0;
   padding: 0;
+  
+  // Mobile collapse behavior
+  &.mobile-hidden {
+    display: none;
+  }
   
   .nav-item {
     display: flex;
@@ -148,6 +194,20 @@ export default {
   }
 }
 
+/* Mobile toggle styles removed in revert */
+
+// Animation for mobile menu
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 300px;
+  }
+}
+
 .cards-section {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 20px;
@@ -185,31 +245,26 @@ export default {
 
 @media (max-width: 768px) {
   .quick-access-container {
-    padding: 15px;
-    margin-bottom: 15px;
+    padding: 0;
+    margin-bottom: 0;
   }
   
-  .section-title {
-    font-size: 1.2rem;
+  .mobile-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--v-backgroundAlt-base);
   }
   
-  .access-buttons .access-btn {
-    min-height: 45px;
-    padding: 10px 12px !important;
+  .nav-menu {
+    padding: 0 16px 16px 16px;
+    background: var(--v-backgroundAlt-base);
     
-    ::v-deep .v-btn__content {
-      gap: 6px;
+    .nav-item {
+      margin-bottom: 3px;
+      font-size: 0.85rem;
+      padding: 8px 12px;
     }
-    
-    .btn-text {
-      line-height: 1.3;
-      font-size: 0.9rem;
-    }
-  }
-  
-  .cards-buttons .card-btn {
-    height: 40px;
-    font-size: 0.85rem;
   }
 }
 

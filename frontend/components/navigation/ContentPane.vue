@@ -1,10 +1,12 @@
 <template>
   <!-- All the data is in _slug/pageData -->
   <div :class="mdAndUp ? ' w-full h-100 full_main_content' : 'w-full small_main_content'" style="background-color: var(--v-backgroundAlt-base);">
-    <div class="max-w-4xl mx-auto md:p-8 pb-32 md:pb-40">
+    
+    <div class="mx-auto md:p-8 pb-32 md:pb-40 w-full">
       <!-- Header -->
-      <div class="mb-6">
-        <h1 class="text-xl md:text-2xl font-medium text-gray-700 mb-3">
+       <Header />
+      <div class="mb-6 mt-6 mx-4">
+        <h1 class="text-xl md:text-2xl font-medium font-weight-bold">
           {{ pageTitle }}
         </h1>
         <p class="text-sm text-gray-600 leading-relaxed" v-html="pageDescription">
@@ -86,13 +88,15 @@
 import Logo from '@/components/Logo.vue';
 import SingleSection from '@/components/content/SingleSection.vue'; // For article layout
 import MultipleSection from '@/components/content/MultipleSection.vue'; // For expandable layout
+import Header from '@/components/navigation/Header.vue';
 
 export default {
   name: 'ContentPane',  
   components: {
     Logo,
     SingleSection,
-    MultipleSection
+    MultipleSection,
+    Header
   },
   props: {
     pageTitle: {
