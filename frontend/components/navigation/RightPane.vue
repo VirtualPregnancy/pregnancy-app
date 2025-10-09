@@ -10,13 +10,17 @@
         :model-config="modelStates.modelConfig"
         @model-size-changed="handleModelSizeChanged"
         @model-state-updated="handleModelStateUpdate"
-
+        @fullscreen-toggle="handleFullscreenToggle"
       />
     </div>
 
-    <!-- Controls and Analytics Section -->
-    <div class="controls-section" :class="{ 'controls-section-mobile': !mdAndUp }">
-      <!-- Model Controls -->
+      <!-- Controls and Analytics Section -->
+      <div class="controls-section" :class="{ 'controls-section-mobile': !mdAndUp }">
+        <!-- Condition Selector -->
+        <div class="condition-selector-panel">
+          <ConditionSelector @conditions-changed="handleConditionsChanged" />
+        </div>
+        <!-- Model Controls -->
       <div class="controls-panel">
         <PanelControls
           :use-tube-rendering="modelStates.useTubeRendering"
@@ -36,16 +40,17 @@
 
       <!-- Waveform Panel -->
       <div class="waveform-panel">
-        <div>
-          <img class="pb-5" :src="getAssetUrl(waveformData.waveformImg)" alt="Waveform" />
-          <div class="text-center mb-3 font-italic text-sm">
-            {{ waveformData.waveformNote }}
-          </div>
-        </div>
+       
         <div class="waveform-content">
           <Waveform :waveform="waveformData" />
           <div class="mt-20 text-center mb-5">
             {{ waveformData.description }}
+          </div>
+        </div>
+        <div>
+          <img class="pb-5" size="100" :src="getAssetUrl(waveformData.waveformImg)" alt="Waveform" />
+          <div class="text-center mb-3 font-italic text-sm">
+            {{ waveformData.waveformNote }}
           </div>
         </div>
       </div>
@@ -63,13 +68,15 @@
 import PanelControls from "../model/PanelControls.vue";
 import Waveform from "../model/Waveform.vue";
 import Logo from '@/components/Logo.vue';
+import ConditionSelector from "../model/ConditionSelector.vue";
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
     PanelControls,
     Waveform,
-    Logo
+    Logo,
+    ConditionSelector
   },
   
   data() {
@@ -88,6 +95,9 @@ export default {
     
     // Listen for condition events from the layout
     this.$nuxt.$on('conditions-updated', this.handleConditionsUpdated);
+    
+    // Listen for model reset events from sidebar toggle
+    this.$nuxt.$on('reset-model-to-default', this.handleModelReset);
 
     // Proactively show loading overlay until first render completes
     try {
@@ -226,6 +236,31 @@ export default {
       }
     },
     
+    // Handle model reset when sidebar is toggled
+    handleModelReset() {
+      console.log('[RightPane] Handling model reset from sidebar toggle');
+      if (this.$refs.modelComponent && this.$refs.modelComponent.resetModelToDefault) {
+        console.log('[RightPane] Calling resetModelToDefault on model component');
+        this.$refs.modelComponent.resetModelToDefault();
+      } else {
+        console.warn('[RightPane] Model component or resetModelToDefault method not available');
+      }
+    },
+    
+    // Handle fullscreen toggle from Model component
+    handleFullscreenToggle(isFullscreen) {
+      console.log('[RightPane] Handling fullscreen toggle:', isFullscreen);
+      // Emit global event to layout
+      this.$nuxt.$emit('fullscreen-toggle', isFullscreen);
+    },
+    
+    // Handle conditions changed from ConditionSelector
+    handleConditionsChanged(data) {
+      console.log('[RightPane] Handling conditions changed:', data);
+      // Emit global event to layout for condition updates
+      this.$nuxt.$emit('conditions-updated', data);
+    },
+    
 
     
 
@@ -238,6 +273,7 @@ export default {
   beforeDestroy() {
     // Clean up event listeners
     this.$nuxt.$off('conditions-updated', this.handleConditionsUpdated);
+    this.$nuxt.$off('reset-model-to-default', this.handleModelReset);
   },
   
   components: { PanelControls, Waveform, Logo },
@@ -263,7 +299,8 @@ export default {
 // Model Section
 .model-section {
   position: relative;
-  min-height: 60vh;
+  min-height: 100vh;
+  min-width: 100%;
   width: 100%;
 
   &.model-section-mobile {
@@ -304,8 +341,18 @@ export default {
 }
 
 // Individual Panels spacing
+.condition-selector-panel {
+  margin-bottom: 10px;
+
+  .controls-section-mobile & {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
 .controls-panel {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 
   .controls-section-mobile & {
     width: 100%;
@@ -321,7 +368,6 @@ export default {
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
 
   img {
     max-width: 100%;

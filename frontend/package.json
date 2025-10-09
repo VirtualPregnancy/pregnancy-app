@@ -31,15 +31,10 @@
     "webpack": "^4.46.0"
   },
   "devDependencies": {
-    "@nuxtjs/pwa": "^3.0.2",
-    "@nuxtjs/tailwindcss": "^4.2.1",
     "@nuxtjs/vuetify": "^1.12.3",
-    "autoprefixer": "^10.4.7",
     "html-loader": "^3.1.0",
     "markdown-loader": "^6.0.0",
-    "postcss": "^8.4.14",
     "sass": "^1.49.0",
-    "sass-loader": "10.1.1",
-    "tailwindcss": "^3.1.8"
+    "sass-loader": "10.1.1"
   }
 }

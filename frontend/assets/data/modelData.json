@@ -3,14 +3,13 @@
     {
       "model": "normal",
       "modelName": "Normal",
-      "Description": "Normal Placenta",
       "color": "#4CAF50",
       "config": {
         "path": "/model/normal.vtk",
         "displayName": "Normal Placenta",
         "color": 16716066,
         "opacity": 1.0,
-        "modelSize": 220,
+        "modelSize": 230,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
         "scaleBar": {
@@ -49,7 +48,7 @@
         "displayName": "Fetal Growth Restriction",
         "color": 16716066,
         "opacity": 1,
-        "modelSize": 220,
+        "modelSize": 200,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
         "defaultRotationY": -1.5707963267948966,
@@ -89,7 +88,7 @@
         "displayName": "Gestational Diabetes Melitus",
         "color": 16716066,
         "opacity": 1.0,
-        "modelSize": 220,
+        "modelSize": 280,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
         "defaultRotationY": 1.5707963267948966,

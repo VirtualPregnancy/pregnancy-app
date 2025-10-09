@@ -1,65 +1,31 @@
 <template>
   <div class="model-control">
     <!-- Collapse Toggle Button -->
-    <div class="collapse-header" @click="toggleCollapse">
-      <h3 class="panel-title">
-        <v-icon left color="white">mdi-cog-outline</v-icon>
-        Model Controls
-      </h3>
-      <v-btn icon small class="collapse-btn" color="white">
-        <v-icon>{{
-          isCollapsed ? "mdi-chevron-down" : "mdi-chevron-up"
-        }}</v-icon>
-      </v-btn>
-    </div>
+
 
     <!-- Collapsible Content --> 
-    <div v-show="!isCollapsed" class="panel-content">
-      <!-- Scale Bar -->
-      <div class="scale-bar">
-        <div class="control-title">
-          Adjust the size of the model
-        </div>
-        <v-slider
-          v-model="modelSize"
-          :min="100"
-          :max="800"
-          :step="10"
-          track-color="rgba(255,255,255,0.3)"
-          thumb-color="green"
-          @input="$emit('model-size-changed', modelSize)"
-        >
-        </v-slider>
-      </div>
-  
-
-      <!-- Main Model Controls -->
+    <div>
+    <!-- Main Model Controls -->
       <div class="control-section">
         <div class="control-group">
-          <div class="colored-models" style="color: white">
-            Colored Models by:
-            <v-radio-group
+          <div class="colored-models" style="color: black">
+             <span class="header-text">Colored Models by:</span>
+            <v-select
               v-model="coloredModelsBy"
               @change="$emit('colored-models-by-changed', coloredModelsBy)"
               :disabled="!renderingComplete"
-              class="custom-radio-group"
-            >
-              <v-radio label="Blood pressure" value="pressure"></v-radio>
-              <v-radio label="Blood flow" value="flux"></v-radio>
-              <v-radio label="No flow/pressure" value="default"></v-radio>
-            </v-radio-group>
+              :items="colorMappingOptions"
+              item-text="label"
+              item-value="value"
+              outlined
+              dense
+              class="mt-2 custom-select"
+            ></v-select>
           </div>
         </div>
       </div>
       <!-- Dynamic Color Bar -->
       <div class="control-section" v-if="coloredModelsBy !== 'default'">
-        <h4 class="control-title" style="color: white">
-          {{
-            this.coloredModelsBy.slice(0, 1).toUpperCase() +
-            this.coloredModelsBy.slice(1)
-          }}
-          Scale
-        </h4>
         <div class="color-bar-container">
           <!-- Pressure Color Bar -->
           <div v-if="coloredModelsBy === 'pressure'" class="color-bar">
@@ -80,7 +46,7 @@
             <div class="color-segment flux-red-high-segment"></div>
           </div>
 
-          <div class="color-labels">
+          <div class="color-labels ">
             <span v-if="coloredModelsBy === 'pressure'" class="label-left"
               >Low</span
             >
@@ -98,7 +64,6 @@
 
       <!-- Default Color Legend -->
       <div class="control-section" v-if="coloredModelsBy === 'default'">
-        <h4 class="control-title">Arterial Model</h4>
         <div class="color-bar-container">
           <div class="vessel-legend">
             <div class="legend-item">
@@ -166,6 +131,11 @@ export default {
       playheadTimer: null,
       coloredModelsBy: "pressure",
       modelSize: 200,
+      colorMappingOptions: [
+        { label: "Blood pressure", value: "pressure" },
+        { label: "Blood flow", value: "flux" },
+        { label: "No flow/pressure", value: "default" }
+      ]
     };
   },
 
@@ -195,109 +165,24 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.header-text{
+  color: #000000 !important;
+  font-size: 1rem !important;
+  font-weight: 600;
+}
 .model-control {
   position: relative;
   width: 100%;
-  background: var(--v-accent-base);
-  border-radius: 12px;
-  color: white;
+  border-radius: 8px;
+  color: black;
   overflow: hidden;
-  margin-bottom: 16px;
-}
-
-.collapse-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  cursor: pointer;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
-}
-
-.panel-title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  display: flex;
-  align-items: center;
-}
-
-.collapse-btn {
-  transition: transform 0.2s ease;
-}
-
-.panel-content {
-  padding: 20px;
-  animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.control-title {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.controls-content {
-  padding: 20px;
-  padding-top: 50px; // Make room for collapse button
-  color: white;
-}
-
-.control-row {
-  margin-bottom: 16px;
-  display: flex;
-  justify-content: center;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.pressure-color-section {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-  border-left: 4px solid #7a3520;
-}
-
-.color-bar-title {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.color-bar-container {
-  margin-bottom: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
 }
 
 .color-bar {
   width: 100%;
-  height: 20px;
+  height: 15px;
   border-radius: 10px;
   display: flex;
   overflow: hidden;
@@ -310,61 +195,8 @@ export default {
   height: 100%;
 }
 
-.color-bar-labels {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 8px;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.7);
-  font-weight: 500;
-}
 
-.label-min,
-.label-max {
-  font-family: "Courier New", monospace;
-  color: rgba(255, 255, 255, 0.8);
-}
 
-.label-mid {
-  color: rgba(255, 255, 255, 0.6);
-  font-style: italic;
-}
-
-.color-bar-description {
-  text-align: center;
-  margin-top: 8px;
-
-  small {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 10px;
-    font-style: italic;
-  }
-}
-
-.color-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 12px;
-  justify-content: center;
-}
-
-.legend-row {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  min-width: 0;
-  flex: 1;
-}
-
-.legend-color {
-  width: 12px;
-  height: 12px;
-  border-radius: 2px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  flex-shrink: 0;
-}
 
 .legend-text {
   font-size: 9px;
@@ -375,71 +207,11 @@ export default {
   text-overflow: ellipsis;
 }
 
-.info-section {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 16px;
-  margin-top: 16px;
-  border-left: 4px solid #2f414b;
-}
-
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.info-label {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.info-value {
-  color: rgba(255, 255, 255, 0.95);
-  font-size: 12px;
-  font-weight: 600;
-  text-align: right;
-  max-width: 60%;
-  word-break: break-word;
-}
-
-// Blood pressure Color Bar Styles
 .color-bar-container {
-  padding: 8px 12px;
+  padding: 6px 8px;
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.color-bar {
-  display: flex;
-  height: 20px;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.color-segment {
-  flex: 1;
-  transition: transform 0.2s ease;
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-
-  &:last-child {
-    border-right: none;
-  }
-
-  &:hover {
-    transform: scaleY(1.1);
-  }
 }
 
 .pressure-low-segment {
@@ -493,7 +265,6 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 8px 0;
 }
 
 .legend-item {
@@ -515,7 +286,7 @@ export default {
 
 .legend-text {
   font-size: 12px;
-  color: #d1c7b5;
+  color: #000000;
   font-weight: 500;
 }
 
@@ -523,9 +294,9 @@ export default {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #d1c7b5;
+  color: #000000;
   font-weight: 500;
-  margin-top: 4px;
+
 }
 
 .label-left,
@@ -541,94 +312,55 @@ export default {
   text-align: right;
 }
 
-// Custom button styles with theme colors
-.v-btn {
-  text-transform: none !important;
-  font-weight: 600 !important;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2) !important;
-  transition: all 0.3s ease !important;
 
-  &.arterial-btn {
-    background-color: #dd3c51 !important;
-    border-color: #dd3c51 !important;
 
-    &:hover:not(:disabled) {
-      background-color: #c13347 !important;
-      box-shadow: 0 6px 20px rgba(221, 60, 81, 0.4) !important;
-      transform: translateY(-2px);
-    }
 
-    &:disabled {
-      opacity: 0.5 !important;
-      cursor: not-allowed !important;
-    }
+// Custom select styles
+.custom-select {
+  .v-input__control {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 4px !important;
+  }
+
+  .v-input__slot {
+    background-color: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .v-select__selection {
+    color: white !important;
+  }
+
+  .v-input__append-inner {
+    color: white !important;
+  }
+
+  .v-input__append-inner .v-icon {
+    color: white !important;
+  }
+
+  // Ensure dropdown menu text is white
+  ::v-deep .v-list-item {
+    color: white !important;
+  }
+
+  ::v-deep .v-list-item__title {
+    color: white !important;
+  }
+
+  ::v-deep .v-list-item__content {
+    color: white !important;
+  }
+
+  &:hover .v-input__slot {
+    border-color: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  &.v-input--is-focused .v-input__slot {
+    border-color: #1976d2 !important;
+    box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2) !important;
   }
 }
 
-.rendering-status {
-  margin-top: 8px;
-  text-align: center;
-}
-
-.status-text {
-  font-family: "Courier New", monospace;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 2px;
-}
-
-// Custom radio group styles
-.custom-radio-group {
-  ::v-deep .v-radio {
-    .v-input__control {
-      .v-input__slot {
-        .v-radio__input {
-          .v-radio__radio {
-            .v-radio__radio--native {
-              color: white !important;
-            }
-          }
-        }
-      }
-    }
-
-    .v-label {
-      color: white !important;
-      font-weight: 500;
-    }
-  }
-}
-
-// Custom button group styles
-.v-btn-toggle {
-  border-radius: 8px !important;
-
-  .v-btn {
-    text-transform: none !important;
-    font-weight: 500 !important;
-    min-width: 100px;
-
-    &.v-btn--active {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-    }
-  }
-}
-
-// Animation for collapse/expand
-.control-panel {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  .controls-content {
-    transition: opacity 0.2s ease;
-  }
-
-  &.collapsed .controls-content {
-    opacity: 0;
-  }
-}
-
-.waveform-section {
-  margin: 16px 0;
-}
 </style>
   

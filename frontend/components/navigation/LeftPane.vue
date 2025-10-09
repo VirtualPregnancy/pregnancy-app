@@ -41,16 +41,6 @@
        </div>
       <div class="pa-4 mb-4" :class="currentBg" tile :style="panelHeightStyle" v-if="!isCollapsed">
 
-        <div v-if="$component() == 'ConditionSelector' && $vuetify.breakpoint.mdAndUp">
-          <div class="conditions-panel">
-            <ConditionSelector
-              @conditions-changed="handleConditionsChanged"
-              @reset-to-normal="handleResetToNormal"
-              @panel-expanded="handleConditionsPanelExpanded"
-              @panel-collapsed="handleConditionsPanelCollapsed"
-            />
-          </div>
-        </div>
         <!-- Desktop submenu -->
         <SubMenu 
           :subtopics="currentTopicSubtopics"
@@ -71,16 +61,6 @@
             :is-mobile="true"
           />
         </div>
-        <div v-if="$component() == 'ConditionSelector' && !$vuetify.breakpoint.mdAndUp">
-          <div class="conditions-panel">
-            <ConditionSelector
-              @conditions-changed="handleConditionsChanged"
-              @reset-to-normal="handleResetToNormal"
-              @panel-expanded="handleConditionsPanelExpanded"
-              @panel-collapsed="handleConditionsPanelCollapsed"
-            />
-          </div>
-        </div>
         
         <!-- Anchor for mobile scroll target -->
         <div id="leftpane-bottom" class="scroll-anchor"></div>
@@ -93,15 +73,13 @@
 </template>
 
 <script>
-import ConditionSelector from "../model/ConditionSelector.vue"
 import SubMenu from './SubMenu.vue';
 
   export default {
   name: "LeftPane",
   
   components: {
-    SubMenu,
-    ConditionSelector
+    SubMenu
   },
 
   props: {
@@ -190,35 +168,6 @@ import SubMenu from './SubMenu.vue';
       this.isMobileSubmenuCollapsed = !this.isMobileSubmenuCollapsed;
     },
     
-    // Handle condition changes from ConditionSelector
-    handleConditionsChanged(data) {
-      //console.log('[Panel] Conditions changed:', data);
-      
-      // Forward to parent components
-      this.$emit('conditions-updated', data);
-      
-      // Store condition data for potential future use
-      this.lastConditionData = data;
-    },
-    // Handle reset to normal from ConditionSelector
-    handleResetToNormal() {
-      //console.log('[Panel] Reset to normal conditions');
-      
-      // Forward to parent components
-      this.$emit('conditions-updated', { selectedConditions: [], reset: true });
-    },
-    
-    // Handle condition panel expansion
-    handleConditionsPanelExpanded() {
-      //console.log('[Panel] Conditions panel expanded');
-      // Optional: handle layout adjustments if needed
-    },
-    
-    // Handle condition panel collapse
-    handleConditionsPanelCollapsed() {
-      //console.log('[Panel] Conditions panel collapsed');
-      // Optional: handle layout adjustments if needed
-    },
     // Forward pregnancy condition updates to parent components
     handleConditionsUpdate(data) {
       //console.log('[LeftPane] Forwarding conditions update:', data);

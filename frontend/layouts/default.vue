@@ -4,10 +4,13 @@
     <div class="main-container">
       
       <!-- Upper Section: LeftPane + ContentPane -->
-      <div class="upper-section">
+      <div class="upper-section" :class="{ 'fullscreen-mode': isFullscreenMode }">
         
         <!-- Left Panel -->
-        <div class="left-panel" ref="leftPanel" :class="{ 'collapsed': isSidebarCollapsed }">
+        <div class="left-panel" ref="leftPanel" :class="{ 
+          'collapsed': isSidebarCollapsed,
+          'fullscreen-hidden': isFullscreenMode
+        }">
          
             <left-pane 
               :panel-height="panelHeight"
@@ -17,13 +20,16 @@
         </div>
         
         <!-- Content Panel -->
-        <div class="content-panel" :class="{ 'expanded': isSidebarCollapsed }">
+        <div class="content-panel" :class="{ 
+          'expanded': isSidebarCollapsed && !isFullscreenMode,
+          'fullscreen-mode': isFullscreenMode
+        }">
           <Nuxt />
         </div>
       </div>
       
       <!-- Lower Section: Navigation -->
-      <div class="lower-section">
+      <div class="lower-section" :class="{ 'fullscreen-hidden': isFullscreenMode }">
         <navigation />
       </div>
       
@@ -55,6 +61,7 @@ export default {
       panelHeight: 0,
       isAppLoading: false,
       isSidebarCollapsed: false,
+      isFullscreenMode: false,
     };
   },
 
@@ -132,6 +139,9 @@ export default {
 
     // Listen to global loading state emitted from RightPane/Model
     this.$nuxt.$on('global-loading', this.handleGlobalLoading);
+    
+    // Listen to fullscreen toggle events from RightPane
+    this.$nuxt.$on('fullscreen-toggle', this.handleFullscreenToggle);
   },
 
   updated() {
@@ -223,6 +233,23 @@ export default {
     // Handle sidebar toggle from LeftPane
     handleSidebarToggle(isCollapsed) {
       this.isSidebarCollapsed = isCollapsed;
+      
+      // Check if we're on the model page (slug route) and reset model to default
+      if (this.$route.name === 'slug') {
+        this.resetModelToDefault();
+      }
+    },
+    
+    // Handle fullscreen toggle from RightPane
+    handleFullscreenToggle(isFullscreen) {
+      this.isFullscreenMode = isFullscreen;
+    },
+    
+    // Reset model to default position when sidebar is toggled
+    resetModelToDefault() {
+      // Emit global event to trigger model reset
+      this.$nuxt.$emit('reset-model-to-default');
+      console.log('Reset model to default -called from layout');
     }
   },
 
@@ -242,6 +269,9 @@ export default {
 
     // Remove global loading listener
     this.$nuxt.$off('global-loading', this.handleGlobalLoading);
+    
+    // Remove fullscreen toggle listener
+    this.$nuxt.$off('fullscreen-toggle', this.handleFullscreenToggle);
   },
 };
 </script>
@@ -275,6 +305,17 @@ export default {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
   }
+  
+  // Fullscreen mode
+  &.fullscreen-mode {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: var(--v-backgroundAlt-base);
+  }
 }
 
 // Left panel: fixed width on desktop, full width on mobile
@@ -299,6 +340,11 @@ export default {
       width: 60px;
       min-width: 60px;
     }
+  }
+  
+  // Hidden in fullscreen mode
+  &.fullscreen-hidden {
+    display: none;
   }
 }
 
@@ -334,6 +380,17 @@ export default {
       max-width: calc(100vw - 60px);
     }
   }
+  
+  // Fullscreen mode
+  &.fullscreen-mode {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    background-color: var(--v-backgroundAlt-base);
+  }
 }
 
 // Lower section: navigation bar
@@ -342,6 +399,11 @@ export default {
   flex-shrink: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
   background-color: var(--v-background-base);
+  
+  // Hidden in fullscreen mode
+  &.fullscreen-hidden {
+    display: none;
+  }
 }
 
 // Panel height calculations (adjusted for new layout)
