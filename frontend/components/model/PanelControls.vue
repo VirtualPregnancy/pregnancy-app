@@ -47,16 +47,11 @@
           </div>
 
           <div class="color-labels ">
-            <span v-if="coloredModelsBy === 'pressure'" class="label-left"
+            <span v-if="coloredModelsBy === 'pressure' || coloredModelsBy === 'flux'" class="label-left"
               >Low</span
             >
-            <span v-if="coloredModelsBy === 'pressure'" class="label-right"
+            <span v-if="coloredModelsBy === 'pressure' || coloredModelsBy === 'flux'" class="label-right"
               >High</span
-            >
-
-            <span v-if="coloredModelsBy === 'flux'" class="label-left">0</span>
-            <span v-if="coloredModelsBy === 'flux'" class="label-right"
-              >>10</span
             >
           </div>
         </div>

@@ -1,9 +1,10 @@
 <template>
   <div class="left-pane h-full" :class="{ 'collapsed': isCollapsed }">
-    <!-- Global menu now floats in layout-->
-
-  
     <div v-if="$route.name == 'slug'">
+      <!-- Header for model page -->
+      <!-- <div class="header-container">  
+        <Header />  
+      </div> -->
        <!-- Mobile sticky header -->
        <div v-if="!mdAndUp" class="mobile-sticky-header">
          <div class="mobile-header-content">
@@ -74,12 +75,14 @@
 
 <script>
 import SubMenu from './SubMenu.vue';
+import Header from '@/components/navigation/Header.vue';
 
   export default {
   name: "LeftPane",
   
   components: {
-    SubMenu
+    SubMenu,
+    Header
   },
 
   props: {

@@ -12,6 +12,7 @@
         "modelSize": 230,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
+        "defaultRotationY": -3.141592653589793,
         "scaleBar": {
           "enabled": true,
           "length": 100,
@@ -51,7 +52,7 @@
         "modelSize": 200,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
-        "defaultRotationY": -1.5707963267948966,
+        "defaultRotationY": 1.5707963267948966,
         "scaleBar": {
           "enabled": true,
           "length": 80,
@@ -91,7 +92,7 @@
         "modelSize": 280,
         "useCylinderGeometry": true,
         "cylinderSegments": 10,
-        "defaultRotationY": 1.5707963267948966,
+        "defaultRotationY": -1.5707963267948966,
         "scaleBar": {
           "enabled": true,
           "length": 120,

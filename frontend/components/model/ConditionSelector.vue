@@ -14,7 +14,6 @@
           v-for="condition in simplifiedConditions"
           :key="condition.key"
           :value="condition.key"
-          class="mb-2"
         >
           <template v-slot:label>
             <div class="condition-item">
@@ -164,7 +163,7 @@ export default {
 
 .v-radio {
   width: 100% !important;
-  margin-bottom: 4px !important;
+  margin-bottom: 2px !important;
 }
 
 /* Black radio button circles */
@@ -186,7 +185,6 @@ export default {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 2px;
   background-color: transparent;
   transition: all 0.2s ease;
 }
@@ -199,7 +197,7 @@ export default {
 .condition-info {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 2px;
   flex: 1;
 }
 

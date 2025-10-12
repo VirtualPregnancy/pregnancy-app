@@ -1,6 +1,6 @@
 <template>
   <div class="waveform-container">
-    <div class="flex flex-col gap-2 justify-between items-center mb-5">
+    <div class="flex flex-col gap-2 justify-between items-center">
       <div class="text-center font-weight-bold flex-1">
         {{ waveform.title }}
       </div>
@@ -365,7 +365,7 @@ export default {
   width: 100%;
   height: 35dvh;
   border-radius: 8px;
-  padding: 10px;
+  padding: 2px;
 }
 
 .waveform-chart {

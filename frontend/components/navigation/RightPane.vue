@@ -1,5 +1,14 @@
+<!-- 
+  This is the right pane component for the app where the model is displayed. It contains the model, controls, and waveform sections.
+  It also contains the logo section.
+-->
 <template>
+  <div>
+  <div v-if="!isFullscreen" class="header-container">  
+    <Header />  
+  </div>
   <div class="responsive-container display-flex ">
+    
     <!-- Model Section -->
     <div class="model-section" :class="{ 'model-section-mobile': !mdAndUp }">
       <model
@@ -61,6 +70,7 @@
       </div>
     </div>
   </div>
+</div>
 
 </template>
 
@@ -70,18 +80,21 @@ import Waveform from "../model/Waveform.vue";
 import Logo from '@/components/Logo.vue';
 import ConditionSelector from "../model/ConditionSelector.vue";
 import { mapGetters, mapActions } from 'vuex';
+import Header from '@/components/navigation/Header.vue';
 
 export default {
   components: {
     PanelControls,
     Waveform,
     Logo,
-    ConditionSelector
+    ConditionSelector,
+    Header
   },
   
   data() {
     return {
       clientMounted: false, // Track if component is mounted on client
+      isFullscreen: false, // Track if fullscreen mode is enabled
     };
   },
 
@@ -249,7 +262,8 @@ export default {
     
     // Handle fullscreen toggle from Model component
     handleFullscreenToggle(isFullscreen) {
-      console.log('[RightPane] Handling fullscreen toggle:', isFullscreen);
+      this.handleModelReset();
+      this.isFullscreen = isFullscreen;
       // Emit global event to layout
       this.$nuxt.$emit('fullscreen-toggle', isFullscreen);
     },

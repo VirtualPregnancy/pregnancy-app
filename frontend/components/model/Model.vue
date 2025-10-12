@@ -727,7 +727,6 @@ export default {
 
     // Toggle fullscreen mode and reload model
     toggleFullscreen() {
-      console.log("[Model] Toggling fullscreen mode");
       this.isFullscreen = !this.isFullscreen;
       
       // Emit fullscreen toggle event to parent layout
