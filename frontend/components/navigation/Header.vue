@@ -19,7 +19,7 @@
             fab
             small
             color="primary"
-            :to="{ name: 'index' }"
+            @click="goToHome"
             title="Home"
             class="home-btn"
           >
@@ -58,7 +58,12 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    goToHome() {
+      // Use router.push with just '/' - let Nuxt handle the base path
+      this.$router.push('/');
+    },
+  },
 
   mounted() {
     this.isClient = true;

@@ -13,7 +13,7 @@
             <v-btn
               icon
               color="primary"
-              :to="{ name: 'index' }"
+              @click="goToHome"
               title="Home"
               class="mobile-home-btn"
             >
@@ -177,6 +177,11 @@ import Header from '@/components/navigation/Header.vue';
       this.$emit('conditions-updated', data);
     },
     
+    // Navigate to home page
+    goToHome() {
+      // Use router.push with just '/' - let Nuxt handle the base path
+      this.$router.push('/');
+    },
 
   },
 };
