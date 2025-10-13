@@ -13,6 +13,15 @@
             <v-btn
               icon
               color="primary"
+              @click="toggleSearch"
+              title="Search"
+              class="mobile-search-btn"
+            >
+              <v-icon>mdi-magnify</v-icon>
+            </v-btn>
+            <v-btn
+              icon
+              color="primary"
               @click="goToHome"
               title="Home"
               class="mobile-home-btn"
@@ -70,19 +79,23 @@
    
     </div>
     
+    <!-- Search Dialog Component -->
+    <SearchDialog v-model="showSearchDialog" />
   </div>
 </template>
 
 <script>
 import SubMenu from './SubMenu.vue';
 import Header from '@/components/navigation/Header.vue';
+import SearchDialog from './SearchDialog.vue';
 
   export default {
   name: "LeftPane",
   
   components: {
     SubMenu,
-    Header
+    Header,
+    SearchDialog
   },
 
   props: {
@@ -141,7 +154,8 @@ import Header from '@/components/navigation/Header.vue';
   data() {
     return {
       isCollapsed: false,
-      isMobileSubmenuCollapsed: true
+      isMobileSubmenuCollapsed: true,
+      showSearchDialog: false
     }
   },
 
@@ -181,6 +195,11 @@ import Header from '@/components/navigation/Header.vue';
     goToHome() {
       // Use router.push with just '/' - let Nuxt handle the base path
       this.$router.push('/');
+    },
+    
+    // Toggle search dialog
+    toggleSearch() {
+      this.showSearchDialog = true;
     },
 
   },

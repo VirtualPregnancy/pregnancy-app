@@ -1,5 +1,5 @@
 <template>
-  <div class="page-header" v-if="showHeader">
+  <div class="page-header pa-4" v-if="showHeader">
     <div class="header-container">
       <div class="header-content">
         <div class="header-text">
@@ -13,8 +13,18 @@
           ></div>
         </div>
 
-        <!-- Home Button -->
+        <!-- Search and Home Buttons -->
         <div v-if="mdAndUp" class="header-actions">
+          <v-btn
+            fab
+            small
+            color="primary"
+            @click="toggleSearch"
+            title="Search"
+            class="search-btn"
+          >
+            <v-icon>mdi-magnify</v-icon>
+          </v-btn>
           <v-btn
             fab
             small
@@ -28,12 +38,21 @@
         </div>
       </div>
     </div>
+
+    <!-- Search Dialog Component -->
+    <SearchDialog v-model="showSearchDialog" />
   </div>
 </template>
 
 <script>
+import SearchDialog from './SearchDialog.vue';
+
 export default {
   name: "Header",
+  
+  components: {
+    SearchDialog
+  },
 
   data() {
     return {
@@ -42,6 +61,7 @@ export default {
       items: ["latest", "version 2.0", "version 1.0"],
       lastConditionData: null, // Store condition data for potential future use
       isClient: false, // Track if we're on client side
+      showSearchDialog: false,
     };
   },
 
@@ -62,6 +82,10 @@ export default {
     goToHome() {
       // Use router.push with just '/' - let Nuxt handle the base path
       this.$router.push('/');
+    },
+    
+    toggleSearch() {
+      this.showSearchDialog = true;
     },
   },
 
@@ -122,9 +146,11 @@ export default {
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
+    gap: 8px;
     padding-top: 4px;
   }
 
+  .search-btn,
   .home-btn {
     transition: transform 0.2s ease;
 

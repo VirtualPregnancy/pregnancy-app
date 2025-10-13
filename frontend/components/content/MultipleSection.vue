@@ -10,7 +10,7 @@
       @click="toggleSection"
     >
       <v-icon left :color="section.iconColor" class="section-icon">{{ section.icon }}</v-icon>
-      <span class="text-xl font-semibold flex-1 section-title">{{ section.title }}</span>
+      <span class="text-xl font-semibold flex-1 section-title word-break-keep">{{ section.title }}</span>
       <v-icon 
         :class="{ 'chevron-rotated': isExpanded }"
         class="chevron-icon"
@@ -88,6 +88,13 @@ export default {
 .section-header:hover {
   background: rgba(243, 244, 246, 1);
   transform: translateX(4px);
+}
+
+/* Word Break - Keep words intact */
+.word-break-keep {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* Chevron Animation */

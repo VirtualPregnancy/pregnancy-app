@@ -136,6 +136,27 @@ export default {
     }
   },
 
+  watch: {
+    defaultExpandedIndex(newIndex) {
+      if (newIndex !== null && this.contentSections && this.contentSections.length > 0) {
+        // Convert 1-based index to 0-based array index
+        const sectionIndex = newIndex - 1;
+        if (sectionIndex >= 0 && sectionIndex < this.contentSections.length) {
+          const targetSection = this.contentSections[sectionIndex];
+          if (targetSection && targetSection.id) {
+            // Expand the section
+            this.$set(this.expandedSections, targetSection.id, true);
+            
+            // Scroll to the expanded section after a short delay
+            this.$nextTick(() => {
+              setTimeout(() => this.scrollSectionToTop(targetSection.id), 500);
+            });
+          }
+        }
+      }
+    }
+  },
+
   methods: {
     toggleSection(sectionId) {
       const willExpand = !this.expandedSections[sectionId];
@@ -185,7 +206,11 @@ export default {
       try {
         const isWindowContainer = (container === document.scrollingElement) || (container === document.documentElement) || (container === document.body);
         const elementRect = element.getBoundingClientRect();
-        const offset = 12; // small breathing space from the very top
+        
+        // Calculate offset based on mobile sticky header height
+        const mobileHeader = document.querySelector('.mobile-sticky-header');
+        const mobileHeaderHeight = mobileHeader ? mobileHeader.offsetHeight : 0;
+        const offset = mobileHeaderHeight > 0 ? mobileHeaderHeight + 12 : 12; // Add header height + breathing space
 
         if (isWindowContainer) {
           const targetTop = (window.pageYOffset || document.documentElement.scrollTop || 0) + elementRect.top - offset;
