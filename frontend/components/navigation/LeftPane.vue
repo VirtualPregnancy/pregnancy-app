@@ -13,7 +13,7 @@
             <v-btn
               icon
               color="primary"
-              :to="homePath"
+              :to="{ name: 'index' }"
               title="Home"
               class="mobile-home-btn"
             >
@@ -135,12 +135,6 @@ import Header from '@/components/navigation/Header.vue';
       const topics = this.$getTopics();
       const topic = topics[parentTopic.slug.toLowerCase()];
       return topic?.title || '';
-    },
-
-    // Get correct home path based on deployment environment
-    homePath() {
-      const basePath = this.$config?.basePath || '';
-      return basePath ? `${basePath}/` : '/';
     },
   },
 

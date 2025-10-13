@@ -19,7 +19,7 @@
             fab
             small
             color="primary"
-            :to="homePath"
+            :to="{ name: 'index' }"
             title="Home"
             class="home-btn"
           >
@@ -55,11 +55,6 @@ export default {
         this.$route.name === "slug" &&
         (this.$parentTopic()?.heading || this.$parentTopic()?.content)
       );
-    },
-    homePath() {
-      // Get the correct home path based on deployment environment
-      const basePath = this.$config?.basePath || '';
-      return basePath ? `${basePath}/` : '/';
     },
   },
 
