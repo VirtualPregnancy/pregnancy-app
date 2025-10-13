@@ -10,15 +10,15 @@
          <div class="mobile-header-content">
           <div class="mobile-title">{{ currentTopicTitle }}</div>
            <div class="mobile-controls">
-             <v-btn
-               icon
-               color="primary"
-               :to="{ path: '/' }"
-               title="Home"
-               class="mobile-home-btn"
-             >
-               <v-icon>mdi-home</v-icon>
-             </v-btn>
+            <v-btn
+              icon
+              color="primary"
+              :to="homePath"
+              title="Home"
+              class="mobile-home-btn"
+            >
+              <v-icon>mdi-home</v-icon>
+            </v-btn>
             
            </div>
           <div>
@@ -135,6 +135,12 @@ import Header from '@/components/navigation/Header.vue';
       const topics = this.$getTopics();
       const topic = topics[parentTopic.slug.toLowerCase()];
       return topic?.title || '';
+    },
+
+    // Get correct home path based on deployment environment
+    homePath() {
+      const basePath = this.$config?.basePath || '';
+      return basePath ? `${basePath}/` : '/';
     },
   },
 

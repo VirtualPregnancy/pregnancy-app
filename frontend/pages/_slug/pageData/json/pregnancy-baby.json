@@ -23,7 +23,7 @@
       "title": "Clinician/Midwife checks",
       "icon": "mdi-hospital",
       "iconColor": "var(--v-primary-base)",
-      "content": "clinician/midwife checks."
+      "content": "Clinician/midwife checks are a common way that your midwife or doctor may check on your baby's health. They will check your baby's heart rate, fundal height, and other things to make sure your baby is growing as expected. "
     },
     {
       "id": "1.f.d",
