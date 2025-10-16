@@ -5,6 +5,19 @@
       <Menu />
     </div>
     
+    <!-- Search Button -->
+    <div class="search-button fixed top-5 right-5 z-50">
+      <v-btn
+        fab
+        small
+        color="primary"
+        @click="showSearchDialog = true"
+        title="Search"
+      >
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </div>
+    
     <!-- Top-Bottom Layout -->
     <div class="landing-container">
       
@@ -51,6 +64,9 @@
       </div>
 
     </div>
+    
+    <!-- Search Dialog Component -->
+    <SearchDialog v-model="showSearchDialog" />
   </v-app>
 </template>
 
@@ -58,16 +74,19 @@
 import landingPageData from '@/assets/data/landingPageData.json';
 import Menu from '@/components/landing/Menu.vue';
 import Logo from '@/components/Logo.vue';
+import SearchDialog from '@/components/navigation/SearchDialog.vue';
 
 export default {
   layout: 'empty',
   components: {
     Menu,
-    Logo
+    Logo,
+    SearchDialog
   },
   data() {
     return {
-      landingPageData: landingPageData
+      landingPageData: landingPageData,
+      showSearchDialog: false
     }
   },
   computed: {
@@ -140,6 +159,18 @@ export default {
     background: var(--v-secondary-base);
     color: white;
     box-shadow: 0 6px 25px rgba(49, 54, 87, 0.3);
+  }
+}
+
+.search-button {
+  .v-btn {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+    }
   }
 }
 
@@ -361,6 +392,11 @@ export default {
   .hamburger-menu {
     top: 10px;
     left: 10px;
+  }
+  
+  .search-button {
+    top: 10px;
+    right: 10px;
   }
 }
 

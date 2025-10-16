@@ -37,8 +37,9 @@
             <v-icon small color="primary">{{ page.icon || 'mdi-file-document' }}</v-icon>
           </div>
           <div class="result-content">
-            <div class="result-title">{{ page.title }}</div>
-            <div v-if="page.category" class="result-category">{{ page.category }}</div>
+            <div class="result-title" v-html="page.highlightedTitle || page.title"></div>
+            <div v-if="page.category" class="result-category" v-html="page.highlightedCategory || page.category"></div>
+            <div v-if="page.matchedSnippet" class="result-snippet" v-html="page.matchedSnippet"></div>
           </div>
         </div>
       </div>
@@ -202,6 +203,15 @@ export default {
       this.allPages.forEach(page => {
         let matchedSectionIndex = null;
         let matchReason = '';
+        let matchedSnippet = '';
+        let highlightedTitle = '';
+        let highlightedCategory = '';
+        let matchedText = '';
+        
+        // Always highlight category if it matches
+        if (page.category && page.category.toLowerCase().includes(query)) {
+          highlightedCategory = this.highlightText(page.category, query);
+        }
         
         // Search in basic page info
         if (
@@ -211,15 +221,21 @@ export default {
           (page.heading && page.heading.toLowerCase().includes(query))
         ) {
           matchReason = 'title';
+          highlightedTitle = this.highlightText(page.title, query);
+          matchedText = page.title;
         }
         
         // Search in page data content
         else if (page.description && page.description.toLowerCase().includes(query)) {
           matchReason = 'description';
+          matchedSnippet = this.extractSnippet(page.description, query);
+          matchedText = page.description;
         }
         
         else if (page.pageTitle && page.pageTitle.toLowerCase().includes(query)) {
           matchReason = 'pageTitle';
+          matchedSnippet = this.extractSnippet(page.pageTitle, query);
+          matchedText = page.pageTitle;
         }
         
         // Search in content sections
@@ -234,15 +250,29 @@ export default {
           if (matchedIndex !== -1) {
             matchedSectionIndex = matchedIndex;
             matchReason = 'content';
+            const section = page.contentSections[matchedIndex];
+            
+            // Check if match is in title or content
+            if (section.title.toLowerCase().includes(query)) {
+              matchedSnippet = `<strong>${this.highlightText(section.title, query)}</strong>`;
+              matchedText = section.title;
+            } else if (section.content.toLowerCase().includes(query)) {
+              matchedSnippet = this.extractSnippet(section.content, query);
+              matchedText = section.content;
+            }
           }
         }
         
-        // If there's a match, add to results with section index
+        // If there's a match, add to results with section index and snippet
         if (matchReason) {
           results.push({
             ...page,
             matchedSectionIndex,
-            matchReason
+            matchReason,
+            matchedSnippet,
+            highlightedTitle,
+            highlightedCategory,
+            matchedText
           });
         }
       });
@@ -251,6 +281,43 @@ export default {
       
       // Reset selection to first result
       this.selectedIndex = 0;
+    },
+    
+    // Highlight search query in text
+    highlightText(text, query) {
+      if (!text || !query) return text;
+      
+      const regex = new RegExp(`(${this.escapeRegex(query)})`, 'gi');
+      return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+    },
+    
+    // Extract snippet around the matched query
+    extractSnippet(text, query, contextLength = 60) {
+      if (!text || !query) return '';
+      
+      const lowerText = text.toLowerCase();
+      const lowerQuery = query.toLowerCase();
+      const matchIndex = lowerText.indexOf(lowerQuery);
+      
+      if (matchIndex === -1) return '';
+      
+      // Calculate start and end positions for the snippet
+      const start = Math.max(0, matchIndex - contextLength);
+      const end = Math.min(text.length, matchIndex + query.length + contextLength);
+      
+      let snippet = text.substring(start, end);
+      
+      // Add ellipsis if needed
+      if (start > 0) snippet = '...' + snippet;
+      if (end < text.length) snippet = snippet + '...';
+      
+      // Highlight the query in the snippet
+      return this.highlightText(snippet, query);
+    },
+    
+    // Escape special regex characters
+    escapeRegex(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     },
     
     handleEnter(event) {
@@ -365,11 +432,12 @@ export default {
 
 .search-result-item {
   display: flex;
-  align-items: center;
-  padding: 6px 8px;
+  align-items: flex-start;
+  padding: 8px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  min-height: 48px;
 
   &:hover {
     background-color: rgba(221, 60, 81, 0.08);
@@ -401,15 +469,42 @@ export default {
   font-size: 0.875rem;
   font-weight: 500;
   color: #1f2937;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.3;
+  margin-bottom: 2px;
+  
+  // Allow wrapping for highlighted titles
+  ::v-deep mark {
+    white-space: normal;
+  }
 }
 
 .result-category {
   font-size: 0.7rem;
   color: #6b7280;
   margin-top: 1px;
+  margin-bottom: 3px;
+}
+
+.result-snippet {
+  font-size: 0.75rem;
+  color: #4b5563;
+  line-height: 1.4;
+  margin-top: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+// Highlight styling
+::v-deep .search-highlight {
+  background-color: #fef08a;
+  color: #854d0e;
+  padding: 1px 2px;
+  border-radius: 2px;
+  font-weight: 600;
 }
 
 .no-results {
