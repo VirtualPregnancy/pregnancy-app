@@ -16,6 +16,15 @@
       >
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
+      <v-btn
+        fab
+        small
+        color="primary"
+        @click="showChatbotDialog = true"
+        title="Chatbot"
+      >
+        <v-icon>mdi-robot</v-icon>
+      </v-btn>
     </div>
     
     <!-- Top-Bottom Layout -->
@@ -67,6 +76,7 @@
     
     <!-- Search Dialog Component -->
     <SearchDialog v-model="showSearchDialog" />
+    <ChatbotDialog v-model="showChatbotDialog" />
   </v-app>
 </template>
 
@@ -75,18 +85,20 @@ import landingPageData from '@/assets/data/landingPageData.json';
 import Menu from '@/components/landing/Menu.vue';
 import Logo from '@/components/Logo.vue';
 import SearchDialog from '@/components/navigation/SearchDialog.vue';
-
+import ChatbotDialog from '@/components/navigation/ChatbotDialog.vue';
 export default {
   layout: 'empty',
   components: {
     Menu,
     Logo,
-    SearchDialog
+    SearchDialog,
+    ChatbotDialog
   },
   data() {
     return {
       landingPageData: landingPageData,
-      showSearchDialog: false
+      showSearchDialog: false,
+      showChatbotDialog: false
     }
   },
   computed: {
@@ -131,7 +143,9 @@ export default {
       // Set a fallback or hide the image instead of retrying
       event.target.style.display = 'none';
     },
-    
+    toggleChatbot() {
+      this.showChatbotDialog = true;
+    },
     
   }
 };

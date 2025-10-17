@@ -1,0 +1,276 @@
+{
+  "intents": {
+    "greeting": {
+      "patterns": ["hello", "hi", "hey", "kia ora", "good morning", "good afternoon", "good evening", "kia ora", "tēnā koe"],
+      "response": {
+        "message": "Kia ora! I'm your pregnancy assistant for Aotearoa New Zealand. I can help you with information about pregnancy, complications, ultrasound scans, care pathways, and support services. How can I help you today?",
+        "actions": [
+          { "type": "suggestion", "text": "What happens in pregnancy?", "query": "What happens in pregnancy?" },
+          { "type": "suggestion", "text": "Tell me about complications", "query": "Tell me about complications" },
+          { "type": "suggestion", "text": "Explain ultrasound scans", "query": "Explain ultrasound scans" },
+          { "type": "suggestion", "text": "Find support services", "query": "Find support services" },
+          { "type": "suggestion", "text": "What my placenta looks like", "query": "What my placenta looks like" }
+        ]
+      }
+    },
+    "pregnancy_info": {
+      "patterns": ["pregnancy", "pregnant", "gestation", "maternal", "body changes", "placenta", "fetal development", "keeping baby healthy", "health checks", "baby health"],
+      "synonyms": {
+        "pregnancy": ["pregnant", "gestation", "maternal", "expecting", "carrying", "prenatal", "antenatal"],
+        "body": ["physical", "bodily", "physiological", "anatomical"],
+        "changes": ["transformation", "development", "growth", "adaptation"],
+        "placenta": ["afterbirth", "placental", "placental function"],
+        "fetal": ["baby", "fetus", "infant", "unborn", "developing baby"],
+        "health": ["wellbeing", "wellness", "condition", "status"],
+        "checks": ["monitoring", "assessment", "evaluation", "screening"]
+      },
+      "response": {
+        "message": "I found information about pregnancy and fetal development. Here's what I can help you with:",
+        "searchCategory": "pregnancy",
+        "actions": [
+          { "type": "suggestion", "text": "Changes to your body", "query": "body changes" },
+          { "type": "suggestion", "text": "Roles of the placenta", "query": "placenta roles" },
+          { "type": "suggestion", "text": "Fetal development", "query": "fetal development" },
+          { "type": "suggestion", "text": "Keeping baby healthy", "query": "keeping baby healthy" },
+          { "type": "suggestion", "text": "Health checks", "query": "baby health checks" }
+        ]
+      }
+    },
+    "complications": {
+      "patterns": ["complications", "disorders", "problems", "issues", "pre-eclampsia", "gestational diabetes", "fetal growth", "reduced fetal growth", "extra care", "pregnancy disorders"],
+      "synonyms": {
+        "complications": ["disorders", "problems", "issues", "conditions", "challenges"],
+        "pre-eclampsia": ["preeclampsia", "PE", "pregnancy-induced hypertension", "toxemia"],
+        "diabetes": ["diabetic", "glucose", "sugar", "GDM", "gestational diabetes mellitus"],
+        "growth": ["development", "FGR", "restriction", "small for gestational age", "SGA"],
+        "fetal": ["baby", "fetus", "unborn", "developing"],
+        "extra care": ["special care", "additional support", "intensive care", "neonatal care"]
+      },
+      "response": {
+        "message": "I can help you understand pregnancy complications and disorders. Here's information about common conditions:",
+        "searchCategory": "complications",
+        "actions": [
+          { "type": "suggestion", "text": "Reduced fetal growth", "query": "reduced fetal growth" },
+          { "type": "suggestion", "text": "Pre-eclampsia", "query": "pre-eclampsia" },
+          { "type": "suggestion", "text": "Gestational diabetes", "query": "gestational diabetes" },
+          { "type": "suggestion", "text": "Pregnancy disorders", "query": "pregnancy disorders" },
+          { "type": "suggestion", "text": "Extra care after birth", "query": "extra care" }
+        ]
+      }
+    },
+    "ultrasound": {
+      "patterns": ["ultrasound", "scan", "imaging", "sonography", "doppler", "ultrasound scan", "what does my ultrasound scan mean", "doppler ultrasound in pregnancy", "ultrasound metrics"],
+      "synonyms": {
+        "ultrasound": ["scan", "imaging", "sonography", "ultrasonography", "ultrasonic"],
+        "doppler": ["blood flow", "circulation", "vascular", "hemodynamic"],
+        "scan": ["ultrasound", "imaging", "examination", "assessment"],
+        "metrics": ["measurements", "parameters", "values", "indices"],
+        "results": ["findings", "outcomes", "interpretation", "meaning"]
+      },
+      "response": {
+        "message": "I can help you understand ultrasound scans and what they mean. Here's information about ultrasound imaging:",
+        "searchCategory": "ultrasound",
+        "actions": [
+          { "type": "suggestion", "text": "What is ultrasound?", "query": "what is ultrasound" },
+          { "type": "suggestion", "text": "Doppler ultrasound in pregnancy", "query": "doppler ultrasound" },
+          { "type": "suggestion", "text": "How ultrasound detects issues", "query": "ultrasound metrics" },
+          { "type": "suggestion", "text": "What does my scan mean?", "query": "what does ultrasound scan mean" }
+        ]
+      }
+    },
+    "care_pathways": {
+      "patterns": ["care", "midwife", "clinical", "pathways", "lmc", "lead maternity carer", "pregnancy care", "pregnancy care in aotearoa", "midwife lead care", "when care changes"],
+      "synonyms": {
+        "care": ["treatment", "management", "support", "healthcare", "services"],
+        "midwife": ["LMC", "lead maternity carer", "birth attendant", "midwifery"],
+        "clinical": ["medical", "healthcare", "professional", "therapeutic"],
+        "pathways": ["routes", "processes", "protocols", "guidelines"],
+        "aotearoa": ["new zealand", "nz", "aotearoa new zealand"],
+        "changes": ["modifications", "adjustments", "adaptations", "transitions"]
+      },
+      "response": {
+        "message": "I can help you understand pregnancy care pathways in Aotearoa New Zealand. Here's information about the care system:",
+        "searchCategory": "clinical",
+        "actions": [
+          { "type": "suggestion", "text": "Midwife lead care", "query": "midwife lead care" },
+          { "type": "suggestion", "text": "How clinical care pathways may change", "query": "when care changes" },
+          { "type": "suggestion", "text": "Pregnancy care in Aotearoa", "query": "pregnancy care aotearoa" }
+        ]
+      }
+    },
+    "support_services": {
+      "patterns": ["support", "services", "help", "counselling", "mental health", "whānau", "whanau", "pregnancy support", "baby support", "for everyone pregnant", "specialist services"],
+      "synonyms": {
+        "support": ["help", "assistance", "aid", "guidance", "backing"],
+        "services": ["resources", "programs", "facilities", "assistance"],
+        "counselling": ["therapy", "counseling", "psychological support", "mental health support"],
+        "mental health": ["psychological", "emotional", "wellbeing", "mental wellbeing"],
+        "whānau": ["family", "whanau", "extended family", "support network"],
+        "specialist": ["specialized", "expert", "professional", "specialized care"]
+      },
+      "response": {
+        "message": "I can help you find support services for pregnancy and parenting in Aotearoa New Zealand. Here are the available services:",
+        "actions": [
+          { "type": "suggestion", "text": "For everyone pregnant", "query": "for everyone pregnant" },
+          { "type": "suggestion", "text": "Specialist services", "query": "specialist services" },
+          { "type": "suggestion", "text": "Mental health support", "query": "mental health support" },
+          { "type": "suggestion", "text": "Pregnancy counselling", "query": "pregnancy counselling" },
+          { "type": "suggestion", "text": "Regional services", "query": "regional services" }
+        ]
+      }
+    },
+    "regional_services": {
+      "patterns": ["auckland", "wellington", "canterbury", "waikato", "bay of plenty", "hawke's bay", "northland", "otago", "southland", "taranaki", "manawatū-whanganui", "nelson marlborough", "rotorua taupō", "south canterbury", "tairāwhiti", "west coast", "wairarapa"],
+      "synonyms": {
+        "auckland": ["tāmaki makaurau", "auckland region", "auckland city"],
+        "wellington": ["te whanganui-a-tara", "wellington region", "wellington hutt kapiti"],
+        "canterbury": ["canterbury region", "christchurch", "south canterbury"],
+        "waikato": ["waikato region", "hamilton", "waikato district"],
+        "bay of plenty": ["bay of plenty region", "tauranga", "whakatāne"],
+        "hawke's bay": ["hawke's bay region", "hastings", "napier"],
+        "northland": ["te tai tokerau", "northland region", "whangārei"],
+        "otago": ["otago region", "dunedin", "otago southland"],
+        "southland": ["southland region", "invercargill", "otago southland"],
+        "taranaki": ["taranaki region", "new plymouth", "taranaki base hospital"],
+        "manawatū-whanganui": ["manawatū-whanganui region", "palmerston north", "whanganui"],
+        "nelson marlborough": ["nelson marlborough tasman", "nelson", "marlborough"],
+        "rotorua taupō": ["rotorua taupō lakes", "rotorua", "taupō"],
+        "tairāwhiti": ["tairāwhiti gisborne", "gisborne", "east coast"],
+        "west coast": ["west coast region", "greymouth", "westport"],
+        "wairarapa": ["wairarapa region", "masterton", "wairarapa hospital"]
+      },
+      "response": {
+        "message": "I can help you find regional services across Aotearoa New Zealand. Here are the available regions:",
+        "actions": [
+          { "type": "suggestion", "text": "Auckland services", "query": "services in Auckland" },
+          { "type": "suggestion", "text": "Wellington services", "query": "services in Wellington" },
+          { "type": "suggestion", "text": "Canterbury services", "query": "services in Canterbury" },
+          { "type": "suggestion", "text": "Waikato services", "query": "services in Waikato" },
+          { "type": "suggestion", "text": "Bay of Plenty services", "query": "services in Bay of Plenty" }
+        ]
+      }
+    },
+    "mental_health": {
+      "patterns": ["mental health", "anxiety", "depression", "pada", "whāraurau", "perinatal mental", "psychological", "maternal mental health", "perinatal anxiety", "perinatal depression"],
+      "synonyms": {
+        "anxiety": ["worried", "nervous", "stressed", "anxious", "concerned", "uneasy"],
+        "depression": ["sad", "low", "down", "depressed", "blue", "melancholy"],
+        "mental health": ["psychological", "emotional", "wellbeing", "mental wellbeing", "mental wellness"],
+        "perinatal": ["prenatal", "antenatal", "postnatal", "pregnancy and parenting"],
+        "maternal": ["mother", "maternal health", "mother's health", "parental"]
+      },
+      "response": {
+        "message": "I understand you're looking for mental health support during pregnancy. Here are some excellent resources available in Aotearoa New Zealand:",
+        "actions": [
+          { "type": "suggestion", "text": "PADA - Perinatal Anxiety & Depression Aotearoa", "query": "PADA perinatal anxiety" },
+          { "type": "suggestion", "text": "Whāraurau - Perinatal Mental Health Resources", "query": "Whāraurau perinatal mental health" },
+          { "type": "suggestion", "text": "Maternal mental health services", "query": "maternal mental health" },
+          { "type": "suggestion", "text": "Pregnancy counselling services", "query": "pregnancy counselling services" }
+        ]
+      }
+    },
+    "premature_birth": {
+      "patterns": ["premature", "premature birth", "nicu", "scbu", "neonatal", "preterm", "early birth", "special care"],
+      "synonyms": {
+        "premature": ["preterm", "early", "before term", "premature birth"],
+        "nicu": ["neonatal intensive care", "intensive care", "special care baby unit", "scbu"],
+        "neonatal": ["newborn", "baby", "infant", "neonatal care"],
+        "special care": ["intensive care", "neonatal care", "baby care", "premature baby care"]
+      },
+      "response": {
+        "message": "I can help you find information about premature birth support and neonatal care services in New Zealand:",
+        "actions": [
+          { "type": "suggestion", "text": "What to expect with premature birth", "query": "premature birth support" },
+          { "type": "suggestion", "text": "NICU and SCBU services", "query": "nicu scbu services" },
+          { "type": "suggestion", "text": "Regional neonatal units", "query": "regional neonatal units" },
+          { "type": "suggestion", "text": "Little Miracles Trust", "query": "little miracles trust" }
+        ]
+      }
+    },
+    "diabetes_pregnancy": {
+      "patterns": ["diabetes", "gestational diabetes", "diabetes in pregnancy", "gdm", "glucose", "sugar", "diabetic pregnancy"],
+      "synonyms": {
+        "diabetes": ["diabetic", "glucose", "sugar", "blood sugar"],
+        "gestational": ["pregnancy", "maternal", "antenatal"],
+        "gdm": ["gestational diabetes mellitus", "gestational diabetes", "pregnancy diabetes"]
+      },
+      "response": {
+        "message": "I can help you understand diabetes in pregnancy and find relevant support services:",
+        "actions": [
+          { "type": "suggestion", "text": "Gestational diabetes information", "query": "gestational diabetes" },
+          { "type": "suggestion", "text": "Diabetes in pregnancy clinics", "query": "diabetes in pregnancy clinic" },
+          { "type": "suggestion", "text": "Diabetes management guidelines", "query": "diabetes management pregnancy" },
+          { "type": "suggestion", "text": "Diabetes & Pregnancy New Zealand", "query": "diabetes pregnancy new zealand" }
+        ]
+      }
+    }
+  },
+  "questionTypes": {
+    "what": {
+      "patterns": ["what", "which", "what is", "what are"],
+      "response": {
+        "message": "That's a great question! Let me find relevant information for you:",
+        "searchResults": true
+      }
+    },
+    "how": {
+      "patterns": ["how", "how to", "how does", "how do"],
+      "response": {
+        "message": "I can explain how that works. Here's what I found:",
+        "searchResults": true
+      }
+    },
+    "when": {
+      "patterns": ["when", "at what time", "what time"],
+      "response": {
+        "message": "Let me find information about timing for you:",
+        "searchResults": true
+      }
+    },
+    "why": {
+      "patterns": ["why", "what causes", "what is the reason"],
+      "response": {
+        "message": "That's an important question. Here's what I can tell you:",
+        "searchResults": true
+      }
+    },
+    "where": {
+      "patterns": ["where", "which page", "where can i find"],
+      "response": {
+        "message": "I can help you find that information:",
+        "searchResults": true
+      }
+    }
+  },
+  "actions": {
+    "suggestion": {
+      "description": "Provide a suggested query for the user",
+      "icon": "mdi-lightbulb-outline",
+      "color": "primary"
+    },
+    "navigate": {
+      "description": "Navigate to a specific page",
+      "icon": "mdi-arrow-right",
+      "color": "success"
+    },
+    "search": {
+      "description": "Perform a search",
+      "icon": "mdi-magnify",
+      "color": "info"
+    },
+    "support": {
+      "description": "Provide support service information",
+      "icon": "mdi-heart",
+      "color": "pink"
+    }
+  },
+  "fallback": {
+    "message": "I'm not sure how to help with that. Try asking me about pregnancy topics, complications, ultrasound scans, or support services.",
+    "actions": [
+      { "type": "suggestion", "text": "Tell me about pregnancy", "query": "pregnancy" },
+      { "type": "suggestion", "text": "Show complications", "query": "complications" },
+      { "type": "suggestion", "text": "Explain ultrasound", "query": "ultrasound" },
+      { "type": "suggestion", "text": "Find support services", "query": "support services" }
+    ]
+  }
+}

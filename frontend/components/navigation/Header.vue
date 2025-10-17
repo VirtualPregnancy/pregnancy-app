@@ -13,7 +13,7 @@
           ></div>
         </div>
 
-        <!-- Search and Home Buttons -->
+        <!-- Search, Chatbot and Home Buttons -->
         <div v-if="mdAndUp" class="header-actions">
           <v-btn
             fab
@@ -24,6 +24,16 @@
             class="search-btn"
           >
             <v-icon>mdi-magnify</v-icon>
+          </v-btn>
+          <v-btn
+            fab
+            small
+            color="primary"
+            @click="toggleChatbot"
+            title="Ask Assistant"
+            class="chatbot-btn"
+          >
+            <v-icon>mdi-robot</v-icon>
           </v-btn>
           <v-btn
             fab
@@ -41,17 +51,22 @@
 
     <!-- Search Dialog Component -->
     <SearchDialog v-model="showSearchDialog" />
+    
+    <!-- Chatbot Dialog Component -->
+    <ChatbotDialog v-model="showChatbotDialog" />
   </div>
 </template>
 
 <script>
 import SearchDialog from './SearchDialog.vue';
+import ChatbotDialog from './ChatbotDialog.vue';
 
 export default {
   name: "Header",
   
   components: {
-    SearchDialog
+    SearchDialog,
+    ChatbotDialog
   },
 
   data() {
@@ -62,6 +77,7 @@ export default {
       lastConditionData: null, // Store condition data for potential future use
       isClient: false, // Track if we're on client side
       showSearchDialog: false,
+      showChatbotDialog: false,
     };
   },
 
@@ -86,6 +102,10 @@ export default {
     
     toggleSearch() {
       this.showSearchDialog = true;
+    },
+    
+    toggleChatbot() {
+      this.showChatbotDialog = true;
     },
   },
 
@@ -146,11 +166,15 @@ export default {
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
     gap: 8px;
-    padding-top: 4px;
   }
 
   .search-btn,
+  .chatbot-btn,
   .home-btn {
     transition: transform 0.2s ease;
 

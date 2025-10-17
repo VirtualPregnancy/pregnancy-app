@@ -7,7 +7,7 @@
       "index": 4,
       "title": "What does my ultrasound scan mean?",
       "description": "Ultrasound scans let doctors check on the health of your baby (and its placenta). Use our interactive tool to better understand what ultrasound is measuring, how it can tell us about baby's health, and what your scan may mean.",
-      "image": "/img/landing/medical_record.svg",
+      "image": "/img/landing/ultrasound.svg",
       "backgroundColor": "#185168",
       "link": "/ultrasound-what-is-ultrasound"
     },

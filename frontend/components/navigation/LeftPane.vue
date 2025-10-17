@@ -11,6 +11,15 @@
           <div class="mobile-title">{{ currentTopicTitle }}</div>
            <div class="mobile-controls">
             <v-btn
+            icon
+            color="primary"
+            @click="toggleChatbot"
+            title="Ask Assistant"
+            class="chatbot-icon"
+          >
+            <v-icon>mdi-robot-outline</v-icon>
+          </v-btn>
+            <v-btn
               icon
               color="primary"
               @click="toggleSearch"
@@ -81,6 +90,8 @@
     
     <!-- Search Dialog Component -->
     <SearchDialog v-model="showSearchDialog" />
+     <!-- Chatbot Dialog Component -->
+     <ChatbotDialog v-model="showChatbotDialog" />
   </div>
 </template>
 
@@ -88,14 +99,15 @@
 import SubMenu from './SubMenu.vue';
 import Header from '@/components/navigation/Header.vue';
 import SearchDialog from './SearchDialog.vue';
-
+import ChatbotDialog from './ChatbotDialog.vue';
   export default {
   name: "LeftPane",
   
   components: {
     SubMenu,
     Header,
-    SearchDialog
+    SearchDialog,
+    ChatbotDialog
   },
 
   props: {
@@ -155,7 +167,8 @@ import SearchDialog from './SearchDialog.vue';
     return {
       isCollapsed: false,
       isMobileSubmenuCollapsed: true,
-      showSearchDialog: false
+      showSearchDialog: false,
+      showChatbotDialog: false,
     }
   },
 
@@ -200,6 +213,9 @@ import SearchDialog from './SearchDialog.vue';
     // Toggle search dialog
     toggleSearch() {
       this.showSearchDialog = true;
+    },
+    toggleChatbot() {
+      this.showChatbotDialog = true;
     },
 
   },
