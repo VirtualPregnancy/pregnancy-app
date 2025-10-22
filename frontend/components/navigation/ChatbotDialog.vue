@@ -25,40 +25,43 @@
               <v-icon color="primary">mdi-robot</v-icon>
             </div>
             <div class="message-content">
-              <div class="message-bubble" v-html="message.content"></div>
-              
-              <!-- Search Results -->
-              <div v-if="message.searchResults && message.searchResults.length > 0" class="search-results">
+              <div class="message-bubble">
                 <div
-                  v-for="(result, idx) in message.searchResults"
+                  v-for="(text, key) in message.summary"
+                  :key="key"
+                >{{ text }}</div>
+                <div v-html="message.content"></div>
+              </div>
+              
+              <!-- Action Cards -->
+              <div v-if="message.actions && message.actions.length > 0" class="action-cards">
+                <div
+                  v-for="(action, idx) in message.actions"
                   :key="idx"
-                  class="search-result-item"
-                  @click="navigateToPage(result)"
+                  class="action-card-item"
+                  @click="handleAction(action)"
                 >
-                  <div class="result-icon">
-                    <v-icon small color="primary">{{ result.icon || 'mdi-file-document' }}</v-icon>
+                  <div class="action-icon">
+                    <v-icon small color="primary">{{ getActionIcon(action.type) }}</v-icon>
                   </div>
-                  <div class="result-content">
-                    <div class="result-title" v-html="result.highlightedTitle || result.title"></div>
-                    <div v-if="result.category" class="result-category" v-html="result.highlightedCategory || result.category"></div>
-                    <div v-if="result.matchedSnippet" class="result-snippet" v-html="result.matchedSnippet"></div>
+                  <div class="action-content">
+                    <div class="action-title">{{ action.text }}</div>
+                    <div v-if="action.description" class="action-description">{{ action.description }}</div>
                   </div>
                 </div>
               </div>
               
-              <!-- Action Buttons -->
-              <div v-if="!message.searchResults && message.actions && message.actions.length > 0" class="action-buttons">
-                <v-btn
-                  v-for="(action, idx) in message.actions"
-                  :key="idx"
-                  small
-                  outlined
-                  color="primary"
-                  class="action-btn"
-                  @click="handleAction(action)"
-                >
-                  {{ action.text }}
-                </v-btn>
+              <!-- Related Pages -->
+              <div v-if="message.searchResults && message.searchResults.length > 0" class="related-pages">
+                <div class="related-pages-header">You may also be interested in:</div>
+                <div class="related-pages-list">
+                  <span
+                    v-for="(result, idx) in message.searchResults"
+                    :key="idx"
+                    class="page-link"
+                    @click="navigateToPage(result)"
+                  >{{ result.title }}<span v-if="idx < message.searchResults.length - 1" class="separator"> · </span></span>
+                </div>
               </div>
             </div>
           </div>
@@ -169,6 +172,16 @@ export default {
   },
   
   methods: {
+    getActionIcon(type) {
+      const icons = {
+        suggestion: 'mdi-lightbulb-outline',
+        navigate: 'mdi-arrow-right-circle',
+        search: 'mdi-magnify',
+        support: 'mdi-heart'
+      };
+      return icons[type] || 'mdi-arrow-right';
+    },
+    
     addWelcomeMessage() {
       this.messages.push(getWelcomeMessage());
     },
@@ -196,12 +209,17 @@ export default {
         const allPages = getAllPagesData();
         let response = generateChatbotResponse(userMessage, allPages);
         
+        // Deduplicate actions and searchResults by path
+        const deduplicatedActions = this.deduplicateByPath(response.actions || []);
+        const deduplicatedSearchResults = this.deduplicateByPath(response.searchResults || []);
+        
         // Add bot response
         this.messages.push({
           type: 'bot',
           content: response.message,
-          searchResults: response.searchResults,
-          actions: response.actions
+          summary: response.summary,
+          searchResults: deduplicatedSearchResults,
+          actions: deduplicatedActions
         });
         
       } catch (error) {
@@ -220,6 +238,43 @@ export default {
     },
     
     // Response logic moved to utils/chatbotUtils.js
+    
+    deduplicateByPath(items) {
+      if (!items || items.length === 0) return [];
+      
+      const seen = new Set();
+      const deduplicated = [];
+      
+      items.forEach(item => {
+        // Determine the path identifier
+        let pathKey = '';
+        
+        // For actions with path property
+        if (item.path) {
+          pathKey = item.path;
+        }
+        // For searchResults with slug property
+        else if (item.slug) {
+          pathKey = item.slug;
+        }
+        // For actions with text that might be used for navigation
+        else if (item.text) {
+          pathKey = item.text;
+        }
+        // Default fallback
+        else {
+          pathKey = JSON.stringify(item);
+        }
+        
+        // Only add if not seen before
+        if (!seen.has(pathKey)) {
+          seen.add(pathKey);
+          deduplicated.push(item);
+        }
+      });
+      
+      return deduplicated;
+    },
     
     handleAction(action) {
       handleChatbotAction(
@@ -372,14 +427,36 @@ export default {
   color: white;
 }
 
-.search-results {
+.summary-section {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: #eff6ff;
+  border-left: 3px solid #60a5fa;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-item {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #374151;
+  
+  &:not(:last-child) {
+    padding-bottom: 6px;
+    border-bottom: 1px solid #dbeafe;
+  }
+}
+
+.action-cards {
   margin-top: 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.search-result-item {
+.action-card-item {
   display: flex;
   align-items: flex-start;
   padding: 12px;
@@ -387,14 +464,16 @@ export default {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  background: #ffffff;
   
   &:hover {
     background: #f9fafb;
     border-color: #3b82f6;
+    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
   }
 }
 
-.result-icon {
+.action-icon {
   width: 24px;
   height: 24px;
   display: flex;
@@ -404,38 +483,56 @@ export default {
   flex-shrink: 0;
 }
 
-.result-content {
+.action-content {
   flex: 1;
   min-width: 0;
 }
 
-.result-title {
+.action-title {
   font-weight: 500;
   color: #1f2937;
-  margin-bottom: 4px;
-}
-
-.result-category {
-  font-size: 0.75rem;
-  color: #6b7280;
-  margin-bottom: 4px;
-}
-
-.result-snippet {
   font-size: 0.875rem;
-  color: #4b5563;
+  margin-bottom: 4px;
+}
+
+.action-description {
+  font-size: 0.8rem;
+  color: #6b7280;
   line-height: 1.4;
 }
 
-.action-buttons {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.related-pages {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
 }
 
-.action-btn {
-  margin: 0;
+.related-pages-header {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.related-pages-list {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.page-link {
+  color: #3b82f6;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    color: #2563eb;
+    text-decoration: underline;
+  }
+}
+
+.separator {
+  color: #9ca3af;
+  margin: 0 4px;
 }
 
 .typing-indicator {

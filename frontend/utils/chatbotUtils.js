@@ -1,54 +1,221 @@
 // Chatbot response utilities
-// Centralized logic for generating intelligent responses based on user queries
+// Centralized logic for generating intelligent responses
 
 import { analyzeIntent, generateResponse } from './intentRecognition.js';
 import chatbotConfig from '~/assets/data/chatbotConfig.json';
 
+// Constants
+const MAX_SEARCH_RESULTS = 5;
+const MIN_WORD_LENGTH = 2;
+const MATCH_SCORES = { EXACT: 100, WORD: 80, PARTIAL: 60, CATEGORY_EXACT: 70, CATEGORY_WORD: 50, CATEGORY_PARTIAL: 35, DESC_WORD: 25, DESC_PARTIAL: 15 };
+const MATCH_TYPE_BONUS = { topic: 20, pattern: 18, intent: 15, synonym: 12, keyword: 8 };
+
 /**
- * Generate intelligent response based on user query using intent recognition
- * @param {string} query - User input query
- * @param {Array} allPages - Available pages data
- * @returns {Object} Response object with message, searchResults, and actions
+ * Calculate relevance score for page
+ * @param {Object} page - Page object
+ * @param {string} term - Search term
+ * @param {string} matchType - Match type
+ * @returns {number} Relevance score
  */
-export function generateChatbotResponse(query, allPages) {
-  // Use intent recognition system
-  const intentResult = analyzeIntent(query);
+function calculateScore(page, term, matchType) {
+  let score = 0;
+  const t = term.toLowerCase();
+  const title = page.title.toLowerCase();
+  const category = page.category.toLowerCase();
+  const desc = (page.description || '').toLowerCase();
   
-  // Filter search results based on intent
-  let searchResults = [];
-  if (intentResult.entities.length > 0) {
-    searchResults = filterSearchResults(allPages, intentResult.entities);
+  // Title matching
+  if (title === t) score += MATCH_SCORES.EXACT;
+  else if (title.split(/\s+/).includes(t)) score += MATCH_SCORES.WORD;
+  else if (title.includes(t)) score += MATCH_SCORES.PARTIAL;
+  
+  // Category matching
+  if (category === t) score += MATCH_SCORES.CATEGORY_EXACT;
+  else if (category.split(/\s+/).includes(t)) score += MATCH_SCORES.CATEGORY_WORD;
+  else if (category.includes(t)) score += MATCH_SCORES.CATEGORY_PARTIAL;
+  
+  // Description matching
+  if (desc.split(/\s+/).includes(t)) score += MATCH_SCORES.DESC_WORD;
+  else if (desc.includes(t)) score += MATCH_SCORES.DESC_PARTIAL;
+  
+  // Match type bonus
+  score += MATCH_TYPE_BONUS[matchType] || 5;
+  
+  // Occurrence count bonus
+  const occurrences = (title.match(new RegExp(t, 'g')) || []).length +
+                     (category.match(new RegExp(t, 'g')) || []).length +
+                     (desc.match(new RegExp(t, 'g')) || []).length;
+  score += occurrences * 3;
+  
+  return score;
+}
+
+/**
+ * Search pages by entities
+ * @param {Array} allPages - All pages
+ * @param {Array} entities - Extracted entities
+ * @returns {Array} Filtered results
+ */
+function searchByEntities(allPages, entities) {
+  const resultsMap = new Map();
+  
+  entities.forEach(entity => {
+    if (['topic', 'pattern', 'synonym'].includes(entity.type)) {
+      const term = entity.value || entity.keyword;
+      
+      allPages
+        .filter(page => 
+          page.category.toLowerCase().includes(term) ||
+          page.title.toLowerCase().includes(term) ||
+          (page.description || '').toLowerCase().includes(term)
+        )
+        .forEach(page => {
+          const score = calculateScore(page, term, entity.type);
+          const existing = resultsMap.get(page.slug);
+          resultsMap.set(page.slug, {
+            page,
+            score: existing ? existing.score + score : score
+          });
+        });
+    }
+    
+    // Intent-based filtering
+    if (entity.intent) {
+      const intentConfig = chatbotConfig.intents[entity.intent];
+      const searchCategory = intentConfig?.response?.searchCategory;
+      
+      if (searchCategory) {
+        allPages
+          .filter(page => page.category.toLowerCase().includes(searchCategory.toLowerCase()))
+          .forEach(page => {
+            const score = calculateScore(page, searchCategory, 'intent');
+            const existing = resultsMap.get(page.slug);
+            resultsMap.set(page.slug, {
+              page,
+              score: existing ? existing.score + score : score
+            });
+          });
+      }
+    }
+  });
+  
+  // Broader matching if no results
+  if (resultsMap.size === 0 && entities.length > 0) {
+    entities
+      .map(e => e.value || e.keyword)
+      .filter(Boolean)
+      .forEach(term => {
+        allPages
+          .filter(page =>
+            page.title.toLowerCase().includes(term.toLowerCase()) ||
+            (page.description || '').toLowerCase().includes(term.toLowerCase()) ||
+            page.category.toLowerCase().includes(term.toLowerCase())
+          )
+          .forEach(page => {
+            const score = calculateScore(page, term, 'keyword');
+            const existing = resultsMap.get(page.slug);
+            resultsMap.set(page.slug, {
+              page,
+              score: existing ? existing.score + score : score
+            });
+          });
+      });
   }
   
-  // If no specific results found, try intent-based search
+  return Array.from(resultsMap.values())
+    .sort((a, b) => b.score - a.score)
+    .map(item => item.page)
+    .slice(0, MAX_SEARCH_RESULTS);
+}
+
+/**
+ * Search pages by intent category
+ * @param {Array} allPages - All pages
+ * @param {string} category - Category term
+ * @returns {Array} Filtered results
+ */
+function searchByIntent(allPages, category) {
+  const resultsMap = new Map();
+  
+  allPages
+    .filter(page => page.category.toLowerCase().includes(category))
+    .forEach(page => {
+      const score = calculateScore(page, category, 'intent');
+      resultsMap.set(page.slug, { page, score });
+    });
+  
+  return Array.from(resultsMap.values())
+    .sort((a, b) => b.score - a.score)
+    .map(item => item.page)
+    .slice(0, MAX_SEARCH_RESULTS);
+}
+
+/**
+ * Search pages by keywords
+ * @param {Array} allPages - All pages
+ * @param {string} query - Query string
+ * @returns {Array} Filtered results
+ */
+function searchByKeywords(allPages, query) {
+  const words = query.toLowerCase().split(/\s+/).filter(w => w.length > MIN_WORD_LENGTH);
+  const resultsMap = new Map();
+  
+  allPages.forEach(page => {
+    let totalScore = 0;
+    words.forEach(word => {
+      if (page.title.toLowerCase().includes(word) ||
+          (page.description || '').toLowerCase().includes(word) ||
+          page.category.toLowerCase().includes(word)) {
+        totalScore += calculateScore(page, word, 'keyword');
+      }
+    });
+    
+    if (totalScore > 0) {
+      resultsMap.set(page.slug, { page, score: totalScore });
+    }
+  });
+  
+  return Array.from(resultsMap.values())
+    .sort((a, b) => b.score - a.score)
+    .map(item => item.page)
+    .slice(0, MAX_SEARCH_RESULTS);
+}
+
+/**
+ * Generate intelligent chatbot response
+ * @param {string} query - User query
+ * @param {Array} allPages - All pages
+ * @returns {Object} Response object
+ */
+export function generateChatbotResponse(query, allPages) {
+  const intentResult = analyzeIntent(query);
+  
+  // Try different search strategies
+  let searchResults = [];
+  
+  if (intentResult.entities.length > 0) {
+    searchResults = searchByEntities(allPages, intentResult.entities);
+  }
+  
   if (searchResults.length === 0 && intentResult.intent !== 'unknown') {
     const intentConfig = chatbotConfig.intents[intentResult.intent];
-    if (intentConfig && intentConfig.response && intentConfig.response.searchCategory) {
-      searchResults = allPages.filter(page => 
-        page.category.toLowerCase().includes(intentConfig.response.searchCategory.toLowerCase())
-      ).slice(0, 5);
+    const searchCategory = intentConfig?.response?.searchCategory;
+    if (searchCategory) {
+      searchResults = searchByIntent(allPages, searchCategory.toLowerCase());
     }
   }
   
-  // If still no results, try keyword matching
   if (searchResults.length === 0) {
-    const queryWords = query.toLowerCase().split(' ');
-    searchResults = allPages.filter(page => 
-      queryWords.some(word => 
-        page.title.toLowerCase().includes(word) ||
-        page.description.toLowerCase().includes(word) ||
-        page.category.toLowerCase().includes(word)
-      )
-    ).slice(0, 5);
+    searchResults = searchByKeywords(allPages, query);
   }
   
-  // Generate response using intent recognition
   const response = generateResponse(intentResult, searchResults);
   
   return {
     message: response.message,
-    searchResults: searchResults,
+    searchResults,
     actions: response.actions || [],
+    summary: response.summaryData || null,
     confidence: intentResult.confidence,
     intent: intentResult.intent,
     entities: intentResult.entities
@@ -56,89 +223,67 @@ export function generateChatbotResponse(query, allPages) {
 }
 
 /**
- * Filter search results based on extracted entities
- * @param {Array} allPages - All available pages
- * @param {Array} entities - Extracted entities from query
- * @returns {Array} Filtered search results
+ * Enhanced search with relevance scoring
+ * @param {Array} allPages - All pages
+ * @param {string} query - User query
+ * @returns {Array} Sorted results
  */
-function filterSearchResults(allPages, entities) {
-  const results = [];
+export function searchPagesWithRelevance(allPages, query) {
+  const words = query.toLowerCase().split(/\s+/).filter(w => w.length > MIN_WORD_LENGTH);
+  const resultsMap = new Map();
   
-  entities.forEach(entity => {
-    // Handle different entity types
-    if (entity.type === 'topic' || entity.type === 'pattern' || entity.type === 'synonym') {
-      const searchTerm = entity.value || entity.keyword;
-      const topicResults = allPages.filter(page => 
-        page.category.toLowerCase().includes(searchTerm) ||
-        page.title.toLowerCase().includes(searchTerm) ||
-        page.description.toLowerCase().includes(searchTerm)
-      );
-      results.push(...topicResults);
-    }
-    
-    // Handle intent-based filtering
-    if (entity.intent) {
-      const intentConfig = chatbotConfig.intents[entity.intent];
-      if (intentConfig && intentConfig.response && intentConfig.response.searchCategory) {
-        const categoryResults = allPages.filter(page => 
-          page.category.toLowerCase().includes(intentConfig.response.searchCategory.toLowerCase())
-        );
-        results.push(...categoryResults);
+  allPages.forEach(page => {
+    let totalScore = 0;
+    words.forEach(word => {
+      if (page.title.toLowerCase().includes(word) ||
+          (page.description || '').toLowerCase().includes(word) ||
+          page.category.toLowerCase().includes(word)) {
+        totalScore += calculateScore(page, word, 'keyword');
       }
+    });
+    
+    if (totalScore > 0) {
+      resultsMap.set(page.slug, { ...page, relevanceScore: totalScore });
     }
   });
   
-  // If no specific results found, try broader matching
-  if (results.length === 0 && entities.length > 0) {
-    const searchTerms = entities.map(e => e.value || e.keyword).filter(Boolean);
-    searchTerms.forEach(term => {
-      const broadResults = allPages.filter(page => 
-        page.title.toLowerCase().includes(term.toLowerCase()) ||
-        page.description.toLowerCase().includes(term.toLowerCase()) ||
-        page.category.toLowerCase().includes(term.toLowerCase())
-      );
-      results.push(...broadResults);
-    });
-  }
-  
-  // Remove duplicates and return top results
-  const uniqueResults = results.filter((result, index, self) => 
-    index === self.findIndex(r => r.slug === result.slug)
-  );
-  
-  return uniqueResults.slice(0, 5);
+  return Array.from(resultsMap.values())
+    .sort((a, b) => b.relevanceScore - a.relevanceScore);
 }
 
 /**
- * Get all available pages data from topics.json
- * @returns {Array} Array of page objects
+ * Get top N relevant pages
+ * @param {Array} allPages - All pages
+ * @param {string} searchTerm - Search term
+ * @param {number} limit - Result limit
+ * @returns {Array} Top pages
+ */
+export function getTopRelevantPages(allPages, searchTerm, limit = MAX_SEARCH_RESULTS) {
+  return searchPagesWithRelevance(allPages, searchTerm).slice(0, limit);
+}
+
+/**
+ * Get all pages data from topics.json
+ * @returns {Array} Pages array
  */
 export function getAllPagesData() {
   const pages = [];
-  
-  // Import topics data from the actual JSON file
   const topicsData = require('~/assets/data/topics.json');
   
-  Object.keys(topicsData).forEach(topicKey => {
-    const topic = topicsData[topicKey];
+  Object.entries(topicsData).forEach(([topicKey, topic]) => {
     const categoryName = topic.heading;
     
     if (topic.subTopics) {
-      Object.keys(topic.subTopics).forEach(subTopicKey => {
-        const subTopic = topic.subTopics[subTopicKey];
-        const slug = `${topicKey}-${subTopicKey}`;
-        
-        const page = {
+      Object.entries(topic.subTopics).forEach(([subTopicKey, subTopic]) => {
+        pages.push({
           title: subTopic.heading,
-          slug: slug,
+          slug: `${topicKey}-${subTopicKey}`,
           category: categoryName,
           icon: subTopic.icon || 'mdi-file-document',
           heading: subTopic.heading,
           description: `Information about ${subTopic.heading}`,
           pageTitle: subTopic.heading
-        };
-        
-        pages.push(page);
+        });
       });
     }
   });
@@ -147,56 +292,49 @@ export function getAllPagesData() {
 }
 
 /**
- * Get support services data for specific regions or types using configuration
- * @param {string} region - Region name (optional)
- * @param {string} type - Service type (optional)
- * @returns {Array} Support services data
+ * Get support services data
+ * @param {string} region - Region name
+ * @param {string} type - Service type
+ * @returns {Array} Services data
  */
 export function getSupportServices(region = null, type = null) {
-  // Import support data from the actual JSON file
   const supportData = require('~/assets/data/supportData.json');
   
-  if (region && supportData.regionalServices[region]) {
+  if (region && supportData.regionalServices?.[region]) {
     return supportData.regionalServices[region];
   }
   
-  if (type === 'mental_health') {
-    return supportData.mentalHealthServices.National || [];
-  }
+  const typeMap = {
+    mental_health: supportData.mentalHealthServices?.National,
+    pregnancy_complication: supportData.pregnancyComplicationSupport?.National,
+    premature_birth: supportData.prematureBirthSupport?.National
+  };
   
-  if (type === 'pregnancy_complication') {
-    return supportData.pregnancyComplicationSupport.National || [];
-  }
+  if (type && typeMap[type]) return typeMap[type];
   
-  if (type === 'premature_birth') {
-    return supportData.prematureBirthSupport.National || [];
-  }
-  
-  // Return all available regions from configuration
-  const regionalConfig = chatbotConfig.intents.regional_services;
-  return Object.keys(regionalConfig.synonyms) || [];
+  return Object.keys(chatbotConfig.intents.regional_services?.synonyms || {});
 }
 
 /**
- * Get welcome message for chatbot using configuration
- * @returns {Object} Welcome message with actions
+ * Get welcome message
+ * @returns {Object} Welcome message
  */
 export function getWelcomeMessage() {
-  const greetingConfig = chatbotConfig.intents.greeting;
+  const greeting = chatbotConfig.intents.greeting;
   return {
     type: 'bot',
-    content: greetingConfig.response.message,
-    actions: greetingConfig.response.actions
+    content: greeting.response.message,
+    actions: greeting.response.actions
   };
 }
 
 /**
- * Handle action execution
+ * Handle chatbot action
  * @param {Object} action - Action object
- * @param {Function} setUserInput - Function to set user input
- * @param {Function} sendMessage - Function to send message
- * @param {Function} navigate - Function to navigate to page
- * @param {Function} closeChatbot - Function to close chatbot
+ * @param {Function} setUserInput - Set input function
+ * @param {Function} sendMessage - Send message function
+ * @param {Function} navigate - Navigate function
+ * @param {Function} closeChatbot - Close function
  */
 export function handleChatbotAction(action, setUserInput, sendMessage, navigate, closeChatbot) {
   if (action.type === 'suggestion') {
@@ -209,37 +347,24 @@ export function handleChatbotAction(action, setUserInput, sendMessage, navigate,
 }
 
 /**
- * Get action configuration from chatbot config
- * @param {string} actionType - Type of action
- * @returns {Object} Action configuration
- */
-export function getActionConfig(actionType) {
-  return chatbotConfig.actions[actionType] || {
-    description: 'Unknown action',
-    icon: 'mdi-help',
-    color: 'grey'
-  };
-}
-
-/**
- * Get all available intents from configuration
- * @returns {Array} Array of intent names
+ * Get available intents
+ * @returns {Array} Intent names
  */
 export function getAvailableIntents() {
   return Object.keys(chatbotConfig.intents);
 }
 
 /**
- * Get intent configuration by name
- * @param {string} intentName - Name of the intent
- * @returns {Object} Intent configuration
+ * Get intent configuration
+ * @param {string} intentName - Intent name
+ * @returns {Object} Intent config
  */
 export function getIntentConfig(intentName) {
   return chatbotConfig.intents[intentName] || null;
 }
 
 /**
- * Get fallback response from configuration
+ * Get fallback response
  * @returns {Object} Fallback response
  */
 export function getFallbackResponse() {

@@ -25,14 +25,23 @@
         "checks": ["monitoring", "assessment", "evaluation", "screening"]
       },
       "response": {
-        "message": "I found information about pregnancy and fetal development. Here's what I can help you with:",
+        "message": "During pregnancy, your body undergoes remarkable changes to support your growing baby. Here's what you should know:",
+        "summary": {
+          "body": "Your body transforms significantly during pregnancy with hormonal changes, increased blood volume, growing uterus, and changes to organs and systems to accommodate and nourish your baby.",
+          "placenta": "The placenta is a vital organ that connects you to your baby, providing oxygen and nutrients while removing waste. It also produces hormones essential for pregnancy.",
+          "fetal": "Your baby develops from a single cell to a fully formed human in about 40 weeks, with critical development occurring in the first trimester.",
+          "health": "Regular checks with your midwife or doctor, including ultrasounds and blood tests, help ensure both you and your baby are healthy throughout pregnancy.",
+          "general": "Understanding what's happening in your body helps you make informed decisions and recognize when something might need attention."
+        },
         "searchCategory": "pregnancy",
         "actions": [
-          { "type": "suggestion", "text": "Changes to your body", "query": "body changes" },
-          { "type": "suggestion", "text": "Roles of the placenta", "query": "placenta roles" },
-          { "type": "suggestion", "text": "Fetal development", "query": "fetal development" },
-          { "type": "suggestion", "text": "Keeping baby healthy", "query": "keeping baby healthy" },
-          { "type": "suggestion", "text": "Health checks", "query": "baby health checks" }
+          { "type": "navigate", "text": "Interact with Your Placenta", "path": "/pregnancy-interact-with-your-placenta", "description": "Interact with your placenta to understand how it works and how it can help you have a healthy pregnancy" },
+          { "type": "navigate", "text": "Changes to Your Body", "path": "/pregnancy-changes", "description": "Learn about the physical and hormonal changes during pregnancy" },
+          { "type": "navigate", "text": " Roles of the Placenta", "path": "/pregnancy-placenta", "description": "Understand how the placenta supports your baby's growth" },
+          { "type": "navigate", "text": "Fetal Development", "path": "/pregnancy-fetal-dev", "description": "Track your baby's development week by week" },
+          { "type": "suggestion", "text": "Find out services in Auckland", "query": "services in Auckland" },
+          { "type": "suggestion", "text": "Find out services in Wellington", "query": "services in Wellington" }
+
         ]
       }
     },
@@ -47,14 +56,18 @@
         "extra care": ["special care", "additional support", "intensive care", "neonatal care"]
       },
       "response": {
-        "message": "I can help you understand pregnancy complications and disorders. Here's information about common conditions:",
+        "message": "While most pregnancies progress smoothly, it's important to understand potential complications. Here's what you need to know:",
+        "summary": {
+          "fgr": "Reduced Fetal Growth (FGR) is when a baby doesn't grow as expected in the womb. Regular ultrasounds help monitor growth, and your care team will create a management plan if detected.",
+          "preeclampsia": "Pre-eclampsia is a condition involving high blood pressure and protein in urine, typically after 20 weeks. Early detection through regular check-ups is crucial for managing this condition.",
+          "diabetes": "Gestational Diabetes involves high blood sugar that develops during pregnancy. It's manageable through diet, exercise, and sometimes medication. Regular monitoring helps ensure healthy outcomes for you and baby.",
+          "general": "Pregnancy complications affect about 1 in 10 pregnancies in New Zealand. Early detection and proper care significantly improve outcomes. Your midwife and doctor are your partners in managing any complications."
+        },
         "searchCategory": "complications",
         "actions": [
-          { "type": "suggestion", "text": "Reduced fetal growth", "query": "reduced fetal growth" },
-          { "type": "suggestion", "text": "Pre-eclampsia", "query": "pre-eclampsia" },
-          { "type": "suggestion", "text": "Gestational diabetes", "query": "gestational diabetes" },
-          { "type": "suggestion", "text": "Pregnancy disorders", "query": "pregnancy disorders" },
-          { "type": "suggestion", "text": "Extra care after birth", "query": "extra care" }
+          { "type": "navigate", "text": "Learn about: Reduced Fetal Growth", "path": "/complications-fetal", "description": "Understand causes, monitoring, and management of slow fetal growth" },
+          { "type": "navigate", "text": "Understand: Pre-eclampsia", "path": "/complications-pe", "description": "Signs, risks, and treatment options for pre-eclampsia" },
+          { "type": "navigate", "text": "Manage: Gestational Diabetes", "path": "/complications-gestational-diabetes", "description": "How to manage blood sugar levels during pregnancy" }
         ]
       }
     },
@@ -68,13 +81,18 @@
         "results": ["findings", "outcomes", "interpretation", "meaning"]
       },
       "response": {
-        "message": "I can help you understand ultrasound scans and what they mean. Here's information about ultrasound imaging:",
+        "message": "Ultrasound is a safe and essential tool for monitoring your baby's health. Here's what you should understand:",
+        "summary": {
+          "what": "Ultrasound uses sound waves to create images of your baby. It's completely safe with no radiation, allowing your care team to check on your baby's growth and wellbeing.",
+          "doppler": "Doppler ultrasound is a special type that measures blood flow through the umbilical cord and baby's organs. It helps detect if your baby is getting enough oxygen and nutrients.",
+          "metrics": "Ultrasounds measure things like baby's size, amniotic fluid levels, and placental position. Your midwife or doctor will explain what the measurements mean for your pregnancy.",
+          "general": "Most pregnancies have at least 2 ultrasounds - one at 12 weeks and another at 20 weeks. Additional scans may be needed if concerns arise."
+        },
         "searchCategory": "ultrasound",
         "actions": [
-          { "type": "suggestion", "text": "What is ultrasound?", "query": "what is ultrasound" },
-          { "type": "suggestion", "text": "Doppler ultrasound in pregnancy", "query": "doppler ultrasound" },
-          { "type": "suggestion", "text": "How ultrasound detects issues", "query": "ultrasound metrics" },
-          { "type": "suggestion", "text": "What does my scan mean?", "query": "what does ultrasound scan mean" }
+          { "type": "navigate", "text": "Understand: What is Ultrasound", "path": "/ultrasound-what-is-ultrasound", "description": "Learn how ultrasound technology works and why it's used" },
+          { "type": "navigate", "text": "Explore: Doppler Ultrasound", "path": "/ultrasound-doppler", "description": "Understand blood flow monitoring and what it reveals" },
+          { "type": "navigate", "text": "Interpret: Your Ultrasound Results", "path": "/ultrasound-metric", "description": "Learn what different measurements and findings mean" }
         ]
       }
     },
@@ -89,12 +107,18 @@
         "changes": ["modifications", "adjustments", "adaptations", "transitions"]
       },
       "response": {
-        "message": "I can help you understand pregnancy care pathways in Aotearoa New Zealand. Here's information about the care system:",
+        "message": "Understanding pregnancy care in Aotearoa New Zealand helps you know what to expect. Here's what you need to know:",
+        "summary": {
+          "lmc": "In New Zealand, you choose an LMC(Leader Maternity Carer) - usually a midwife - who coordinates your pregnancy care from confirmation through to 6 weeks after birth. This care is free under the public health system.",
+          "midwife": "Most pregnant people in NZ are cared for by midwives who provide continuous, personalized care. They attend your pregnancy check-ups, are present at birth, and provide postnatal support.",
+          "pathways": "If complications arise, your LMC will refer you to specialist obstetricians or other healthcare professionals. You'll still keep your LMC who works alongside specialists to coordinate your care.",
+          "changes": "Your care may involve additional specialists if you develop complications like gestational diabetes, pre-eclampsia, or reduced fetal growth. This ensures you receive appropriate expert care while maintaining continuity.",
+          "general": "NZ's maternity system is organized around community-based primary care, with hospital specialist services available when needed. This model supports normal pregnancy while ensuring access to expertise when required."
+        },
         "searchCategory": "clinical",
         "actions": [
-          { "type": "suggestion", "text": "Midwife lead care", "query": "midwife lead care" },
-          { "type": "suggestion", "text": "How clinical care pathways may change", "query": "when care changes" },
-          { "type": "suggestion", "text": "Pregnancy care in Aotearoa", "query": "pregnancy care aotearoa" }
+          { "type": "navigate", "text": "Learn about: Midwife Lead Care", "path": "/clinical-mid-wife", "description": "Understand the role of your LMC and what to expect from midwife-led care" },
+          { "type": "navigate", "text": "Understand: When Care Changes", "path": "/clinical-when-care-changes", "description": "Learn when and why you might need specialist care during pregnancy" }
         ]
       }
     },
@@ -109,29 +133,35 @@
         "specialist": ["specialized", "expert", "professional", "specialized care"]
       },
       "response": {
-        "message": "I can help you find support services for pregnancy and parenting in Aotearoa New Zealand. Here are the available services:",
+        "message": "You're not alone - there are many support services available throughout your pregnancy journey in Aotearoa New Zealand:",
+        "summary": {
+          "universal": "All pregnant people in NZ have access to free LMC care, ultrasounds, blood tests, and hospital services. Plunket provides free support for all families with babies and young children.",
+          "mental": "Organizations like PADA (Perinatal Anxiety & Depression Aotearoa) and Whāraurau provide specialized support for emotional wellbeing during pregnancy and postpartum.",
+          "specialist": "Additional support is available for specific situations - diabetes clinics, growth restriction monitoring, pre-eclampsia management, and neonatal intensive care.",
+          "whanau": "Many services offer culturally appropriate care and support for your family/whānau, recognizing the importance of family involvement in pregnancy and parenting.",
+          "general": "Services are available across all regions of New Zealand. Your LMC can help connect you with local support services relevant to your needs."
+        },
         "actions": [
-          { "type": "suggestion", "text": "For everyone pregnant", "query": "for everyone pregnant" },
-          { "type": "suggestion", "text": "Specialist services", "query": "specialist services" },
-          { "type": "suggestion", "text": "Mental health support", "query": "mental health support" },
-          { "type": "suggestion", "text": "Pregnancy counselling", "query": "pregnancy counselling" },
-          { "type": "suggestion", "text": "Regional services", "query": "regional services" }
+          { "type": "navigate", "text": "Find: Services For Everyone", "path": "/support-services", "description": "Universal support services available to all pregnant people in NZ" },
+          { "type": "navigate", "text": "Access: Specialist Services", "path": "/support-specialist", "description": "Specialized support for specific pregnancy complications or needs" }
         ]
       }
     },
     "regional_services": {
-      "patterns": ["auckland", "wellington", "canterbury", "waikato", "bay of plenty", "hawke's bay", "northland", "otago", "southland", "taranaki", "manawatū-whanganui", "nelson marlborough", "rotorua taupō", "south canterbury", "tairāwhiti", "west coast", "wairarapa"],
+      "patterns": ["regional services", "local services", "services in", "find services", "auckland services", "wellington services", "canterbury services", "regional support", "local support", "area services","auckland", "wellington", "canterbury", "waikato", "bay of plenty", "hawke's bay", "northland", "otago", "southland", "taranaki", "manawatū-whanganui", "nelson marlborough", "rotorua taupō", "south canterbury", "tairāwhiti", "west coast", "wairarapa"],
       "synonyms": {
-        "auckland": ["tāmaki makaurau", "auckland region", "auckland city"],
-        "wellington": ["te whanganui-a-tara", "wellington region", "wellington hutt kapiti"],
-        "canterbury": ["canterbury region", "christchurch", "south canterbury"],
-        "waikato": ["waikato region", "hamilton", "waikato district"],
+        "services": ["service", "support", "facilities", "resources", "care"],
+        "regional": ["local", "area", "region", "district"],
+        "auckland": ["tāmaki makaurau", "auckland region", "auckland city", "auckland"],
+        "wellington": ["te whanganui-a-tara", "wellington region", "wellington hutt kapiti", "wellington"],
+        "canterbury": ["canterbury region", "christchurch", "south canterbury", "canterbury"],
+        "waikato": ["waikato region", "hamilton", "waikato district", "waikato"],
         "bay of plenty": ["bay of plenty region", "tauranga", "whakatāne"],
         "hawke's bay": ["hawke's bay region", "hastings", "napier"],
-        "northland": ["te tai tokerau", "northland region", "whangārei"],
-        "otago": ["otago region", "dunedin", "otago southland"],
-        "southland": ["southland region", "invercargill", "otago southland"],
-        "taranaki": ["taranaki region", "new plymouth", "taranaki base hospital"],
+        "northland": ["te tai tokerau", "northland region", "whangārei", "northland"],
+        "otago": ["otago region", "dunedin", "otago southland", "otago"],
+        "southland": ["southland region", "invercargill", "southland"],
+        "taranaki": ["taranaki region", "new plymouth", "taranaki base hospital", "taranaki"],
         "manawatū-whanganui": ["manawatū-whanganui region", "palmerston north", "whanganui"],
         "nelson marlborough": ["nelson marlborough tasman", "nelson", "marlborough"],
         "rotorua taupō": ["rotorua taupō lakes", "rotorua", "taupō"],
@@ -142,11 +172,9 @@
       "response": {
         "message": "I can help you find regional services across Aotearoa New Zealand. Here are the available regions:",
         "actions": [
-          { "type": "suggestion", "text": "Auckland services", "query": "services in Auckland" },
-          { "type": "suggestion", "text": "Wellington services", "query": "services in Wellington" },
-          { "type": "suggestion", "text": "Canterbury services", "query": "services in Canterbury" },
-          { "type": "suggestion", "text": "Waikato services", "query": "services in Waikato" },
-          { "type": "suggestion", "text": "Bay of Plenty services", "query": "services in Bay of Plenty" }
+          { "type": "navigate", "text": "For everyone pregnant", "path": "/support-services", "description": "Find the services that help you navifate pregnancy and connect with appropriate care in your region." },
+          { "type": "navigate", "text": "Find services about mental health, pregnancy complications, and premature birth (NICU/SCBU services)", "path": "/support-specialist", "description": "Find maternity care providers and services in your region." },
+          { "type": "navigate", "text": "When your baby needs extra care after birth", "path": "/complications-extra-care", "description": "Find out the hospitals in your region." }
         ]
       }
     },
@@ -160,12 +188,17 @@
         "maternal": ["mother", "maternal health", "mother's health", "parental"]
       },
       "response": {
-        "message": "I understand you're looking for mental health support during pregnancy. Here are some excellent resources available in Aotearoa New Zealand:",
+        "message": "Your mental health during pregnancy and after birth is just as important as your physical health. Here's what you need to know:",
+        "summary": {
+          "importance": " Up to 1 in 5 pregnant people experience anxiety or depression. These feelings are common, treatable, and nothing to be ashamed about. Early support makes a real difference.",
+          "anxiety": "Feeling worried, having racing thoughts, or experiencing panic are signs you may need support. Anxiety during pregnancy is very common and highly treatable with the right help.",
+          "depression": "Persistent sadness, loss of interest, difficulty bonding with baby, or feeling hopeless are signs to seek help. Depression can occur during pregnancy or after birth.",
+          "support": "PADA (Perinatal Anxiety & Depression Aotearoa) offers free helpline and resources. Whāraurau provides comprehensive mental health information. Your LMC can also refer you to specialized perinatal mental health services.",
+          "general": "Talk to your LMC, GP, or call PADA helpline 0800 111 757. Free counselling and support services are available. You deserve support and recovery is possible with the right help."
+        },
         "actions": [
-          { "type": "suggestion", "text": "PADA - Perinatal Anxiety & Depression Aotearoa", "query": "PADA perinatal anxiety" },
-          { "type": "suggestion", "text": "Whāraurau - Perinatal Mental Health Resources", "query": "Whāraurau perinatal mental health" },
-          { "type": "suggestion", "text": "Maternal mental health services", "query": "maternal mental health" },
-          { "type": "suggestion", "text": "Pregnancy counselling services", "query": "pregnancy counselling services" }
+          { "type": "navigate", "text": "Learn more: Mental Health Support", "path": "/support-services#mental-health", "description": "Access information about perinatal mental health services and resources" },
+          { "type": "navigate", "text": "Find: Specialist Services", "path": "/support-specialist", "description": "Connect with specialized mental health support during pregnancy" }
         ]
       }
     },
@@ -178,12 +211,17 @@
         "special care": ["intensive care", "neonatal care", "baby care", "premature baby care"]
       },
       "response": {
-        "message": "I can help you find information about premature birth support and neonatal care services in New Zealand:",
+        "message": "Having a premature baby can be overwhelming, but excellent care and support are available. Here's what you should know:",
+        "summary": {
+          "premature": "Babies born before 37 weeks are considered premature. About 7-8% of babies in NZ are born prematurely. The earlier a baby is born, the more specialized care they typically need.",
+          "nicu": "Neonatal Intensive Care Units provide specialized care for premature and sick newborns. They have specialist teams, advanced equipment, and 24/7 monitoring to support your baby's development.",
+          "scbu": "Special Care Baby Units (SCBU) provide care for babies who need extra support but aren't critically ill. Your baby might need help with feeding, temperature regulation, or monitoring.",
+          "support": "You can usually stay with your baby, participate in their care (kangaroo care, feeding), and be supported by the neonatal team. Organizations like Little Miracles Trust provide peer support for families.",
+          "general": "All major hospitals in NZ have neonatal units. Very premature babies may need transfer to a tertiary NICU in larger centers for specialized care."
+        },
         "actions": [
-          { "type": "suggestion", "text": "What to expect with premature birth", "query": "premature birth support" },
-          { "type": "suggestion", "text": "NICU and SCBU services", "query": "nicu scbu services" },
-          { "type": "suggestion", "text": "Regional neonatal units", "query": "regional neonatal units" },
-          { "type": "suggestion", "text": "Little Miracles Trust", "query": "little miracles trust" }
+          { "type": "navigate", "text": "Understand: Extra Care After Birth", "path": "/complications-extra-care", "description": "Learn what to expect if your baby needs special care after birth" },
+          { "type": "navigate", "text": "Find: Support Services", "path": "/support-specialist", "description": "Access support for families with premature or unwell babies" }
         ]
       }
     },
@@ -195,12 +233,204 @@
         "gdm": ["gestational diabetes mellitus", "gestational diabetes", "pregnancy diabetes"]
       },
       "response": {
-        "message": "I can help you understand diabetes in pregnancy and find relevant support services:",
+        "message": "Gestational diabetes is manageable with the right care and support. Here's what you need to know:",
+        "summary": {
+          "what": "Gestational Diabetes Mellitus (GDM) occurs when your body can't produce enough insulin during pregnancy, causing high blood sugar. It affects about 5-10% of pregnancies in NZ and usually resolves after birth.",
+          "management": "Most women manage their blood sugar through healthy eating and regular physical activity. Some may need insulin or medication. Your diabetes team will guide you with a personalized plan.",
+          "monitoring": "You'll need to check your blood sugar levels regularly (usually 4 times daily) and attend more frequent antenatal appointments. Additional ultrasounds may monitor your baby's growth.",
+          "baby": "Well-managed GDM usually results in healthy outcomes. Your baby will be monitored after birth to ensure their blood sugar is stable. Breastfeeding helps regulate your baby's blood sugar.",
+          "general": "Diabetes in pregnancy clinics provide specialist care, dietitian support, and education. Your LMC works with the diabetes team to coordinate your care throughout pregnancy."
+        },
         "actions": [
-          { "type": "suggestion", "text": "Gestational diabetes information", "query": "gestational diabetes" },
-          { "type": "suggestion", "text": "Diabetes in pregnancy clinics", "query": "diabetes in pregnancy clinic" },
-          { "type": "suggestion", "text": "Diabetes management guidelines", "query": "diabetes management pregnancy" },
-          { "type": "suggestion", "text": "Diabetes & Pregnancy New Zealand", "query": "diabetes pregnancy new zealand" }
+          { "type": "navigate", "text": "Learn about: Gestational Diabetes", "path": "/complications-gestational-diabetes", "description": "Comprehensive information about managing diabetes during pregnancy" },
+          { "type": "navigate", "text": "Find: Specialist Services", "path": "/support-specialist", "description": "Access diabetes in pregnancy clinics and support services" }
+        ]
+      }
+    },
+    "healthy_lifestyle": {
+      "patterns": ["smoking", "smoke", "cigarettes", "tobacco", "alcohol", "drinking", "drugs", "nutrition", "diet", "eating", "exercise", "fitness", "weight", "caffeine", "coffee", "tea", "healthy", "lifestyle", "keeping baby healthy", "food safety", "supplements", "vitamins", "folic acid"],
+      "synonyms": {
+        "smoking": ["smoke", "cigarettes", "tobacco", "vaping", "e-cigarettes", "nicotine", "quit smoking"],
+        "alcohol": ["drinking", "wine", "beer", "spirits", "alcoholic beverages", "liquor"],
+        "drugs": ["substances", "medication", "medicines", "recreational drugs", "illegal drugs"],
+        "nutrition": ["diet", "eating", "food", "nourishment", "meals", "healthy eating"],
+        "exercise": ["fitness", "physical activity", "workout", "movement", "activity", "active"],
+        "weight": ["body weight", "weight gain", "bmi", "body mass index", "weight management"],
+        "caffeine": ["coffee", "tea", "energy drinks", "cola", "caffeinated"],
+        "supplements": ["vitamins", "minerals", "folic acid", "folate", "iron", "calcium", "vitamin d"],
+        "food safety": ["safe eating", "food hygiene", "listeria", "toxoplasmosis", "foods to avoid"],
+        "healthy": ["health", "wellbeing", "wellness", "staying healthy", "baby health"]
+      },
+      "response": {
+        "message": "Great question about keeping your baby healthy during pregnancy! Here's what you need to know:",
+        "summary": {
+          "smoking": "It's strongly recommended to avoid all smoking and tobacco products during pregnancy. Smoking reduces oxygen supply to your baby and increases risks of premature birth, low birth weight, and developmental issues.",
+          "alcohol": "No amount of alcohol is considered safe during pregnancy. Alcohol can cause fetal alcohol spectrum disorders affecting your baby's physical and cognitive development.",
+          "nutrition": "A balanced diet rich in fruits, vegetables, whole grains, lean proteins, and dairy is essential. Folic acid (400-800mcg daily) is particularly important for preventing neural tube defects.",
+          "exercise": "Moderate physical activity like walking, swimming, or prenatal yoga is beneficial. Aim for 30 minutes most days, but always consult your midwife or doctor first.",
+          "caffeine": "Limit caffeine intake to 200mg per day (about 2 cups of instant coffee or 1 cup of brewed coffee). Excessive caffeine may increase miscarriage risk.",
+          "supplements": "In addition to folic acid, your midwife may recommend vitamin D, iron, and iodine supplements depending on your individual needs.",
+          "general": "Your lifestyle choices directly impact your baby's development. Small positive changes can make a big difference in ensuring a healthy pregnancy."
+        },
+        "searchCategory": "pregnancy",
+        "actions": [
+          { "type": "navigate", "text": "Read full guide: Keeping Baby Healthy", "path": "/pregnancy-keep-baby-healthy", "description": "Comprehensive information about nutrition, substances to avoid, and healthy lifestyle choices" },
+          { "type": "navigate", "text": "Learn about: Fetal Development", "path": "/pregnancy-fetal-dev", "description": "Understand how your lifestyle choices affect your baby's growth" }
+        ]
+      }
+    },
+    "risk_factors": {
+      "patterns": ["risk", "risk factors", "high risk", "complications risk", "factors", "causes", "prevention", "avoid complications", "reduce risk"],
+      "synonyms": {
+        "risk": ["risk factors", "danger", "hazard", "complications risk", "high risk"],
+        "factors": ["causes", "reasons", "contributors", "influences", "elements"],
+        "prevention": ["preventing", "avoid", "reduce risk", "minimize", "protect"],
+        "high risk": ["at risk", "increased risk", "vulnerable", "susceptible"]
+      },
+      "response": {
+        "message": "I can help you understand risk factors for pregnancy complications and how to reduce risks:",
+        "searchCategory": "complications",
+        "actions": [
+          { "type": "suggestion", "text": "Risk factors for complications", "query": "pregnancy complications risk factors" },
+          { "type": "suggestion", "text": "Keeping baby healthy", "query": "keeping baby healthy" },
+          { "type": "suggestion", "text": "Reduced fetal growth", "query": "reduced fetal growth" },
+          { "type": "suggestion", "text": "Pre-eclampsia risk factors", "query": "pre-eclampsia" },
+          { "type": "suggestion", "text": "Health checks during pregnancy", "query": "baby health checks" }
+        ]
+      }
+    },
+    "emergency": {
+      "patterns": ["emergency", "urgent", "bleeding", "heavy bleeding", "severe pain", "can't feel baby", "no movement", "baby not moving", "severe headache", "blurred vision", "chest pain", "shortness of breath", "severe abdominal pain", "fluid leaking", "waters broke", "contractions"],
+      "synonyms": {
+        "emergency": ["urgent", "critical", "serious", "immediate help"],
+        "bleeding": ["blood", "hemorrhage", "spotting heavy", "bleeding heavily"],
+        "pain": ["severe pain", "intense pain", "sharp pain", "cramping severe"]
+      },
+      "response": {
+        "message": "URGENT: This sounds like an emergency. If you're experiencing any of these symptoms, please:\n\n• Call 111 immediately for emergency medical help\n• Contact your LMC (midwife or lead maternity carer)\n• Go to your nearest hospital emergency department\n\nDon't wait if you're concerned - it's always better to get checked. Your safety and your baby's wellbeing are the priority.",
+        "actions": [
+          { "type": "suggestion", "text": "Non-urgent: Find my LMC contact", "query": "find midwife" },
+          { "type": "suggestion", "text": "Learn about warning signs", "query": "complications" }
+        ],
+        "priority": "critical"
+      }
+    },
+    "pregnancy_weeks": {
+      "patterns": ["weeks", "week", "trimester", "first trimester", "second trimester", "third trimester", "how many weeks", "weeks pregnant", "pregnancy timeline", "due date"],
+      "synonyms": {
+        "trimester": ["first trimester", "second trimester", "third trimester", "early pregnancy", "mid pregnancy", "late pregnancy"],
+        "weeks": ["week", "weeks pregnant", "gestational age", "pregnancy week"],
+        "timeline": ["stages", "phases", "development stages", "pregnancy journey"]
+      },
+      "response": {
+        "message": "Pregnancy is typically divided into three trimesters over approximately 40 weeks. Here's what happens during each stage:",
+        "summary": {
+          "first": "Critical period for baby's development. Major organs form. You may experience morning sickness, fatigue, and frequent urination. First ultrasound around 12 weeks.",
+          "second": "Often called the 'honeymoon period'. Energy returns, you'll feel baby move (quickening), and have your anatomy scan around 20 weeks. Baby grows rapidly.",
+          "third": "Final growth phase. Baby gains weight and develops fully. You may experience Braxton Hicks contractions. Prepare for birth and baby's arrival.",
+          "general": "Your LMC will schedule regular appointments throughout pregnancy to monitor your health and baby's growth. Frequency increases as you approach your due date."
+        },
+        "searchCategory": "pregnancy",
+        "actions": [
+          { "type": "navigate", "text": "Explore: Fetal Development", "path": "/pregnancy-fetal-dev", "description": "Track your baby's development week by week" },
+          { "type": "navigate", "text": "Understand: Body Changes", "path": "/pregnancy-changes", "description": "Learn what to expect in each trimester" },
+          { "type": "suggestion", "text": "When are ultrasounds done?", "query": "ultrasound timeline" }
+        ]
+      }
+    },
+    "baby_movement": {
+      "patterns": ["baby moving", "baby movement", "kicks", "kicking", "quickening", "feel baby", "baby active", "baby not moving", "reduced movement", "counting kicks"],
+      "synonyms": {
+        "movement": ["moving", "kicks", "kicking", "activity", "active", "motion"],
+        "quickening": ["first movements", "first kicks", "feeling baby"],
+        "reduced": ["less", "decreased", "not moving", "stopped moving", "quiet"]
+      },
+      "response": {
+        "message": "Baby movements are an important sign of your baby's wellbeing. Here's what you need to know:",
+        "summary": {
+          "when": "Most pregnant people first feel baby move between 18-25 weeks (earlier if second pregnancy). Initially feels like flutters or bubbles.",
+          "pattern": "Baby should have regular patterns of activity. Most active times vary - some babies are night owls! You'll learn your baby's normal pattern.",
+          "counting": "From 28 weeks, be aware of your baby's usual pattern. You should feel at least 10 movements in 2 hours during baby's active time.",
+          "concerns": "If you notice reduced or absent movements, or a change from normal pattern, contact your LMC immediately. Don't wait - always get checked.",
+          "general": "You know your baby best. If something feels different or concerning, always contact your healthcare provider. Never worry about 'bothering' them."
+        },
+        "actions": [
+          { "type": "navigate", "text": "Learn about: Fetal Development", "path": "/pregnancy-fetal-dev", "description": "Understand your baby's growth and movements" },
+          { "type": "suggestion", "text": "What are warning signs?", "query": "pregnancy warning signs" },
+          { "type": "suggestion", "text": "When to contact midwife", "query": "when care changes" }
+        ]
+      }
+    },
+    "emotional_wellbeing": {
+      "patterns": ["worried", "scared", "anxious", "stressed", "overwhelmed", "crying", "emotional", "feeling down", "can't cope", "struggling", "alone", "isolated", "sad"],
+      "synonyms": {
+        "anxious": ["worried", "nervous", "stressed", "overwhelmed", "panicked"],
+        "sad": ["down", "low", "depressed", "unhappy", "blue"],
+        "emotional": ["feelings", "emotions", "mood", "hormonal"],
+        "support": ["help", "someone to talk to", "counselling", "mental health"]
+      },
+      "response": {
+        "message": "It's completely normal to have many emotions during pregnancy. Your feelings are valid, and support is available. Here's what can help:",
+        "summary": {
+          "normal": "Pregnancy brings huge changes - physical, hormonal, emotional, and life adjustments. Up to 1 in 5 pregnant people experience anxiety or depression. These feelings are common and treatable.",
+          "support": "If you need someone to talk to now, call PADA helpline 0800 111 757 (24/7). They provide free, confidential support for perinatal mental health.",
+          "lmc": "Your midwife or doctor is there to support your emotional wellbeing too, not just physical health. They can help connect you with appropriate services.",
+          "partners": "Don't hesitate to reach out to family, friends, or partner. Building your support network is important for wellbeing.",
+          "general": "It's normal to feel anxious or down during pregnancy. Free counselling and mental health services are available. Recovery is possible with the right support. You deserve to feel well during this journey."
+        },
+        "actions": [
+          { "type": "navigate", "text": "Find the pregnancy services", "path": "/support-services", "description": "Find perinatal mental health resources and services" },
+          { "type": "navigate", "text": "Learn about: Perinatal Mental Health", "path": "/support-specialist?index=1", "description": "Understanding anxiety and depression in pregnancy" },
+          { "type": "suggestion", "text": "Tell me about PADA", "query": "PADA mental health support" },
+          { "type": "suggestion", "text": "Tell me about the specialist services", "query": "pregnancy complications" }
+        ]
+      }
+    },
+    "birth_preparation": {
+      "patterns": ["birth", "labour", "labor", "delivery", "giving birth", "birth plan", "birth options", "pain relief", "epidural", "c-section", "caesarean", "natural birth", "water birth", "home birth", "hospital birth"],
+      "synonyms": {
+        "birth": ["labour", "labor", "delivery", "giving birth", "childbirth"],
+        "plan": ["birth plan", "preferences", "options", "choices"],
+        "pain": ["pain relief", "epidural", "analgesia", "pain management"],
+        "caesarean": ["c-section", "cesarean", "surgical birth"],
+        "location": ["home birth", "hospital birth", "birthing centre", "where to give birth"]
+      },
+      "response": {
+        "message": "Preparing for birth is an important part of your pregnancy journey. Here's what you should know:",
+        "summary": {
+          "options": "You can choose hospital birth, home birth, or primary birthing unit depending on your circumstances and local availability. Your LMC will discuss options with you.",
+          "plan": "Consider your preferences for pain relief, positions, support people, and immediate postnatal care. Discuss these with your LMC to create a flexible plan.",
+          "pain": "Range from breathing techniques, water immersion, gas and air (Entonox), to epidural. Your options may depend on birth location and circumstances.",
+          "classes": "Free or low-cost classes help you prepare for labour, birth, and early parenting. Your LMC can recommend local options.",
+          "general": "While it's good to have preferences, birth can be unpredictable. Trust your care team and your body. The goal is a safe arrival for you and baby."
+        },
+        "actions": [
+          { "type": "navigate", "text": "Understand: Midwife Led Care", "path": "/clinical-mid-wife", "description": "Learn about your LMC's role in birth" },
+          { "type": "suggestion", "text": "Find antenatal classes", "query": "antenatal classes" },
+          { "type": "suggestion", "text": "Pain relief options", "query": "pain relief during birth" }
+        ]
+      }
+    },
+    "partner_support": {
+      "patterns": ["partner", "partner's role", "dad", "father", "support person", "family support", "what can partner do", "how to help", "partner anxious", "partner worried"],
+      "synonyms": {
+        "partner": ["dad", "father", "spouse", "support person", "significant other"],
+        "help": ["support", "assist", "contribute", "be involved"],
+        "anxious": ["worried", "nervous", "concerned", "scared"]
+      },
+      "response": {
+        "message": "Partners and support people play a vital role during pregnancy, birth, and beyond. Here's how they can help:",
+        "summary": {
+          "pregnancy": "Attend appointments with LMC, learn about pregnancy changes, help with healthy lifestyle, provide emotional support, and prepare together for baby's arrival.",
+          "emotional": "Listen without judgment, acknowledge feelings, help manage stress, and celebrate this journey together. Partners can also experience anxiety - that's normal too.",
+          "practical": "Help with household tasks, attend antenatal classes, prepare home for baby, learn about newborn care, and plan parental leave.",
+          "birth": "Be a supportive presence, help with comfort measures, communicate with care team, advocate for birth preferences, and provide encouragement.",
+          "general": "It's normal to feel anxious or uncertain. Talk to the LMC, attend classes together, and don't hesitate to ask questions or seek support for yourself."
+        },
+        "actions": [
+          { "type": "navigate", "text": "Find: Support Services", "path": "/support-services", "description": "Resources for the whole whānau" },
+          { "type": "suggestion", "text": "Antenatal classes for partners", "query": "antenatal classes" },
+          { "type": "suggestion", "text": "What happens at appointments?", "query": "pregnancy appointments" }
         ]
       }
     }
@@ -242,35 +472,17 @@
       }
     }
   },
-  "actions": {
-    "suggestion": {
-      "description": "Provide a suggested query for the user",
-      "icon": "mdi-lightbulb-outline",
-      "color": "primary"
-    },
-    "navigate": {
-      "description": "Navigate to a specific page",
-      "icon": "mdi-arrow-right",
-      "color": "success"
-    },
-    "search": {
-      "description": "Perform a search",
-      "icon": "mdi-magnify",
-      "color": "info"
-    },
-    "support": {
-      "description": "Provide support service information",
-      "icon": "mdi-heart",
-      "color": "pink"
-    }
-  },
   "fallback": {
-    "message": "I'm not sure how to help with that. Try asking me about pregnancy topics, complications, ultrasound scans, or support services.",
+    "message": "Try asking me about: pregnancy basics, complications (FGR, GDM, pre-eclampsia), healthy lifestyle, ultrasound scans, mental health support, or regional services.",
+    "summary": {
+      "topics": "I'm not quite sure what you're looking for, but I'm here to help! I can answer questions about pregnancy, health conditions, support services, and more.",
+      "examples": "Example questions: 'What is gestational diabetes?', 'How do I keep my baby healthy?', 'Find support in Auckland', 'Tell me about ultrasound'"
+    },
     "actions": [
-      { "type": "suggestion", "text": "Tell me about pregnancy", "query": "pregnancy" },
-      { "type": "suggestion", "text": "Show complications", "query": "complications" },
-      { "type": "suggestion", "text": "Explain ultrasound", "query": "ultrasound" },
-      { "type": "suggestion", "text": "Find support services", "query": "support services" }
+      { "type": "navigate", "text": "Health Complications", "path": "/complications", "description": "Information about FGR, GDM, and other conditions" },
+      { "type": "navigate", "text": "Interact with Your Placenta", "path": "/pregnancy-interact-with-your-placenta", "description": "Interact with your placenta to understand how it works and how it can help you have a healthy pregnancy" },
+      { "type": "suggestion", "text": "Find Support Services", "query": "support services" },
+      { "type": "suggestion", "text": "Ask About Ultrasound", "query": "ultrasound scan" }
     ]
   }
 }
