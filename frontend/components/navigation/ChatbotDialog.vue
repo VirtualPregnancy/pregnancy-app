@@ -1,9 +1,9 @@
 <template>
-  <div v-if="showDialog" class="chatbot-overlay" @click.self="closeChatbot">
+  <div v-if="showDialog" class="chatbot-overlay p-5" @click.self="closeChatbot">
     <div class="chatbot-container">
       <!-- Chatbot Header -->
-      <div class="chatbot-header">
-        <div class="chatbot-title">
+      <div class="chatbot-header px-5 py-4">
+        <div class="chatbot-title font-semibold text-gray-800">
           <v-icon color="primary" class="mr-2">mdi-robot</v-icon>
           <span>Pregnancy Assistant</span>
         </div>
@@ -13,19 +13,19 @@
       </div>
       
       <!-- Messages Container -->
-      <div class="messages-container" ref="messagesContainer">
+      <div class="messages-container p-4 gap-4" ref="messagesContainer">
         <div
           v-for="(message, index) in messages"
           :key="index"
           :class="['message', message.type]"
         >
           <!-- Bot Message -->
-          <div v-if="message.type === 'bot'" class="bot-message">
+          <div v-if="message.type === 'bot'" class="bot-message gap-2">
             <div class="message-avatar">
               <v-icon color="primary">mdi-robot</v-icon>
             </div>
             <div class="message-content">
-              <div class="message-bubble">
+              <div class="message-bubble px-4 py-3 text-gray-700 leading-relaxed">
                 <div
                   v-for="(text, key) in message.summary"
                   :key="key"
@@ -34,42 +34,42 @@
               </div>
               
               <!-- Action Cards -->
-              <div v-if="message.actions && message.actions.length > 0" class="action-cards">
+              <div v-if="message.actions && message.actions.length > 0" class="action-cards mt-3 gap-2">
                 <div
                   v-for="(action, idx) in message.actions"
                   :key="idx"
-                  class="action-card-item"
+                  class="action-card-item p-3"
                   @click="handleAction(action)"
                 >
-                  <div class="action-icon">
+                  <div class="action-icon mr-3">
                     <v-icon small color="primary">{{ getActionIcon(action.type) }}</v-icon>
                   </div>
                   <div class="action-content">
-                    <div class="action-title">{{ action.text }}</div>
-                    <div v-if="action.description" class="action-description">{{ action.description }}</div>
+                    <div class="action-title font-medium text-gray-800 text-sm mb-1">{{ action.text }}</div>
+                    <div v-if="action.description" class="action-description text-xs text-gray-500 leading-snug">{{ action.description }}</div>
                   </div>
                 </div>
               </div>
               
               <!-- Related Pages -->
-              <div v-if="message.searchResults && message.searchResults.length > 0" class="related-pages">
-                <div class="related-pages-header">You may also be interested in:</div>
-                <div class="related-pages-list">
+              <div v-if="message.searchResults && message.searchResults.length > 0" class="related-pages mt-4 pt-3">
+                <div class="related-pages-header text-xs text-gray-500 mb-2 font-medium">You may also be interested in:</div>
+                <div class="related-pages-list text-sm leading-relaxed">
                   <span
                     v-for="(result, idx) in message.searchResults"
                     :key="idx"
                     class="page-link"
                     @click="navigateToPage(result)"
-                  >{{ result.title }}<span v-if="idx < message.searchResults.length - 1" class="separator"> · </span></span>
+                  >{{ result.title }}<span v-if="idx < message.searchResults.length - 1" class="separator text-gray-400 mx-1"> · </span></span>
                 </div>
               </div>
             </div>
           </div>
           
           <!-- User Message -->
-          <div v-else-if="message.type === 'user'" class="user-message">
+          <div v-else-if="message.type === 'user'" class="user-message gap-2">
             <div class="message-content">
-              <div class="message-bubble">{{ message.content }}</div>
+              <div class="message-bubble px-4 py-3">{{ message.content }}</div>
             </div>
             <div class="message-avatar">
               <v-icon color="grey">mdi-account</v-icon>
@@ -79,14 +79,12 @@
         
         <!-- Typing Indicator -->
         <div v-if="isTyping" class="message bot">
-          <div class="bot-message">
+          <div class="bot-message gap-2">
             <div class="message-avatar">
               <v-icon color="primary">mdi-robot</v-icon>
             </div>
             <div class="message-content">
-              <div class="typing-indicator">
-                <span></span>
-                <span></span>
+              <div class="typing-indicator gap-1">
                 <span></span>
               </div>
             </div>
@@ -95,7 +93,7 @@
       </div>
       
       <!-- Input Area -->
-      <div class="input-area">
+      <div class="input-area px-5 py-4">
         <v-text-field
           v-model="userInput"
           placeholder="Ask me anything about pregnancy..."
@@ -334,7 +332,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
 }
 
 .chatbot-container {
@@ -353,7 +350,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 20px;
   border-bottom: 1px solid #e5e7eb;
   background: #f9fafb;
 }
@@ -361,17 +357,13 @@ export default {
 .chatbot-title {
   display: flex;
   align-items: center;
-  font-weight: 600;
-  color: #1f2937;
 }
 
 .messages-container {
   flex: 1;
   overflow-y: auto;
-  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .message {
@@ -389,7 +381,6 @@ export default {
 .bot-message, .user-message {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
   max-width: 80%;
 }
 
@@ -415,10 +406,7 @@ export default {
 
 .message-bubble {
   background: #f3f4f6;
-  padding: 12px 16px;
   border-radius: 18px;
-  color: #374151;
-  line-height: 1.5;
   word-wrap: break-word;
 }
 
@@ -428,38 +416,27 @@ export default {
 }
 
 .summary-section {
-  margin-top: 12px;
-  padding: 10px 14px;
   background: #eff6ff;
   border-left: 3px solid #60a5fa;
   border-radius: 6px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .summary-item {
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: #374151;
-  
   &:not(:last-child) {
-    padding-bottom: 6px;
     border-bottom: 1px solid #dbeafe;
   }
 }
 
 .action-cards {
-  margin-top: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .action-card-item {
   display: flex;
   align-items: flex-start;
-  padding: 12px;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   cursor: pointer;
@@ -479,7 +456,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 12px;
   flex-shrink: 0;
 }
 
@@ -488,35 +464,8 @@ export default {
   min-width: 0;
 }
 
-.action-title {
-  font-weight: 500;
-  color: #1f2937;
-  font-size: 0.875rem;
-  margin-bottom: 4px;
-}
-
-.action-description {
-  font-size: 0.8rem;
-  color: #6b7280;
-  line-height: 1.4;
-}
-
 .related-pages {
-  margin-top: 16px;
-  padding-top: 12px;
   border-top: 1px solid #e5e7eb;
-}
-
-.related-pages-header {
-  font-size: 0.8rem;
-  color: #6b7280;
-  margin-bottom: 8px;
-  font-weight: 500;
-}
-
-.related-pages-list {
-  font-size: 0.85rem;
-  line-height: 1.6;
 }
 
 .page-link {
@@ -530,15 +479,9 @@ export default {
   }
 }
 
-.separator {
-  color: #9ca3af;
-  margin: 0 4px;
-}
-
 .typing-indicator {
   display: flex;
   align-items: center;
-  gap: 4px;
   
   span {
     width: 8px;
@@ -569,7 +512,6 @@ export default {
 }
 
 .input-area {
-  padding: 16px 20px;
   border-top: 1px solid #e5e7eb;
   background: #f9fafb;
 }
@@ -587,7 +529,7 @@ export default {
   }
 }
 
-// Highlight styling
+// Highlight styling for dynamic v-html content
 ::v-deep .search-highlight {
   background-color: #fef08a;
   color: #854d0e;
