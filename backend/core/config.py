@@ -11,7 +11,7 @@ class Config:
     """Application configuration"""
     
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-    GEMINI_MODEL = "gemini-2.0-flash-exp"
+    GEMINI_MODEL = "gemini-2.0-flash-lite"
     GEMINI_RETRY_ATTEMPTS = 3
     GEMINI_RETRY_DELAY = 1.0
     

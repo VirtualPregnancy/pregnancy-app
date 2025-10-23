@@ -36,7 +36,7 @@
               <!-- Action Cards -->
               <div v-if="message.actions && message.actions.length > 0" class="action-cards">
                 <div
-                  v-for="(action, idx) in message.actions"
+                  v-for="(action, idx) in message.actions.filter(a => a.text || a.description)"
                   :key="idx"
                   class="action-card-item"
                   @click="handleAction(action)"
@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import { generateChatbotResponse, getAllPagesData, getWelcomeMessage, handleChatbotAction } from '~/utils/chatbotUtils.js';
+import { getWelcomeMessage } from '~/utils/chatbotUtils.js';
 
 export default {
   name: 'ChatbotDialog',
@@ -142,8 +142,6 @@ export default {
       userInput: '',
       messages: [],
       isTyping: false,
-      pageDataCache: {},
-      isLoadingPageData: false,
     };
   },
   
@@ -197,28 +195,36 @@ export default {
         type: 'user',
         content: userMessage
       });
+      console.log(this.messages);
       
       this.scrollToBottom();
       this.isTyping = true;
       
-      // Simulate typing delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       try {
-        // Use utils for response generation
-        const allPages = getAllPagesData();
-        let response = generateChatbotResponse(userMessage, allPages);
+        // Call backend API
+        const response = await fetch('https://pregnancy-app-tau.vercel.app/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: userMessage })
+        });
+        console.log(response);
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
         
-        // Deduplicate actions and searchResults by path
-        const deduplicatedActions = this.deduplicateByPath(response.actions || []);
-        const deduplicatedSearchResults = this.deduplicateByPath(response.searchResults || []);
+        const data = await response.json();
+        
+        // Deduplicate actions by path
+        const deduplicatedActions = this.deduplicateByPath(data.actions || []);
         
         // Add bot response
         this.messages.push({
           type: 'bot',
-          content: response.message,
-          summary: response.summary,
-          searchResults: deduplicatedSearchResults,
+          content: data.response,
+          summary: [],
+          searchResults: [],
           actions: deduplicatedActions
         });
         
@@ -236,8 +242,6 @@ export default {
       this.isTyping = false;
       this.scrollToBottom();
     },
-    
-    // Response logic moved to utils/chatbotUtils.js
     
     deduplicateByPath(items) {
       if (!items || items.length === 0) return [];
@@ -277,13 +281,15 @@ export default {
     },
     
     handleAction(action) {
-      handleChatbotAction(
-        action,
-        (query) => { this.userInput = query; },
-        () => { this.sendMessage(); },
-        (path) => { this.$router.push(path); },
-        () => { this.closeChatbot(); }
-      );
+      if (action.type === 'suggestion') {
+        this.userInput = action.query || '';
+        this.$nextTick(() => {
+          this.sendMessage();
+        });
+      } else if (action.type === 'navigate') {
+        this.$router.push(action.path);
+        this.closeChatbot();
+      }
     },
     
     navigateToPage(page) {
@@ -296,14 +302,6 @@ export default {
         this.$router.push(`/${page.slug}`);
       }
       this.closeChatbot();
-    },
-    
-    // Simplified - no external data loading needed
-    
-    // Page data logic moved to utils/chatbotUtils.js
-    
-    stripHTML(html) {
-      return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
     },
     
     scrollToBottom() {
