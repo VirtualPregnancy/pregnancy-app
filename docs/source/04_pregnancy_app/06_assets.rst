@@ -9,6 +9,7 @@ Icons
 The application uses the following icon sets:
 
 * **Pregnancy Icons**: `Pregnancy Icon Set <https://www.freevector.com/pregnancy-icon-set-21124>`_
+* **Ultrasound Icons**: `Ultrasound Icon <https://uxwing.com/ultrasound-machine-icon/>`_
 * **Other Icons**: `Material Design Icons <https://pictogrammers.com/library/mdi/>`_
 
 Images

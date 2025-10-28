@@ -1,5 +1,14 @@
+<!-- 
+  This is the right pane component for the app where the model is displayed. It contains the model, controls, and waveform sections.
+  It also contains the logo section.
+-->
 <template>
+  <div>
+  <div v-if="!isFullscreen" class="header-container">  
+    <Header />  
+  </div>
   <div class="responsive-container display-flex ">
+    
     <!-- Model Section -->
     <div class="model-section" :class="{ 'model-section-mobile': !mdAndUp }">
       <model
@@ -10,13 +19,17 @@
         :model-config="modelStates.modelConfig"
         @model-size-changed="handleModelSizeChanged"
         @model-state-updated="handleModelStateUpdate"
-
+        @fullscreen-toggle="handleFullscreenToggle"
       />
     </div>
 
-    <!-- Controls and Analytics Section -->
-    <div class="controls-section" :class="{ 'controls-section-mobile': !mdAndUp }">
-      <!-- Model Controls -->
+      <!-- Controls and Analytics Section -->
+      <div class="controls-section" :class="{ 'controls-section-mobile': !mdAndUp }">
+        <!-- Condition Selector -->
+        <div class="condition-selector-panel">
+          <ConditionSelector @conditions-changed="handleConditionsChanged" />
+        </div>
+        <!-- Model Controls -->
       <div class="controls-panel">
         <PanelControls
           :use-tube-rendering="modelStates.useTubeRendering"
@@ -36,16 +49,17 @@
 
       <!-- Waveform Panel -->
       <div class="waveform-panel">
-        <div>
-          <img class="pb-5" :src="getAssetUrl(waveformData.waveformImg)" alt="Waveform" />
-          <div class="text-center mb-3 font-italic text-sm">
-            {{ waveformData.waveformNote }}
-          </div>
-        </div>
+       
         <div class="waveform-content">
           <Waveform :waveform="waveformData" />
           <div class="mt-20 text-center mb-5">
             {{ waveformData.description }}
+          </div>
+        </div>
+        <div>
+          <img class="pb-5" size="100" :src="getAssetUrl(waveformData.waveformImg)" alt="Waveform" />
+          <div class="text-center mb-3 font-italic text-sm">
+            {{ waveformData.waveformNote }}
           </div>
         </div>
       </div>
@@ -56,6 +70,7 @@
       </div>
     </div>
   </div>
+</div>
 
 </template>
 
@@ -63,28 +78,23 @@
 import PanelControls from "../model/PanelControls.vue";
 import Waveform from "../model/Waveform.vue";
 import Logo from '@/components/Logo.vue';
-import modelData from '@/assets/data/modelData.json';
+import ConditionSelector from "../model/ConditionSelector.vue";
+import { mapGetters, mapActions } from 'vuex';
+import Header from '@/components/navigation/Header.vue';
+
 export default {
+  components: {
+    PanelControls,
+    Waveform,
+    Logo,
+    ConditionSelector,
+    Header
+  },
+  
   data() {
     return {
-      
       clientMounted: false, // Track if component is mounted on client
-      // Centralized model state management
-      modelStates: {
-        useTubeRendering: true,
-        currentPerformanceMode: "high",
-        modelName: "Loading...",
-        modelConfig: modelData.models[0].config, // Initialize with healthy model config
-        pressureColorMapping: null, // Pressure color mapping for display
-        pressureMapping: true, // Track pressure mapping state
-        isLoading: false, // Track if model is currently loading - initialize to false
-        loadingComplete: false, // Track if loading has completed
-        colorMappingType: 'pressure', // Track current color mapping type
-        renderingComplete: false, // Track if model is fully rendered and ready for interaction
-        modelSize: 200,
-      },
-      // Waveform data
-      waveformData: modelData.models[0].waveform
+      isFullscreen: false, // Track if fullscreen mode is enabled
     };
   },
 
@@ -98,6 +108,9 @@ export default {
     
     // Listen for condition events from the layout
     this.$nuxt.$on('conditions-updated', this.handleConditionsUpdated);
+    
+    // Listen for model reset events from sidebar toggle
+    this.$nuxt.$on('reset-model-to-default', this.handleModelReset);
 
     // Proactively show loading overlay until first render completes
     try {
@@ -108,6 +121,22 @@ export default {
   },
 
   computed: {
+    ...mapGetters('model', [
+      'getModelStates',
+      'getWaveformData',
+      'isModelReady',
+      'hasErrors'
+    ]),
+    
+    // Map Vuex getters to local computed properties
+    modelStates() {
+      return this.getModelStates;
+    },
+    
+    waveformData() {
+      return this.getWaveformData;
+    },
+    
     mdAndUp() {
       // Ensure consistent behavior between SSR and client
       if (!this.clientMounted) {
@@ -128,6 +157,13 @@ export default {
   },
 
   methods: {
+    ...mapActions('model', [
+      'updateColorMapping',
+      'updateModelSize',
+      'updateConditions',
+      'loadModel'
+    ]),
+    
     getAssetUrl(path) {
       const base = this.$config?.basePath || '';
       return `${base}${path}`;
@@ -145,14 +181,12 @@ export default {
       }
     },
 
-
-
-    handleColoredModelsByChanged(coloredModelsBy) {
+    // Handle color mapping changes using Vuex action
+    async handleColoredModelsByChanged(coloredModelsBy) {
       console.log('[RightPane] Color mapping changed to:', coloredModelsBy);
       
-      // Store the color mapping type in our state
-      this.modelStates.coloredModelsBy = coloredModelsBy;
-      this.modelStates.colorMappingType = coloredModelsBy; // Keep both for compatibility
+      // Use Vuex action to update color mapping
+      await this.updateColorMapping(coloredModelsBy);
       
       // Show global loading immediately for better perceived responsiveness
       try {
@@ -165,27 +199,13 @@ export default {
       this.$refs.modelComponent.reciveColoringType(coloredModelsBy);
     },
 
-    // Handle state updates from Model component
+    // Handle state updates from Model component using Vuex mutations
     handleModelStateUpdate(newStates) {
-      Object.assign(this.modelStates, newStates);
-      
-      // Ensure pressure mapping state is properly synchronized
-      if (newStates.hasOwnProperty('pressureMapping')) {
-        this.modelStates.pressureMapping = newStates.pressureMapping;
-      }
-      
-      // Handle loading state updates
-      if (newStates.hasOwnProperty('isLoading')) {
-        this.modelStates.isLoading = newStates.isLoading;
-      }
-      
-      if (newStates.hasOwnProperty('loadingComplete') && newStates.loadingComplete) {
-        this.modelStates.loadingComplete = newStates.loadingComplete;
-      }
+      // Use Vuex mutation to update states
+      this.$store.commit('model/UPDATE_MODEL_STATES', newStates);
       
       // Handle rendering complete state updates
       if (newStates.hasOwnProperty('renderingComplete')) {
-        this.modelStates.renderingComplete = newStates.renderingComplete;
         // Emit global loading overlay toggle based on rendering state
         try {
           this.$nuxt && this.$nuxt.$emit('global-loading', !newStates.renderingComplete);
@@ -195,8 +215,11 @@ export default {
       }
     },
     
-    handleModelSizeChanged(modelSize) {
-      this.modelStates.modelSize = modelSize;
+    // Handle model size changes using Vuex action
+    async handleModelSizeChanged(modelSize) {
+      // Use Vuex action to update model size
+      await this.updateModelSize(modelSize);
+      
       // Forward the size change to the model component for scaling
       if (this.$refs.modelComponent && this.$refs.modelComponent.handleModelSizeChange) {
         this.$refs.modelComponent.handleModelSizeChange(modelSize);
@@ -204,9 +227,10 @@ export default {
     },
 
     
-    // Update the model and the waveform data
-    handleConditionsUpdated(data) {
-      // update the model and transfer the config to the model component
+    // Update the model and the waveform data using Vuex action
+    async handleConditionsUpdated(data) {
+      // Use Vuex action to update conditions and model configuration
+      await this.updateConditions(data);
       try {
         this.$nuxt && this.$nuxt.$emit('global-loading', true);
       } catch (e) {
@@ -216,13 +240,39 @@ export default {
         this.$refs.modelComponent.changeModel(data.conditionData.config);
       }
 
-      // update the waveform data
-      this.waveformData = data.conditionData.waveform;
+      // update the waveform data using Vuex
+      this.$store.commit('model/SET_WAVEFORM_DATA', data.conditionData.waveform);
       
       // update model size from config
       if (data.conditionData.config && data.conditionData.config.modelSize) {
         this.modelStates.modelSize = data.conditionData.config.modelSize;
       }
+    },
+    
+    // Handle model reset when sidebar is toggled
+    handleModelReset() {
+      console.log('[RightPane] Handling model reset from sidebar toggle');
+      if (this.$refs.modelComponent && this.$refs.modelComponent.resetModelToDefault) {
+        console.log('[RightPane] Calling resetModelToDefault on model component');
+        this.$refs.modelComponent.resetModelToDefault();
+      } else {
+        console.warn('[RightPane] Model component or resetModelToDefault method not available');
+      }
+    },
+    
+    // Handle fullscreen toggle from Model component
+    handleFullscreenToggle(isFullscreen) {
+      this.handleModelReset();
+      this.isFullscreen = isFullscreen;
+      // Emit global event to layout
+      this.$nuxt.$emit('fullscreen-toggle', isFullscreen);
+    },
+    
+    // Handle conditions changed from ConditionSelector
+    handleConditionsChanged(data) {
+      console.log('[RightPane] Handling conditions changed:', data);
+      // Emit global event to layout for condition updates
+      this.$nuxt.$emit('conditions-updated', data);
     },
     
 
@@ -237,6 +287,7 @@ export default {
   beforeDestroy() {
     // Clean up event listeners
     this.$nuxt.$off('conditions-updated', this.handleConditionsUpdated);
+    this.$nuxt.$off('reset-model-to-default', this.handleModelReset);
   },
   
   components: { PanelControls, Waveform, Logo },
@@ -262,7 +313,8 @@ export default {
 // Model Section
 .model-section {
   position: relative;
-  min-height: 60vh;
+  min-height: 100vh;
+  min-width: 100%;
   width: 100%;
 
   &.model-section-mobile {
@@ -303,8 +355,18 @@ export default {
 }
 
 // Individual Panels spacing
+.condition-selector-panel {
+  margin-bottom: 10px;
+
+  .controls-section-mobile & {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+  }
+}
+
 .controls-panel {
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 
   .controls-section-mobile & {
     width: 100%;
@@ -320,7 +382,6 @@ export default {
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 16px;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
 
   img {
     max-width: 100%;

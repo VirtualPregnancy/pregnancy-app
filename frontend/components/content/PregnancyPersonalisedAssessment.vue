@@ -54,7 +54,7 @@
 
     <!-- reference -->
     <div class="reference-section">
-      <p>*Data comes from <a href="https://www.asum.com.au/wp-content/uploads/2015/09/Fetal-Measurements.pdf" target="_blank"> ASUM</a></p>
+      <p>*Data comes from <a class="ml-1" href="https://www.asum.com.au/wp-content/uploads/2015/09/Fetal-Measurements.pdf" target="_blank"> ASUM</a></p>
     </div>
   </div>
 </template>

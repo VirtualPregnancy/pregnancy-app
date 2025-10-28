@@ -33,6 +33,25 @@ export default {
     return { slug, content, pageData, defaultExpandedIndex };
   },
 
+  data() {
+    return {
+      currentExpandedIndex: this.defaultExpandedIndex
+    };
+  },
+
+  watch: {
+    '$route.query.index': {
+      handler(newIndex) {
+        if (newIndex !== undefined && newIndex !== null) {
+          this.currentExpandedIndex = parseInt(newIndex, 10);
+        } else {
+          this.currentExpandedIndex = null;
+        }
+      },
+      immediate: true
+    }
+  },
+
   computed: {
     // pageData is now loaded in asyncData
 
@@ -91,7 +110,7 @@ export default {
       baseProps.additionalResources = this.pageData.addtionalResources || [];
 
       // Add default expanded section index from URL parameter
-      baseProps.defaultExpandedIndex = this.defaultExpandedIndex;
+      baseProps.defaultExpandedIndex = this.currentExpandedIndex;
 
       return baseProps;
     },

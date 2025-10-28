@@ -53,6 +53,7 @@
             v-model="selectedRegion"
             :items="regionItems"
             @change="onRegionChange"
+            :disabled="loading"
             outlined
             dense
             hide-details
@@ -69,6 +70,7 @@
             v-model="selectedHospitalName"
             :items="hospitalItems"
             @change="onHospitalChange"
+            :disabled="loading"
             outlined
             dense
             hide-details
@@ -76,6 +78,34 @@
             class="themed-vselect"
             style="--v-theme-overlay-multiplier: 1;"
           ></v-select>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div v-if="loading" class="mt-4 p-4 text-center">
+        <div class="inline-flex items-center">
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Loading hospital data...
+        </div>
+      </div>
+
+      <!-- Error state -->
+      <div v-if="error" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm text-red-800">{{ error }}</p>
+            <button @click="loadHospitals" class="mt-2 text-sm text-red-600 underline hover:text-red-500">
+              Try again
+            </button>
+          </div>
         </div>
       </div>
 
@@ -113,10 +143,22 @@
           </a>
         </div>
       </div>
-      <!-- Disclaimer -->
-    <div class="text-xs text-gray-500 mt-6">
-      Data collected from <a href="https://catalogue.data.govt.nz/dataset/certified-health-care-providers" target="_blank" rel="noopener noreferrer" class="underline ml-1">catalogue.data.govt.nz</a>. It may not always be up to date.
-    </div>
+      <!-- Data Attribution -->
+      <div class="text-xs text-gray-500 mt-6 p-2 bg-gray-50 rounded border">
+        <div class="mb-1">
+          <strong>Source:</strong> 
+          <a href="https://catalogue.data.govt.nz/dataset/certified-health-care-providers" target="_blank" rel="noopener noreferrer" class="underline text-blue-600">
+            NZ Government Open Data
+          </a>
+        </div>
+        <div>
+          <strong>License:</strong> 
+          <a href="https://opendefinition.org/od/2.1/en/" target="_blank" rel="noopener noreferrer" class="underline text-blue-600">
+            Open Definition 2.1
+          </a>
+          - Free to access, use, modify, and share
+        </div>
+      </div>
     </section>
 
     <!-- Support services link -->
@@ -137,10 +179,8 @@
 </template>
 
 <script>
-// Load CSVs as raw text via webpack raw-loader
-import publicHospitalCsv from 'raw-loader!~/assets/data/hospital/LegalEntitySummaryPublicHospital.csv';
-import ngoHospitalCsv from 'raw-loader!~/assets/data/hospital/LegalEntitySummaryNGOHospital.csv';
-import fertilityCsv from 'raw-loader!~/assets/data/hospital/LegalEntitySummaryFertility.csv';
+// Import clean API service
+import hospitalApiService from '~/services/hospitalApi.js';
 
 export default {
   layout: 'default',
@@ -152,56 +192,51 @@ export default {
       selectedRegion: '',
       selectedHospitalName: '',
       selectedHospital: null,
+      loading: false,
+      error: null,
     };
   },
   mounted() {
     this.loadHospitals();
   },
   methods: {
-    loadHospitals() {
-      const all = [];
-      const addFromCsv = (csvText) => {
-        const rows = this.parseCsv(csvText).filter(r => r.length > 0);
-        if (!rows.length) return;
-        const header = rows[0];
-        const nameIdx = header.findIndex(h => /Premises Name/i.test(h));
-        const addr1Idx = header.findIndex(h => /Premises Address Other/i.test(h));
-        const addr2Idx = header.findIndex(h => /Premises Address(?!.*Other)/i.test(h));
-        const suburbIdx = header.findIndex(h => /Premises Address Suburb/i.test(h));
-        const cityIdx = header.findIndex(h => /Premises Address Town|City/i.test(h));
-        const postIdx = header.findIndex(h => /Premises Address Post Code/i.test(h));
-        const websiteIdx = header.findIndex(h => /Premises Website/i.test(h));
-        const typeIdx = header.findIndex(h => /Certification Service Type/i.test(h));
-        const svcTypesIdx = header.findIndex(h => /Service Types/i.test(h));
-        const bedsIdx = header.findIndex(h => /Total Beds/i.test(h));
+    async loadHospitals() {
+      this.loading = true;
+      this.error = null;
+      
+      try {
+        const allHospitals = await Promise.all([
+          hospitalApiService.fetchAllRecords('publicHospitals'),
+          hospitalApiService.fetchAllRecords('ngoHospitals'),
+          hospitalApiService.fetchAllRecords('fertilityClinic')
+        ]);
 
-        rows.slice(1).forEach((cols, i) => {
-          const name = (cols[nameIdx] || '').trim();
-          if (!name) return;
-          const item = {
-            id: `${name}-${i}-${all.length}`,
-            name,
-            addr1: (cols[addr1Idx] || '').trim(),
-            addr2: (cols[addr2Idx] || '').trim(),
-            suburb: (cols[suburbIdx] || '').trim(),
-            city: (cols[cityIdx] || '').trim(),
-            postcode: (cols[postIdx] || '').trim(),
-            website: (cols[websiteIdx] || '').trim(),
-            type: (cols[typeIdx] || '').trim(),
-            serviceTypes: (cols[svcTypesIdx] || '').trim(),
-            beds: (cols[bedsIdx] || '').trim(),
-            region: (cols[cityIdx] || '').trim(),
-          };
-          all.push(item);
-        });
-      };
+        // Flatten and combine all hospital data
+        const combinedHospitals = allHospitals.flat();
+        
+        this.hospitals = combinedHospitals.sort((a, b) => a.name.localeCompare(b.name));
+        this.regions = this.extractUniqueRegions(combinedHospitals);
+        
+      } catch (error) {
+        console.error('Error loading hospitals:', error);
+        this.error = 'Failed to load hospital data. Please try again later.';
+      } finally {
+        this.loading = false;
+      }
+    },
 
-      addFromCsv(publicHospitalCsv);
-      addFromCsv(ngoHospitalCsv);
-      addFromCsv(fertilityCsv);
-
-      this.hospitals = all.sort((a, b) => a.name.localeCompare(b.name));
-      this.regions = Array.from(new Set(all.map(h => h.region).filter(Boolean))).sort((a, b) => a.localeCompare(b));
+    /**
+     * Extract unique regions from hospital data
+     * @param {Array} hospitals - Hospital data array
+     * @returns {Array} Sorted array of unique regions
+     */
+    extractUniqueRegions(hospitals) {
+      const regions = hospitals
+        .map(h => h.region)
+        .filter(region => region && region.trim() !== '')
+        .filter((region, index, self) => self.indexOf(region) === index);
+      
+      return regions.sort((a, b) => a.localeCompare(b));
     },
 
     onHospitalChange() {
@@ -229,71 +264,6 @@ export default {
     splitTypes(val) {
       if (!val) return [];
       return val.split(',').map(s => s.trim()).filter(Boolean);
-    },
-
-    // Minimal CSV parser handling quoted fields and commas inside quotes
-    parseCsv(text) {
-      const rows = [];
-      let row = [];
-      let cur = '';
-      let inQuotes = false;
-      let i = 0;
-      while (i < text.length) {
-        const ch = text[i];
-        if (inQuotes) {
-          if (ch === '"') {
-            if (i + 1 < text.length && text[i + 1] === '"') {
-              cur += '"';
-              i += 2;
-              continue;
-            } else {
-              inQuotes = false;
-              i++;
-              continue;
-            }
-          } else {
-            cur += ch;
-            i++;
-            continue;
-          }
-        } else {
-          if (ch === '"') {
-            inQuotes = true;
-            i++;
-            continue;
-          }
-          if (ch === ',') {
-            row.push(cur);
-            cur = '';
-            i++;
-            continue;
-          }
-          if (ch === '\n' || ch === '\r') {
-            // finalize row on newline
-            if (cur.length || row.length) {
-              row.push(cur);
-              rows.push(row);
-              row = [];
-              cur = '';
-            }
-            // skip \r\n combinations
-            if (ch === '\r' && i + 1 < text.length && text[i + 1] === '\n') {
-              i += 2;
-            } else {
-              i++;
-            }
-            continue;
-          }
-          cur += ch;
-          i++;
-        }
-      }
-      if (cur.length || row.length) {
-        row.push(cur);
-        rows.push(row);
-      }
-      // Trim header/footers that may include empty lines
-      return rows.map(r => r.map(c => (c || '').trim()));
     },
   },
   computed: {

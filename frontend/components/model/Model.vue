@@ -12,37 +12,36 @@
       <v-btn @click="showHelpDialog = true" color="primary" icon>
         <v-icon :size="mdAndUp ? 30 : 24">mdi-help-circle-outline</v-icon>
       </v-btn>
+      <!-- Fullscreen Icon -->
+      <v-btn @click="toggleFullscreen" v-if="mdAndUp" color="primary" icon>
+        <v-icon :size="mdAndUp ? 30 : 24">{{ isFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen' }}</v-icon>
+      </v-btn>
     </div>
 
     <!-- Scale Bar -->
-    <div
+    <!-- <div
       v-if="scaleBarConfig && scaleBarConfig.enabled"
-      class="absolute top-20 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
+      class="absolute top-20 left-1/2 transform -translate-x-1/2 z-20 pointer-events-none"
     >
       <div class="rounded px-3 py-2 flex flex-col items-center gap-1">
-        <!-- Scale bar with end markers -->
         <div
           class="relative flex items-center"
           :style="{ width: scaleBarConfig.length + 'px' }"
         >
-          <!-- Left vertical marker -->
           <div
             class="absolute left-0 bg-black"
             :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"
           ></div>
-          <!-- Horizontal line -->
           <div
             class="bg-black mx-1"
             :class="mdAndUp ? 'h-0.5' : 'h-0.5'"
             :style="{ width: scaleBarConfig.length - 8 + 'px' }"
           ></div>
-          <!-- Right vertical marker -->
           <div
             class="absolute right-0 bg-black"
             :class="mdAndUp ? 'w-0.5 h-3' : 'w-0.5 h-2'"
           ></div>
         </div>
-        <!-- Label -->
         <div
           class="text-black font-semibold text-shadow-sm whitespace-nowrap"
           :class="mdAndUp ? 'text-sm' : 'text-xs'"
@@ -50,12 +49,11 @@
           {{ scaleBarConfig.label }}
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- Help Dialog -->
     <v-dialog v-model="showHelpDialog" max-width="400" persistent>
       <v-card class="help-dialog">
         <v-card-title class="text-h6 pb-2">
-          <v-icon left color="info">mdi-gesture-tap</v-icon>
           Model Controls 
         </v-card-title>
         <v-card-text class="pt-0">
@@ -150,6 +148,8 @@ export default {
       scaleBarWidth: 50, // Default width in pixels
       // Help dialog state
       showHelpDialog: false, // Control help dialog visibility
+      // Fullscreen state
+      isFullscreen: false, // Track fullscreen mode
     };
   },
 
@@ -251,9 +251,11 @@ export default {
           }
         }
 
-        // Nudge an update if available
+        // Nudge an update if available, but don't block the main thread
         if (typeof controls.update === "function") {
-          controls.update();
+          requestAnimationFrame(() => {
+            controls.update();
+          });
         }
       } catch (e) {
         console.warn("[Model] Failed to apply control tuning:", e);
@@ -619,45 +621,128 @@ export default {
     // Handle model size changes from PanelControls
     handleModelSizeChange(newSize) {
       if (this.vtkLoader && this.vtkLoader.scene) {
-        this.vtkLoader.scaleModel(newSize * 2);
-        // Update controls to keep distances proportional to size
-        this.applyControlTuning();
+        // Use requestAnimationFrame to prevent blocking the main thread
+        requestAnimationFrame(() => {
+          this.vtkLoader.scaleModel(newSize * 2);
+          // Update controls to keep distances proportional to size
+          this.applyControlTuning();
+        });
       }
     },
 
     // Reset model to default position, zoom, and remove any effects
     resetModelToDefault() {
+      console.log("[Model] Resetting model to default");
       if (!this.scene) {
         console.warn("[Model] Scene not available for reset");
         return;
       }
 
-      try {
-        this.handleModelSizeChange(this.modelConfig.modelSize);
-        this.$emit("model-size-changed", this.modelConfig.modelSize);
-        // Reset camera to default view
-        const viewPath = this.getAssetPath("modelView/noInfarct_view.json");
-        this.scene.loadViewUrl(viewPath);
+      // Use requestAnimationFrame to ensure smooth UI updates
+      requestAnimationFrame(() => {
+        try {
+          // First, clear any temporary data
+          if (this.vtkLoader) {
+            console.log("[Model] Clearing temporary data");
+            this.vtkLoader.clearTemporaryData();
+          }
 
-        // Trigger window resize to ensure proper rendering
-        this.scene.onWindowResize();
+          // Reset model size first
+          if (this.modelConfig && this.modelConfig.modelSize) {
+            console.log("[Model] Resetting model size to:", this.modelConfig.modelSize);
+            this.handleModelSizeChange(this.modelConfig.modelSize);
+            this.$emit("model-size-changed", this.modelConfig.modelSize);
+          }
 
-        // Clear any zoom/pan transformations and reset to initial state
-        if (this.vtkLoader) {
-          // Remove any overlaid data or effects
-          this.vtkLoader.clearTemporaryData();
+          // Try to reset camera controls directly first
+          if (this.scene && this.scene.controls) {
+            console.log("[Model] Resetting camera controls");
+            const controls = this.scene.controls;
+            
+            // Reset camera position and target to defaults
+            if (controls.object && controls.target) {
+              controls.object.position.set(0, 0, 500);
+              controls.target.set(0, 0, 0);
+              controls.update();
+            }
+          }
+
+          // Apply control tuning before loading view
+          this.applyControlTuning();
+
+          // Reset camera to default view with proper timing
+          const viewPath = this.getAssetPath("modelView/noInfarct_view.json");
+          console.log("[Model] Loading camera view from:", viewPath);
+          
+          // Load the view
+          this.scene.loadViewUrl(viewPath);
+          
+          // Force a render update immediately
+          if (this.scene && this.scene.render) {
+            this.scene.render();
+          }
+          
+          // Give the view time to load and then trigger resize
+          setTimeout(() => {
+            console.log("[Model] Triggering window resize after view load");
+            if (this.scene && this.scene.onWindowResize) {
+              this.scene.onWindowResize();
+            }
+            
+            // Force another render after resize
+            if (this.scene && this.scene.render) {
+              this.scene.render();
+            }
+            
+            // Apply control tuning again after resize
+            setTimeout(() => {
+              this.applyControlTuning();
+              
+              // Final render to ensure everything is updated
+              if (this.scene && this.scene.render) {
+                this.scene.render();
+              }
+            }, 100);
+          }, 100);
+
+          // Emit state update to parent
+          this.$emit("model-state-updated", {
+            modelName: this.modelName || "Placental Arterial Tree",
+            resetTriggered: true,
+          });
+
+          // If the above doesn't work, try reloading the entire model as a fallback
+          setTimeout(() => {
+            console.log("[Model] Fallback: attempting to reload model");
+            this.loadTree({
+              clearScene: true,
+              colorMappingType: this.currentColorMappingType
+            });
+          }, 500);
+        } catch (error) {
+          console.error("[Model] Error resetting model to default:", error);
         }
+      });
+    },
 
-        // Ensure controls remain within sane limits after reset
-        this.applyControlTuning();
-
-        // Emit state update to parent
-        this.$emit("model-state-updated", {
-          modelName: this.modelName || "Placental Arterial Tree",
-          resetTriggered: true,
-        });
-      } catch (error) {
-        console.error("[Model] Error resetting model to default:", error);
+    // Toggle fullscreen mode and reload model
+    toggleFullscreen() {
+      this.isFullscreen = !this.isFullscreen;
+      
+      // Emit fullscreen toggle event to parent layout
+      this.$emit('fullscreen-toggle', this.isFullscreen);
+      
+      // If entering fullscreen, reload the model after a short delay
+      if (this.isFullscreen) {
+        console.log("[Model] Entering fullscreen mode, reloading model");
+        setTimeout(() => {
+          this.loadTree({
+            clearScene: true,
+            colorMappingType: this.currentColorMappingType
+          });
+        }, 300); // Give time for fullscreen transition
+      } else {
+        console.log("[Model] Exiting fullscreen mode");
       }
     },
   },
@@ -726,11 +811,9 @@ export default {
 
 .model-info {
   font-size: 1.2em;
-  color: white;
-  font-weight: 500;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  color: black;
+  font-weight: bold;
   white-space: nowrap;
-  background-color: var(--v-info-base);
   padding: 8px 16px;
   border-radius: 4px;
 }

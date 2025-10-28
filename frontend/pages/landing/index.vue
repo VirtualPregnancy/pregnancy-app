@@ -5,60 +5,78 @@
       <Menu />
     </div>
     
-    <!-- Three Column Layout -->
-    <div class="landing-container">
-      <div class="landing-row">
-        
-        <!-- Left Column - Title and Content -->
-        <div class="column left-column">
-          <div class="column-content">
-            <div class="mb-4">
-              <Logo />
-            </div>
-            <h1 class="main-title">
-              {{ landingPageData.title }}
-            </h1>
-            <p class="intro-text">
-              {{ landingPageData.description }}
-
-            </p>
-          </div>
-        </div>
-
-        <!-- Cards Columns -->
-        <div 
-          v-for="(columnItems, columnIndex) in cardColumns" 
-          :key="columnIndex"
-          class="column cards-column"
-        >
-          <div class="column-content">
-            <div class="cards-container">
-              <div 
-                v-for="item in columnItems" 
-                :key="item.title"
-                class="card-item"
-                :style="{ backgroundColor: item.backgroundColor }"
-                @click="navigateToPage(item.link)"
-              >
-                <div class="card-icon">
-                  <img 
-                    :src="item.image" 
-                    :alt="item.title"
-                    @error="onImageError"
-                  />
-                </div>
-                <div class="card-content">
-                  <h3 class="card-title">{{ item.title }}</h3>
-                  <p class="card-description">{{ item.description }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-
-      </div>
+    <!-- Search Button -->
+    <div class="search-button fixed top-5 right-5 z-50">
+      <v-btn
+        fab
+        small
+        color="primary"
+        @click="showSearchDialog = true"
+        title="Search"
+      >
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+      <v-btn
+        fab
+        small
+        color="primary"
+        @click="showChatbotDialog = true"
+        title="Chatbot"
+      >
+        <v-icon>mdi-robot</v-icon>
+      </v-btn>
     </div>
+    
+    <!-- Top-Bottom Layout -->
+    <div class="landing-container">
+      
+      <!-- Top Section - Title and Description -->
+      <div class="top-section">
+        <div class="top-content">
+          
+          <h1 class="main-title">
+            {{ landingPageData.title }}
+          </h1>
+          <p class="intro-text">
+            {{ landingPageData.description }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Bottom Section - Cards in Rows -->
+      <div class="bottom-section">
+        <div class="cards-grid">
+          <div 
+            v-for="item in landingPageData.items" 
+            :key="item.title"
+            class="card-item"
+            :style="{ backgroundColor: item.backgroundColor }"
+            @click="navigateToPage(item.link)"
+          >
+            <div class="card-icon">
+              <img 
+                :src="getImagePath(item.image)" 
+                :alt="item.title"
+                @error="onImageError"
+              />
+            </div>
+            <div class="card-content">
+              <h3 class="card-title">{{ item.title }}</h3>
+              <p class="card-description">{{ item.description }}</p>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <div class="mb-6">
+        <Logo />
+      </div>
+
+    </div>
+    
+    <!-- Search Dialog Component -->
+    <SearchDialog v-model="showSearchDialog" />
+    <ChatbotDialog v-model="showChatbotDialog" />
   </v-app>
 </template>
 
@@ -66,35 +84,27 @@
 import landingPageData from '@/assets/data/landingPageData.json';
 import Menu from '@/components/landing/Menu.vue';
 import Logo from '@/components/Logo.vue';
-
+import SearchDialog from '@/components/navigation/SearchDialog.vue';
+import ChatbotDialog from '@/components/navigation/ChatbotDialog.vue';
 export default {
   layout: 'empty',
   components: {
     Menu,
-    Logo
+    Logo,
+    SearchDialog,
+    ChatbotDialog
   },
   data() {
     return {
-      landingPageData: landingPageData
+      landingPageData: landingPageData,
+      showSearchDialog: false,
+      showChatbotDialog: false
     }
   },
   computed: {
-    cardColumns() {
-      const processedItems = landingPageData.items.map(item => ({
-        ...item,
-        image: this.getImagePath(item.image)
-      }));
-      
-      // Split into two columns: [0,1,2] and [3,4,5]
-      const middleColumn = processedItems.filter(item => item.index <= 2);
-      const rightColumn = processedItems.filter(item => item.index > 2);
-      
-      return [middleColumn, rightColumn];
-    },
     mdAndUp() {
       return this.$vuetify.breakpoint.mdAndUp;
     },
-    
   },
   
   methods: {
@@ -133,7 +143,9 @@ export default {
       // Set a fallback or hide the image instead of retrying
       event.target.style.display = 'none';
     },
-    
+    toggleChatbot() {
+      this.showChatbotDialog = true;
+    },
     
   }
 };
@@ -164,11 +176,24 @@ export default {
   }
 }
 
+.search-button {
+  .v-btn {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
 .landing-container {
   min-height: 100vh;
   width: 100vw;
   background: var(--v-backgroundAlt-base);
   display: flex;
+  flex-direction: column;
   position: relative;
   
   &::before {
@@ -186,58 +211,29 @@ export default {
   }
 }
 
-.landing-row {
-  display: flex;
-  width: 100%;
-  height: 100%;
+/* Top Section Styles */
+.top-section {
+  flex: 0 0 auto;
+  padding: 4rem 2rem 2rem;
   position: relative;
   z-index: 1;
 }
 
-.column {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  
-  &.left-column {
-    flex: 0 0 24%;
-    background: rgba(255, 255, 255, 0.02);
-  }
-  
-  &.cards-column {
-    flex: 0 0 38%;
-    background: rgba(255, 255, 255, 0.01);
-    
-    &:last-child {
-      background: rgba(255, 255, 255, 0.02);
-    }
-  }
-}
-
-.column-content {
-  padding: 5em 2em;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Left Column Styles */
-.left-column .column-content {
+.top-content {
+  margin: 0 auto;
   text-align: center;
-  align-items: center;
 }
 
 .main-title {
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: bold;
   color: var(--v-primary-base);
-  margin-bottom: 1em;
+  margin-bottom: 1.5rem;
   line-height: 1.2;
   
   .title-gradient {
     display: block;
-    background:  var(--v-info-base);
+    background: var(--v-info-base);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -255,44 +251,27 @@ export default {
 }
 
 .intro-text {
-  font-size: 1rem;
+  font-size: 1.25rem;
   line-height: 1.6;
   color: var(--v-info-base);
-  
-  /* Responsive font sizes using Tailwind-like approach */
-  @media (min-width: 1536px) {
-    font-size: 1.4rem; /* 2xl screens */
-  }
-  
-  @media (min-width: 1280px) and (max-width: 1535px) {
-    font-size: 1rem; /* xl screens */
-  }
-  
-  @media (min-width: 1024px) and (max-width: 1279px) {
-    font-size: 1rem; /* lg screens */
-  }
-  
-  @media (min-width: 768px) and (max-width: 1023px) {
-    font-size: 0.9375rem; /* md screens */
-  }
-  
-  @media (min-width: 640px) and (max-width: 767px) {
-    font-size: 0.875rem; /* sm screens */
-  }
-  
-  @media (max-width: 639px) {
-    font-size: 0.8125rem; /* xs screens */
-  }
+  margin: 0 auto;
 }
 
+/* Bottom Section Styles */
+.bottom-section {
+  flex: 1;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
 
-/* Cards Styles */
-.cards-container {
-  display: flex;
-  flex-direction: column;
-  gap: 2dvh;
-  height: 100%;
-  justify-content: center;
+.cards-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  justify-items: center;
 }
 
 .card-item {
@@ -302,7 +281,9 @@ export default {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  min-height: 20dvh;
+  min-height: 120px;
+  width: 100%;
+  max-width: 400px;
   
   &:hover {
     transform: translateY(-5px);
@@ -311,23 +292,23 @@ export default {
 }
 
 .card-icon {
-  flex: 0 0 10dvh;
+  flex: 0 0 80px;
   background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1dvh;
+  padding: 1rem;
   
   img {
-    width: 10dvh;
-    height: 10dvh;
+    width: 60px;
+    height: 60px;
     object-fit: contain;
   }
 }
 
 .card-content {
   flex: 1;
-  padding: 1dvh 2dvh;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -335,15 +316,15 @@ export default {
 
 .card-title {
   color: white;
-  font-size: 1.5em;
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 0.5dvh;
+  margin-bottom: 0.5rem;
   line-height: 1.3;
 }
 
 .card-description {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 1em;    
+  font-size: 0.95rem;    
   line-height: 1.4;
   margin: 0;
 }
@@ -351,15 +332,16 @@ export default {
 /* Responsive Design */
 @media (max-width: 1200px) {
   .main-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
   
-  .card-title {
-    font-size: 1.2rem;
+  .intro-text {
+    font-size: 1.1rem;
   }
   
-  .card-description {
-    font-size: 0.9rem;
+  .cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
   }
 }
 
@@ -374,64 +356,88 @@ export default {
     min-height: 100vh;
   }
   
-  .landing-row {
-    flex-direction: column;
-    height: auto;
+  .top-section {
+    padding: 3rem 1rem 1.5rem;
   }
   
-  .column {
-    flex: none !important;
-    height: auto;
-    min-height: auto;
-    
-    &.left-column {
-      min-height: 50vh;
-      display: flex;
-      align-items: center;
-    }
-    
-    &.cards-column {
-      min-height: auto;
-      
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-  
-  .column-content {
-    padding: 20px 15px;
-    height: auto;
-    min-height: auto;
+  .bottom-section {
+    padding: 1rem;
   }
   
   .main-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
   
-
+  .intro-text {
+    font-size: 1rem;
+  }
   
-  .cards-container {
-    gap: 15px;
-    justify-content: flex-start;
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .card-item {
     min-height: 100px;
+    max-width: none;
   }
   
   .card-icon {
     flex: 0 0 60px;
     
     img {
-      width: 35px;
-      height: 35px;
+      width: 40px;
+      height: 40px;
     }
+  }
+  
+  .card-content {
+    padding: 1rem;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+  }
+  
+  .card-description {
+    font-size: 0.9rem;
   }
   
   .hamburger-menu {
     top: 10px;
     left: 10px;
+  }
+  
+  .search-button {
+    top: 10px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-section {
+    padding: 2rem 1rem 1rem;
+  }
+  
+  .main-title {
+    font-size: 1.75rem;
+  }
+  
+  .intro-text {
+    font-size: 0.95rem;
+  }
+  
+  .card-item {
+    min-height: 90px;
+  }
+  
+  .card-icon {
+    flex: 0 0 50px;
+    
+    img {
+      width: 30px;
+      height: 30px;
+    }
   }
 }
 </style>

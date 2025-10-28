@@ -1,26 +1,27 @@
 <template>
   <div class="quick-access-container" v-if="Object.keys(subtopics).length > 1">
-    <div class="quick-access-header">
+
+    <!-- Section title - always visible -->
+    <div class="section-title-container" v-if="!isMobile">
       <h3 class="section-title">
         <v-icon left color="accent">mdi-compass-outline</v-icon>
-        {{ topicTitle + ' Menu' || 'Quick Access' }}
+        What's in this section?
       </h3>
     </div>
 
-    <div class="access-buttons">
-      <v-btn 
+    <!-- Navigation menu - always visible on desktop, collapsible on mobile -->
+    <nav class="nav-menu" :class="{ 'mobile-hidden': isMobile && isMobileCollapsed }">
+      <nuxt-link 
         v-for="(subtopic, key) in subtopics" 
         :key="key"
-        class="access-btn" 
-        :class="{ 'active-btn': isCurrentPage(key) }"
-        large 
-        block
+        class="nav-item" 
+        :class="{ 'nav-item--active': isCurrentPage(key) }"
         :to="navTo(key)"
       >
-        <v-icon left>{{ subtopic. icon }}</v-icon>
-        <span class="btn-text">{{ subtopic.heading }}</span>
-      </v-btn>
-    </div>
+        <v-icon class="nav-icon" size="18">{{ subtopic.icon }}</v-icon>
+        <span class="nav-text">{{ subtopic.heading }}</span>
+      </nuxt-link>
+    </nav>
   </div>
 </template>
 
@@ -40,12 +41,27 @@ export default {
     topicTitle: {
       type: String,
       default: ''
+    },
+    isMobileCollapsed: {
+      type: Boolean,
+      default: false
+    },
+    isMobile: {
+      type: Boolean,
+      default: false
     }
+  },
+
+  data() {
+    return {}
   },
 
   computed: {
     currentSlug() {
       return this.$route.params.slug;
+    },
+    mdAndUp() {
+      return this.$vuetify.breakpoint.mdAndUp;
     }
   },
 
@@ -67,111 +83,128 @@ export default {
 
     navTo(key) {
       const base = { name: 'slug', params: { slug: `${this.parentSlug}-${key}` } };
-      // On mobile, add hash to jump below the submenu into content
+      // On mobile, add hash to scroll to leftpane bottom
       const isMobile = !this.$vuetify.breakpoint.mdAndUp;
-      return isMobile ? { ...base, hash: '#content-start' } : base;
-    }
+      return isMobile ? { ...base, hash: '#leftpane-bottom' } : base;
+    },
+  },
+
+  mounted() {
+    // Component mounted
+  },
+
+  beforeDestroy() {
+    // Component destroyed
   }
 };
 </script>
 
 <style scoped lang="scss">
 .quick-access-container {
-  padding: 15px;
-  background: var(--v-subSuccess-base);
-  border-radius: 8px;
-  border: 1px solid var(--v-secondary-base);
-  margin-bottom: 10px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  margin-bottom: 0;
+  position: relative;
+}
+
+
+// Desktop header styles
+.desktop-header {
+  .quick-access-header {
+    margin-bottom: 16px;
+    padding-left: 16px;
+  }
 }
 
 .quick-access-header {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  padding-left: 16px;
+}
+
+.section-title-container {
+  margin-bottom: 16px;
+  padding-left: 16px;
 }
 
 .section-title {
-  color: black;
-  font-size: 1.3rem;
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 500;
   margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
-.access-buttons {
+.nav-menu {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 10px;
-  padding: 0.5rem;
+  gap: 0;
+  margin-bottom: 0;
+  padding: 0;
   
-  .access-btn {
-    min-height: 50px;
-    height: auto !important;
-    font-weight: 500;
-    background-color: var(--v-buttonMain-base);
-    color: var(--v-buttonText-base);
-    text-transform: none;
-    justify-content: flex-start;
-    text-align: left;
-    padding: 12px 16px !important;
+  // Mobile collapse behavior
+  &.mobile-hidden {
+    display: none;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    color: black;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.4;
+    border-radius: 6px;
+    margin-bottom: 4px;
+    background-color: #dbeafe;
+    transition: all 0.15s ease;
     
-    
-    ::v-deep .v-btn__content {
-      width: 100%;
-      height: auto !important;
-      white-space: normal !important;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      flex-wrap: nowrap;
-      gap: 8px;
-      padding: 4px 0;
-    }
-    
-    
-    ::v-deep .v-icon {
-      margin-right: 0 !important;
-      margin-left: 0 !important;
+    .nav-icon {
+      margin-right: 12px;
+      color: inherit;
       flex-shrink: 0;
-      align-self: flex-start;
-      margin-top: 2px;
     }
     
-    .btn-text {
-      white-space: normal !important;
+    .nav-text {
+      flex: 1;
+      white-space: normal;
       word-break: break-word;
       overflow-wrap: break-word;
-      hyphens: auto;
-      width: 100%;
-      line-height: 1.4;
-      flex: 1;
-      display: block;
-      text-align: left;
-      font-size: 0.95rem;
-      
-     
-      word-wrap: break-word;
-      -webkit-hyphens: auto;
-      -moz-hyphens: auto;
-      -ms-hyphens: auto;
     }
     
     &:hover {
-        transform: translateX(4px);
-        transition: transform 0.2s ease;
-        background-color: var(--v-buttonMainHover-base);
-        color: var(--v-buttonTextHover-base);
+      background-color: #b1cde7;
+      color: #334155;
     }
     
-    &.active-btn {
-        background-color: var(--v-buttonMainActive-base);
-        color: var(--v-buttonTextActive-base);
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        scale: 1.02;
-
+    &.nav-item--active {
+      background-color: #cce5fb;
+      color: #1e40af;
+      font-weight: 500;
+      
+      .nav-icon {
+        color: #1e40af;
+      }
     }
+  }
+}
+
+/* Mobile toggle styles removed in revert */
+
+// Animation for mobile menu
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 300px;
   }
 }
 
@@ -212,31 +245,26 @@ export default {
 
 @media (max-width: 768px) {
   .quick-access-container {
-    padding: 15px;
-    margin-bottom: 15px;
+    padding: 0;
+    margin-bottom: 0;
   }
   
-  .section-title {
-    font-size: 1.2rem;
+  .mobile-sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--v-backgroundAlt-base);
   }
   
-  .access-buttons .access-btn {
-    min-height: 45px;
-    padding: 10px 12px !important;
+  .nav-menu {
+    padding: 0 16px 16px 16px;
+    background: var(--v-backgroundAlt-base);
     
-    ::v-deep .v-btn__content {
-      gap: 6px;
+    .nav-item {
+      margin-bottom: 3px;
+      font-size: 0.85rem;
+      padding: 8px 12px;
     }
-    
-    .btn-text {
-      line-height: 1.3;
-      font-size: 0.9rem;
-    }
-  }
-  
-  .cards-buttons .card-btn {
-    height: 40px;
-    font-size: 0.85rem;
   }
 }
 
@@ -244,6 +272,7 @@ export default {
 ::v-deep .v-btn {
   text-transform: none !important;
   font-weight: 500 !important;
+  
   
   &.access-btn {
     white-space: normal !important;

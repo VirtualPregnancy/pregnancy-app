@@ -1,15 +1,15 @@
 {
     "title": "Gestational Diabetes",
     "id": "2.c",
-    "description": "Sample",
+    "description": "",
     "showModel": false,
     "contentSections": [
       {
         "id": "2.b.a",
-        "title": "Sample",
+        "title": "Gestational Diabetes",
         "icon": "mdi-heart-plus",
         "iconColor": "var(--v-primary-base)",
-        "content": "Sample"
+        "content": "Gestational Diabetes is a pregnancy complication that can affect both mother and baby. It is a serious condition that can lead to serious health problems for both mother and baby if not treated early. It is a condition that is often detected through regular checkups during pregnancy. It is a condition that is often detected through regular checkups during pregnancy."
       }
     ]
   }

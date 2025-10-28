@@ -1,81 +1,34 @@
 <template>
   <!-- All the data is in _slug/pageData -->
   <div :class="mdAndUp ? ' w-full h-100 full_main_content' : 'w-full small_main_content'" style="background-color: var(--v-backgroundAlt-base);">
-    <div class="max-w-4xl mx-auto md:p-8 pb-32 md:pb-40">
+    
+    <div class="mx-auto md:p-8 pb-32 md:pb-40 w-full">
       <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+       <Header />
+      <div class="mb-6 mt-6 mx-4">
+        <h1 class="text-xl md:text-2xl font-medium font-weight-bold">
           {{ pageTitle }}
         </h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto" v-html="pageDescription">
+        <p class="text-sm text-gray-600 leading-relaxed" v-html="pageDescription">
         </p>
       </div>
-
-      <!-- Anchor below submenu for mobile hash scroll -->
-      <div id="content-start"></div>
-
       <!-- Content Sections -->
       <div class="space-y-6 mb-8">
         <!-- Single section article layout -->
-        <div v-if="isSingleSection" class="w-full">
-          <article class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
-            
-            <div class="p-6 md:p-10">
-              <!-- Use custom component if specified -->
-              <component 
-                v-if="contentSections[0].component" 
-                :is="contentSections[0].component"
-                v-bind="contentSections[0].props || {}"
-                class="prose prose-lg max-w-none prose-slate prose-headings:text-slate-800 prose-headings:font-semibold prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-a:font-medium"
-              />
-              <!-- Fallback to HTML content -->
-              <div v-else class="prose prose-lg max-w-none prose-slate prose-headings:text-slate-800 prose-headings:font-semibold prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-a:font-medium prose-blockquote:border-l-blue-500 prose-blockquote:bg-slate-50 prose-blockquote:rounded-r-lg prose-code:bg-slate-100 prose-code:rounded prose-pre:bg-slate-50" v-html="contentSections[0].content">
-              </div>
-            </div>
-          </article>
-        </div>
+        <SingleSection 
+          v-if="isSingleSection" 
+          :section="contentSections[0]"
+        />
 
         <!-- Multiple sections expandable layout -->
         <template v-else>
-          <v-card 
+          <MultipleSection
             v-for="section in contentSections" 
             :key="section.id"
-            :data-section-id="section.id"
-            class="section-card elevation-2 overflow-hidden"
-            :class="{ 'section-card--expanded': expandedSections[section.id] }"
-          >
-            <!-- Section Header -->
-            <v-card-title 
-              class="section-header cursor-pointer"
-              @click="toggleSection(section.id)"
-            >
-              <v-icon left :color="section.iconColor" class="section-icon">{{ section.icon }}</v-icon>
-              <span class="text-xl font-semibold flex-1 section-title">{{ section.title }}</span>
-              <v-icon 
-                :class="{ 'chevron-rotated': expandedSections[section.id] }"
-                class="chevron-icon"
-                color="primary"
-              >
-                mdi-chevron-down
-              </v-icon>
-            </v-card-title>
-
-            <!-- Section Content -->
-            <div class="section-content" :class="{ 'section-content--expanded': expandedSections[section.id] }">
-              <v-card-text class="content-text">
-                <!-- Use custom component if specified -->
-                <component 
-                  v-if="section.component" 
-                  :is="section.component"
-                  v-bind="section.props || {}"
-                  class="space-y-6"
-                />
-                <!-- Fallback to HTML content -->
-                <div v-else class="space-y-6" v-html="section.content">
-                </div>
-              </v-card-text>
-            </div>
-          </v-card>
+            :section="section"
+            :is-expanded="expandedSections[section.id]"
+            @toggle="toggleSection"
+          />
         </template>
       </div>
 
@@ -133,10 +86,17 @@
 
 <script>
 import Logo from '@/components/Logo.vue';
+import SingleSection from '@/components/content/SingleSection.vue'; // For article layout
+import MultipleSection from '@/components/content/MultipleSection.vue'; // For expandable layout
+import Header from '@/components/navigation/Header.vue';
+
 export default {
   name: 'ContentPane',  
   components: {
-    Logo
+    Logo,
+    SingleSection,
+    MultipleSection,
+    Header
   },
   props: {
     pageTitle: {
@@ -173,6 +133,27 @@ export default {
     },
     isSingleSection() {
       return this.contentSections && this.contentSections.length === 1;
+    }
+  },
+
+  watch: {
+    defaultExpandedIndex(newIndex) {
+      if (newIndex !== null && this.contentSections && this.contentSections.length > 0) {
+        // Convert 1-based index to 0-based array index
+        const sectionIndex = newIndex - 1;
+        if (sectionIndex >= 0 && sectionIndex < this.contentSections.length) {
+          const targetSection = this.contentSections[sectionIndex];
+          if (targetSection && targetSection.id) {
+            // Expand the section
+            this.$set(this.expandedSections, targetSection.id, true);
+            
+            // Scroll to the expanded section after a short delay
+            this.$nextTick(() => {
+              setTimeout(() => this.scrollSectionToTop(targetSection.id), 500);
+            });
+          }
+        }
+      }
     }
   },
 
@@ -225,7 +206,11 @@ export default {
       try {
         const isWindowContainer = (container === document.scrollingElement) || (container === document.documentElement) || (container === document.body);
         const elementRect = element.getBoundingClientRect();
-        const offset = 12; // small breathing space from the very top
+        
+        // Calculate offset based on mobile sticky header height
+        const mobileHeader = document.querySelector('.mobile-sticky-header');
+        const mobileHeaderHeight = mobileHeader ? mobileHeader.offsetHeight : 0;
+        const offset = mobileHeaderHeight > 0 ? mobileHeaderHeight + 12 : 12; // Add header height + breathing space
 
         if (isWindowContainer) {
           const targetTop = (window.pageYOffset || document.documentElement.scrollTop || 0) + elementRect.top - offset;
@@ -329,57 +314,6 @@ export default {
   min-height: 100vh;
   padding-bottom: 100px; /* Extra space for navigation */
 }
-
-/* Section Cards */
-.section-card {
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  border-left: 4px solid transparent;
-}
-
-.section-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-  border-left-color: var(--v-primary-base);
-}
-
-.section-card--expanded {
-  border-left-color: var(--v-secondary-base);
-}
-
-/* Section Header */
-.section-header {
-  background: rgba(248, 250, 252, 0.95);
-  transition: all 0.3s ease;
-}
-
-.section-header:hover {
-  background: rgba(243, 244, 246, 1);
-  transform: translateX(4px);
-}
-
-/* Chevron Animation */
-.chevron-icon {
-  transition: transform 0.3s ease;
-}
-
-.chevron-rotated {
-  transform: rotate(180deg);
-}
-
-/* Content Animation */
-.section-content {
-  max-height: 0;
-  overflow: scroll;
-  transition: all 0.3s ease;
-  opacity: 0;
-}
-
-.section-content--expanded {
-  max-height: 1000px;
-  opacity: 1;
-}
-
 
 .logo {
   width: 100%;
