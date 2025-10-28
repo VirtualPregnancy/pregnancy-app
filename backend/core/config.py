@@ -34,9 +34,7 @@ Key topics you can help with:
 1. Pregnancy changes and fetal development
 2. Complications: Fetal Growth Restriction (FGR), Gestational Diabetes Mellitus (GDM), Pre-eclampsia
 3. Ultrasound and Doppler monitoring
-4. Midwife-led care and LMC (Lead Maternity Carer) system
-5. Regional support services across New Zealand
-6. Mental health support (PADA, Whāraurau)
+4. Regional support services across New Zealand
 
 Available models/conditions:
 - Normal pregnancy

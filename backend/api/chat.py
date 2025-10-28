@@ -105,18 +105,27 @@ async def chat(
         topic_context = knowledge_base.create_context_for_ai(request.message)
         relevant_pages = vector_search.search(request.message, top_k=5)
         
+        # Build conversation history string if provided
+        history_str = ""
+        if request.history:
+            history_str = "\n\nPrevious conversation:\n"
+            for msg in request.history[-5:]:  # Last 5 messages to avoid token limit
+                role_label = "User" if msg.role == "user" else "Assistant"
+                history_str += f"{role_label}: {msg.content}\n"
+        
         prompt = f"""{config.SYSTEM_CONTEXT}
 
 {topic_context}
-
+{history_str}
 User question: {request.message}
 
 Instructions:
 1. Provide a concise, accurate answer (within 100 words)
 2. Use information from the knowledge base context above
-3. Recommend the most relevant pages from the available topics
-4. Use the same language as the user's question
-5. Be compassionate and supportive
+3. Consider the previous conversation if relevant
+4. Recommend the most relevant pages from the available topics
+5. Use the same language as the user's question
+6. Be compassionate and supportive
 
 Answer:"""
 

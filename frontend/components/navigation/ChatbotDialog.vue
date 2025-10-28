@@ -45,7 +45,9 @@
                     <v-icon small color="primary">{{ getActionIcon(action.type) }}</v-icon>
                   </div>
                   <div class="action-content">
-                    <div class="action-title">{{ action.text }}</div>
+                    <div v-if="action.query" class="action-title">{{ action.query }}</div>
+                    <div v-else class="action-title">{{ action.text }}</div>
+                    
                     <div v-if="action.description" class="action-description">{{ action.description }}</div>
                   </div>
                 </div>
@@ -125,7 +127,7 @@
 </template>
 
 <script>
-import { getWelcomeMessage } from '~/utils/chatbotUtils.js';
+import { getWelcomeMessage, generateChatbotResponse, getAllPagesData } from '~/utils/chatbotUtils.js';
 
 export default {
   name: 'ChatbotDialog',
@@ -153,6 +155,9 @@ export default {
       set(val) {
         this.$emit('input', val);
       }
+    },
+    backendApiUrl() {
+      return this.$config.publicRuntimeConfig?.backendApiUrl || 'https://pregnancy-app-tau.vercel.app';
     }
   },
   
@@ -195,38 +200,69 @@ export default {
         type: 'user',
         content: userMessage
       });
-      console.log(this.messages);
       
       this.scrollToBottom();
       this.isTyping = true;
       
       try {
-        // Call backend API
-        const response = await fetch('https://pregnancy-app-tau.vercel.app/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ message: userMessage })
-        });
-        console.log(response);
-        if (!response.ok) {
-          throw new Error(`API error: ${response.status}`);
+        // Try AI backend first
+        try {
+          // Prepare conversation history (last 5 user/assistant pairs)
+          const history = this.messages
+            .filter(msg => msg.type === 'user' || msg.type === 'bot')
+            .slice(-10)  // Last 10 messages (5 pairs)
+            .map(msg => ({
+              role: msg.type === 'user' ? 'user' : 'assistant',
+              content: msg.content
+            }));
+          
+          const response = await fetch(`${this.backendApiUrl}/chat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+              message: userMessage,
+              history: history.length > 0 ? history : undefined
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          // Deduplicate actions by path
+          const deduplicatedActions = this.deduplicateByPath(data.actions || []);
+          
+          // Add bot response
+          this.messages.push({
+            type: 'bot',
+            content: data.response,
+            summary: [],
+            searchResults: [],
+            actions: deduplicatedActions
+          });
+        } catch (aiError) {
+          console.warn('AI backend failed, falling back to local:', aiError);
+          
+          // Fallback to local configuration
+          const allPages = getAllPagesData();
+          const response = generateChatbotResponse(userMessage, allPages);
+          
+          // Deduplicate actions by path
+          const deduplicatedActions = this.deduplicateByPath(response.actions || []);
+          
+          // Add bot response
+          this.messages.push({
+            type: 'bot',
+            content: response.message,
+            summary: response.summary ? Object.values(response.summary) : [],
+            searchResults: response.searchResults || [],
+            actions: deduplicatedActions
+          });
         }
-        
-        const data = await response.json();
-        
-        // Deduplicate actions by path
-        const deduplicatedActions = this.deduplicateByPath(data.actions || []);
-        
-        // Add bot response
-        this.messages.push({
-          type: 'bot',
-          content: data.response,
-          summary: [],
-          searchResults: [],
-          actions: deduplicatedActions
-        });
         
       } catch (error) {
         console.error('Error processing message:', error);
@@ -308,7 +344,20 @@ export default {
       this.$nextTick(() => {
         const container = this.$refs.messagesContainer;
         if (container) {
-          container.scrollTop = container.scrollHeight;
+          // Find the last user message
+          const messages = container.querySelectorAll('.message.user');
+          if (messages.length > 0) {
+            const lastUserMessage = messages[messages.length - 1];
+            // Scroll to the user message position
+            lastUserMessage.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start',
+              inline: 'nearest'
+            });
+          } else {
+            // Fallback to scrolling to bottom if no user messages found
+            container.scrollTop = container.scrollHeight;
+          }
         }
       });
     },
