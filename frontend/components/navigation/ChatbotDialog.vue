@@ -163,6 +163,21 @@ export default {
   
   mounted() {
     this.addWelcomeMessage();
+    
+    // Listen for messages from landing page
+    this.$root.$on('send-chatbot-message', (message) => {
+      if (message && message.trim()) {
+        this.userInput = message;
+        this.$nextTick(() => {
+          this.sendMessage();
+        });
+      }
+    });
+  },
+  
+  beforeDestroy() {
+    // Clean up event listener
+    this.$root.$off('send-chatbot-message');
   },
   
   watch: {
