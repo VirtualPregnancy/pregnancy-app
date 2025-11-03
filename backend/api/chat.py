@@ -70,6 +70,7 @@ Requirements:
 2. Use the SAME LANGUAGE as the user's question
 3. Make them specific and helpful for learning more about the topic
 4. The question is a predict question that user might ask next, and the answer is not in the context. Not ask user a new question.
+5. Make sure the question is related to the topic and pregnancy related
 
 Return ONLY a JSON array:
 [
