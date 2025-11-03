@@ -37,7 +37,7 @@
     {
       "index": 0,
       "title": "Support services",
-      "description": "The pregnancy experience is different for everyone. Here you can find information on support services available for you and your whanau to help navigate your journey, whatever it may look like.",
+      "description": "The pregnancy experience is different for everyone. Here you can find information on support services available for you and your whanau(family) to help navigate your journey, whatever it may look like.",
       "image": "/img/landing/heart.svg",
       "backgroundColor": "#470b4d",
       "link": "/support-services"
@@ -45,7 +45,7 @@
     {
       "index": 5,
       "title": "About Us",
-      "description": "Learn more about the team behind this app, and how we are working to support you and your whanau.",
+      "description": "Learn more about the team behind this app, and how we are working to support you and your whanau(family).",
       "image": "/img/landing/about-us.svg",
       "backgroundColor": "#062405",
       "link": "/about"

@@ -12,7 +12,7 @@
       </h3>
       <div class="text-gray-700 leading-relaxed space-y-3">
         <p>
-          Neonatal care units support pēpi who need extra help after birth. Special Care Baby Units (SCBU) and
+          Neonatal care units support Pēpi(baby) who need extra help after birth. Special Care Baby Units (SCBU) and
           Neonatal Intensive Care Units (NICU) provide monitoring, breathing support, feeding assistance and specialist
           care depending on what your baby needs.
         </p>

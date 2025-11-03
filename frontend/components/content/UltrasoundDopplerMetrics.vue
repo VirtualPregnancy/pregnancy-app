@@ -30,7 +30,7 @@
      <!-- PI Checker -->
      <v-card class="my-6 pa-4" outlined>
       <div class="flex justify-center align-center flex-column">
-      <h3 class="mb-4">QuickPI Value Checker</h3>
+      <h3 class="mb-4">Quick PI Value Checker</h3>
 
       <div class="width-full d-flex  gap-4">
         
@@ -179,21 +179,21 @@ export default {
           title: "Resistive Index (RI)",
           color: "var(--v-accentLight-base)",
           content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "The Resistive Index (RI) is a measure of the resistance of the blood flow. It is calculated by dividing the velocity of the blood flow by the velocity of the blood flow. The normal range for the RI is 0.7-1.0.",
         },
 
         {
           title: "Pulsatility Index (PI)",
           color: "var(--v-accent-base)",
           content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "The Pulsatility Index (PI) is a measure of the pulsatility of the blood flow. It is calculated by dividing the velocity of the blood flow by the velocity of the blood flow. The normal range for the PI is 0.7-1.0.",
         },
 
         {
           title: "S/D Ratio",
           color: "var(--v-success-base)",
           content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            "The S/D Ratio is a measure of the systolic to diastolic blood pressure ratio. It is calculated by dividing the systolic blood pressure by the diastolic blood pressure. The normal range for the S/D Ratio is 1.0-1.5.",
         },
       ],
       dialogData: [

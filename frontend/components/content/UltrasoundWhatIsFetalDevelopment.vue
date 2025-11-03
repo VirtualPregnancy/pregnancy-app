@@ -16,13 +16,13 @@
               @click="showEctopicDialog = true"
             >
               ectopic</v-btn
-            >)
+            >).
           </li>
-          <li>• Determine if there is a single baby or twins/triplets</li>
+          <li>• Determine if there is a single baby or twins/triplets.</li>
           <li>• Check the basic anatomy of the fetus.</li>
           <li>• Listen to the fetal heartbeat.</li>
           <li>
-            Screen for chromosomal conditions using
+            • Screen for chromosomal conditions using
             <v-btn
               text
               small
@@ -30,7 +30,7 @@
               class="medical-term-btn"
               @click="showNuchalDialog = true"
             >
-              nuchal translucency
+              nuchal translucency.
             </v-btn>
           </li>
         </ul>
@@ -46,7 +46,7 @@
             properly.
           </li>
           <li>
-            • That the limbs have formed correctly (Arms, legs, hands and feet),
+            • That the limbs have formed correctly (arms, legs, hands and feet),
             and if any movement can be seen.
           </li>
           <li>
@@ -68,7 +68,7 @@
       </v-card-text>
     </v-card>
 
-    <!-- Ectopic Pregnancy Dialog - Vuetify 2.x compatible -->
+    <!-- Ectopic Pregnancy Dialog -->
     <v-dialog v-model="showEctopicDialog" max-width="500" persistent>
       <v-card>
         <v-card-title class="headline">
