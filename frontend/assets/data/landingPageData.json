@@ -2,6 +2,13 @@
   "title": "Pregnancy is an exciting time!",
   "description": "Nau mai, haere mai! Whether you're experiencing a smooth pregnancy or navigating unexpected challenges, this app is here to support you and your whānau every step of the way. Designed especially for people in Aotearoa New Zealand, we offer trusted information, helpful tools, and guidance to help you understand your health and make confident decisions.",
   "items": [
+    {
+      "title": "What is happening in pregnancy?",
+      "description": "Information on how your body changes to support your babys growth during pregnancy, and how your midwife/doctor will track the health of you and your baby.",
+      "image": "/img/landing/pregnancy.svg",
+      "backgroundColor": "#7A3520",
+      "link": "/pregnancy-changes"
+    },
 
     {
       "index": 4,
@@ -11,13 +18,7 @@
       "backgroundColor": "#185168",
       "link": "/ultrasound-what-is-ultrasound"
     },
-    {
-      "title": "What is happening in pregnancy?",
-      "description": "Information on how your body changes to support your babys growth during pregnancy, and how your midwife/doctor will track the health of you and your baby.",
-      "image": "/img/landing/pregnancy.svg",
-      "backgroundColor": "#7A3520",
-      "link": "/pregnancy-changes"
-    },
+    
     {
       "index": 3,
       "title": "Navigating pregnancy complications",

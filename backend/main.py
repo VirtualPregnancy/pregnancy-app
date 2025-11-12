@@ -1,7 +1,9 @@
 """Main application entry point"""
 
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from core import config, get_vector_search, get_knowledge_base
 from api import api_router
@@ -21,6 +23,11 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
+
+# Mount static files directory for images
+static_dir = Path(__file__).parent / "static"
+static_dir.mkdir(exist_ok=True)
+app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 
 @app.get("/")
