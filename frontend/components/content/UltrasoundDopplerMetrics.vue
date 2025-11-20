@@ -176,25 +176,11 @@ export default {
       result: null,
       cardItems: [
         {
-          title: "Resistive Index (RI)",
-          color: "var(--v-accentLight-base)",
-          content:
-            "The Resistive Index (RI) is a measure of the resistance of the blood flow. It is calculated by dividing the velocity of the blood flow by the velocity of the blood flow. The normal range for the RI is 0.7-1.0.",
-        },
-
-        {
           title: "Pulsatility Index (PI)",
           color: "var(--v-accent-base)",
           content:
             "The Pulsatility Index (PI) is a measure of the pulsatility of the blood flow. It is calculated by dividing the velocity of the blood flow by the velocity of the blood flow. The normal range for the PI is 0.7-1.0.",
-        },
-
-        {
-          title: "S/D Ratio",
-          color: "var(--v-success-base)",
-          content:
-            "The S/D Ratio is a measure of the systolic to diastolic blood pressure ratio. It is calculated by dividing the systolic blood pressure by the diastolic blood pressure. The normal range for the S/D Ratio is 1.0-1.5.",
-        },
+        }
       ],
       dialogData: [
         {

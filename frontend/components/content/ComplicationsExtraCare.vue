@@ -17,7 +17,7 @@
           care depending on what your baby needs.
         </p>
         <p>
-          Babies may be admitted for many reasons — being born preterm, low birthweight, breathing difficulties,
+          Babies may be admitted for many reasons — being born preterm, low birth weight, breathing difficulties,
           infections, jaundice, or after a complicated birth. The teams include doctors, nurses, lactation consultants
           and allied health professionals working alongside you and your LMC.
         </p>
@@ -27,12 +27,53 @@
     <!-- Patient stories -->
     <section class="mb-10">
       <h3 class="text-xl font-semibold mb-3" style="color: var(--v-accent-base);">Patient stories</h3>
-      <div class="text-gray-700 leading-relaxed">
+      <div class="text-gray-700 leading-relaxed mb-4">
         <p>
-          Every whānau’s experience is unique. We’re curating short stories that explain what the first hours and days
+          Every whānau's experience is unique. We're curating short stories that explain what the first hours and days
           can feel like in SCBU/NICU, how families stayed connected with their pēpi, and practical tips that helped.
         </p>
       </div>
+      
+      <!-- Story bubbles -->
+      <div class="story-bubbles-container relative py-2">
+        <button
+          v-for="(story, index) in patientStories"
+          :key="index"
+          @click="selectedStoryIndex = index"
+          class="story-bubble absolute w-20 h-20 rounded-full text-sm font-medium text-white transition-all duration-300 hover:scale-110 hover:shadow-xl flex items-center justify-center text-center"
+          :style="{
+            backgroundColor: story.color || 'var(--v-primary-base)',
+            left: getBubblePosition(index).left + '%',
+            top: getBubblePosition(index).top + 'px'
+          }"
+        >
+          {{ story.title }}
+        </button>
+      </div>
+
+      <!-- Story popup -->
+      <transition name="fade">
+        <div
+          v-if="selectedStoryIndex !== null"
+          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+          @click="selectedStoryIndex = null"
+        >
+          <div
+            class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            @click.stop
+          >
+            <div class="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center rounded-t-lg">
+              <h4 class="text-xl font-semibold text-gray-800">{{ selectedStory.title }}</h4>
+              <button @click="selectedStoryIndex = null" class="text-gray-400 hover:text-gray-600">
+                <v-icon size="24">mdi-close</v-icon>
+              </button>
+            </div>
+            <div class="px-6 py-5 text-gray-700 leading-relaxed space-y-4">
+              <p v-for="(para, idx) in selectedStory.content" :key="idx">{{ para }}</p>
+            </div>
+          </div>
+        </div>
+      </transition>
     </section>
 
     <!-- Practical info: hospital selector -->
@@ -194,6 +235,51 @@ export default {
       selectedHospital: null,
       loading: false,
       error: null,
+      selectedStoryIndex: null,
+      patientStories: [
+        {
+          title: 'First Hours',
+          color: 'var(--v-primary-base)',
+          content: [
+            'The first hours in SCBU were overwhelming. Our pēpi was so small, surrounded by machines and wires. The nurses were incredible - they explained everything and made sure we understood what was happening.',
+            'We learned that skin-to-skin contact (kangaroo care) was possible even with all the equipment. That first cuddle meant everything to us.'
+          ]
+        },
+        {
+          title: 'Staying Connected',
+          color: 'var(--v-accent-base)',
+          content: [
+            'We found ways to stay connected even when we couldn\'t be there 24/7. We recorded our voices reading stories, and the nurses played them for our pēpi.',
+            'Taking photos and keeping a journal helped us track progress and celebrate small milestones. Every gram gained, every day breathing on their own - these were huge victories.'
+          ]
+        },
+        {
+          title: 'Staying Connected',
+          color: 'var(--v-accent-base)',
+          content: [
+            'We found ways to stay connected even when we couldn\'t be there 24/7. We recorded our voices reading stories, and the nurses played them for our pēpi.',
+            'Taking photos and keeping a journal helped us track progress and celebrate small milestones. Every gram gained, every day breathing on their own - these were huge victories.'
+          ]
+        },
+        {
+          title: 'Practical Tips',
+          color: 'var(--v-info-base)',
+          content: [
+            'Bring comfortable clothes and snacks - you\'ll be spending a lot of time there. A small notebook helped us remember questions for doctors.',
+            'Accept help from whānau and friends. Let them bring meals, do laundry, or just sit with you. You don\'t have to do this alone.',
+            'The NICU nurses became our teachers. Don\'t hesitate to ask questions - they want you to feel confident caring for your pēpi.'
+          ]
+        },
+        {
+          title: 'Practical Tips',
+          color: 'var(--v-primary-base)',
+          content: [
+            'Bring comfortable clothes and snacks - you\'ll be spending a lot of time there. A small notebook helped us remember questions for doctors.',
+            'Accept help from whānau and friends. Let them bring meals, do laundry, or just sit with you. You don\'t have to do this alone.',
+            'The NICU nurses became our teachers. Don\'t hesitate to ask questions - they want you to feel confident caring for your pēpi.'
+          ]
+        }
+      ]
     };
   },
   mounted() {
@@ -265,6 +351,15 @@ export default {
       if (!val) return [];
       return val.split(',').map(s => s.trim()).filter(Boolean);
     },
+    getBubblePosition(index) {
+      const positions = [
+        { left: 5, top: 0 },
+        { left: 45, top: 15 },
+        { left: 80, top: 5 },
+        { left: 25, top: 5 }
+      ];
+      return positions[index] || { left: 50, top: 0 };
+    }
   },
   computed: {
     filteredHospitals() {
@@ -282,6 +377,12 @@ export default {
         text: h.name,
         value: h.name
       }));
+    },
+    selectedStory() {
+      if (this.selectedStoryIndex === null || !this.patientStories[this.selectedStoryIndex]) {
+        return { title: '', content: [] };
+      }
+      return this.patientStories[this.selectedStoryIndex];
     }
   }
 };
@@ -397,5 +498,63 @@ export default {
   background: var(--v-backgroundAlt-base);
   color: var(--v-accent-base);
   border: 1px solid var(--v-secondary-base);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.story-bubbles-container {
+  min-height: 70px;
+  width: 100%;
+  position: relative;
+}
+
+.story-bubble {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.story-bubble::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  width: 30%;
+  height: 30%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.story-bubble:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+  .story-bubbles-container {
+    min-height: 200px;
+  }
+  
+  .story-bubble {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    margin: 0.5rem;
+  }
+  
+  .story-bubbles-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 </style>

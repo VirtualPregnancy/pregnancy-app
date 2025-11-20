@@ -13,7 +13,10 @@
         >
           Doppler effect
         </v-btn>
-        to measure the movement of blood through vessels. In pregnancy, the main blood vessels that are checked by Doppler ultrasound are the 
+        to measure the movement of blood through vessels.
+      </p>
+      <p class="text-lg leading-relaxed mb-6">
+        In pregnancy, the main blood vessels that are checked by Doppler ultrasound are the 
         <v-btn 
           text 
           color="primary" 
@@ -31,10 +34,15 @@
         >
           umbilical artery
         </v-btn>
-        . These vessels are chosen as they are large enough to easily image and produce useful information about downstream blood flow to the uterus and the placenta respectively.  <br /> <br />Sometimes if blood flow in the uterine or umbilical artery is abnormal Doppler ultrasound of some of the major blood vessels in the fetus may also be measured (usually the middle cerebral artery (MCA) which tells us about blood flow in the brain, or the ductus venosis (DV) which tells us about blood flow around the wider fetal circulation).
-</p>
-        <p class="text-lg leading-relaxed mb-6">Doppler ultrasound produces a signal in the form of a wave across each heartbeat. Interpreting the shape of that wave provides information about fetal health. Each major vessel in the body produces a ‘signature’ shape, and your clinical team can use different measurements and features taken from the shape of these waveforms to understand if blood is flowing to the placenta and baby normally, or if it may be reduced.  </p>
-      
+        . These vessels are chosen as they are large enough to easily image, and provide useful information about downstream blood flow through the uterus and the placenta respectively.
+      </p>
+      <p class="text-lg leading-relaxed mb-6">
+        Sometimes if blood flow in the uterine or umbilical artery is abnormal Doppler ultrasound of some of the major blood vessels in the fetus may also be measured (usually the middle cerebral artery (MCA) which tells us about blood flow in the brain, or the ductus venosis (DV) which tells us about blood flow around the wider fetal circulation).
+      </p>
+      <p class="text-lg leading-relaxed mb-6">
+        Doppler ultrasound produces a signal in the form of a wave across each heartbeat. Interpreting the shape of that wave provides information about fetal health. Each major vessel in the body produces a 'signature' shape, and your clinical team can use different measurements and features taken from the shape of these waveforms to understand if blood is flowing to the placenta and baby normally, or if it may be reduced.
+      </p>
+      <!-- TODO: MCA is common after 32 weeks - would be ideal to have a simple clear explanation of this as mention of the brain  creates anxiety  ++Also, we only report the CPR (ration between MCA PI and umA PI)_-->
 
       <!-- Normal Doppler -->
      <img src="https://www.researchgate.net/profile/Kilian-Pohl/publication/221363274/figure/fig1/AS:305378391805956@1449819290476/llustration-of-shape-patterns-conveyed-by-Doppler-images-for-various-cardiac.png" alt="Normal Doppler" />
