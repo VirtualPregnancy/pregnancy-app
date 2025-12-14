@@ -6,6 +6,7 @@ Build & Deploy
     :maxdepth: 2
     :numbered: 2
 
+    00_backend
     01_netify
     02_github
     03_readthedocs

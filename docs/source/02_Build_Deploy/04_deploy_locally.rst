@@ -1,4 +1,4 @@
-Documentation for host heart app locally on windows
+Documentation for host pregnancy app locally on windows
 ==========================================================
 
 - Install git to your windows
