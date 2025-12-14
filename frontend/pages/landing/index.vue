@@ -5,27 +5,6 @@
       <Menu />
     </div>
     
-    <!-- Search Button -->
-    <div class="search-button fixed top-5 right-5 z-50">
-      <v-btn
-        fab
-        small
-        color="primary"
-        @click="showSearchDialog = true"
-        title="Search"
-      >
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-      <v-btn
-        fab
-        small
-        color="primary"
-        @click="showChatbotDialog = true"
-        title="Chatbot"
-      >
-        <v-icon>mdi-robot</v-icon>
-      </v-btn>
-    </div>
     
     <!-- Top-Bottom Layout -->
     <div class="landing-container">
@@ -40,6 +19,24 @@
           <p class="intro-text">
             {{ landingPageData.description }}
           </p>
+          
+          <!-- Chat Input Box -->
+          <div class="chat-input-container">
+            <v-text-field
+              v-model="userMessage"
+              solo
+              flat
+              rounded
+              placeholder="Ask me anything about your pregnancy..."
+              append-icon="mdi-send"
+              @click:append="handleChatInput"
+              @keydown.enter="handleChatInput"
+              @focus="focusInput"
+              class="chat-input-field"
+              prepend-inner-icon="mdi-chat-question"
+              hide-details
+            ></v-text-field>
+          </div>
         </div>
       </div>
 
@@ -74,8 +71,19 @@
 
     </div>
     
-    <!-- Search Dialog Component -->
-    <SearchDialog v-model="showSearchDialog" />
+    <!-- Chatbot Floating Button -->
+    <div class="chatbot-fab">
+      <v-btn
+        fab
+        large
+        color="primary"
+        @click="showChatbotDialog = true"
+        title="Chat with Pregnancy Assistant"
+        class="chatbot-button"
+      >
+        <v-icon>mdi-robot</v-icon>
+      </v-btn>
+    </div>
     <ChatbotDialog v-model="showChatbotDialog" />
   </v-app>
 </template>
@@ -84,21 +92,20 @@
 import landingPageData from '@/assets/data/landingPageData.json';
 import Menu from '@/components/landing/Menu.vue';
 import Logo from '@/components/Logo.vue';
-import SearchDialog from '@/components/navigation/SearchDialog.vue';
 import ChatbotDialog from '@/components/navigation/ChatbotDialog.vue';
 export default {
   layout: 'empty',
   components: {
     Menu,
     Logo,
-    SearchDialog,
     ChatbotDialog
   },
   data() {
     return {
       landingPageData: landingPageData,
-      showSearchDialog: false,
-      showChatbotDialog: false
+      showChatbotDialog: false,
+      userMessage: '',
+      pendingMessage: null
     }
   },
   computed: {
@@ -147,6 +154,29 @@ export default {
       this.showChatbotDialog = true;
     },
     
+    focusInput() {
+      // Optional: could show a hint or animation when user focuses
+    },
+    
+    handleChatInput() {
+      if (this.userMessage.trim()) {
+        // Store the message to send to chatbot
+        this.pendingMessage = this.userMessage.trim();
+        // Clear the input
+        this.userMessage = '';
+        // Open chatbot dialog
+        this.showChatbotDialog = true;
+        
+        // Wait for dialog to open then send message
+        this.$nextTick(() => {
+          // Use a ref or event to trigger message send in ChatbotDialog
+          this.$root.$emit('send-chatbot-message', this.pendingMessage);
+        });
+      } else {
+        // Just open the chatbot if no message
+        this.showChatbotDialog = true;
+      }
+    }
   }
 };
 </script>
@@ -254,7 +284,57 @@ export default {
   font-size: 1.25rem;
   line-height: 1.6;
   color: var(--v-info-base);
-  margin: 0 auto;
+  margin: 0 auto 2rem;
+}
+
+.chat-input-container {
+  max-width: 700px;
+  margin: 2rem auto 0;
+  width: 100%;
+}
+
+.chat-input-field {
+  ::v-deep .v-input__slot {
+    background: white !important;
+    box-shadow: 0 6px 20px rgba(221, 60, 81, 0.15) !important;
+    border: 2px solid var(--v-primary-base) !important;
+    font-size: 1rem;
+    padding: 12px 12px !important;
+    transition: all 0.3s ease;
+  }
+  
+  ::v-deep .v-input__slot:hover {
+    box-shadow: 0 8px 30px rgba(221, 60, 81, 0.25) !important;
+  }
+  
+  ::v-deep .v-input__slot:focus-within {
+    box-shadow: 0 8px 35px rgba(221, 60, 81, 0.3) !important;
+    border-color: var(--v-accent-base);
+  }
+  
+  ::v-deep input {
+    font-size: 1.05rem;
+    color: var(--v-info-base);
+  }
+  
+  ::v-deep input::placeholder {
+    color: rgba(49, 54, 87, 0.5);
+  }
+  
+  ::v-deep .v-input__prepend-inner {
+    margin-right: 12px;
+    color: var(--v-primary-base);
+  }
+  
+  ::v-deep .v-input__append-inner {
+    color: var(--v-primary-base);
+    cursor: pointer;
+    
+    .v-icon:hover {
+      transform: scale(1.1);
+      transition: transform 0.2s ease;
+    }
+  }
 }
 
 /* Bottom Section Styles */
@@ -408,9 +488,27 @@ export default {
     left: 10px;
   }
   
-  .search-button {
-    top: 10px;
-    right: 10px;
+  .chat-input-container {
+    margin-top: 1.5rem;
+  }
+  
+  .chat-input-field {
+    ::v-deep .v-input__slot {
+      padding: 10px 20px !important;
+    }
+    
+    ::v-deep input {
+      font-size: 0.95rem !important;
+    }
+  }
+  
+  .input-hint {
+    font-size: 0.8rem;
+  }
+  
+  .chatbot-button {
+    width: 56px !important;
+    height: 56px !important;
   }
 }
 
@@ -427,6 +525,25 @@ export default {
     font-size: 0.95rem;
   }
   
+  .chat-input-container {
+    margin-top: 1rem;
+  }
+  
+  .chat-input-field {
+    ::v-deep .v-input__slot {
+      padding: 8px 16px !important;
+    }
+    
+    ::v-deep input {
+      font-size: 0.9rem !important;
+    }
+  }
+  
+  .input-hint {
+    font-size: 0.75rem;
+    margin-top: 8px;
+  }
+  
   .card-item {
     min-height: 90px;
   }
@@ -437,6 +554,63 @@ export default {
     img {
       width: 30px;
       height: 30px;
+    }
+  }
+}
+
+/* Chatbot Floating Button */
+.chatbot-fab {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+}
+
+.chatbot-button {
+  box-shadow: 0 6px 25px rgba(221, 60, 81, 0.4) !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    transform: translateY(-4px) scale(1.05) !important;
+    box-shadow: 0 8px 35px rgba(221, 60, 81, 0.5) !important;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    background: rgba(221, 60, 81, 0.3);
+    animation: pulse 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .chatbot-fab {
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .chatbot-button {
+    width: 56px !important;
+    height: 56px !important;
+    
+    ::v-deep .v-icon {
+      font-size: 24px !important;
     }
   }
 }

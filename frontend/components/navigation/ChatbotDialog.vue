@@ -36,7 +36,7 @@
               <!-- Action Cards -->
               <div v-if="message.actions && message.actions.length > 0" class="action-cards mt-3 gap-2">
                 <div
-                  v-for="(action, idx) in message.actions"
+                  v-for="(action, idx) in message.actions.filter(a => a.text || a.description)"
                   :key="idx"
                   class="action-card-item p-3"
                   @click="handleAction(action)"
@@ -45,8 +45,10 @@
                     <v-icon small color="primary">{{ getActionIcon(action.type) }}</v-icon>
                   </div>
                   <div class="action-content">
-                    <div class="action-title font-medium text-gray-800 text-sm mb-1">{{ action.text }}</div>
-                    <div v-if="action.description" class="action-description text-xs text-gray-500 leading-snug">{{ action.description }}</div>
+                    <div v-if="action.query" class="action-title">{{ action.query }}</div>
+                    <div v-else class="action-title">{{ action.text }}</div>
+                    
+                    <div v-if="action.description" class="action-description">{{ action.description }}</div>
                   </div>
                 </div>
               </div>
@@ -123,7 +125,7 @@
 </template>
 
 <script>
-import { generateChatbotResponse, getAllPagesData, getWelcomeMessage, handleChatbotAction } from '~/utils/chatbotUtils.js';
+import { getWelcomeMessage, generateChatbotResponse, getAllPagesData } from '~/utils/chatbotUtils.js';
 
 export default {
   name: 'ChatbotDialog',
@@ -140,8 +142,6 @@ export default {
       userInput: '',
       messages: [],
       isTyping: false,
-      pageDataCache: {},
-      isLoadingPageData: false,
     };
   },
   
@@ -153,11 +153,29 @@ export default {
       set(val) {
         this.$emit('input', val);
       }
+    },
+    backendApiUrl() {
+      return this.$config.publicRuntimeConfig?.backendApiUrl || 'https://pregnancy-app-tau.vercel.app';
     }
   },
   
   mounted() {
     this.addWelcomeMessage();
+    
+    // Listen for messages from landing page
+    this.$root.$on('send-chatbot-message', (message) => {
+      if (message && message.trim()) {
+        this.userInput = message;
+        this.$nextTick(() => {
+          this.sendMessage();
+        });
+      }
+    });
+  },
+  
+  beforeDestroy() {
+    // Clean up event listener
+    this.$root.$off('send-chatbot-message');
   },
   
   watch: {
@@ -199,26 +217,65 @@ export default {
       this.scrollToBottom();
       this.isTyping = true;
       
-      // Simulate typing delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       try {
-        // Use utils for response generation
-        const allPages = getAllPagesData();
-        let response = generateChatbotResponse(userMessage, allPages);
-        
-        // Deduplicate actions and searchResults by path
-        const deduplicatedActions = this.deduplicateByPath(response.actions || []);
-        const deduplicatedSearchResults = this.deduplicateByPath(response.searchResults || []);
-        
-        // Add bot response
-        this.messages.push({
-          type: 'bot',
-          content: response.message,
-          summary: response.summary,
-          searchResults: deduplicatedSearchResults,
-          actions: deduplicatedActions
-        });
+        // Try AI backend first
+        try {
+          // Prepare conversation history (last 5 user/assistant pairs)
+          const history = this.messages
+            .filter(msg => msg.type === 'user' || msg.type === 'bot')
+            .slice(-10)  // Last 10 messages (5 pairs)
+            .map(msg => ({
+              role: msg.type === 'user' ? 'user' : 'assistant',
+              content: msg.content
+            }));
+          
+          const response = await fetch(`${this.backendApiUrl}/chat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+              message: userMessage,
+              history: history.length > 0 ? history : undefined
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          
+          // Deduplicate actions by path
+          const deduplicatedActions = this.deduplicateByPath(data.actions || []);
+          
+          // Add bot response
+          this.messages.push({
+            type: 'bot',
+            content: data.response,
+            summary: [],
+            searchResults: [],
+            actions: deduplicatedActions
+          });
+        } catch (aiError) {
+          console.warn('AI backend failed, falling back to local:', aiError);
+          
+          // Fallback to local configuration
+          const allPages = getAllPagesData();
+          const response = generateChatbotResponse(userMessage, allPages);
+          
+          // Deduplicate actions by path
+          const deduplicatedActions = this.deduplicateByPath(response.actions || []);
+          
+          // Add bot response
+          this.messages.push({
+            type: 'bot',
+            content: response.message,
+            summary: response.summary ? Object.values(response.summary) : [],
+            searchResults: response.searchResults || [],
+            actions: deduplicatedActions
+          });
+        }
         
       } catch (error) {
         console.error('Error processing message:', error);
@@ -234,8 +291,6 @@ export default {
       this.isTyping = false;
       this.scrollToBottom();
     },
-    
-    // Response logic moved to utils/chatbotUtils.js
     
     deduplicateByPath(items) {
       if (!items || items.length === 0) return [];
@@ -275,13 +330,15 @@ export default {
     },
     
     handleAction(action) {
-      handleChatbotAction(
-        action,
-        (query) => { this.userInput = query; },
-        () => { this.sendMessage(); },
-        (path) => { this.$router.push(path); },
-        () => { this.closeChatbot(); }
-      );
+      if (action.type === 'suggestion') {
+        this.userInput = action.query || '';
+        this.$nextTick(() => {
+          this.sendMessage();
+        });
+      } else if (action.type === 'navigate') {
+        this.$router.push(action.path);
+        this.closeChatbot();
+      }
     },
     
     navigateToPage(page) {
@@ -296,19 +353,24 @@ export default {
       this.closeChatbot();
     },
     
-    // Simplified - no external data loading needed
-    
-    // Page data logic moved to utils/chatbotUtils.js
-    
-    stripHTML(html) {
-      return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
-    },
-    
     scrollToBottom() {
       this.$nextTick(() => {
         const container = this.$refs.messagesContainer;
         if (container) {
-          container.scrollTop = container.scrollHeight;
+          // Find the last user message
+          const messages = container.querySelectorAll('.message.user');
+          if (messages.length > 0) {
+            const lastUserMessage = messages[messages.length - 1];
+            // Scroll to the user message position
+            lastUserMessage.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start',
+              inline: 'nearest'
+            });
+          } else {
+            // Fallback to scrolling to bottom if no user messages found
+            container.scrollTop = container.scrollHeight;
+          }
         }
       });
     },

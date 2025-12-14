@@ -51,11 +51,49 @@
       }
     }
   },
+  "ultrasound": {
+    "id": "3",
+    "title": "Ultrasound",
+    "component": "none",
+    "heading": "What does my ultrasound scan mean",
+    "icon": "/img/landing/ultrasound.svg",
+    "content": "During pregnancy your baby will be checked on using ultrasound imaging.  This is a safe and widely used tool, that can help your midwife/doctor know that baby is healthy. This page helps you understand what ultrasound is and the different ways it is used and includes an interactive tool to help you understand your own ultrasound scan better. ",
+    "subTopics": {
+      "what-is-ultrasound": {
+        "id": "3.a",
+        "title": "What Ultrasound Means",
+        "component": "none",
+        "heading": "Ultrasound",
+        "icon": "mdi-stethoscope"
+      },
+      "doppler": {
+        "id": "3.b",
+        "title": "Doppler Ultrasound",
+        "component": "none",
+        "heading": "Doppler Ultrasound in Pregnancy ",
+        "icon": "mdi-chart-areaspline"
+      },
+      "metric": {
+        "id": "3.c",
+        "title": "Doppler Ultrasound Metrics",
+        "component": "none",
+        "heading": "How ultrasound can be used to detect pregnancy issues",
+        "icon": "mdi-alert-circle"
+      },
+      "what-ultrasound-means": {
+        "id": "3.d",
+        "title": "What Ultrasound Means",
+        "component": "ConditionSelector",
+        "heading": "What does my ultrasound scan mean? ",
+        "icon": "mdi-help-circle"
+      }
+    }
+  },
   "complications": {
     "id": "2",
     "title": "Pregnancy Complications",
     "component": "none",
-    "content":"Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told you have a complication in pregnancy you are not alone – pregnancy disorders affect around 6000 pepi and their whanau each year in New Zealand (1 in 10 pregnancies). On these pages you will find information to help you understand what causes common issues in pregnancy, how your doctor/midwife may check on pepi, and what this may mean for your pregnancy journey. ",
+    "content":"Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told you have a complication in pregnancy you are not alone – pregnancy disorders affect around 6000 Pēpi(baby) and their whanau(family) each year in New Zealand (1 in 10 pregnancies). On these pages you will find information to help you understand what causes common issues in pregnancy, how your doctor/midwife may check on Pēpi, and what this may mean for your pregnancy journey. ",
     "heading": "Navigating Pregnancy Complications",
     "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
@@ -95,44 +133,6 @@
         "icon": "mdi-heart-minus"
       }
 
-    }
-  },
-  "ultrasound": {
-    "id": "3",
-    "title": "Ultrasound",
-    "component": "none",
-    "heading": "What does my ultrasound scan mean",
-    "icon": "/img/landing/ultrasound.svg",
-    "content": "During pregnancy your baby will be checked on using ultrasound imaging.  This is a safe and widely used tool, that can help your midwife/doctor know that baby is healthy. This page helps you understand what ultrasound is and the different ways it is used and includes an interactive tool to help you understand your own ultrasound scan better. ",
-    "subTopics": {
-      "what-is-ultrasound": {
-        "id": "3.a",
-        "title": "What Ultrasound Means",
-        "component": "none",
-        "heading": "Ultrasound",
-        "icon": "mdi-stethoscope"
-      },
-      "doppler": {
-        "id": "3.b",
-        "title": "Doppler Ultrasound",
-        "component": "none",
-        "heading": "Doppler Ultrasound in Pregnancy ",
-        "icon": "mdi-chart-areaspline"
-      },
-      "metric": {
-        "id": "3.c",
-        "title": "Doppler Ultrasound Metrics",
-        "component": "none",
-        "heading": "How ultrasound can be used to detect pregnancy issues",
-        "icon": "mdi-alert-circle"
-      },
-      "what-ultrasound-means": {
-        "id": "3.d",
-        "title": "What Ultrasound Means",
-        "component": "ConditionSelector",
-        "heading": "What does my ultrasound scan mean? ",
-        "icon": "mdi-help-circle"
-      }
     }
   },
   "clinical": {

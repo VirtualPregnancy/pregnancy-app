@@ -25,9 +25,14 @@
 
       <!-- Controls and Analytics Section -->
       <div class="controls-section" :class="{ 'controls-section-mobile': !mdAndUp }">
+        <!-- Model Description Banner -->
+        
         <!-- Condition Selector -->
         <div class="condition-selector-panel">
           <ConditionSelector @conditions-changed="handleConditionsChanged" />
+        </div>
+        <div class="model-description-banner text-white px-4 py-3 rounded-lg mb-4 text-center text-sm md:text-base font-medium leading-relaxed">
+          {{ currentModelDescription }}
         </div>
         <!-- Model Controls -->
       <div class="controls-panel">
@@ -56,11 +61,15 @@
             {{ waveformData.description }}
           </div>
         </div>
+        
         <div>
           <img class="pb-5" size="100" :src="getAssetUrl(waveformData.waveformImg)" alt="Waveform" />
           <div class="text-center mb-3 font-italic text-sm">
             {{ waveformData.waveformNote }}
           </div>
+        </div>
+        <div class="text-center mb-5 text-sm">
+          Read more on <a href="/ultrasound-doppler">Doppler ultrasound</a>
         </div>
       </div>
 
@@ -81,6 +90,7 @@ import Logo from '@/components/Logo.vue';
 import ConditionSelector from "../model/ConditionSelector.vue";
 import { mapGetters, mapActions } from 'vuex';
 import Header from '@/components/navigation/Header.vue';
+import modelData from '~/assets/data/modelData.json';
 
 export default {
   components: {
@@ -95,6 +105,7 @@ export default {
     return {
       clientMounted: false, // Track if component is mounted on client
       isFullscreen: false, // Track if fullscreen mode is enabled
+      currentConditionKey: 'normal', // Track current selected condition
     };
   },
 
@@ -153,6 +164,13 @@ export default {
         console.warn("[RightPane] Error accessing vuetify breakpoint:", e);
         return false;
       }
+    },
+    
+    currentModelDescription() {
+      // Find the matching model in modelData based on current condition key
+      const currentModel = modelData.models.find(model => model.model === this.currentConditionKey);
+      // Return the description or a default message
+      return currentModel?.description || 'Normal Placenta';
     },
   },
 
@@ -229,6 +247,11 @@ export default {
     
     // Update the model and the waveform data using Vuex action
     async handleConditionsUpdated(data) {
+      // Update current condition key for description banner
+      if (data.conditionData && data.conditionData.key) {
+        this.currentConditionKey = data.conditionData.key;
+      }
+      
       // Use Vuex action to update conditions and model configuration
       await this.updateConditions(data);
       try {
@@ -271,6 +294,10 @@ export default {
     // Handle conditions changed from ConditionSelector
     handleConditionsChanged(data) {
       console.log('[RightPane] Handling conditions changed:', data);
+      // Update current condition key immediately for reactive description update
+      if (data.conditionData && data.conditionData.key) {
+        this.currentConditionKey = data.conditionData.key;
+      }
       // Emit global event to layout for condition updates
       this.$nuxt.$emit('conditions-updated', data);
     },
@@ -414,5 +441,9 @@ export default {
 // Legacy styles compatibility (kept for safety)
 .model-panel {
   position: relative;
+}
+
+.model-description-banner {
+  background-color: var(--v-info-base);
 }
 </style>

@@ -37,6 +37,9 @@
 
     <!-- Global Loading Overlay to block interactions until ready -->
     <LoadingOverlay :visible="isAppLoading" />
+    
+    <!-- Weight Converter Floating Button -->
+    <WeightConverter />
   </v-app>
 </template>
 
@@ -45,12 +48,14 @@ import Navigation from '@/components/navigation/Navigation.vue';
 import LoadingOverlay from '@/components/common/LoadingOverlay.vue';
 import Header from '@/components/navigation/Header.vue';
 import Menu from '@/components/landing/Menu.vue';
+import WeightConverter from '@/components/common/WeightConverter.vue';
 
 export default {
   name: "DefaultLayout",
   components: {
     Navigation,
     Menu,
+    WeightConverter,
     LoadingOverlay,
     Header
   },

@@ -1,5 +1,6 @@
 {
   "regions": [
+    "National",
     "Auckland",
     "Bay of Plenty",
     "Canterbury",
@@ -38,6 +39,24 @@
         "name": "Maternity service and referral information for health professionals",
         "link": "https://www.tewhatuora.govt.nz/for-health-professionals/hospital-and-specialist-services/maternity-services",
         "lastCheckDate": "16/10/2025"
+      },
+      {
+        "name": "Sands New Zealand - Supporting bereaved parents, families and whānau",
+        "link": "https://www.sands.org.nz/",
+        "description": "A voluntary, parent-run, non-profit organisation supporting parents and families who have experienced the death of a baby at any stage during pregnancy, as a baby or infant.",
+        "lastCheckDate": "16/11/2025"
+      },
+      {
+        "name": "Whetūrangitia - Stillbirth Support Resources",
+        "link": "https://wheturangitia.services.govt.nz/stillbirth/support-resources",
+        "description": "Government support resources for families affected by stillbirth.",
+        "lastCheckDate": "16/11/2025"
+      },
+      {
+        "name": "The Little Miracles Trust - Supporting families of premature and sick babies",
+        "link": "https://littlemiraclestrust.org.nz/",
+        "description": "Aotearoa New Zealand's national neonatal charity providing support to families of premature and sick full-term babies through neonatal intensive care, transition home, and onwards.",
+        "lastCheckDate": "16/11/2025"
       }
     ],
     "Auckland": [
@@ -69,12 +88,12 @@
       {
         "name": "National Women's Health",
         "link": "https://info.health.nz/locations/auckland/womens-health",
-        "lastCheckDate": "16/10/2025"
+        "lastCheckDate": "16/11/2025"
       },
       {
         "name": "Pregnancy Counselling Services – Auckland",
         "link": "https://www.familyservices.govt.nz/directory/viewprovider.htm?id=6514&letter=P&back=searchprovideralphabetical&pageNumber=1&pageSize=10",
-        "lastCheckDate": "16/10/2025"
+        "lastCheckDate": "16/11/2025"
       }
     ],
     "Bay of Plenty": [
@@ -537,6 +556,18 @@
         "name": "Small for Gestational Age / Fetal Growth Restriction Guidelines",
         "link": "https://www.tewhatuora.govt.nz/publications/small-for-gestational-age-fetal-growth-restriction-guidelines",
         "lastCheckDate": "16/10/2025"
+      },
+      {
+        "name": "Sands New Zealand - Supporting bereaved parents, families and whānau",
+        "link": "https://www.sands.org.nz/",
+        "description": "A voluntary, parent-run, non-profit organisation supporting parents and families who have experienced the death of a baby at any stage during pregnancy, as a baby or infant.",
+        "lastCheckDate": "16/11/2025"
+      },
+      {
+        "name": "Whetūrangitia - Stillbirth Support Resources",
+        "link": "https://wheturangitia.services.govt.nz/stillbirth/support-resources",
+        "description": "Government support resources for families affected by stillbirth.",
+        "lastCheckDate": "16/11/2025"
       }
     ]
   },
@@ -699,6 +730,12 @@
         "name": "Australian and New Zealand Neonatal Network",
         "link": "https://www.anznn.net/",
         "lastCheckDate": "16/10/2025"
+      },
+      {
+        "name": "The Little Miracles Trust - Supporting families of premature and sick babies",
+        "link": "https://littlemiraclestrust.org.nz/",
+        "description": "Aotearoa New Zealand's national neonatal charity providing support to families of premature and sick full-term babies through neonatal intensive care, transition home, and onwards.",
+        "lastCheckDate": "16/11/2025"
       }
     ]
   }
