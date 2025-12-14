@@ -98,7 +98,7 @@
       <div class="input-area px-5 py-4">
         <v-text-field
           v-model="userInput"
-          placeholder="Ask me anything about pregnancy..."
+          placeholder="Ask a question about pregnancy, symptoms, or fetal development..."
           solo
           flat
           dense

@@ -27,7 +27,7 @@
               solo
               flat
               rounded
-              placeholder="Ask me anything about your pregnancy..."
+              placeholder="Ask a question about pregnancy, symptoms, or fetal development..."
               append-icon="mdi-send"
               @click:append="handleChatInput"
               @keydown.enter="handleChatInput"
