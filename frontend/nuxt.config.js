@@ -21,7 +21,8 @@ export default {
   // Runtime config to make environment variables available in browser
   publicRuntimeConfig: {
     deployEnv: process.env.DEPLOY_ENV || 'local',
-    basePath: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app" : ""
+    basePath: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app" : "",
+    backendApiUrl: process.env.BACKEND_API_URL || 'https://pregnancy-app-tau.vercel.app'
   },
   
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -106,8 +107,6 @@ export default {
     dirs: [
       "~/components/model",
       "~/components/navigation",
-      "~/components/topics",
-      "~/components/loading",
       "~/components/content",
     ],
   },

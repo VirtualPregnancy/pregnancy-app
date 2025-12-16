@@ -30,7 +30,7 @@
      <!-- PI Checker -->
      <v-card class="my-6 pa-4" outlined>
       <div class="flex justify-center align-center flex-column">
-      <h3 class="mb-4">QuickPI Value Checker</h3>
+      <h3 class="mb-4">Quick PI Value Checker</h3>
 
       <div class="width-full d-flex  gap-4">
         
@@ -176,25 +176,11 @@ export default {
       result: null,
       cardItems: [
         {
-          title: "Resistive Index (RI)",
-          color: "var(--v-accentLight-base)",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        },
-
-        {
           title: "Pulsatility Index (PI)",
           color: "var(--v-accent-base)",
           content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        },
-
-        {
-          title: "S/D Ratio",
-          color: "var(--v-success-base)",
-          content:
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-        },
+            "The Pulsatility Index (PI) is a measure of the pulsatility of the blood flow. It is calculated by dividing the velocity of the blood flow by the velocity of the blood flow. The normal range for the PI is 0.7-1.0.",
+        }
       ],
       dialogData: [
         {

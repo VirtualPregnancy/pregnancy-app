@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen">
     <!-- Home Button -->
-    <div class="fixed top-5 left-5 z-50">
+    <div class="fixed top-5 right-5 z-50">
       <v-btn
         fab
         small

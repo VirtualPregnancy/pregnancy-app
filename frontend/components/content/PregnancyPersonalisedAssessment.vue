@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: Smooth the curves -->
   <div class="chart-container">
     <div class="input-section">
       <div class="input-group">
@@ -95,10 +96,10 @@ export default {
           26: { mean: 67, sd: 4.0 },
           27: { mean: 68, sd: 5.0 },
           28: { mean: 72, sd: 4.0 },
-          29: { mean: 73, sd: 4.0 },
+          29: { mean: 74, sd: 4.0 },
           30: { mean: 76, sd: 4.0 },
           31: { mean: 80, sd: 6.0 },
-          32: { mean: 81, sd: 4.0 },
+          32: { mean: 82, sd: 5.0 },
           33: { mean: 84, sd: 6.0 },
           34: { mean: 86, sd: 6.0 },
           35: { mean: 88, sd: 6.5 },
@@ -234,6 +235,9 @@ export default {
             width: 2,
             color: this.colors.primary
           },
+          itemStyle: {
+            color: this.colors.primary
+          },
           symbol: 'none'
         },
         {
@@ -245,6 +249,9 @@ export default {
             width: 2,
             color: this.colors.secondary
           },
+          itemStyle: {
+            color: this.colors.secondary
+          },
           symbol: 'none'
         },
         {
@@ -254,6 +261,9 @@ export default {
           smooth: true,
           lineStyle: {
             width: 2,
+            color: this.colors.tertiary
+          },
+          itemStyle: {
             color: this.colors.tertiary
           },
           symbol: 'none'
@@ -344,9 +354,9 @@ export default {
           textStyle: {
             color: this.colors.secondary
           },
-          itemStyle: {
-            borderType: 'solid',
-          }
+          itemWidth: 25,
+          itemHeight: 14,
+          itemGap: 10
         },
         tooltip: {
           trigger: 'axis',
@@ -503,4 +513,6 @@ export default {
     padding: 10px;
   }
 }
+
+
 </style>

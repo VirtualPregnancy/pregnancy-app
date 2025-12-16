@@ -1,6 +1,6 @@
 <template>
   <div class="fetal-development-timeline">
-    <img style='width: 50%; margin: 0 auto; display: block; padding-bottom: 20px;' src='https://www.mazecordblood.com/wp-content/uploads/2015/08/A-pink-infographic-final.jpg' alt='Fetal Development' />
+    <img style='width: 50%; margin: 0 auto; display: block; padding-bottom: 20px;' src='https://pregnancy-app-tau.vercel.app/static/images/placeholder.png' alt='Fetal Development' />
     <v-timeline
       :reverse="false"
       dense
@@ -34,20 +34,23 @@ export default {
   data() {
     return {
       fetalDevelopment: [
+        // TODO: ?can link to tests done at this stage? Important t to find a midwife, blood tests , offered screening for conditions where there are chromosome differences
         {
           title: 'First Trimester',
-          description: 'Weeks 1-12',
+          description: 'Weeks 1-12 (or month 1-4)',
           icon: 'mdi-baby-face-outline',
           content: 'After fertilization, the embryo implants in the uterus and begins forming vital organs. By week 5, the heart starts beating. The brain, spinal cord, and limbs begin to take shape, and by the end of the first trimester, the fetus has recognizable features like fingers, toes, and facial contours. Though still tiny, it\'s already moving—though the mother can\'t feel it yet.'
         },
+        // TODO: ?can link here to anatomy scan, diabetes screening.  Need to check the growth of baby (tapemeasurement uss growth)
         {
-          title: 'Second Trimester',
+          title: 'Second Trimester (or month 5-8)',
           description: 'Weeks 13-26',
           icon: 'mdi-baby-bottle-outline',
-          content: 'In the second trimester of pregnancy, with the foundations of the placenta laid down and maternal blood flow bringing more nutrients and oxygen to the placenta, fetal development can really start to accelerate. The fetus develops fine hair (lanugo), fingerprints, and begins practicing movements like sucking and swallowing. Around week 20, many mothers feel the first movements of their baby. Organs like the lungs and digestive system mature, and the baby can often be seen on an ultrasound.'
+          content: 'In the second trimester of pregnancy, with the foundations of the placenta laid down and maternal blood flow bringing more nutrients and oxygen to the placenta, your baby gets bigger and you will be able to see more features on scan. '
         },
+        // TODO: Growth scans as needed
         {
-          title: 'Third Trimester',
+          title: 'Third Trimester (or month 9-12)',
           description: 'Weeks 27-40',
           icon: 'mdi-baby',
           content: 'The final trimester of pregnancy is all about growth and fine-tuning. The brain develops rapidly, fat accumulates under the skin, and the lungs prepare for breathing. The baby responds to sounds and light. As space in the uterus becomes more constrained, the baby will usually naturally turn to a position of \'best fit\' with its head is facing downwards, ready for birth.'

@@ -3,6 +3,7 @@
     {
       "model": "normal",
       "modelName": "Normal",
+      "description": "Normal Placenta, the blood flow is normal and healthy.",
       "color": "#4CAF50",
       "config": {
         "path": "/model/normal.vtk",
@@ -42,7 +43,7 @@
     {
       "model": "FGR",
       "modelName": "Fetal Growth Restriction (FGR)",
-      "Description": "Fetal Growth Restriction",
+      "description": "Fetal Growth Restriction, smaller than expected for that stage of pregnancy",
       "color": "#F44336",
       "config": {
         "path": "/model/fgr_tree.vtk",
@@ -82,7 +83,7 @@
     {
       "model": "GDM",
       "modelName": "Gestational Diabetes Melitus (GDM)",
-      "Description": "Gestational Diabetes Melitus",
+      "description": "Gestational Diabetes Melitus, bigger than expected for that stage of pregnancy",
       "color": "#FF9800",
       "config": {
         "path": "/model/diabetes_tree.vtk",
