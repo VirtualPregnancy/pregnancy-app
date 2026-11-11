@@ -23,9 +23,7 @@
             class="landing-image"
           />
 
-          <p class="intro-text">
-            {{ landingPageData.description }}
-          </p>
+          <p class="intro-text" v-html="landingPageData.description"></p>
           
           <!-- Chat Input Box -->
           <div class="chat-input-container">
