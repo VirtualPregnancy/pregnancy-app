@@ -139,12 +139,12 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: "#DD3C51",        
+          primary: "#CB3852",        
           accent: "#313657",         
           accentLight: "#1F6683",    
           secondary: "#B8BCC8",      
         
-          info: "#1F6683",          
+          info: "#05314C",          
           warning: "#DD3C51",        
           subWarning: "#FAF6F7",     
           error: "#976533",          
@@ -168,7 +168,7 @@ export default {
         },
         
         dark: {
-          primary: "#DD3C51",     // red from palette
+          primary: "#CB3852",     // red from palette
           accent: "#6C90B9",      // blue from palette
           accentLight: "#1F6683",     // teal from palette
           secondary: "#B8BCC8",   // light grey for buttons
