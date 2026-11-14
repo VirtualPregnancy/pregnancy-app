@@ -1,7 +1,7 @@
 {
   "title": "What is ultrasound, and what does it measure?",
   "id": "3.a",
-  "description": "Ultrasound is a safe and widely used imaging technique during pregnancy that uses high-frequency sound waves to create real-time pictures of the pēpi inside the womb. Unlike X-rays, ultrasound does not use radiation so it is safe to use during pregnancy.",
+  "description": "Ultrasound is a safe and widely used imaging technique. It uses high-frequency sound waves to create real-time pictures of pēpi inside the womb. Unlike X-rays, ultrasound does not use radiation, so it is safe to use during pregnancy.",
   "showModel": false,
   "contentSections": [
     {
@@ -16,21 +16,14 @@
       "title": "3D or 4D ultrasound",
       "icon": "mdi-video-3d",
       "iconColor": "var(--v-primary-base)",
-      "content": "Some clinics may offer 3D or 4D ultrasound as an optional add on (not covered by public funding in New Zealand), but these are not generally used for medical or diagnostic purposes. <br /> <br /> In 3D ultrasound, multiple angles of flat 2D images are captured and used to create a more lifelike and detailed 3D image of your pēpi. <br /> <br />4D ultrasound builds on this by creating a live video of your pēpi in the womb, allowing you to see your pēpi's movements in real time, such as yawning, stretching, or smiling."
+      "content": "Some clinics may offer 3D or 4D ultrasound as an optional add-on (not covered by public funding in New Zealand). Still, these are not generally used for medical or diagnostic purposes. <br /> <br />In 3D ultrasound, multiple flat 2D images are captured from different angles and used to create a more lifelike, detailed 3D image of your pēpi. <br /> <br />4D ultrasound builds on this by creating a live video of your pēpi in the womb. This allows you to see your pēpi's movements in real time, such as yawning, stretching, or smiling."
     },
     {
       "id": "3.a.c",
-      "title": "Finding the placental position",
-      "icon": "mdi-bowl-outline",
-      "iconColor": "var(--v-primary-base)",
-      "component": "UltrasoundWhatIsPlacentaPosition"
-    },
-    {
-      "id": "3.a.d",
       "title": "Showing blood flow to the placenta",
       "icon": "mdi-water-plus",
       "iconColor": "var(--v-primary-base)",
-      "content": "Sometimes you might notice that the colour on the ultrasound screen goes blue and red. This is a Doppler measurement. <br /> <br />Doppler is used to help work out if extra monitoring is needed for your pregnancy. Doppler ultrasound helps assess how maternal blood flows through the uterus to the placenta, and how blood flows between the fetus and the placenta. <br /> <br />See more at <a href='/ultrasound-doppler'><strong><u>Doppler ultrasound in pregnancy</u></strong></a>."
+      "content": "Sometimes you might notice that the colour on the ultrasound screen goes blue and red. This is a Doppler measurement. <br /> <br />Doppler ultrasound is used to help determine whether extra monitoring is needed for your pregnancy. Doppler ultrasound helps assess how maternal blood flows through the uterus to the placenta, and how blood flows between the fetus and the placenta. <br /> <br />See more at <a href='/ultrasound-doppler'><strong><u>Doppler ultrasound in pregnancy</u></strong></a>."
     }
   ]
 }

@@ -64,7 +64,7 @@
     "component": "none",
     "heading": "What does my ultrasound scan mean?",
     "icon": "/img/landing/ultrasound.svg",
-    "content": "During pregnancy, your pēpi (baby) will be checked on using ultrasound imaging. This is a safe and widely used tool, that can help your midwife/doctor know that pēpi is healthy. <br /><br />This page helps you understand what ultrasound is, and the different ways it is used. There is also an interactive tool to help you better understand your ultrasound scan.",
+    "content": "During pregnancy, your pēpi (baby) will be checked using ultrasound imaging. This is a safe, widely used tool that can help your midwife/doctor confirm that pēpi is healthy. <br /><br />This page helps you understand what ultrasound is and the different ways it is used. There is also an interactive tool to help you better understand your ultrasound scan.",
     "subTopics": {
       "what-is-ultrasound": {
         "id": "3.a",
@@ -86,13 +86,6 @@
         "component": "none",
         "heading": "How ultrasound helps detect pregnancy issues",
         "icon": "mdi-alert-circle"
-      },
-      "what-ultrasound-means": {
-        "id": "3.d",
-        "title": "What ultrasound means",
-        "component": "ConditionSelector",
-        "heading": "What does my ultrasound scan mean? ",
-        "icon": "mdi-help-circle"
       }
     }
   },

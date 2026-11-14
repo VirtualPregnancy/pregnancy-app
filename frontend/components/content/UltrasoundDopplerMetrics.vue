@@ -10,10 +10,7 @@
         <v-card-text style="color: white">{{ item.content }}</v-card-text>
       </v-card>
     </div>
-    What may be a 'normal' or 'abnormal' value for each of these metrics varies
-    depending on the blood vessel being examined, and the gestation of your
-    pregnancy (how far along you are). Indicators of normal ranges for these
-    values for the umbilical artery and uterine artery are below.
+    What may be a 'normal' or 'abnormal' value for each metric varies depending on the blood vessel being examined and the gestation of your pregnancy (how far along you are). Normal ranges for these values in the umbilical and uterine arteries are below.
    
     <!-- Normal Ranges Table Section -->
     <div class="mt-6 d-flex justify-center">
@@ -179,7 +176,7 @@ export default {
           title: "Pulsatility Index (PI)",
           color: "var(--v-accent-base)",
           content:
-            "The Pulsatility Index (PI) is a measure of the pulsatility of the blood flow. It is calculated by dividing the velocity of the blood flow by the velocity of the blood flow. The normal range for the PI is 0.7-1.0.",
+            "The Pulsatility Index (PI) is a measure of blood flow pulsatility and vascular resistance of particular blood vessels. It is derived by dividing the difference between the maximum and minimum velocities by the average blood flow velocity. The normal range for the PI is 0.7-1.0.",
         }
       ],
       dialogData: [

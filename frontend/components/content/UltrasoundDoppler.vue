@@ -4,19 +4,10 @@
     <div class="ultrasound-content">
       <!-- Introduction Paragraph -->
       <p class="text-lg leading-relaxed mb-6">
-        Doppler ultrasound is a specialised form of ultrasound imaging that uses the
-        <v-btn 
-          text 
-          color="primary" 
-          class="medical-term-btn"
-          @click="showDopplerDialog = true"
-        >
-        Doppler effect
-        </v-btn>
-        to measure the movement of blood through vessels.
+        Doppler ultrasound is a specialised form of ultrasound imaging that measures the movement of blood through vessels.
       </p>
       <p class="text-lg leading-relaxed mb-6">
-        If you have concerns about your pēpi's health during pregnancy, Doppler ultrasound can be used to check some key blood vessels, such as the 
+        If you have concerns about your pēpi's health during pregnancy, a Doppler ultrasound can assess the condition of key blood vessels, such as the 
         <v-btn 
           text 
           color="primary" 
@@ -34,7 +25,7 @@
         >
           umbilical
         </v-btn> arteries <i>(see example below)</i>. 
-        These vessels are large enough to easily image, and provide useful information about downstream blood flow through the uterus and the placenta respectively. Red or blue spots on the image indicate blood flow towards the ultrasound probe, and away from it respectively. Dark shades on the image show slow blood flow, and light shades for faster blood flow.
+        These vessels are large enough to easily image. They both provide useful information about downstream blood flow through the uterus and the placenta, respectively. Red or blue spots on the image indicate blood flow towards the ultrasound probe and away from it, respectively. Dark shades in the image indicate slower blood flow, and light shades indicate faster blood flow.
         <!-- Normal Doppler -->
         <!-- <img src="https://www.researchgate.net/profile/Kilian-Pohl/publication/221363274/figure/fig1/AS:305378391805956@1449819290476/llustration-of-shape-patterns-conveyed-by-Doppler-images-for-various-cardiac.png" alt="Normal Doppler" /> -->
         <figure style="text-align: center;">
@@ -79,7 +70,7 @@
       </p> 
       -->
       <p class="text-lg leading-relaxed mb-6">
-        Doppler ultrasound produces a signal in the form of a wave across each heartbeat. Interpreting the shape of that wave provides information about fetal health. Each major vessel in the body produces a 'signature' shape. Your clinical team can use different measurements and features taken from the shape of these waveforms to understand if blood is flowing to the placenta and pēpi normally, or if it may be reduced.
+        Doppler ultrasound produces a signal in the form of a wave across each heartbeat. Each major vessel in the body produces a unique wave pattern. Analysing these wave patterns and the measurements derived from them shows whether blood flow to the placenta and pēpi is normal or reduced. This helps you and your care team keep track of pēpi’s health and how well the anatomy is developing.
       </p>
     <!-- Dialogs -->
 
