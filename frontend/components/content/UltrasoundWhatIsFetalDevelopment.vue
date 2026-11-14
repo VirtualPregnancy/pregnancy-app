@@ -1,6 +1,6 @@
 <template>
   <div>
-    Ultrasound images are ideal for monitoring fetal development throughout your pregnancy. In New Zealand, pregnant women are offered two ultrasound scans as part of standard care (at 12 weeks and 20 weeks gestation, respectively).
+    Ultrasound images are ideal for monitoring fetal development throughout your pregnancy. In New Zealand, pregnant women are offered two ultrasound scans as part of standard care (at 12 weeks and 20 weeks' gestation, respectively).
     
     <v-card class="timeline-card">
       <v-card-text class="content-text">
@@ -18,12 +18,13 @@
     </v-card>
     <v-card class="timeline-card">
       <v-card-text class="content-text">
-        At <strong>12 weeks</strong> of gestation, the ultrasound scan measures the size of the fetus and/or ‘gestational sac’ (the fluid filled structure within which the pēpi grows) by the end of the first trimester.
+        At <strong>12 weeks</strong>  of gestation, the ultrasound scan measures the size of the fetus and/or 'gestational sac' (the fluid-filled structure within which pēpi grows) by the end of the first trimester.
         <br></br>This scan looks to do the following: 
         <ul>
-          <li>Determine if there is a single pēpi or twins/triplets.</li>
-          <li>Check the basic anatomy of the fetus.</li>
-          <li>Listen to the fetal heartbeat.</li>
+          <li>Confirm viability of the fetus</li>
+          <li>Determine if there is a single pēpi or twins/triplets</li>
+          <li>Check the basic anatomy of the fetus</li>
+          <li>Listen to the fetal heartbeat</li>
           <li>
             Screen for chromosomal conditions using
             <v-btn
@@ -36,6 +37,7 @@
               nuchal translucency
             </v-btn>. 
           </li>
+          <li>Accurately confirm the gestational age (dating) to estimate the due date.</li>
         </ul>
         If you have specific medical conditions, this scan may be performed earlier in the pregnancy.
       </v-card-text>
@@ -45,10 +47,10 @@
       <!--TODO Could also add in here about checking blood flow to the placenta / uterine artery dopplers  -->
       <!-- TODO: Link to doppler ultrasound in pregnancy after "How easily blood is flowing to the placenta" -->
       <v-card-text class="content-text">
-        At <strong>20 weeks</strong> of gestation, you will have another scan to show the physical development of the fetal anatomy in greater detail. It also highlights any abnormalities or health concerns to allow for timely specialised care. 
+        At <strong>20 weeks</strong> of gestation, you will have another scan to show the physical development of the fetal anatomy in greater detail. It also highlights any abnormalities or health concerns to allow for timely specialised care.
         <br></br>The scan checks for the following:
         <ul>
-          <li>How the pēpi is growing and developing, which is indicated by estimating the
+          <li>How pēpi grows and develops, as indicated by estimating the
             <v-btn
               text
               small
@@ -63,7 +65,7 @@
           <li>That the limbs have formed (arms, legs, hands and feet), and if any movement can be seen.</li>
           <li>How the heart is beating.</li>
           <li>How easily blood is flowing to the placenta.</li>
-          <li>The amount of fluid around your pēpi. Low levels of amniotic fluid can be an indicator of pregnancy complications.</li>
+          <li>The amount of fluid around your pēpi. Low levels of amniotic fluid can be an indicator of growth complications.</li>
           <li>Where the placenta is growing.</li>
         </ul>
       <figure class="figure-group"; style='text-align: center;'>

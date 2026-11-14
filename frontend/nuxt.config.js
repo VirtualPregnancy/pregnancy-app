@@ -239,8 +239,7 @@ export default {
       '/support-specialist',
       '/ultrasound-doppler',
       '/ultrasound-metric',
-      '/ultrasound-what-is-ultrasound',
-      '/ultrasound-what-ultrasound-means'
+      '/ultrasound-what-is-ultrasound'
     ],
   },
 };

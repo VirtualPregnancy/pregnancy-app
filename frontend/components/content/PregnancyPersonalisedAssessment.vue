@@ -2,7 +2,7 @@
   <!-- TODO: Smooth the curves -->
   <div class="chart-container">
     <div class="input-section">
-      <p>Seeing how your pēpi develops over time is just as important as seeing what they are like at any one time. One useful metric is the biparietal diameter (BPD), which is the diameter of the fetal head measured from the forehead to the back of the head. <br></br>In conjunction with ultrasound scans taken at 12 weeks and 20 weeks, BPD is useful to estimate fetal weight, determine gestational age and a potential due date (dating). This gives the whānau and healthcare providers a better idea of your pēpi's growth rate.</p>
+      <p>Tracking how your pēpi develops over time is just as important as seeing what they are like at any one time. One useful metric is the biparietal diameter (BPD), which is the diameter of the fetal head measured from the forehead to the back of the head. <br></br>In conjunction with ultrasound scans taken at 12 weeks and 20 weeks, BPD is useful to estimate fetal weight, determine gestational age and a potential due date (dating). This gives the whānau and healthcare providers a better idea of your pēpi's growth rate.</p>
       <div class="input-group">
         <div>
         <label for="gestationalAge">Gestational Age (11-41 Weeks):</label>
@@ -57,7 +57,7 @@
     <!-- reference -->
     <div class="reference-section">
       <p>*Data comes from <a class="ml-1" href="https://www.asum.com.au/wp-content/uploads/2015/09/Fetal-Measurements.pdf" target="_blank"> Australasian Society For Ultrasound In Medicine (ASUM).</a></p>
-      <p>*Note: The fetal growth presented here is from a population of babies from a single dataset. Please treat this information as purely educational, and not diagnostic. Please see a doctor, midwife or your LMC if you have concerns about your pēpi's growth.</p>
+      <p>*Note: The fetal growth presented here is from a population of babies from a single dataset. Please treat this information as purely educational, and not diagnostic. Consult a doctor, midwife or your LMC if you have concerns about your pēpi's growth.</p>
     </div>
   </div>
 </template>

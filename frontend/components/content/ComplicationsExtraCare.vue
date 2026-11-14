@@ -12,14 +12,12 @@
       </h3>
       <div class="text-gray-700 leading-relaxed space-y-3">
         <p>
-          Neonatal care units support pēpi who need extra help after birth. SCBU and
-          NICU provide monitoring, breathing support, feeding assistance and specialist
-          care depending on what your pēpi needs.
+          Neonatal care units support pēpi who need extra help after birth. SCBU and NICU provide monitoring, 
+          breathing support, feeding assistance and specialist care depending on what your pēpi needs. 
         </p>
         <p>
-          Babies may be admitted for many reasons — being born preterm, low birth weight, breathing difficulties,
-          infections, jaundice, or after a complicated birth. The teams include doctors, nurses, lactation consultants
-          and allied health professionals working alongside you and your lead maternity carer (LMC).
+          Babies may be admitted for many reasons — being born preterm, low birth weight, breathing difficulties, infections, jaundice, or after a complicated birth. 
+          The teams include doctors, nurses, lactation consultants, and allied health professionals who work alongside you and your LMC. 
         </p>
       </div>
     </section>

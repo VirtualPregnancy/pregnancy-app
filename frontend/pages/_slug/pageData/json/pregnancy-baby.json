@@ -1,7 +1,7 @@
 {
   "title": "How do we check on pēpi (baby)'s health",
   "id": "1.f",
-  "description": "Healthcare providers, such as your doctor or midwife, use many different methods to monitor your pēpi's health and development throughout your pregnancy. They will check your pēpi's heart rate, fundal height, and other things to make sure your pēpi is growing as expected.<br/><br/>Please be aware that tests and scans only show part of the picture of your pēpi's health, your instinct and daily awareness of your pēpi's movements is just as important! If you have any concerns, even if the scan is normal, please contact your midwife or doctor right away.",
+  "description": "Throughout your pregnancy, your doctor or midwife will use different methods to monitor your pēpi's growth, such as pēpi's heart rate, fundal height, and scan biometrics. <br/><br/>Please be aware that measurements of pēpi's biometrics are only a guide for pēpi's health at one point in time. They only show part of the picture of your pēpi's health and fluctuate over the course of pregnancy. Your daily awareness of your body and your pēpi's movements are just as important, if not more! <br/><br/>If you have any concerns, even if the scan is normal, don't hesitate to get in touch with your midwife or doctor right away. Your care team will work with you to determine how to achieve the best possible health outcomes for pēpi.",
   "showModel": false,
   "contentSections": [
     {
@@ -10,7 +10,7 @@
       "groupTitle": "Standard Tests",
       "icon": "mdi-ruler",
       "iconColor": "var(--v-primary-base)",
-      "content": "The fundal height measurement is a common way for your midwife or doctor to assess how well your pēpi is growing. To do this, they measure the distance between your pubic bone and the top of your 'bump' (the uterus or 'fundus') with a tape measure. <br /> <br />Plotting this measurement on a chart lets them track the rate of your pēpi's growth.  If this measurement is higher or lower than expected, you may be referred for follow up tests (e.g. <a href='/ultrasound-what-is-ultrasound'>ultrasound</a>) to take a closer look at pēpi."
+      "content": "The fundal height measurement is a common way for your midwife or doctor to assess how well your pēpi is growing. To do this, they measure the distance between your pubic bone and the top of your 'bump' (the uterus or 'fundus') with a tape measure. <br /> <br />Plotting this measurement on a chart lets them track the rate of your pēpi's growth. If this measurement is higher or lower than expected, you may be referred for follow-up tests (e.g. <a href='/ultrasound-what-is-ultrasound'>ultrasound</a>) to take a closer look at pēpi."
     },
     {
       "id": "1.f.b",
@@ -52,7 +52,7 @@
       "groupTitle": "Standard Tests",
       "icon": "mdi-test-tube",
       "iconColor": "var(--v-primary-base)",
-      "content": "Regular urine checks with a dipstick can help detect early signs of pre-eclampsia. This is a fast screening tool to test for the presence of protein in urine, which may be an indication of declining kidney health.<br /> <br />Generally, kidneys filter out proteins and prevent them leaking into urine. If protein is present in the screening, you may be asked to collect your urine in a jug over 12-24 hours to determine how much protein is lost. If further testing shows more than 300 mg of protein in urine per day, that may indicate pre-eclampsia.",
+      "content": "Regular urine checks with a dipstick can help detect early signs of pre-eclampsia. This is a fast screening tool to detect protein in urine, which may indicate declining kidney health.<br /><br />Generally, kidneys filter out proteins and prevent them from leaking into urine. If protein is present in the screening, you may be asked to collect your urine in a jug over 12-24 hours to determine how much protein is lost. If further testing shows more than 300 mg of protein in urine per day, that may indicate pre-eclampsia.",
       "additionalResources": [
         {
           "title": "Healthify New Zealand - Pregnancy screening tests",
@@ -69,7 +69,7 @@
       "groupTitle": "Non-Standard Tests",
       "icon": "mdi-wave",
       "iconColor": "var(--v-primary-base)",
-      "content": "<a href='/ultrasound-what-is-ultrasound'> Ultrasound </a> is a safe and important tool that uses sound waves to create images of your pēpi in the womb. It helps healthcare providers monitor your pēpi's development and detect any potential issues throughout pregnancy. <br /> <br />In New Zealand, all pregnant people can have publicly funded ultrasounds at two important times in pregnancy – the end of the first trimester (~12 weeks of gestation), and in the middle of pregnancy <a href='/ultrasound-what-is-ultrasound'> (~20 weeks of gestation) </a>. The 20-week scan helps doctors have a better idea of the pēpi's growth and development by estimating the fetal weight (see the <a href='/ultrasound-what-is-ultrasound'>fetal growth and development</a> section). <br></br>You may be referred for an ultrasound later in pregnancy to closely check your pēpi’s health if you are more likely to have a smaller pēpi, if you need to check their growth or health, and if you anticipate to have a complicated pregnancy (for example, if your last pēpi was small, or you have health conditions like diabetes or high blood pressure). <br /> <br />Other reasons to have a scan might be to check the pēpi’s position as birth nears, or to followup any changes seen at the anatomy scan. Our <a href='/ultrasound-what-ultrasound-means'>ultrasound tool</a> helps visualise and explain more about what is being measured by ultrasound in pregnancy, and what this can mean."
+      "content": "<a href='/ultrasound-what-is-ultrasound'> Ultrasound </a> is a safe and important tool that uses sound waves to create images of your pēpi in the womb. It helps healthcare providers monitor your pēpi's development and detect any potential issues throughout pregnancy. <br /> <br />In New Zealand, all pregnant people can have publicly funded ultrasounds at two important times in pregnancy – the end of the first trimester (~12 weeks of gestation), and in the middle of pregnancy <a href='/ultrasound-what-is-ultrasound'> (~20 weeks of gestation) </a>. The 20-week scan helps doctors better understand pēpi's growth and development by estimating fetal weight (see the <a href='/ultrasound-what-is-ultrasound'>fetal growth and development</a> section). <br></br>You may be referred for an ultrasound later in pregnancy to closely check your pēpi's health if you are more likely to have a smaller pēpi, if you need to check their growth or health, and if you anticipate having a complicated pregnancy (for example, if your last pēpi was small, or you have health conditions like diabetes or high blood pressure). <br /> <br />Other reasons to have a scan might be to check the pēpi’s position as birth nears, or to followup any changes seen at the anatomy scan (week 20)."
     },
     {
       "id": "1.f.f",

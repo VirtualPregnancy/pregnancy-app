@@ -1,7 +1,7 @@
 {
   "title": "Pre-eclampsia",
   "id": "2.b",
-  "description": "This is a serious complication that can affect mum's health and the pēpi's growth, if not treated early.",
+  "description": "Pre-eclampsia is a serious complication that can affect mum's health and the pēpi's growth. This complication develops after the 20th week of gestation and can affect the functions of the placenta and mum's cardiovascular system. If detected early and monitored vigilantly, it is a highly manageable and treatable disorder.",
   "showModel": false,
   "contentSections": [
     {
@@ -9,21 +9,21 @@
       "title": "How is pre-eclampsia detected?",
       "icon": "mdi-heart-plus",
       "iconColor": "var(--v-primary-base)",
-      "content": "Pre-eclampsia testing typically involves a urine test for mum. One indication of the disorder is an abnormally high level of protein in the urine, which may suggest compromised kidney function."
+      "content": "One of the first signs of pre-eclampsia that mum can detect is reduced fetal movement. Case studies have shown that it is important for mums to alert their LMC of decreased fetal movement, so that ultrasound scans (e.g. Doppler) can be conducted as soon as possible to monitor fetal size and growth (ideally within 24 hours). Pre-eclampsia restricts blood flow through umbilical arteries to pēpi, slowing down pēpi's growth. <br/><br/>These scans can also detect low amniotic fluid volume around the pēpi, which has been linked with pre-eclampsia. However, low amniotic fluid should not be the main cause of concern, as it can happen in healthy pregnancies. <br/><br/>Another pre-eclampsia test involves a urine test for mum. One indication of the disorder is an abnormally high level of protein in the urine. This may suggest compromised kidney function, and that blood flow to mum's vital organs is restricted."
     },
     {
       "id": "2.b.b",
       "title": "What causes pre-eclampsia?",
       "icon": "mdi-alert-circle",
       "iconColor": "var(--v-primary-base)",
-      "content": "Pre-eclampsia develops due to high blood pressure, where mum's blood vessels narrow and limits the blood flow through to her vital organs (e.g. brain, kidneys, and liver). <br /> <br />This can lead to the swelling of mum's hands, feet, and face, as well as dizziness, headaches and an increased risk of stroke and cardiovascular diseases later in life. The reduced blood flow may slow down the growth of the pēpi, and increases the risk of premature birth (<37 weeks) or stillbirth."
+      "content": "Pre-eclampsia develops due to high blood pressure, where mum's blood vessels narrow and limit the blood flow to her vital organs (e.g. brain, kidneys, and liver). <br/><br/>This can lead to the swelling of mum's hands, feet, and face, as well as dizziness, headaches and an increased risk of stroke and cardiovascular diseases later in life. The reduced blood flow may slow down pēpi's growth due to a lack of oxygen (as described in the \"Reduced Fetal Growth\" section) and increase the risk of premature birth (<37 weeks) or stillbirth."
     },
     {
       "id": "2.b.c",
       "title": "What does this mean for my pregnancy care?",
       "icon": "mdi-hospital",
       "iconColor": "var(--v-primary-base)",
-      "content":"The condition can be detected and managed through regular, careful checks of mum's blood pressure, blood, urine and pēpi health throughout the pregnancy. Medication and rest is important for keeping the condition under control."
+      "content":"The condition can be detected and managed through regular, careful checks of mum's blood pressure, blood and urine, and pēpi's health throughout the pregnancy. <br/><br/>A Doppler Ultrasound scan of mum's uterine artery is performed to assess how well blood is being supplied to the uterus. Fetal growth and development will be monitored throughout to ensure timely interventions are taken to support pēpi's growth. <br/><br/>Medication and rest for mum are important for keeping the condition under control."
     },
     {
       "id": "2.b.d",

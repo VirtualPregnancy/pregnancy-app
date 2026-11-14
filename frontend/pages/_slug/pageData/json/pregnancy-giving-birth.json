@@ -1,7 +1,7 @@
 {
   "title": "Delivering your pēpi",
   "id": "1.g",
-  "description": "There are several different ways of delivering your pēpi. The appropriate approach depends on your personal preferences, your health status and the medical necessities for your pregnancy. <br></br>Please be assured that choosing the delivery method is a shared decision making process between mum, their partner and whānau, and the trained healthcare providers (e.g. midwife, leading maternity carer (LMC), obstetrician). They will be present at your labour to support you as you give birth.",
+  "description": "There are several ways to deliver your pēpi. The appropriate approach depends on your personal preferences, your health status, and the medical needs of your pregnancy. <br></br>Please be assured that choosing the delivery method is a shared decision-making process between mum, their partner, and whānau, and the certified healthcare providers (e.g., a midwife, a leading maternity carer (LMC), or an obstetrician). They will be present throughout your pregnancy, and at your labour to support you through birth. <br></br>This process personalises birthing to the individual and ensures that the best and most appropriate care is provided to mums and their whānau.",
   "showModel": false,
   "contentSections": [
     {
@@ -9,14 +9,14 @@
       "title": "Spontaneous",
       "icon": "mdi-hospital",
       "iconColor": "var(--v-primary-base)",
-      "content": "Labour and muscle contractions begin naturally to open mum's cervix between weeks 37 and 40. The pēpi is delivered through the vagina without medical intervention or surgical tools. This is the standard approach for giving birth if there are no health concerns for mum or pēpi. <br></br> Water births has been shown to help reduce pain, and increase comfort level for mum during labour. In most cases, it does not increase the risk of infection for mum and pēpi. Please speak to your doctor, midwife or LMC on whether a water birth is appropriate for you, and whether you have health issues that may make water births unsafe."
+      "content": "Labour and muscle contractions begin naturally to open mum's cervix between weeks 37 and 40. Pēpi is delivered through the vagina without medical intervention or surgical tools. This is the standard approach for giving birth if there are no health concerns for mum or pēpi."
     },
     {
       "id": "1.g.b",
       "title": "C-Section",
       "icon": "mdi-hospital",
       "iconColor": "var(--v-primary-base)",
-      "content": "This is an operation where a cut is made through your abdomen and womb to deliver the pēpi. Mums can elect to have a C-Section in order to plan the exact date and time of the birth, and avoid the painful labour process. It is advised to have a discussion with the LMC to decide if this option is appropriate. <br></br>In some cases, C-Sections may be medically necessary, as covered in the <a href='/complications-birth-considerations'>Pregnancy Complications</a> section."
+      "content": "This is an operation where a cut is made through your abdomen and womb to deliver the pēpi. It is advised that you discuss this with the LMC to determine whether this option is appropriate. <br></br>In most cases, C-Sections are only recommended when medically necessary, as covered in the <a href='/complications-birth-considerations'>Pregnancy Complications</a> section."
     },
     {
       "id": "1.g.c",
@@ -58,14 +58,6 @@
     "icon": "mdi-web",
     "iconColor": "var(--v-primary-base)",
     "link": "https://www.healthnz.govt.nz/health-topics/pregnancy-maternity/labour-and-birth/who-to-have-with-you-during-the-birth"
-  },
-  {
-    "title": "Water labour and birth",
-    "id": "2.d.e",
-    "description": "Check out the benefits of water birth, how to prep, and whether it's for you.",
-    "icon": "mdi-web",
-    "iconColor": "var(--v-primary-base)",
-    "link": "https://www.healthnz.govt.nz/health-topics/pregnancy-maternity/labour-and-birth/water-labour-and-birth#water-labour-and-birth-safety-9895"
   }
 ]
 }

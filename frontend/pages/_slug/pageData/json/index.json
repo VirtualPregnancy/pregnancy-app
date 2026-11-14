@@ -17,6 +17,5 @@
   "complications-extra-care": "complications-extra-care.json",
   "ultrasound-doppler": "ultrasound-doppler.json",
   "ultrasound-what-is-ultrasound": "ultrasound-what-is-ultrasound.json",
-  "ultrasound-metric": "ultrasound-metric.json",
-  "ultrasound-what-ultrasound-means": "ultrasound-what-ultrasound-means.json"
+  "ultrasound-metric": "ultrasound-metric.json"
 }

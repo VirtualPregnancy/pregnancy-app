@@ -4,7 +4,7 @@
     "title": "Pregnancy journey",
     "component": "none",
     "heading": "What is happening in pregnancy?",
-    "content": "Your body is changing to accommodate the growth of your pēpi (baby). Here, you can find information on what is happening to your body, how the pēpi grows and is nourished by the placenta. You can also find out the different ways your midwife or doctor may check on your pēpi’s health during pregnancy.",
+    "content": "Your body is changing to accommodate your pēpi's (baby) growth. Here, you can find information about what is happening to your body and how pēpi grows and is nourished by the placenta. You can also find out the different ways your midwife or doctor may check on your pēpi's health during pregnancy.",
     "icon": "/img/landing/pregnancy.svg",
     "subTopics": {
       "changes": {
@@ -64,7 +64,7 @@
     "component": "none",
     "heading": "What does my ultrasound scan mean?",
     "icon": "/img/landing/ultrasound.svg",
-    "content": "During pregnancy, your pēpi (baby) will be checked on using ultrasound imaging. This is a safe and widely used tool, that can help your midwife/doctor know that pēpi is healthy. <br /><br />This page helps you understand what ultrasound is, and the different ways it is used. There is also an interactive tool to help you better understand your ultrasound scan.",
+    "content": "During pregnancy, your pēpi (baby) will be checked using ultrasound imaging. This is a safe, widely used tool that can help your midwife/doctor confirm that pēpi is healthy. <br /><br />This page helps you understand what ultrasound is and the different ways it is used. There is also an interactive tool to help you better understand your ultrasound scan.",
     "subTopics": {
       "what-is-ultrasound": {
         "id": "3.a",
@@ -86,13 +86,6 @@
         "component": "none",
         "heading": "How ultrasound helps detect pregnancy issues",
         "icon": "mdi-alert-circle"
-      },
-      "what-ultrasound-means": {
-        "id": "3.d",
-        "title": "What ultrasound means",
-        "component": "ConditionSelector",
-        "heading": "What does my ultrasound scan mean? ",
-        "icon": "mdi-help-circle"
       }
     }
   },
@@ -100,7 +93,7 @@
     "id": "2",
     "title": "Pregnancy complications",
     "component": "none",
-    "content":"Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told that you have a complication in pregnancy, you are not alone! Pregnancy disorders affect around 6000 pēpi (baby) and their whānau (family) each year in New Zealand, which is about 1 in 10 pregnancies. <br /><br />On these pages, you will find information about the causes of common pregnancy issues, how your doctor/midwife may check on pēpi, and what this may mean for your pregnancy journey.",
+    "content": "Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told that you have a complication in pregnancy, you are not alone! Pregnancy disorders affect around 6000 pēpi (baby) and their whānau (family) each year in New Zealand, which is about 1 in 10 pregnancies. <br /><br />On these pages, you will find information about the causes of common pregnancy issues, how your doctor/midwife may check on pēpi, and what this may mean for your pregnancy journey.",
     "heading": "How to navigate pregnancy complications?",
     "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
@@ -148,7 +141,7 @@
     "component": "none",
     "heading": "What does pregnancy care look like in Aotearoa NZ?",
     "icon": "mdi-routes",
-    "content":"Clinical care pathways for pregnancy in Aotearoa New Zealand are organised around a pyramid of community-based primary maternity services, supported by secondary and tertiary hospital services, with the woman choosing a <strong>Lead Maternity Carer (LMC)</strong>, usually a midwife, to coordinate her care. <br></br>Pathways include primary care for low-risk pregnancies, with consultations and referrals to higher-level specialist services for complex cases or emergencies, ensuring equitable access and appropriate care across all stages of pregnancy.",
+    "content":"Clinical care pathways for pregnancy in Aotearoa New Zealand are organised around a pyramid of community-based primary maternity services, supported by secondary and tertiary hospital services. You can choose a <strong>Lead Maternity Carer (LMC)</strong>, usually a midwife, to coordinate your care within these services. <br/><br/>Pathways include primary care for low-risk pregnancies, with consultations and referrals to higher-level specialist services for complex cases or emergencies, ensuring equitable access and appropriate care across all stages of pregnancy.",
     "subTopics": {
       "mid-wife": {
         "title": "Midwife lead care",
@@ -172,7 +165,7 @@
     "component": "none",
     "heading": "What pregnancy / pēpi (baby) support services are available?",
     "icon": "mdi-account-group",
-    "content": "This application provides comprehensive information about support services available for pregnant people and their whānau throughout Aotearoa New Zealand.",
+    "content": "This application provides comprehensive information about support services available for pregnant people and their whānau throughout Aotearoa New Zealand. It is strongly recommended to consult and discuss with the lead maternity carer (LMC) about the most appropriate care pathways available for your pregnancy.",
     "subTopics": {
       "services": {
         "title": "For everyone pregnant",
