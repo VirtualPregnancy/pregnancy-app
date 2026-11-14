@@ -7,6 +7,10 @@
   <div v-if="!isFullscreen" class="header-container">  
     <Header />  
   </div>
+  <div class="model-page-intro">
+    <h1 class="model-page-title">{{ pageTitle }}</h1>
+    <p v-if="pageDescription" class="model-page-description" v-html="pageDescription"></p>
+  </div>
   <div class="responsive-container display-flex ">
     
     <!-- Model Section -->
@@ -69,7 +73,7 @@
           </div>
         </div>
         <div class="text-center mb-5 text-sm">
-          Read more on <a href="/ultrasound-doppler">Doppler ultrasound</a>
+          Read more on <NuxtLink to="/ultrasound-doppler">Doppler Ultrasound</NuxtLink>
         </div>
       </div>
 
@@ -93,6 +97,16 @@ import Header from '@/components/navigation/Header.vue';
 import modelData from '~/assets/data/modelData.json';
 
 export default {
+  props: {
+    pageTitle: {
+      type: String,
+      default: ''
+    },
+    pageDescription: {
+      type: String,
+      default: ''
+    }
+  },
   components: {
     PanelControls,
     Waveform,
@@ -337,12 +351,36 @@ export default {
   }
 }
 
+.model-page-intro {
+  position: relative;
+  z-index: 1;
+  padding: 16px 24px 8px;
+  background-color: var(--v-backgroundAlt-base);
+}
+
+.model-page-title {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  line-height: 1.3;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.model-page-description {
+  max-width: 72rem;
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
 // Model Section
 .model-section {
   position: relative;
   min-height: 100vh;
   min-width: 100%;
   width: 100%;
+  overflow: hidden;
 
   &.model-section-mobile {
     width: 100%;

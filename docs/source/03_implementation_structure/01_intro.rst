@@ -27,7 +27,7 @@ The data will be saved in the following files:
         "id": "1",
         "title": "Pregnancy Journey",
         "component": "none",
-        "heading": "What is Happening in Pregnancy?",
+        "heading": "What is happening in pregnancy?",
         "content": "During pregnancy your body undergoes a remarkable transformation to accommodate the growth of new life. Here, you can find information on what is happening to your body, how the fetus grows and is nourished by the placenta, and the different ways your midwife or doctor may check on your baby’s health during pregnancy.",
         "icon": "/img/landing/pregnancy.svg",
         "subTopics": {
@@ -35,14 +35,14 @@ The data will be saved in the following files:
             "id": "1.a",
             "title": "Your Body",
             "component": "none",
-            "heading": "Changes To Your Body",
+            "heading": "Changes to your body",
             "icon": "mdi-radar"
         },
         "placenta": {
             "id": "1.b",
             "title": "Placenta",
             "component": "none",
-            "heading": "Roles of the Placenta",
+            "heading": "Roles of the placenta",
             "icon": "mdi-bowl-outline"
         }
     }

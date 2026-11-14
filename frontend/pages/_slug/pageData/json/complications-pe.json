@@ -1,26 +1,53 @@
 {
   "title": "Pre-eclampsia",
   "id": "2.b",
-  "description": "",
+  "description": "Pre-eclampsia is a serious complication that can affect mum's health and the pēpi's growth. This complication develops after the 20th week of gestation and can affect the functions of the placenta and mum's cardiovascular system. If detected early and monitored vigilantly, it is a highly manageable and treatable disorder.",
   "showModel": false,
   "contentSections": [
     {
       "id": "2.b.a",
-      "title": "Pre-eclampsia",
+      "title": "How is pre-eclampsia detected?",
       "icon": "mdi-heart-plus",
       "iconColor": "var(--v-primary-base)",
-      "content": "Pre-eclampsia is a pregnancy complication that can affect both mother and baby. It is a serious condition that can lead to serious health problems for both mother and baby if not treated early. It is a condition that is often detected through regular checkups during pregnancy. It is a condition that is often detected through regular checkups during pregnancy."
+      "content": "One of the first signs of pre-eclampsia that mum can detect is reduced fetal movement. Case studies have shown that it is important for mums to alert their LMC of decreased fetal movement, so that ultrasound scans (e.g. Doppler) can be conducted as soon as possible to monitor fetal size and growth (ideally within 24 hours). Pre-eclampsia restricts blood flow through umbilical arteries to pēpi, slowing down pēpi's growth. <br/><br/>These scans can also detect low amniotic fluid volume around the pēpi, which has been linked with pre-eclampsia. However, low amniotic fluid should not be the main cause of concern, as it can happen in healthy pregnancies. <br/><br/>Another pre-eclampsia test involves a urine test for mum. One indication of the disorder is an abnormally high level of protein in the urine. This may suggest compromised kidney function, and that blood flow to mum's vital organs is restricted."
+    },
+    {
+      "id": "2.b.b",
+      "title": "What causes pre-eclampsia?",
+      "icon": "mdi-alert-circle",
+      "iconColor": "var(--v-primary-base)",
+      "content": "Pre-eclampsia develops due to high blood pressure, where mum's blood vessels narrow and limit the blood flow to her vital organs (e.g. brain, kidneys, and liver). <br/><br/>This can lead to the swelling of mum's hands, feet, and face, as well as dizziness, headaches and an increased risk of stroke and cardiovascular diseases later in life. The reduced blood flow may slow down pēpi's growth due to a lack of oxygen (as described in the \"Reduced Fetal Growth\" section) and increase the risk of premature birth (<37 weeks) or stillbirth."
+    },
+    {
+      "id": "2.b.c",
+      "title": "What does this mean for my pregnancy care?",
+      "icon": "mdi-hospital",
+      "iconColor": "var(--v-primary-base)",
+      "content":"The condition can be detected and managed through regular, careful checks of mum's blood pressure, blood and urine, and pēpi's health throughout the pregnancy. <br/><br/>A Doppler Ultrasound scan of mum's uterine artery is performed to assess how well blood is being supplied to the uterus. Fetal growth and development will be monitored throughout to ensure timely interventions are taken to support pēpi's growth. <br/><br/>Medication and rest for mum are important for keeping the condition under control."
+    },
+    {
+      "id": "2.b.d",
+      "title": "Patient stories/experiences/journeys",
+      "icon": "mdi-account-group",
+      "iconColor": "var(--v-primary-base)",
+      "content":"<strong>PLACEHOLDER.</strong> See <i>Extra Care</i> for inspiration, implement once we have stories."
     }
   ],
   "addtionalResources": [
     {
-      "title": "Pre-eclampsia",
-      "description": "Information on Pre-eclampsia",
+      "title": "What is pre-eclampsia?",
+      "description": "HealthNZ resource about pre-eclampsia",
       "icon": "mdi-web",
       "iconColor": "var(--v-primary-base)",
-      "link": "https://www.mayoclinic.org/diseases-conditions/preeclampsia/symptoms-causes/syc-20355745"
+      "link": "https://www.healthnz.govt.nz/health-topics/pregnancy-maternity/having-a-healthy-pregnancy/pre-eclampsia"
+    },
+    {
+      "title": "Signs, symptoms and treatment of pre-eclampsia",
+      "description": "More in-depth pre-eclampsia from the Heart Research Institute (HRI)",
+      "icon": "mdi-web",
+      "iconColor": "var(--v-primary-base)",
+      "link": "https://www.hri.org.nz/health/learn/cardiovascular-disease/preeclampsia"
     }
-
   ]
 }
   

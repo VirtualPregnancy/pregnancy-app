@@ -1,5 +1,5 @@
 {
-    "title": "About Our Team",
+    "title": "About our team",
     "heroimage": "/img/about/Alys.jpg",
     "id": "about-us",
     "description":"The Pregnancy Health group aims to improve health in pregnancy and early childhood by providing a better understanding of physiology in the critical developmental period. We use data-driven computational models to provide a new understanding of the important contributors to healthy development and to interpret clinical data obtained in early-life.",
@@ -16,7 +16,7 @@
         ]
     },
     "contributors": {
-        "title": "Web-app Contributors",
+        "title": "Web-app contributors",
         "members": [
             {
                 "name": "Prof. Alys Clark",
@@ -28,12 +28,25 @@
             },
             
             {
-            "name": "Dr Thiranja Prasad Babarenda Gamage",
+                "name": "Dr Thiranja Prasad Babarenda Gamage",
                 "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/thiranja-prasad-babarenda-gamage.html"
             },
             {
                 "name": "Dr Charlotte Oyston",
                 "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/charlotte-oyston.html"
+            },
+            {
+                "name": "Dr Ngaire Anderson",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/ngaire-anderson.html"
+            },
+            {
+                "name": "Dr Teena Gamage",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/teena-gamage.html"
+            },
+            {
+                "name": "Dr Max Dang Vu",
+                "role": "Web Developer",
+                "link": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health/team/max-dang-vu.html"
             },
             {
                 "name": "Zoea Chen",
@@ -49,10 +62,10 @@
         ]
     },
     "contact": {
-        "title": "Get in Touch",
+        "title": "Get in touch",
         "description": "We welcome collaboration opportunities and feedback from healthcare providers, researchers, and families.",
         "website": "https://www.auckland.ac.nz/en/abi/our-research/research-groups-themes/reproductive-systems/pregnancy-health.html",
-        "institution": "Auckland Bioengineering Institute, University of Auckland",
+        "institution": "Auckland Bioengineering Institute, Waipapa Taumata Rau University of Auckland",
         "address": "70 Symonds Street, Auckland 1010, New Zealand"
     }
 }

@@ -1,11 +1,11 @@
 {
-  "title": "Support Services",
+  "title": "Support services",
   "id": "5.a",
   "showModel": false,
   "contentSections": [
     {
       "id": "0",
-      "title": "Support Services",
+      "title": "Support services",
       "icon": "mdi-account-group",
       "iconColor": "var(--v-primary-base)",
       "component": "SupportService"

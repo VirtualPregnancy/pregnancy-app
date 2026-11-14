@@ -2,24 +2,22 @@
   <div class="max-w-4xl mx-auto p-6">
     <!-- Title -->
     <h2 class="text-2xl md:text-2xl font-bold text-center mb-8" style="color: var(--v-primary-base);">
-      NICU / SCBU – what they are and what to expect
+      Neonatal Intensive Units (NICU) & Special Care Baby Units (SCBU) – what they are and what to expect
     </h2>
 
     <!-- What it is -->
     <section class="mb-10">
       <h3 class="text-xl font-semibold mb-3" style="color: var(--v-accent-base);">
-        What it is, why baby might need to be sent there
+        What it is, why pēpi might need to be sent there
       </h3>
       <div class="text-gray-700 leading-relaxed space-y-3">
         <p>
-          Neonatal care units support Pēpi(baby) who need extra help after birth. Special Care Baby Units (SCBU) and
-          Neonatal Intensive Care Units (NICU) provide monitoring, breathing support, feeding assistance and specialist
-          care depending on what your baby needs.
+          Neonatal care units support pēpi who need extra help after birth. SCBU and NICU provide monitoring, 
+          breathing support, feeding assistance and specialist care depending on what your pēpi needs. 
         </p>
         <p>
-          Babies may be admitted for many reasons — being born preterm, low birth weight, breathing difficulties,
-          infections, jaundice, or after a complicated birth. The teams include doctors, nurses, lactation consultants
-          and allied health professionals working alongside you and your LMC.
+          Babies may be admitted for many reasons — being born preterm, low birth weight, breathing difficulties, infections, jaundice, or after a complicated birth. 
+          The teams include doctors, nurses, lactation consultants, and allied health professionals who work alongside you and your LMC. 
         </p>
       </div>
     </section>
@@ -81,7 +79,7 @@
       <h3 class="text-xl font-semibold mb-3" style="color: var(--v-accent-base);">Practical information to help</h3>
       <p class="text-gray-700 mb-4">
         Choose your hospital to get quick links for maps and local information. This uses public hospital data for
-        Aotearoa New Zealand including certified fertility clinics, NGO hospitals and public hospitals.
+        Aotearoa New Zealand including certified fertility clinics, non-governmental organisations (NGO) hospitals and public hospitals.
       </p>
       <p class="text-gray-700 mb-4">
         You can find the local health provider by selecting your city/town below:
@@ -254,25 +252,8 @@ export default {
           ]
         },
         {
-          title: 'Staying Connected',
-          color: 'var(--v-accent-base)',
-          content: [
-            'We found ways to stay connected even when we couldn\'t be there 24/7. We recorded our voices reading stories, and the nurses played them for our pēpi.',
-            'Taking photos and keeping a journal helped us track progress and celebrate small milestones. Every gram gained, every day breathing on their own - these were huge victories.'
-          ]
-        },
-        {
           title: 'Practical Tips',
           color: 'var(--v-info-base)',
-          content: [
-            'Bring comfortable clothes and snacks - you\'ll be spending a lot of time there. A small notebook helped us remember questions for doctors.',
-            'Accept help from whānau and friends. Let them bring meals, do laundry, or just sit with you. You don\'t have to do this alone.',
-            'The NICU nurses became our teachers. Don\'t hesitate to ask questions - they want you to feel confident caring for your pēpi.'
-          ]
-        },
-        {
-          title: 'Practical Tips',
-          color: 'var(--v-primary-base)',
           content: [
             'Bring comfortable clothes and snacks - you\'ll be spending a lot of time there. A small notebook helped us remember questions for doctors.',
             'Accept help from whānau and friends. Let them bring meals, do laundry, or just sit with you. You don\'t have to do this alone.',

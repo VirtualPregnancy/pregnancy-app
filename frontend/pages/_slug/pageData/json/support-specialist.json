@@ -1,12 +1,12 @@
 {
-  "title": "Specialist Services",
+  "title": "Specialist services",
   "id": "5.b",
-  "description": "Specialized healthcare services for complex pregnancy conditions and high-risk situations.",
+  "description": "Specialised healthcare services for complex pregnancy conditions and high-risk situations.",
   "showModel": false,
   "contentSections": [
     {
       "id": "5.b.a",
-      "title": "Mental Health Support Services",
+      "title": "Mental health support services",
       "icon": "mdi-brain",
       "iconColor": "var(--v-primary-base)",
       "component": "SupportMentalHealth"
@@ -14,14 +14,14 @@
     },
     {
       "id": "5.b.b",
-      "title": "Pregnancy Complications Support",
+      "title": "Pregnancy complications support",
       "icon": "mdi-alert-circle-outline",
       "iconColor": "var(--v-primary-base)",
       "component": "SupportComplicationService"
     },
     {
       "id": "5.b.c",
-      "title": "Premature Birth Support and NICU / SCBU Services",
+      "title": "Premature birth support and Neonatal Intensive Units (NICU) / Special Care Baby Units (SCBU) services",
       "icon": "mdi-baby-face-outline",
         "iconColor": "var(--v-primary-base)",
         "component": "SupportNICUService"

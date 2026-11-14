@@ -87,7 +87,10 @@ export default {
 
       // For RightPane (model pages), return minimal props
       if (this.pageComponent === 'RightPane') {
-        return {};
+        return {
+          pageTitle: this.pageData.title,
+          pageDescription: this.pageData.description || ''
+        };
       }
 
       // For all content panes (including custom ones), provide full props

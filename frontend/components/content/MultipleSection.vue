@@ -31,9 +31,32 @@
           class="space-y-6"
         />
         <!-- Fallback to HTML content -->
-        <div v-else class="space-y-6" v-html="section.content">
+        <div v-else class="space-y-6" v-html="contentHtml">
         </div>
       </v-card-text>
+
+      <div v-if="section.additionalResources && section.additionalResources.length" class="px-6 pb-6">
+        <div
+          v-for="resource in section.additionalResources"
+          :key="resource.title"
+          class="resource-box"
+        >
+          <v-icon :color="resource.iconColor" size="28">{{ resource.icon }}</v-icon>
+          <div class="resource-box__content">
+            <h3 class="resource-box__title">{{ resource.title }}</h3>
+            <p class="resource-box__description">{{ resource.description }}</p>
+            <a
+              :href="resource.link"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="resource-box__link"
+            >
+              Learn More
+              <v-icon size="16" class="ml-1">mdi-arrow-top-right</v-icon>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   </v-card>
 </template>
@@ -52,7 +75,24 @@ export default {
       default: false
     }
   },
-  
+
+  computed: {
+    contentHtml() {
+      const basePath = this.$config.basePath || (
+        process.env.DEPLOY_ENV === 'GH_PAGES' ? '/pregnancy-app' : ''
+      );
+
+      if (!basePath || !this.section.content) {
+        return this.section.content;
+      }
+
+      return this.section.content.replace(
+        /(["'])\/img\//g,
+        `$1${basePath}/img/`
+      );
+    }
+  },
+ 
   methods: {
     toggleSection() {
       this.$emit('toggle', this.section.id);
@@ -117,6 +157,46 @@ export default {
 .section-content--expanded {
   max-height: 1000px;
   opacity: 1;
+}
+
+.resource-box {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  border-left: 4px solid var(--v-accent-base);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.resource-box__content {
+  min-width: 0;
+}
+
+.resource-box__title {
+  margin: 0 0 6px;
+  color: #1f2937;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.resource-box__description {
+  margin: 0 0 10px;
+  color: #4b5563;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.resource-box__link {
+  display: inline-flex;
+  align-items: center;
+  color: #2563eb;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.resource-box__link:hover {
+  color: #1e40af;
 }
 </style>
 

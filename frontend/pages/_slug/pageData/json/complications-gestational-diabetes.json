@@ -1,16 +1,60 @@
 {
-    "title": "Gestational Diabetes",
-    "id": "2.c",
-    "description": "",
-    "showModel": false,
-    "contentSections": [
-      {
-        "id": "2.b.a",
-        "title": "Gestational Diabetes",
-        "icon": "mdi-heart-plus",
-        "iconColor": "var(--v-primary-base)",
-        "content": "Gestational Diabetes is a pregnancy complication that can affect both mother and baby. It is a serious condition that can lead to serious health problems for both mother and baby if not treated early. It is a condition that is often detected through regular checkups during pregnancy. It is a condition that is often detected through regular checkups during pregnancy."
-      }
-    ]
-  }
+  "title": "Gestational diabetes",
+  "id": "2.c",
+  "description": "Gestational diabetes develops in the second or third trimester (typically between weeks 24 and 28 of gestation) and is only temporary. High amounts of maternal blood glucose pass into the fetal circulation through the placenta, with the extra glucose stored as body fat and leading to a large for gestational age pēpi. Gestational diabetes is treatable and easily managed, with most mothers going on to have healthy pregnancies and babies.",
+  "showModel": false,
+  "contentSections": [
+    {
+      "id": "2.c.a",
+      "title": "How is gestational diabetes detected?",
+      "icon": "mdi-heart-plus",
+      "iconColor": "var(--v-primary-base)",
+      "content": "Gestational diabetes is diagnosed through routine blood screening. One example is an Hb1Ac test before week 20 to check for undiagnosed diabetes or any risk of developing it later. <br/><br/>If your result is at least 42 mmol/mol, you will be referred to a diabetes in pregnancy service."
+    },
+    {
+      "id": "2.c.b",
+      "title": "What causes gestational diabetes?",
+      "icon": "mdi-alert-circle",
+      "iconColor": "var(--v-primary-base)",
+      "content": "Gestational diabetes develops because of increasing glucose levels in the mother's blood after about 24 weeks of pregnancy. <br/><br/>This is due to two factors. Firstly, the human body needs four times as much insulin as normal to supply energy to both mum and pēpi. Secondly, hormones in the placenta (e.g., cortisol and human placental lactogen) block the body's insulin action, which raises glucose levels."
+    },
+    {
+      "id": "2.c.c",
+      "title": "What does this mean for my pregnancy care?",
+      "icon": "mdi-hospital",
+      "iconColor": "var(--v-primary-base)",
+      "content":"Potential complications include birthing difficulties related to pēpi overgrowing in size (macrosomia, where pēpi's birth weight is at least 4 kg), and pēpi experiencing increased health risks related to low calcium and glucose levels after birth. <br/><br/>To help monitor these complications and pēpi overgrowth, it is recommended for mums with gestational diabetes to have more frequent ultrasound scans and checkups from 24 weeks onwards. The scan frequency depends on the progression of pregnancy and consultation with the LMC but could be every four weeks. <br/><br/>After birth, it is recommended that both have yearly GP check-ins as both mother and pēpi have a higher risk of developing Type 2 diabetes later in life. With informed dietary changes and regular exercising during pregnancy, gestational diabetes is manageable and typically resolves after childbirth."
+    },
+    {
+      "id": "2.c.d",
+      "title": "Patient stories/experiences/journeys",
+      "icon": "mdi-account-group",
+      "iconColor": "var(--v-primary-base)",
+      "content":"<strong>PLACEHOLDER.</strong> See <i>Extra Care</i> for inspiration, implement once we have stories."
+    }
+  ],
+  "addtionalResources": [
+    {
+      "title": "Gestational diabetes - Diabetes New Zealand",
+      "description": "Get a more diabetes-focused look at gestational diabetes",
+      "icon": "mdi-web",
+      "iconColor": "var(--v-primary-base)",
+      "link": "https://www.diabetes.org.nz/gestational-diabetes"
+    },
+    {
+      "title": "Gestational diabetes - Health New Zealand",
+      "description": "Information on how to manage gestational diabetes and related disorders",
+      "icon": "mdi-web",
+      "iconColor": "var(--v-primary-base)",
+      "link": "https://www.healthnz.govt.nz/health-topics/conditions-treatments/diabetes/gestational-diabetes/gestational-diabetes-pregnancy-and-your-baby"
+    },
+    {
+      "title": "Diabetes testing in pregnancy – Health New Zealand",
+      "description": "Check out the different ways to test for gestational diabetes in pregnancy, including the HbA1c test and oral glucose tolerance test (OGTT)",
+      "icon": "mdi-web",
+      "iconColor": "var(--v-primary-base)",
+      "link": "https://www.healthnz.govt.nz/health-topics/pregnancy-maternity/pregnancy-newborn-screening/diabetes-testing-pregnancy"
+    }
+  ]
+}
   

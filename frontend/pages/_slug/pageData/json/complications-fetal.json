@@ -1,7 +1,7 @@
 {
   "title": "Reduced fetal growth",
   "id": "2.a",
-  "description": "Understanding fetal conditions and their management.",
+  "description": "Babies usually grow steadily in utero, fed by the nutrients and oxygen passed from mum across the placenta. Reduced fetal growth means your pēpi is not growing as expected in the uterus. The most common cause is an issue with the placenta that leads to poor nutrient and oxygen supply. Do note that some babies may be small for reasons not related to the placenta (e.g. genetics). Extra check-ups and scans are needed to monitor pēpi's growth and develop a care plan for pēpi during birth and beyond.",
   "showModel": false,
   "contentSections": [
     {
@@ -9,45 +9,69 @@
       "title": "Different terms used to describe reduced fetal growth",
       "icon": "mdi-heart-minus",
       "iconColor": "var(--v-primary-base)",
-      "content":"Babies usually grow at a steady rate in utero, fed by the nutrients and oxygen that are passed across the placenta. <br /> <br />However, in some cases there may be concerns because baby is smaller than expected for that stage of pregnancy (something called Small for Gestational Age (SGA)), or because their growth is slowing down indicating that the placenta’s ability to nourish the baby cannot keep up with its needs (called Fetal Growth Restriction (FGR)).  <br /> <br />It is important to remember that many SGA babies in particular are healthy and just naturally small, but it is important to check on these babies more closely so we can know if something is going wrong. <br /> <br /> In New Zealand..." 
+      "content": "There may be concerns when pēpi is smaller than expected for that stage of pregnancy (<strong>Small for Gestational Age (SGA)</strong>). In these cases, the estimated weight for pēpi is below the 10th percentile for that gestational age. <br/> <br/>In other cases, pēpi's growth slows down. This indicates that pēpi's nourishment through the placenta may not keep up with pēpi's needs (a condition called <strong>Fetal Growth Restriction (FGR)</strong>).  <br /> <br />It is essential to remember that many SGA babies, in particular, are healthy and just naturally small. Still, it is important to closely monitor these babies to flag any issues when they arise." 
     },
     {
       "id": "2.a.b",
       "title": "How is reduced fetal growth detected?",
       "icon": "mdi-magnify",
       "iconColor": "var(--v-primary-base)",
-      "content": "In pregnancy your midwife/doctor will monitor your pregnancy by measuring the <a href='/pregnancy-keep-baby-healthy'> fundal height </a> from 24 weeks of gestation.  If this measurement suggests that your baby may be smaller than expected, or its growth is slowing down, you may be referred for an <a href='/ultrasound-what-ultrasound-means'> ultrasound scan </a> to more closely check on baby’s growth."
+      "content": "Your midwife/doctor will monitor your pregnancy by measuring the <a href='/pregnancy-baby'> fundal height </a> from 24 weeks of gestation onwards. If this measurement suggests that your pēpi may be smaller than expected, or its growth is slowing down, you may be referred for an <a href='/ultrasound-what-ultrasound-means'> ultrasound scan </a> to check on pēpi's growth more closely. <br></br>Doppler imaging of the <strong>ductus venosus (DV)</strong> helps to monitor blood flow around the wider fetal circulation early in pregnancy <i>(11-13 weeks)</i>. For high-risk pregnancies, e.g. involving a SGA pēpi , DV doppler is also performed in the second and third trimesters <i>(prior to 34 weeks)</i> to monitor potential complications. <br></br>Doppler imaging of the <strong>middle cerebral artery (MCA)</strong> is performed after <i>32 weeks</i> to monitor blood flow to the pēpi's upper body. From this, a clinical metric called <strong>CPR (Cerebroplacental Ratio)</strong> is reported to indicate pēpi's wellbeing. This ratio is calculated by dividing the MCA <a href='/ultrasound-metric'>pulsatility index</a> (MCA-PI) by the umbilical artery pulsatility index (UA-PI)."
     },
     {
       "id": "2.a.c",
-      "title": "What causes FGR?",
+      "title": "What causes Fetal Growth Restriction (FGR)?",
       "icon": "mdi-alert-circle",
       "iconColor": "var(--v-warning-base)",
-      "content": "We know that some factors like <span class='font-semibold'>smoking</span> or <span class='font-semibold'>obesity</span> can reduce fetal growth. However, it is important to realise that in most cases if you are told your baby is not growing as well as expected, it is <span class='font-semibold'>not a result of anything you did or did not do</span>.<br /><br />At its core, reduced fetal growth arises from <span class='font-semibold'>poor function of the placenta</span>. This can arise for several different reasons, or combinations of reasons, meaning that what caused a baby to be SGA or FGR is often different in each case.<br /><br />It can help to think about the factors that contribute to FGR in three main areas:<br /><br />1) <span class='font-semibold'>how blood is delivered to the placenta through the uterus</span>,<br />2) <span class='font-semibold'>how capable the placenta is of absorbing nutrients from maternal blood</span>, and<br />3) <span class='font-semibold'>how well the baby can pump blood through the placenta to use the nutrients</span>.<br /><br />1) In pregnancy, the placenta induces the blood vessels in your uterus to undergo <span class='font-semibold'>big changes that allow 15 times more blood</span> to flow to the placenta to nourish your baby. In FGR, these changes can be reduced, meaning that not as much blood reaches the placenta, and/or that blood flows across the surface of the placenta too fast, meaning that not enough nutrients or oxygen can be absorbed. How well blood flows through the uterus to the placenta is checked in pregnancy using <span class='font-semibold'><a href='/ultrasound-what-is-ultrasound'>uterine artery Doppler</a></span>.<br /><br />2) One of the placenta's main jobs is to absorb nutrients and oxygen from your blood and pass them to the baby. In FGR the placenta can sometimes not be as able to do this as well because it is <span class='font-semibold'>smaller overall and/or its branches are not as well formed</span> – this reduces the surface available for exchange. In some cases of FGR nutrient or oxygen uptake may also be limited by lower levels of molecules on the surface of the placenta that bring in nutrients, or because the fetal blood vessels inside the placenta also haven't developed as well to take up these nutrients and pass them to the baby. Both of these things make the placenta <span class='font-semibold'>less efficient</span>.<br /><br />3) It can be harder for the baby's heart to push blood through the placenta in FGR, resulting in <span class='font-semibold'>reduced blood flow to the placenta</span>, that in turn reduces nutrient and oxygen uptake. This can sometimes also place more strain on the baby's heart as it has to work harder to get what it needs, which in turn can change some things about how it grows. As a result, your doctor may want to <span class='font-semibold'>check on your baby's heart</span>."
+      "content": "We know that some factors like <span class='font-semibold'>smoking</span> or <span class='font-semibold'>obesity</span> can reduce fetal growth. However, it is important to realise that, in most cases, if you are told your pēpi is not growing as well as expected, it is <span class='font-semibold'>not a result of anything you did or did not do</span>.<br /><br />Reduced fetal growth can result from <span class='font-semibold'>poor functioning of the placenta</span>. This arises for several reasons, or combinations of reasons, meaning that what caused a pēpi to be SGA or FGR can vary from case to case. <br /><br />It can help to think about the factors that contribute to FGR in three main areas:<br /><br />1) <span class='font-semibold'>how blood is delivered to the placenta through the uterus</span>,<br />2) <span class='font-semibold'>how capable the placenta is of absorbing nutrients from maternal blood</span>, and<br />3) <span class='font-semibold'>how well pēpi can pump blood through the placenta to use the nutrients</span>.<br /><br /><strong><u>Blood delivery to the placenta:</u></strong> In a healthy pregnancy, the placenta induces changes in the blood vessels in mum's uterus <span class='font-semibold'>  so that up to 15 times more blood </span>  can reach it to nourish pēpi.In FGR, these changes can be reduced, so less blood reaches the placenta and/or the blood flows across the placenta surface too quickly. This means that not enough nutrients or oxygen can be absorbed by pēpi. A <span class='font-semibold'><a href='/ultrasound-what-is-ultrasound'>uterine artery Doppler ultrasound</a></span> checks how well blood flows from the uterus to the placenta. <br /><br /><strong><u>Nutrient absorption at the placenta:</u></strong> The placenta helps to absorb nutrients and oxygen from mum's blood and passes them to pēpi. In FGR, placental function is compromised because the <span class='font-semibold'>placenta may be smaller or its branches less developed</span> resulting in less surface area available for exchange. The placenta may also have fewer surface molecules that transport nutrients, and the fetal blood vessels inside the placenta may be underdeveloped. Both factors make the placenta <span class='font-semibold'>less efficient</span> at picking up and transporting nutrients and oxygen to pēpi. <br /><br /><strong><u>Pēpi pumping blood through placenta:</u></strong>  In FGR, it may be harder for pēpi's heart to pump blood through the placenta. This <span class='font-semibold'>reduces the uptake of nutrients and oxygen</span>, which can push pēpi's heart to work harder towards meeting the nutrient and oxygen demands, which in turn can change how it grows. As a result, one FGR test your doctor may perform is <span class='font-semibold'>checking on your pēpi's heart</span>."
     },
     {
       "id": "2.a.d",
       "title": "What does this mean for my pregnancy care?",
       "icon": "mdi-hospital",
       "iconColor": "var(--v-primary-base)",
-      "content":"Reduced fetal growth means that your baby is not growing as well as expected. This can be due to a variety of reasons, including poor function of the placenta, poor blood flow to the placenta, and poor nutrient and oxygen uptake by the baby. This can lead to a variety of problems for your baby, including growth restriction, low birth weight, and increased risk of complications during pregnancy and birth."
+      "content":"Reduced fetal growth means that pēpi is growing less than expected. There are several reasons, including poor placental function, reduced blood flow to the placenta, and compromised nutrient and oxygen uptake by pēpi. These issues can affect your pēpi in different ways, including: <ul><li>Growth restriction </li><li>Low birth weight </li><li>Increased risk of complications during pregnancy and birth.</li></ul> Based on your medical history, your LMC (lead maternity carer) will help you come up with an informed plan to provide guided care for you and pēpi. The plan typically involves early screening and monitoring scans throughout the pregnancy, particularly from weeks 20-24 all the way through to birth. <br/><br/>The scans are usually ultrasound to assess pēpi growth assessments, where a customised antenatal growth chart is sent to mum. If abnormal fetal growth is detected, Doppler assessments of the umbilical artery, uterine artery are performed, and the CPR calculated. Based on the findings of Doppler scans, the appropriate treatment pathways will be determined for mum and pēpi. For mums with FGR, the care pathways will differ between early onset (<32 weeks) and late onset (> 32 weeks). <br/><br/>You can also find more SGA treatment suggested by Starship, in the Additional Resources section."
     },
     {
       "id": "2.a.e",
       "title": "Patient stories/experiences/journeys",
       "icon": "mdi-account-group",
       "iconColor": "var(--v-primary-base)",
-      "content":"Reduced fetal growth means that your baby is not growing as well as expected. This can be due to a variety of reasons, including poor function of the placenta, poor blood flow to the placenta, and poor nutrient and oxygen uptake by the baby. This can lead to a variety of problems for your baby, including growth restriction, low birth weight, and increased risk of complications during pregnancy and birth."
+      "content":"<strong>PLACEHOLDER.</strong> See <i>Extra Care</i> for inspiration, implement once we have stories."
     }
   ],
   "addtionalResources": [
     {
-      "title": "Fetal Growth Restriction",
+      "title": "Small for Gestational Age (SGA) - Starship",
       "id": "2.a.f",
-      "description": "More information on Fetal Growth Restriction (FGR) / Having a Small Baby",
+      "description": "Starship guide for looking after SGA newborns",
+      "icon": "mdi-web",
+      "iconColor": "var(--v-primary-base)",
+      "link": "https://www.starship.org.nz/small-for-gestational-age-babies/"
+    },
+    {
+      "title": "Fetal Growth Restriction (FGR) - RANZCOG",
+      "id": "2.a.f",
+      "description": "More information about having a small pēpi with FGR, from the Royal Australian and New Zealand College of Obstetricians and Gynaecologists",
       "icon": "mdi-web",
       "iconColor": "var(--v-primary-base)",
       "link": "https://ranzcog.edu.au/wp-content/uploads/Fetal-Growth-Restriction.pdf"
+    },
+    {
+      "title": "Practical guidance for screening SGA and FGR babies - New Zealand College of Midwives",
+      "id": "2.a.f",
+      "description": "Midwife guidance about SGA and FGR monitoring and care",
+      "icon": "mdi-web",
+      "iconColor": "var(--v-primary-base)",
+      "link": "https://www.midwife.org.nz/wp-content/uploads/2021/05/Assessment-and-promotion-of-fetal-wellbeing-during-pregnancy.pdf"
+    },
+    {
+      "title": "SGA and FGR guidelines - Health New Zealand",
+      "id": "2.a.f",
+      "description": "National clinical maternity guidelines for SGA and FGR care pathways",
+      "icon": "mdi-web",
+      "iconColor": "var(--v-primary-base)",
+      "link": "https://www.healthnz.govt.nz/health-professionals/guidance-standards/topic/maternity/national-maternity-clinical-guidelines"
     }
   ]
 }
