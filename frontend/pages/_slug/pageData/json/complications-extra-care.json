@@ -6,7 +6,7 @@
   "contentSections": [
     {
       "id": "2.e.a",
-      "title": "Neonatal Intensive Units (NICU) & Special Care Baby Units (SCBU) – what they are/what to expect",
+      "title": "Neonatal Intensive Units (NICU) & Special Care Baby Units (SCBU) – what they are and what to expect",
       "icon": "mdi-heart-minus",
       "iconColor": "var(--v-primary-base)",
       "component": "ComplicationsExtraCare"
