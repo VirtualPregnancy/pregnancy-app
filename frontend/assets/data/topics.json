@@ -1,52 +1,59 @@
 {
   "pregnancy": {
     "id": "1",
-    "title": "Pregnancy Journey",
+    "title": "Pregnancy journey",
     "component": "none",
-    "heading": "What is Happening in Pregnancy?",
-    "content": "During pregnancy your body undergoes a remarkable transformation to accommodate the growth of new life. Here, you can find information on what is happening to your body, how the fetus grows and is nourished by the placenta, and the different ways your midwife or doctor may check on your baby’s health during pregnancy.",
+    "heading": "What is happening in pregnancy?",
+    "content": "Your body is changing to accommodate your pēpi's (baby) growth. Here, you can find information about what is happening to your body and how pēpi grows and is nourished by the placenta. You can also find out the different ways your midwife or doctor may check on your pēpi's health during pregnancy.",
     "icon": "/img/landing/pregnancy.svg",
     "subTopics": {
       "changes": {
         "id": "1.a",
-        "title": "Your Body",
+        "title": "Your body",
         "component": "none",
-        "heading": "Changes To Your Body",
+        "heading": "Changes to your body",
         "icon": "mdi-radar"
       },
       "placenta": {
         "id": "1.b",
         "title": "Placenta",
         "component": "none",
-        "heading": "Roles of the Placenta",
+        "heading": "Roles of the placenta",
         "icon": "mdi-bowl-outline"
       },
       "interact-with-your-placenta": {
         "id": "1.c",
-        "title": "Interact With Your Placenta",
+        "title": "Interact with your placenta",
         "component": "ConditionSelector",
-        "heading": "Interact With Your Placenta",
+        "heading": "Interact with your placenta",
         "icon": "mdi-gesture-tap"
       },
       "fetal-dev": {
         "id": "1.d",
-        "title": "Fetal Development",
+        "title": "Fetal development",
         "component": "none",
-        "heading": "Fetal Development",
+        "heading": "Fetal development",
         "icon": "mdi-flower-outline"
       },
       "keep-baby-healthy": {
         "id": "1.e",
-        "title": "Keeping Baby Healthy",
+        "title": "Keeping pēpi (baby) healthy",
         "component": "none",
-        "heading": "Keeping Baby Healthy",
+        "heading": "Keeping pēpi (baby) healthy",
         "icon": "mdi-charity"
       },
       "baby": {
         "id": "1.f",
-        "title": "Health Checks",
+        "title": "Health checks",
         "component": "none",
-        "heading": "How do we check on baby's health?",
+        "heading": "How do we check on pēpi's (baby) health?",
+        "icon": "mdi-baby-face-outline"
+      },
+      "giving-birth": {
+        "id": "1.g",
+        "title": "Delivering your pēpi",
+        "component": "none",
+        "heading": "Different ways of giving birth",
         "icon": "mdi-baby-face-outline"
       }
     }
@@ -55,81 +62,74 @@
     "id": "3",
     "title": "Ultrasound",
     "component": "none",
-    "heading": "What does my ultrasound scan mean",
+    "heading": "What does my ultrasound scan mean?",
     "icon": "/img/landing/ultrasound.svg",
-    "content": "During pregnancy your baby will be checked on using ultrasound imaging.  This is a safe and widely used tool, that can help your midwife/doctor know that baby is healthy. This page helps you understand what ultrasound is and the different ways it is used and includes an interactive tool to help you understand your own ultrasound scan better. ",
+    "content": "During pregnancy, your pēpi (baby) will be checked using ultrasound imaging. This is a safe, widely used tool that can help your midwife/doctor confirm that pēpi is healthy. <br /><br />This page helps you understand what ultrasound is and the different ways it is used. There is also an interactive tool to help you better understand your ultrasound scan.",
     "subTopics": {
       "what-is-ultrasound": {
         "id": "3.a",
-        "title": "What Ultrasound Means",
+        "title": "What ultrasound means",
         "component": "none",
-        "heading": "Ultrasound",
+        "heading": "What is ultrasound?",
         "icon": "mdi-stethoscope"
       },
       "doppler": {
         "id": "3.b",
-        "title": "Doppler Ultrasound",
+        "title": "Doppler ultrasound",
         "component": "none",
-        "heading": "Doppler Ultrasound in Pregnancy ",
+        "heading": "Doppler ultrasound in pregnancy",
         "icon": "mdi-chart-areaspline"
       },
       "metric": {
         "id": "3.c",
-        "title": "Doppler Ultrasound Metrics",
+        "title": "Doppler ultrasound metrics",
         "component": "none",
-        "heading": "How ultrasound can be used to detect pregnancy issues",
+        "heading": "How ultrasound helps detect pregnancy issues",
         "icon": "mdi-alert-circle"
-      },
-      "what-ultrasound-means": {
-        "id": "3.d",
-        "title": "What Ultrasound Means",
-        "component": "ConditionSelector",
-        "heading": "What does my ultrasound scan mean? ",
-        "icon": "mdi-help-circle"
       }
     }
   },
   "complications": {
     "id": "2",
-    "title": "Pregnancy Complications",
+    "title": "Pregnancy complications",
     "component": "none",
-    "content":"Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told you have a complication in pregnancy you are not alone – pregnancy disorders affect around 6000 Pēpi(baby) and their whanau(family) each year in New Zealand (1 in 10 pregnancies). On these pages you will find information to help you understand what causes common issues in pregnancy, how your doctor/midwife may check on Pēpi, and what this may mean for your pregnancy journey. ",
-    "heading": "Navigating Pregnancy Complications",
+    "content": "Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told that you have a complication in pregnancy, you are not alone! Pregnancy disorders affect around 6000 pēpi (baby) and their whānau (family) each year in New Zealand, which is about 1 in 10 pregnancies. <br /><br />On these pages, you will find information about the causes of common pregnancy issues, how your doctor/midwife may check on pēpi, and what this may mean for your pregnancy journey.",
+    "heading": "How to navigate pregnancy complications?",
     "icon": "/img/landing/embryo_icon.svg",
     "subTopics": {
       "fetal": {
         "id": "2.a",
-        "title": "Fetal Growth",
+        "title": "Fetal growth",
         "component": "none",
         "heading": "Reduced fetal growth",
         "icon": "mdi-heart-minus"
       },
       "pe":{
         "id": "2.b",
-        "title": "A similar framework for PE ",
+        "title": "A similar framework for PE",
         "component": "none",
         "heading": "Pre-eclampsia",
         "icon": "mdi-heart-minus"
       },
       "gestational-diabetes":{
         "id": "2.c",
-        "title": "A similar framework for Gestational Diabetes",
+        "title": "A similar framework for gestational diabetes",
         "component": "none",
-        "heading": "Gestational Diabetes",
+        "heading": "Gestational diabetes",
         "icon": "mdi-heart-minus"
       },
-      "disorders":{
+      "birth-considerations":{
         "id": "2.d",
-        "title": "What does having a pregnancy disorder mean for how my baby might be born?",
+        "title": "What does having a pregnancy disorder mean for how my pēpi might be born?",
         "component": "none",
-        "heading": "Disorders",
+        "heading": "Giving birth in high-risk pregnancies",
         "icon": "mdi-heart-minus"
       },
       "extra-care":{
         "id": "2.e",
-        "title": "When baby needs extra care after birth",
+        "title": "When pēpi needs extra care after birth",
         "component": "none",
-        "heading": "Extra Care",
+        "heading": "Extra care",
         "icon": "mdi-heart-minus"
       }
 
@@ -137,21 +137,21 @@
   },
   "clinical": {
     "id": "4",
-    "title": "Care Pathways",
+    "title": "Care pathways",
     "component": "none",
-    "heading": "Pregnancy Care in Aotearoa New Zealand",
+    "heading": "What does pregnancy care look like in Aotearoa NZ?",
     "icon": "mdi-routes",
-    "content":"Clinical care pathways for pregnancy in Aotearoa New Zealand are organized around a pyramid of community-based primary maternity services, supported by secondary and tertiary hospital services, with the woman choosing a Lead Maternity Carer (LMC), usually a midwife, to coordinate her care. Pathways include primary care for low-risk pregnancies, with consultations and referrals to higher-level specialist services for complex cases or emergencies, ensuring equitable access and appropriate care across all stages of pregnancy. ",
+    "content":"Clinical care pathways for pregnancy in Aotearoa New Zealand are organised around a pyramid of community-based primary maternity services, supported by secondary and tertiary hospital services. You can choose a <strong>Lead Maternity Carer (LMC)</strong>, usually a midwife, to coordinate your care within these services. <br/><br/>Pathways include primary care for low-risk pregnancies, with consultations and referrals to higher-level specialist services for complex cases or emergencies, ensuring equitable access and appropriate care across all stages of pregnancy.",
     "subTopics": {
       "mid-wife": {
-        "title": "Midwife Lead Care",
+        "title": "Midwife lead care",
         "id": "4.a",
         "component": "none",
-        "heading": "Midwife Lead Care",
+        "heading": "Midwife lead care",
         "icon": "mdi-account-heart"
       },
       "when-care-changes": {
-        "title": "When Care Changes",
+        "title": "When care changes",
         "id": "4.b",
         "component": "none",
         "heading": "How clinical care pathways may change?",
@@ -161,24 +161,24 @@
   },
   "support": {
     "id": "5",
-    "title": "Support Services",
+    "title": "Support services",
     "component": "none",
-    "heading": "Pregnancy / Baby Support Services",
+    "heading": "What pregnancy / pēpi (baby) support services are available?",
     "icon": "mdi-account-group",
-    "content": "This application provides comprehensive information about support services available for pregnant people and their whānau throughout Aotearoa New Zealand.",
+    "content": "This application provides comprehensive information about support services available for pregnant people and their whānau throughout Aotearoa New Zealand. It is strongly recommended to consult and discuss with the lead maternity carer (LMC) about the most appropriate care pathways available for your pregnancy.",
     "subTopics": {
       "services": {
-        "title": "For Everyone Pregnant",
+        "title": "For everyone pregnant",
         "id": "5.a",
         "component": "none",
-        "heading": "For Everyone Pregnant",
+        "heading": "For everyone pregnant",
         "icon": "mdi-account-group"
       },
       "specialist": {
-        "title": "Specialist Services",
+        "title": "Specialist services",
         "id": "5.b",
         "component": "none",
-        "heading": "Specialist Services",
+        "heading": "Specialist services",
         "icon": "mdi-account-group"
       }
     }

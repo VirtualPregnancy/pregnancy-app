@@ -17,7 +17,7 @@
     </div>
 
     <div class="text-left mb-3 font-bold">
-      Or could also use the dropdown list to identify any regional specific services:
+      You could also use the dropdown list to identify any regional specific services:
     </div>
 
     <!-- Services list -->

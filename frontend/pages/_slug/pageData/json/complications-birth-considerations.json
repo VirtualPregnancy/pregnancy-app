@@ -1,0 +1,60 @@
+{
+    "title": "What do pregnancy complications mean for the birth of my pēpi?",
+    "id": "2.d",
+    "description": "The medical necessities that come with your pregnancy complications mean that extra care goes into choosing the delivery method. Spontaneous birth is unlikely in such cases, and healthcare providers are more likely to recommend either an induction of labour or a C-section.",
+    "showModel": false,
+    "contentSections": [
+      {
+        "id": "2.d.a",
+        "title": "Induced Labour",
+        "icon": "mdi-hospital",
+        "iconColor": "var(--v-primary-base)",
+        "content": "In this situation, labour and muscle contractions begin artificially for mum rather than naturally. The decision is made with the following in mind: <ul><li>If your pēpi is overdue (e.g. 41 weeks);</li><li>Your waters are broken before labour starts;</li><li>Mum or pēpi has a health problem, e.g. <a href='/complications-gestational-diabetes'>Gestational diabetes</a>, <a href='/complications-pe'>Pre-eclampsia</a>.</li></ul>"
+      },
+      {
+        "id": "2.d.b",
+        "title": "C-Section",
+        "icon": "mdi-hospital",
+        "iconColor": "var(--v-primary-base)",
+        "content": "Mum is advised to take this option if vaginal birth is not possible or safe. There are many reasons for this, including:<ul><li>The placenta is blocking the pēpi's path through the cervix; </li><li>Mum has had a previous C-section or a major surgery to the uterus; </li><li>Pēpi is premature or not developing well; </li><li>Both mum and pēpi have a serious medical condition/complication.</li></ul> You can find more details about C-Sections below or on <a href='/pregnancy-giving-birth'>this page</a>, which discusses the different ways of giving birth during a pregnancy without complications."
+      },
+      {
+        "id": "2.d.c",
+        "title": "Patient stories/experiences/journeys",
+        "icon": "mdi-account-group",
+        "iconColor": "var(--v-primary-base)",
+        "content":"<strong>PLACEHOLDER</strong>. See <i>Extra Care</i> for inspiration, implement once we have stories."
+      }
+    ],
+    "addtionalResources": [
+      {
+        "title": "Giving birth with gestational diabetes",
+        "description": "How to plan your birth if you have gestational diabetes",
+        "icon": "mdi-web",
+        "iconColor": "var(--v-primary-base)",
+        "link": "https://www.tommys.org/pregnancy-information/pregnancy-complications/gestational-diabetes/gestational-diabetes-and-giving-birth"
+      },
+      {
+        "title": "Intervention advice from Plunket",
+        "description": "Being prepared for interventions when labour does not go to plan",
+        "icon": "mdi-web",
+        "iconColor": "var(--v-primary-base)",
+        "link": "https://www.plunket.org.nz/being-a-parent/preparing-for-your-baby/preparing-for-birth/interventions-during-labour/#inducing-labour"
+      },
+      {
+        "title": "What is a Caesarean (C-) section - Health New Zealand Te Whatu Ora",
+        "description": "Read more about what happens during a C-Section and how this could affect future births.",
+        "icon": "mdi-web",
+        "iconColor": "var(--v-primary-base)",
+        "link": "https://www.healthnz.govt.nz/health-topics/pregnancy-maternity/labour-and-birth/caesarean-section"
+      },
+      {
+        "title": "A mother's story | Giving birth with pre-eclampsia",
+        "description": "Jadey details her experience with pre-eclampsia, and how doctors intervened to help her deliver her firstborn.",
+        "icon": "mdi-web",
+        "iconColor": "var(--v-primary-base)",
+        "link": "https://littlemiraclestrust.org.nz/starting-motherhood-with-severe-preeclampsia-and-days-of-separation-2/"
+      }
+    ]
+  }
+  

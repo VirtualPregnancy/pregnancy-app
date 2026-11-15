@@ -1,43 +1,99 @@
 {
-  "title": "How do we check on baby's health",
+  "title": "How do we check on pēpi (baby)'s health",
   "id": "1.f",
-  "description": "Learn about the various methods healthcare providers use to monitor your baby's health and development throughout pregnancy.",
+  "description": "Throughout your pregnancy, your doctor or midwife will use different methods to monitor your pēpi's growth, such as pēpi's heart rate, fundal height, and scan biometrics. <br/><br/>Please be aware that measurements of pēpi's biometrics are only a guide for pēpi's health at one point in time. They only show part of the picture of your pēpi's health and fluctuate over the course of pregnancy. Your daily awareness of your body and your pēpi's movements are just as important, if not more! <br/><br/>If you have any concerns, even if the scan is normal, don't hesitate to get in touch with your midwife or doctor right away. Your care team will work with you to determine how to achieve the best possible health outcomes for pēpi.",
   "showModel": false,
   "contentSections": [
     {
       "id": "1.f.a",
       "title": "Fundal height measurement",
+      "groupTitle": "Standard Tests",
       "icon": "mdi-ruler",
       "iconColor": "var(--v-primary-base)",
-      "content": "The fundal height measurement is a common way that your midwife or doctor may measure how well your baby is growing. To do this they will use a tape measure to measure the distance between your pubic bone and the top of your 'bump' (the uterus or 'fundus').  Plotting this measurement on a chart lets them track the rate of your baby's growth.  If this measurement is higher or lower than expected you may be referred for follow up tests such as <a href='/ultrasound-what-is-ultrasound'>ultrasound</a> to take a closer look at baby. "
+      "content": "The fundal height measurement is a common way for your midwife or doctor to assess how well your pēpi is growing. To do this, they measure the distance between your pubic bone and the top of your 'bump' (the uterus or 'fundus') with a tape measure. <br /> <br />Plotting this measurement on a chart lets them track the rate of your pēpi's growth. If this measurement is higher or lower than expected, you may be referred for follow-up tests (e.g. <a href='/ultrasound-what-is-ultrasound'>ultrasound</a>) to take a closer look at pēpi."
     },
     {
       "id": "1.f.b",
       "title": "Fetal heart rate",
+      "groupTitle": "Standard Tests",
       "icon": "mdi-heart-pulse",
       "iconColor": "var(--v-primary-base)",
-      "content": "Monitoring your baby's heart rate during pregnancy helps your midwife/doctor assess your baby's well-being. A normal fetal heart rate typically ranges from 110 to 160 beats per minute – so don't be concerned that their heart is beating faster than yours most of the time! Changes in this heart rate can signal how your baby is coping inside the womb and whether they're getting enough oxygen."
+      "content": "Monitoring your pēpi's heart rate during pregnancy helps your midwife/doctor assess your pēpi's well-being. <br/><br>A normal fetal heart rate typically ranges from 110 to 160 beats per minute – so don't be concerned that their heart is beating faster than yours most of the time! <br/><br/>Changes in this heart rate can signal how your pēpi is coping inside the womb and whether they're getting enough oxygen.",
+      "additionalResources": [
+        {
+          "title": "Health New Zealand Te Whatu Ora — Fetal heart rate monitoring",
+          "description": "Here is how your pēpi's heartbeat is monitored.",
+          "icon": "mdi-web",
+          "iconColor": "var(--v-accent-base)",
+          "link": "https://www.healthnz.govt.nz/health-topics/pregnancy-maternity/labour-and-birth/monitoring-your-pepis-heartbeat-during-labour-fetal-monitoring"
+        }
+      ]
     },
     {
       "id": "1.f.c",
-      "title": "Clinician/Midwife checks",
-      "icon": "mdi-hospital",
+      "title": "Blood pressure",
+      "groupTitle": "Standard Tests",
+      "icon": "mdi-gauge",
       "iconColor": "var(--v-primary-base)",
-      "content": "Clinician/midwife checks are a common way that your midwife or doctor may check on your baby's health. They will check your baby's heart rate, fundal height, and other things to make sure your baby is growing as expected. "
+      "content": "Checking blood pressure throughout your pregnancy is important for monitoring disorders such as gestational hypertension or pre-eclampsia. <br /> <br />Gestational hypertension is developed after 20 weeks of pregnancy. In this case, blood pressure readings are typically 140 mmHg / 90 mmHg, which is much higher than normal (120 mmHg / 80 mmHg). <br /> <br />If this persists, you may develop <a href='/complications-pe'>pre-eclampsia</a>, which presents major complications to the health of mum and pēpi.",
+      "additionalResources": [
+        {
+          "title": "Healthify New Zealand - High blood pressure in pregnancy",
+          "description": "Find out more about hypertension in pregnancy.",
+          "icon": "mdi-web",
+          "iconColor": "var(--v-accent-base)",
+          "link": "https://healthify.nz/health-a-z/h/high-blood-pressure-in-pregnancy"
+        }
+      ]
     },
     {
       "id": "1.f.d",
-      "title": "Ultrasound",
-      "icon": "mdi-wave",
+      "title": "Urine dipstick",
+      "groupTitle": "Standard Tests",
+      "icon": "mdi-test-tube",
       "iconColor": "var(--v-primary-base)",
-      "content": " <a href='/ultrasound-what-is-ultrasound'> Ultrasound </a> is a safe and important tool that uses sound waves to create images of your baby in the womb. It helps healthcare providers monitor your baby's development and detect any potential issues throughout pregnancy. <br />  In New Zealand all pregnant people can have publicly funded ultrasounds at two important times in pregnancy – the end of the first trimester (~12 weeks of gestation), and in the middle of pregnancy <a href='/ultrasound-what-is-ultrasound'> (~20 weeks of gestation) </a> .  You may also be referred for an ultrasound later in pregnancy to check baby’s health more closely if you are a person who is more likely to have a smaller baby or a complicated pregnancy (for example, if your last baby was small, or you have health conditions like diabetes or high blood pressure ),  or there is a need to check their growth or health. Other reasons to have a scan might be to check the baby’s position as birth nears, or to followup any changes seen at the anatomy scan. Our <a href='/ultrasound-what-ultrasound-means'>ultrasound tool</a> helps visualise and explain more about what is being measured by ultrasound in pregnancy, and what this can mean."
+      "content": "Regular urine checks with a dipstick can help detect early signs of pre-eclampsia. This is a fast screening tool to detect protein in urine, which may indicate declining kidney health.<br /><br />Generally, kidneys filter out proteins and prevent them from leaking into urine. If protein is present in the screening, you may be asked to collect your urine in a jug over 12-24 hours to determine how much protein is lost. If further testing shows more than 300 mg of protein in urine per day, that may indicate pre-eclampsia.",
+      "additionalResources": [
+        {
+          "title": "Healthify New Zealand - Pregnancy screening tests",
+          "description": "Check out urine screening here.",
+          "icon": "mdi-web",
+          "iconColor": "var(--v-accent-base)",
+          "link": "https://healthify.nz/health-a-z/p/pregnancy-screening-tests-and-checks"
+        }
+      ]
     },
     {
       "id": "1.f.e",
-      "title": "Personalised assessment of pregnancy ",
+      "title": "Ultrasound",
+      "groupTitle": "Non-Standard Tests",
+      "icon": "mdi-wave",
+      "iconColor": "var(--v-primary-base)",
+      "content": "<a href='/ultrasound-what-is-ultrasound'> Ultrasound </a> is a safe and important tool that uses sound waves to create images of your pēpi in the womb. It helps healthcare providers monitor your pēpi's development and detect any potential issues throughout pregnancy. <br /> <br />In New Zealand, all pregnant people can have publicly funded ultrasounds at two important times in pregnancy – the end of the first trimester (~12 weeks of gestation), and in the middle of pregnancy <a href='/ultrasound-what-is-ultrasound'> (~20 weeks of gestation) </a>. The 20-week scan helps doctors better understand pēpi's growth and development by estimating fetal weight (see the <a href='/ultrasound-what-is-ultrasound'>fetal growth and development</a> section). <br></br>You may be referred for an ultrasound later in pregnancy to closely check your pēpi's health if you are more likely to have a smaller pēpi, if you need to check their growth or health, and if you anticipate having a complicated pregnancy (for example, if your last pēpi was small, or you have health conditions like diabetes or high blood pressure). <br /> <br />Other reasons to have a scan might be to check the pēpi’s position as birth nears, or to followup any changes seen at the anatomy scan (week 20)."
+    },
+    {
+      "id": "1.f.f",
+      "title": "Personalised assessment of pregnancy",
+      "groupTitle": "Non-Standard Tests",
       "icon": "mdi-chart-bar",
       "iconColor": "var(--v-primary-base)",
       "component": "PregnancyPersonalisedAssessment"
+    }
+  ],
+  "addtionalResources": [
+    {
+      "title": "Plunket New Zealand - Tests and appointments",
+      "description": "Check out the different types of tests and appointments throughout your pregnancy to monitor your pēpi's health.",
+      "icon": "mdi-web",
+      "iconColor": "var(--v-accent-base)",
+      "link": "https://www.plunket.org.nz/being-a-parent/preparing-for-your-baby/health-and-care-during-pregnancy/tests-and-appointments/"
+    },
+    {
+      "title": "Health New Zealand Te Whatu Ora — National maternity clinical guidelines",
+      "description": "Official guidance on the national maternity clinical guidance for health professionals.",
+      "icon": "mdi-web",
+      "iconColor": "var(--v-accent-base)",
+      "link": "https://www.healthnz.govt.nz/health-professionals/guidance-standards/topic/maternity/national-maternity-clinical-guidelines"
     }
   ]
 }

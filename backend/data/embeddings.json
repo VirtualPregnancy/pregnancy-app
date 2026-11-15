@@ -778,7 +778,7 @@
   },
   {
     "url": "/pregnancy-placenta",
-    "title": "Roles of the Placenta",
+    "title": "Roles of the placenta",
     "description": "Understanding the vital functions of the placenta in supporting your baby's growth and development throughout pregnancy. Placenta The placenta (whenua) is an organ grown by your baby from the very start of pregnancy. It plays essential roles in adapt your body to support pregnancy by secreting hormones and other signals that can",
     "id": "1.b",
     "source": "pageData",
@@ -1554,8 +1554,8 @@
     ]
   },
   {
-    "url": "/complications-disorders",
-    "title": "Disorders",
+    "url": "/complications-birth-considerations",
+    "title": "What do pregnancy complications mean for the birth of my pēpi?",
     "description": "  Different types of ways babies can be born at a high level e spontaneous, induced labour, c-section. Something about shared decision making so they don’t feel freaked out (sublinks through to more detailed information/layers?).",
     "id": "2.d",
     "source": "pageData",
@@ -3886,8 +3886,8 @@
   },
   {
     "url": "/clinical-mid-wife",
-    "title": "Midwife Lead Care",
-    "description": "Understand what to expect during midwife and doctor visits. Your lead maternity carer Your lead maternity carer (LMC) holds the legal, professional, and practical responsibility for ensuring both you and your Pēpi(baby) receive the right maternity care. This role may be filled by a sel How to find a lead maternity carer For help finding a midwife you can visit: - Maternity Services - Find your midwife What to expect during your visits Your lead maternity carer (LMC) is available 24/7 to support you throughout pregnancy, labour, and after birth. They will: - During pregnancy: Create a care plan for labour and birth, monitor your ove",
+    "title": "Midwife lead care",
+    "description": "Understand what to expect during midwife and doctor visits. Your lead maternity carer Your lead maternity carer (LMC) holds the legal, professional, and practical responsibility for ensuring both you and your Pēpi (baby) receive the right maternity care. This role may be filled by a sel How to find a lead maternity carer For help finding a midwife you can visit: - Maternity Services - Find your midwife What to expect during your visits Your lead maternity carer (LMC) is available 24/7 to support you throughout pregnancy, labour, and after birth. They will: - During pregnancy: Create a care plan for labour and birth, monitor your ove",
     "id": "4.a",
     "source": "pageData",
     "embedding": [
@@ -17096,7 +17096,7 @@
   {
     "url": "/complications",
     "title": "Navigating Pregnancy Complications",
-    "description": "Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told you have a complication in pregnancy you are not alone – pregnancy disorders affect around 6000 Pēpi(baby) and their whanau(family) each year in New Zealand (1 in 10 pregnancies). On these pages you will find information to help you understand what causes common issues in pregnancy, how your doctor/midwife may check on Pēpi, and what this may mean for your pregnancy journey. ",
+    "description": "Whilst most pregnancies and births progress smoothly, some can be complicated by pregnancy disorders. If you have been told you have a complication in pregnancy you are not alone – pregnancy disorders affect around 6000 pēpi (baby) and their whānau (family) each year in New Zealand (1 in 10 pregnancies). On these pages you will find information to help you understand what causes common issues in pregnancy, how your doctor/midwife may check on Pēpi, and what this may mean for your pregnancy journey. ",
     "id": "2",
     "source": "topics",
     "embedding": [
@@ -18650,7 +18650,7 @@
   {
     "url": "/clinical",
     "title": "Pregnancy Care in Aotearoa New Zealand",
-    "description": "Clinical care pathways for pregnancy in Aotearoa New Zealand are organized around a pyramid of community-based primary maternity services, supported by secondary and tertiary hospital services, with the woman choosing a Lead Maternity Carer (LMC), usually a midwife, to coordinate her care. Pathways include primary care for low-risk pregnancies, with consultations and referrals to higher-level specialist services for complex cases or emergencies, ensuring equitable access and appropriate care across all stages of pregnancy. ",
+    "description": "Clinical care pathways for pregnancy in Aotearoa New Zealand are organised around a pyramid of community-based primary maternity services, supported by secondary and tertiary hospital services, with the woman choosing a Lead Maternity Carer (LMC), usually a midwife, to coordinate her care. Pathways include primary care for low-risk pregnancies, with consultations and referrals to higher-level specialist services for complex cases or emergencies, ensuring equitable access and appropriate care across all stages of pregnancy. ",
     "id": "4",
     "source": "topics",
     "embedding": [

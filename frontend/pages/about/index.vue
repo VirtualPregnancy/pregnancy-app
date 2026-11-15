@@ -33,7 +33,7 @@
           {{ aboutUs.title }}
         </h1>
         <p class="text-lg md:text-xl font-light max-w-3xl mx-auto">
-          Supporting Your Pregnancy Journey Through Science and Care
+          Supporting your pregnancy journey through Science and Care
         </p>
       </div>
     </div>

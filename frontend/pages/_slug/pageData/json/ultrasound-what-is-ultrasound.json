@@ -1,43 +1,29 @@
 {
   "title": "What is ultrasound, and what does it measure?",
   "id": "3.a",
-  "description": "Ultrasound is a safe and widely used imaging technique during pregnancy that uses high-frequency sound waves to create real-time pictures of the baby inside the womb. Unlike X-rays, it doesn't use radiation, making it ideal for monitoring fetal development throughout pregnancy. <br />Ultrasound allows healthcare providers to measure and assess several key aspects of pregnancy:",
+  "description": "Ultrasound is a safe and widely used imaging technique. It uses high-frequency sound waves to create real-time pictures of pēpi inside the womb. Unlike X-rays, ultrasound does not use radiation, so it is safe to use during pregnancy.",
   "showModel": false,
   "contentSections": [
     {
       "id": "3.a.a",
-      "title": "Gestational age and due date",
-      "icon": "mdi-calendar-clock",
-      "iconColor": "var(--v-primary-base)",
-      "content": "Ultrasound is often used in early pregnancy to measure the size of the embryo and/or ‘gestational sac’ (the fluid filled structure within which the baby grows).  This lets the sonographer determine how far along the pregnancy is. <br />If you have pain and / or bleeding you might need an early ultrasound to check the pregnancy is growing in the right place."
-    },
-    {
-      "id": "3.a.b",
-      "title": "Fetal growth and development",
+      "title": "When are ultrasound scans performed? What do they show?",
       "icon": "mdi-baby-face-outline",
       "iconColor": "var(--v-primary-base)",
       "component": "UltrasoundWhatIsFetalDevelopment"
     },
     {
-      "id": "3.a.c",
+      "id": "3.a.b",
       "title": "3D or 4D ultrasound",
       "icon": "mdi-video-3d",
       "iconColor": "var(--v-primary-base)",
-      "content": "Some clinics may offer 3D or 4D ultrasound as an optional add on (not covered by public funding in New Zealand), but these are not generally used for medical or diagnostic purposes. <br /> <br /> In 3D ultrasound, multiple angles of flat 2D images are captured and used to create a more lifelike and detailed 3D image of your baby.  <br /> <br />4D ultrasound builds on this by creating a live video of your baby in the womb, allowing you to see your baby's movements in real time, such as yawning, stretching, or smiling.  "
+      "content": "Some clinics may offer 3D or 4D ultrasound as an optional add-on (not covered by public funding in New Zealand). Still, these are not generally used for medical or diagnostic purposes. <br /> <br />In 3D ultrasound, multiple flat 2D images are captured from different angles and used to create a more lifelike, detailed 3D image of your pēpi. <br /> <br />4D ultrasound builds on this by creating a live video of your pēpi in the womb. This allows you to see your pēpi's movements in real time, such as yawning, stretching, or smiling."
     },
     {
-      "id": "3.a.d",
-      "title": "Placental position",
-      "icon": "mdi-bowl-outline",
-      "iconColor": "var(--v-primary-base)",
-      "component": "UltrasoundWhatIsPlacentaPosition"
-    },
-    {
-      "id": "3.a.e",
-      "title": "Blood flow to the placenta",
+      "id": "3.a.c",
+      "title": "Showing blood flow to the placenta",
       "icon": "mdi-water-plus",
       "iconColor": "var(--v-primary-base)",
-      "content": "Sometimes you might notice that the colour on the screen goes blue and red. This is a doppler measurement. Doppler is used to help work out if extra monitoring is needed for your pregnancy. Doppler ultrasound is used to assess how maternal blood is flowing through the uterus to the placenta, and how blood is flowing between the fetus and the placenta. See more at <a href='/ultrasound-doppler'>Doppler ultrasound in pregnancy</a>. "
+      "content": "Sometimes you might notice that the colour on the ultrasound screen goes blue and red. This is a Doppler measurement. <br /> <br />Doppler ultrasound is used to help determine whether extra monitoring is needed for your pregnancy. Doppler ultrasound helps assess how maternal blood flows through the uterus to the placenta, and how blood flows between the fetus and the placenta. <br /> <br />See more at <a href='/ultrasound-doppler'><strong><u>Doppler ultrasound in pregnancy</u></strong></a>."
     }
   ]
 }

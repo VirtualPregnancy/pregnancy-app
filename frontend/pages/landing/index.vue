@@ -16,9 +16,14 @@
           <h1 class="main-title">
             {{ landingPageData.title }}
           </h1>
-          <p class="intro-text">
-            {{ landingPageData.description }}
-          </p>
+          
+          <img
+            :src="getImagePath('/img/landing/landing-page.png')"
+            alt="Pregnancy journey landing"
+            class="landing-image"
+          />
+
+          <p class="intro-text" v-html="landingPageData.description"></p>
           
           <!-- Chat Input Box -->
           <div class="chat-input-container">
@@ -189,6 +194,14 @@ export default {
 .landing-page-md {
   margin-top: 30px;
   box-sizing: border-box;
+}
+
+.landing-image {
+  display: block;
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  margin: 20px auto;
 }
 
 .hamburger-menu {

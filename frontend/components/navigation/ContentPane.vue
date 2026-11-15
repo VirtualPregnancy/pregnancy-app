@@ -22,13 +22,22 @@
 
         <!-- Multiple sections expandable layout -->
         <template v-else>
-          <MultipleSection
-            v-for="section in contentSections" 
-            :key="section.id"
-            :section="section"
-            :is-expanded="expandedSections[section.id]"
-            @toggle="toggleSection"
-          />
+          <div
+            v-for="group in sectionGroups"
+            :key="group.key"
+            class="content-section-group"
+          >
+            <h2 v-if="group.title" class="content-section-group__title">
+              {{ group.title }}
+            </h2>
+            <MultipleSection
+              v-for="section in group.sections"
+              :key="section.id"
+              :section="section"
+              :is-expanded="expandedSections[section.id]"
+              @toggle="toggleSection"
+            />
+          </div>
         </template>
       </div>
 
@@ -133,6 +142,27 @@ export default {
     },
     isSingleSection() {
       return this.contentSections && this.contentSections.length === 1;
+    },
+    sectionGroups() {
+      const groups = [];
+
+      this.contentSections.forEach(section => {
+        const title = section.groupTitle || null;
+        let group = groups.find(item => item.title === title);
+
+        if (!group) {
+          group = {
+            key: title || 'ungrouped',
+            title,
+            sections: []
+          };
+          groups.push(group);
+        }
+
+        group.sections.push(section);
+      });
+
+      return groups;
     }
   },
 
@@ -321,6 +351,23 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.content-section-group {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.content-section-group + .content-section-group {
+  margin-top: 32px;
+}
+
+.content-section-group__title {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.35rem;
+  font-weight: 700;
 }
 
 

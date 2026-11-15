@@ -11,7 +11,7 @@ Overview
 
 The pregnancy app uses a dynamic routing system with content-driven pages. The main entry point redirects to a landing page, while all topic pages are generated dynamically through a slug-based routing system.
 
-Page Organization
+Page Organisation
 ----------------
 
 .. code-block:: text

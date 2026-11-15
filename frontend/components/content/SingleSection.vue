@@ -13,7 +13,7 @@
         <div 
           v-else 
           class="prose prose-lg max-w-none prose-slate prose-headings:text-slate-800 prose-headings:font-semibold prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline prose-a:font-medium prose-blockquote:border-l-blue-500 prose-blockquote:bg-slate-50 prose-blockquote:rounded-r-lg prose-code:bg-slate-100 prose-code:rounded prose-pre:bg-slate-50" 
-          v-html="section.content"
+          v-html="contentHtml"
         >
         </div>
       </div>
@@ -29,6 +29,23 @@ export default {
     section: {
       type: Object,
       required: true
+    }
+  },
+
+  computed: {
+    contentHtml() {
+      const basePath = this.$config.basePath || (
+        process.env.DEPLOY_ENV === 'GH_PAGES' ? '/pregnancy-app' : ''
+      );
+
+      if (!basePath || !this.section.content) {
+        return this.section.content;
+      }
+
+      return this.section.content.replace(
+        /(["'])\/img\//g,
+        `$1${basePath}/img/`
+      );
     }
   }
 }

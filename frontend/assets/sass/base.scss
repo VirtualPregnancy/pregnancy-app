@@ -20,3 +20,40 @@ hr{
   margin-top:0.2rem;
   margin-bottom:0.2rem;
 }
+
+/* Global list formatting for rich content blocks */
+.content-text ul,
+.content-text ol,
+.prose ul,
+.prose ol,
+.conclusion-content ul,
+.conclusion-content ol {
+  margin: 0 0 1rem;
+  padding-left: 1.5rem;
+  list-style-position: outside;
+}
+
+.content-text ul,
+.prose ul,
+.conclusion-content ul {
+  list-style-type: disc;
+}
+
+.content-text ol,
+.prose ol,
+.conclusion-content ol {
+  list-style-type: decimal;
+}
+
+.content-text li,
+.prose li,
+.conclusion-content li {
+  display: list-item;
+  margin-bottom: 0.5rem;
+}
+
+.content-text li::marker,
+.prose li::marker,
+.conclusion-content li::marker {
+  color: currentColor;
+}

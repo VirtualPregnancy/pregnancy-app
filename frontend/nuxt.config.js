@@ -28,6 +28,7 @@ export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: "Pregnancy App",
+    __dangerouslyDisableSanitizers: ["script"],
     htmlAttrs: {
       lang: "en",
     },
@@ -70,6 +71,12 @@ export default {
       {
         src: "https://www.googletagmanager.com/gtag/js?id=G-LXD5LJXP2Y",
         async: true,
+      },
+      {
+        hid: "marker-io",
+        innerHTML:
+          "window.markerConfig={project:'6a6c1e67f805db9540faf408',source:'snippet',useNativeScreenshot:true};!function(e,r,a){if(!e.__Marker){e.__Marker={};var t=[],n={__cs:t};['show','hide','isVisible','capture','cancelCapture','unload','reload','isExtensionInstalled','setReporter','clearReporter','setCustomData','on','off'].forEach(function(e){n[e]=function(){var r=Array.prototype.slice.call(arguments);r.unshift(e),t.push(r)}}),e.Marker=n;var s=r.createElement('script');s.async=1,s.src='https://edge.marker.io/latest/shim.js';var i=r.getElementsByTagName('script')[0];i.parentNode.insertBefore(s,i)}}(window,document);",
+        type: "text/javascript",
       },
     ],
   },
@@ -132,12 +139,12 @@ export default {
       dark: false,
       themes: {
         light: {
-          primary: "#DD3C51",        
+          primary: "#CB3852",        
           accent: "#313657",         
           accentLight: "#1F6683",    
           secondary: "#B8BCC8",      
         
-          info: "#1F6683",          
+          info: "#05314C",          
           warning: "#DD3C51",        
           subWarning: "#FAF6F7",     
           error: "#976533",          
@@ -161,7 +168,7 @@ export default {
         },
         
         dark: {
-          primary: "#DD3C51",     // red from palette
+          primary: "#CB3852",     // red from palette
           accent: "#6C90B9",      // blue from palette
           accentLight: "#1F6683",     // teal from palette
           secondary: "#B8BCC8",   // light grey for buttons
@@ -180,7 +187,6 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    publicPath: process.env.DEPLOY_ENV === "GH_PAGES" ? "/pregnancy-app/_nuxt/" : "/_nuxt/",
     extend(config) {
       config.module.rules.push({
         test: /\.md$/i,
@@ -218,7 +224,7 @@ export default {
       '/complications-fetal',
       '/complications-gestational-diabetes',
       '/complications-pe',
-      '/complications-disorders',
+      '/complications-birth-considerations',
       '/complications-extra-care',
       '/pregnancy-baby',
       '/pregnancy-changes',
@@ -226,14 +232,14 @@ export default {
       '/pregnancy-interact',
       '/pregnancy-keep-baby-healthy',
       '/pregnancy-placenta',
+      '/pregnancy-giving-birth',
       '/clinical-mid-wife',
       '/clinical-when-care-changes',
       '/support-services',
       '/support-specialist',
       '/ultrasound-doppler',
       '/ultrasound-metric',
-      '/ultrasound-what-is-ultrasound',
-      '/ultrasound-what-ultrasound-means'
+      '/ultrasound-what-is-ultrasound'
     ],
   },
 };

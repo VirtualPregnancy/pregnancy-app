@@ -10,7 +10,7 @@
         class="ml-4 px-3 py-1 text-sm rounded-md transition-colors duration-200"
         :class="colorblindMode ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black hover:bg-gray-500'"
       >
-       Change color
+       Change colour
       </button>
       </div>
     </div>

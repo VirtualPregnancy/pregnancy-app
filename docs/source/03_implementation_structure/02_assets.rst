@@ -123,7 +123,7 @@ The `landingPageData.json` file contains the configuration for the landing page:
     {
       "index": 0,
       "title": "What is happening in pregnancy?",
-      "description": "Information on how your body changes to support your babys growth during pregnancy, and how your midwife/doctor will track the health of you and your baby.",
+      "description": "Information on how your body changes to support your pēpi's growth during pregnancy, and how your midwife/doctor will track the health of you and your pēpi.",
       "image": "/img/landing/pregnancy.svg",
       "backgroundColor": "#7A3520",
       "link": "/pregnancy-changes"

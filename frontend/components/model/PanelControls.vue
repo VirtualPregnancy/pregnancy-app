@@ -232,26 +232,32 @@ export default {
 // Blood flow Color Segments - Updated to match vtkLoader.js FLUX_COLORS
 .flux-reverse-segment {
   background: rgb(0, 51, 204); // ZERO: Blue (0)
+  // background: rgb(0, 34, 78);
 }
 
 .flux-low-segment {
   background: rgb(51, 153, 255); // LOW: Light Blue (0-2.5)
+  // background: rgb(53, 69, 108);
 }
 
 .flux-mid-segment {
   background: rgb(0, 255, 128); // BLUE_LOW: Green (2.5-5)
+  // background: rgb(102, 105, 112);
 }
 
 .flux-high-segment {
   background: rgb(255, 255, 0); // MEDIUM_HIGH: Yellow (5-7.5)
+  // background: rgb(148, 142, 119);
 }
 
 .flux-max-segment {
   background: rgb(255, 128, 0); // HIGH: Orange (7.5-10)
+  // background: rgb(200, 184, 102);
 }
 
 .flux-red-high-segment {
   background: rgb(255, 0, 0); // RED_HIGH: Red (>10)
+  // background: rgb(254, 232, 56);
 }
 
 

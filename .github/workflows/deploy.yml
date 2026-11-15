@@ -1,21 +1,44 @@
-name: Deploy App via Github action
+name: Deploy App via GitHub Pages
 on:
-  release:
-    types: [created]
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      DEPLOY_ENV: GH_PAGES
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 16
-      - run: cd frontend && yarn install && yarn generate:gh-pages
-      - run: ls
+          cache: 'yarn'
+          cache-dependency-path: frontend/yarn.lock
 
-      - uses: peaceiris/actions-gh-pages@v3
+      - name: Generate static site
+        working-directory: frontend
+        run: yarn install --frozen-lockfile && yarn generate:gh-pages
+
+      - uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{secrets.gitpages}}
-          publish_dir: "./frontend/build"
+          path: frontend/build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

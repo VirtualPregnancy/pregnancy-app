@@ -35,10 +35,10 @@
         },
         "searchCategory": "pregnancy",
         "actions": [
-          { "type": "navigate", "text": "Interact with Your Placenta", "path": "/pregnancy-interact-with-your-placenta", "description": "Interact with your placenta to understand how it works and how it can help you have a healthy pregnancy" },
-          { "type": "navigate", "text": "Changes to Your Body", "path": "/pregnancy-changes", "description": "Learn about the physical and hormonal changes during pregnancy" },
-          { "type": "navigate", "text": " Roles of the Placenta", "path": "/pregnancy-placenta", "description": "Understand how the placenta supports your baby's growth" },
-          { "type": "navigate", "text": "Fetal Development", "path": "/pregnancy-fetal-dev", "description": "Track your baby's development week by week" },
+          { "type": "navigate", "text": "Interact with your placenta", "path": "/pregnancy-interact-with-your-placenta", "description": "Interact with your placenta to understand how it works and how it can help you have a healthy pregnancy" },
+          { "type": "navigate", "text": "Changes to your body", "path": "/pregnancy-changes", "description": "Learn about the physical and hormonal changes during pregnancy" },
+          { "type": "navigate", "text": " Roles of the placenta", "path": "/pregnancy-placenta", "description": "Understand how the placenta supports your baby's growth" },
+          { "type": "navigate", "text": "Fetal development", "path": "/pregnancy-fetal-dev", "description": "Track your baby's development week by week" },
           { "type": "suggestion", "text": "Find out services in Auckland", "query": "services in Auckland" },
           { "type": "suggestion", "text": "Find out services in Wellington", "query": "services in Wellington" }
 
@@ -110,15 +110,15 @@
         "message": "Understanding pregnancy care in Aotearoa New Zealand helps you know what to expect. Here's what you need to know:",
         "summary": {
           "lmc": "In New Zealand, you choose an LMC(Leader Maternity Carer) - usually a midwife - who coordinates your pregnancy care from confirmation through to 6 weeks after birth. This care is free under the public health system.",
-          "midwife": "Most pregnant people in NZ are cared for by midwives who provide continuous, personalized care. They attend your pregnancy check-ups, are present at birth, and provide postnatal support.",
+          "midwife": "Most pregnant people in NZ are cared for by midwives who provide continuous, personalised care. They attend your pregnancy check-ups, are present at birth, and provide postnatal support.",
           "pathways": "If complications arise, your LMC will refer you to specialist obstetricians or other healthcare professionals. You'll still keep your LMC who works alongside specialists to coordinate your care.",
           "changes": "Your care may involve additional specialists if you develop complications like gestational diabetes, pre-eclampsia, or reduced fetal growth. This ensures you receive appropriate expert care while maintaining continuity.",
-          "general": "NZ's maternity system is organized around community-based primary care, with hospital specialist services available when needed. This model supports normal pregnancy while ensuring access to expertise when required."
+          "general": "NZ's maternity system is organised around community-based primary care, with hospital specialist services available when needed. This model supports normal pregnancy while ensuring access to expertise when required."
         },
         "searchCategory": "clinical",
         "actions": [
-          { "type": "navigate", "text": "Learn about: Midwife Lead Care", "path": "/clinical-mid-wife", "description": "Understand the role of your LMC and what to expect from midwife-led care" },
-          { "type": "navigate", "text": "Understand: When Care Changes", "path": "/clinical-when-care-changes", "description": "Learn when and why you might need specialist care during pregnancy" }
+          { "type": "navigate", "text": "Learn about: Midwife lead care", "path": "/clinical-mid-wife", "description": "Understand the role of your LMC and what to expect from midwife-led care" },
+          { "type": "navigate", "text": "Understand: When care changes", "path": "/clinical-when-care-changes", "description": "Learn when and why you might need specialist care during pregnancy" }
         ]
       }
     },
@@ -136,7 +136,7 @@
         "message": "You're not alone - there are many support services available throughout your pregnancy journey in Aotearoa New Zealand:",
         "summary": {
           "universal": "All pregnant people in NZ have access to free LMC care, ultrasounds, blood tests, and hospital services. Plunket provides free support for all families with babies and young children.",
-          "mental": "Organizations like PADA (Perinatal Anxiety & Depression Aotearoa) and Whāraurau provide specialized support for emotional wellbeing during pregnancy and postpartum.",
+          "mental": "Organisations like PADA (Perinatal Anxiety & Depression Aotearoa) and Whāraurau provide specialized support for emotional wellbeing during pregnancy and postpartum.",
           "specialist": "Additional support is available for specific situations - diabetes clinics, growth restriction monitoring, pre-eclampsia management, and neonatal intensive care.",
           "whanau": "Many services offer culturally appropriate care and support for your family/whānau, recognizing the importance of family involvement in pregnancy and parenting.",
           "general": "Services are available across all regions of New Zealand. Your LMC can help connect you with local support services relevant to your needs."
@@ -216,7 +216,7 @@
           "premature": "Babies born before 37 weeks are considered premature. About 7-8% of babies in NZ are born prematurely. The earlier a baby is born, the more specialized care they typically need.",
           "nicu": "Neonatal Intensive Care Units provide specialized care for premature and sick newborns. They have specialist teams, advanced equipment, and 24/7 monitoring to support your baby's development.",
           "scbu": "Special Care Baby Units (SCBU) provide care for babies who need extra support but aren't critically ill. Your baby might need help with feeding, temperature regulation, or monitoring.",
-          "support": "You can usually stay with your baby, participate in their care (kangaroo care, feeding), and be supported by the neonatal team. Organizations like Little Miracles Trust provide peer support for families.",
+          "support": "You can usually stay with your baby, participate in their care (kangaroo care, feeding), and be supported by the neonatal team. Organisations like Little Miracles Trust provide peer support for families.",
           "general": "All major hospitals in NZ have neonatal units. Very premature babies may need transfer to a tertiary NICU in larger centers for specialized care."
         },
         "actions": [
@@ -236,7 +236,7 @@
         "message": "Gestational diabetes is manageable with the right care and support. Here's what you need to know:",
         "summary": {
           "what": "Gestational Diabetes Mellitus (GDM) occurs when your body can't produce enough insulin during pregnancy, causing high blood sugar. It affects about 5-10% of pregnancies in NZ and usually resolves after birth.",
-          "management": "Most women manage their blood sugar through healthy eating and regular physical activity. Some may need insulin or medication. Your diabetes team will guide you with a personalized plan.",
+          "management": "Most women manage their blood sugar through healthy eating and regular physical activity. Some may need insulin or medication. Your diabetes team will guide you with a personalised plan.",
           "monitoring": "You'll need to check your blood sugar levels regularly (usually 4 times daily) and attend more frequent antenatal appointments. Additional ultrasounds may monitor your baby's growth.",
           "baby": "Well-managed GDM usually results in healthy outcomes. Your baby will be monitored after birth to ensure their blood sugar is stable. Breastfeeding helps regulate your baby's blood sugar.",
           "general": "Diabetes in pregnancy clinics provide specialist care, dietitian support, and education. Your LMC works with the diabetes team to coordinate your care throughout pregnancy."

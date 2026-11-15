@@ -430,9 +430,8 @@ export default {
       const resizeHandler = () => {
         setTimeout(() => {
           if (baseContainer) {
-            this.mdAndUp
-              ? (baseContainer.style.height = "100vh")
-              : (baseContainer.style.height = "100vw");
+            baseContainer.style.width = "100%";
+            baseContainer.style.height = "100%";
           }
           if (this.scene) {
             this.scene.onWindowResize();
@@ -845,6 +844,8 @@ export default {
   align-items: center;
   width: 100%;
   height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 

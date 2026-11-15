@@ -1,22 +1,40 @@
 <template>
   <div>
     
-    Ultrasound can show where the placenta is located in the uterus (i.e. if it is at the front (anterior), back (posterior), or fundal (top) positions) and its proximity to the opening of the cervix (the opening at the bottom of the uterus through which the baby will pass during birth). 
-    <br />
-    <br />
-    If the placenta has implanted in a way that blocks the cervix this is called  
-    <v-btn
+    The 20-week ultrasound scan can show doctors the location of the placenta in mum's uterus. The main things they look for are: 
+    <ul>
+      <li>If the placenta is at the anterior (front), posterior (back), or fundal (top) positions</li>
+      <li>The proximity of the placenta to the opening of the 
+        <v-btn
           text
           small
           color="primary"
           class="medical-term-btn"
-          @click="showPlacentaPreviaDialog = true"
-        >
-          placenta previa
-        </v-btn>, and it is important to know about this before delivery to prevent complications.
-      
-  
+          @click="showCervixDialog = true"
+        >cervix
+        </v-btn>.
+      </li>
+    </ul> 
 
+    It is typically a quick search for the placenta, as it is big and easy to spot. An example is shown below.
+    <figure style="text-align: center;">
+      <img :src="getImagePath('/img/ultrasound/fetal-development_us/placenta/Week20_19_face-placenta.jpg')" alt='Example ultrasound scan showing placenta.' style='width: 100%; max-width: 600px; margin: 20px auto; display: block;' />
+      <figcaption>
+        <small>Example of a 20-week ultrasound image that shows the position of the placenta in the uterus. &copy; 2025 James Lab & Pregnancy Modelling Group. All rights reserved.</small>
+      </figcaption>
+    </figure>
+
+    If the implanted placenta blocks the cervix, this condition is called  
+    <v-btn
+      text
+      small
+      color="primary"
+      class="medical-term-btn"
+      @click="showPlacentaPreviaDialog = true"
+    >
+    placenta previa
+    </v-btn>. It is important to know about this before delivery to prevent birthing complications.
+  
     <!-- Placenta Previa Dialog - Vuetify 2.x compatible -->
     <v-dialog 
       v-model="showPlacentaPreviaDialog" 
@@ -31,7 +49,7 @@
         
         <v-card-text class="pt-4">
           <p>
-            Placenta previa occurs when the placenta covers the cervical opening, which can cause bleeding and other complications during pregnancy.
+            Placenta previa occurs when the placenta covers the cervical opening. This can cause bleeding and other complications during pregnancy.
           </p>
         </v-card-text>
         
@@ -41,6 +59,37 @@
             color="primary" 
             text 
             @click="showPlacentaPreviaDialog = false"
+          >
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- Cervix Dialog - Vuetify 2.x compatible -->
+    <v-dialog 
+      v-model="showCervixDialog" 
+      max-width="500"
+      persistent
+    >
+      <v-card>
+        <v-card-title class="headline">
+          <v-icon left color="warning">mdi-information-variant-circle-outline</v-icon>
+          Cervix
+        </v-card-title>
+        
+        <v-card-text class="pt-4">
+          <p>
+            This is the opening at the bottom of the uterus. The pēpi will pass through this opening during birth.
+          </p>
+        </v-card-text>
+        
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn 
+            color="primary" 
+            text 
+            @click="showCervixDialog = false"
           >
             Close
           </v-btn>
@@ -58,9 +107,20 @@ export default {
   data() {
     return {
       showPlacentaPreviaDialog: false,
-      showNuchalDialog: false
+      showNuchalDialog: false,
+      showCervixDialog: false
     };
-  }
+  },
+
+  methods: {
+    getImagePath(imagePath) {
+      const basePath = this.$config.basePath || (
+        process.env.DEPLOY_ENV === 'GH_PAGES' ? '/pregnancy-app' : ''
+      );
+
+      return `${basePath}${imagePath}`;
+    }
+  },
 };
 </script>
 
@@ -75,13 +135,23 @@ export default {
   text-transform: none !important;
   text-decoration: underline;
   min-width: auto !important;
-  padding: 0 4px !important;
+  padding: 0 !important;
   height: auto !important;
   font-weight: 600;
-  margin: 0 2px;
-  display: inline;
+  margin: 0;
+  display: inline-flex !important;
+  align-items: baseline;
   vertical-align: baseline;
   font-size: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: normal !important;
+  border-radius: 0 !important;
+  white-space: normal;
+}
+
+.medical-term-btn .v-btn__content {
+  display: inline !important;
+  padding: 0 !important;
 }
 
 .medical-term-btn:hover {

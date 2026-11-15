@@ -16,8 +16,10 @@ const initializeCopper = () => {
   try {
     // Create container element
     container = document.createElement("div");
-    container.style.width = "100vw";
-    container.style.height = "100vh";
+    container.style.width = "100%";
+    container.style.height = "100%";
+    container.style.position = "relative";
+    container.style.overflow = "hidden";
     container.style.margin = 0;
     container.style.padding = 0;
     

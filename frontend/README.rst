@@ -51,7 +51,7 @@ Contains uncompiled assets including:
 ``components/``
 ~~~~~~~~~~~~~~~
 
-Vue.js components organized by functionality:
+Vue.js components organised by functionality:
 
 - **content/**: Content display components for pregnancy education
 - **landing/**: Landing page specific components

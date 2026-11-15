@@ -9,7 +9,7 @@
       Poor maternal mental health can lead to inadequate prenatal care, 
       preterm birth, and negative parent-infant relationships, resulting in 
       children having difficult temperaments, poor health, developmental delays, 
-      and long-term behavioral problems that affect their lifelong wellbeing.
+      and long-term behavioural problems that affect their lifelong wellbeing.
     </p>
 
     <div class="text-center text-gray-600 mb-8">
